@@ -1,0 +1,1327 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.IdentityModel.Services.SessionAuthenticationModule
+  id: SessionAuthenticationModule
+  children:
+  - System.IdentityModel.Services.SessionAuthenticationModule.#ctor
+  - System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(System.IdentityModel.Tokens.SessionSecurityToken,System.Boolean)
+  - System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(System.Web.HttpCookieCollection)
+  - System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken
+  - System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler
+  - System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(System.Security.Claims.ClaimsPrincipal,System.String,System.DateTime,System.DateTime,System.Boolean)
+  - System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie
+  - System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(System.Web.HttpApplication)
+  - System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration
+  - System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(System.Object,System.EventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(System.Object,System.EventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(System.EventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(System.IdentityModel.Services.SigningOutEventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(System.IdentityModel.Services.ErrorEventArgs)
+  - System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(System.Byte[])
+  - System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated
+  - System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived
+  - System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  - System.IdentityModel.Services.SessionAuthenticationModule.SignedOut
+  - System.IdentityModel.Services.SessionAuthenticationModule.SigningOut
+  - System.IdentityModel.Services.SessionAuthenticationModule.SignOut
+  - System.IdentityModel.Services.SessionAuthenticationModule.SignOutError
+  - System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)
+  - System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  - System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)
+  langs:
+  - csharp
+  name: SessionAuthenticationModule
+  nameWithType: SessionAuthenticationModule
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule
+  type: Class
+  summary: "Implements an ASP.NET module that processes session cookies in WS-Federation scenarios."
+  remarks: "When present in the ASP.NET pipeline, the SessionAuthenticationModule (SAM) processes session cookies in WS-Federation scenarios. It uses the cookie handler specified by the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property to read the raw session cookie from the HTTP request and write it to the HTTP response. It uses the <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> that is configured for an application to deserialize the raw session cookie into <xref:System.IdentityModel.Tokens.SessionSecurityToken> objects. The session security token contains the claims (<xref:System.Security.Claims.Claim>) and principal (<xref:System.Security.Claims.ClaimsPrincipal>) associated with the entity for which the request is being served.  \n  \n The SAM adds its <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> event handler to the <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=fullName> event in the ASP.NET pipeline. This handler intercepts sign-in requests, and, if there is a session cookie, deserializes it into a session token, and sets the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> and <xref:System.Web.HttpContext.User%2A?displayProperty=fullName> properties to the claims principal contained in the session token. It invokes several of the other methods exposed by the SAM during this process.  \n  \n The <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method can be invoked to sign the user out of a session (for example, in a SignOut.aspx.cs code-behind file).  \n  \n The SAM exposes several events that provide access to its processing pipeline. The <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> and <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> events enable you to modify session tokens that are read from cookies or created during processing. Typically, this is done to add, remove, or transform claims in the token or to adjust its expiration time. The <xref:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut>, <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut>, and <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError> events provide hooks into the processing of sign-out requests. For many scenarios, simply adding handlers for these events, often to the global.asax.cs file, will be sufficient.  \n  \n For more complicated scenarios, you can derive from SessionAuthenticationModule to implement a custom SAM. To this end, many of the methods that are invoked during <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> and <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> are exposed so that you can provide custom behavior at specific stages of the session processing lifecycle.  \n  \n You can add the SAM to the ASP.NET pipeline in a configuration file by adding it to the HTTP modules under either the `<system.webServer>` element for IIS version 7 and later or under the `<system.web>` element for versions prior to IIS 7. The cookie handler used by the SAM can be configured with the [\\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element."
+  example:
+  - "[!code-cs[WifSAM#1](~/add/codesnippet/CSharp/sam/global.asax.cs#1)]  \n  \n The following XML shows how to configure the SAM in the ASP.NET pipeline. Many other elements that are present in a typical configuration are omitted here for brevity.  \n  \n```xml  \n<configuration>  \n  <system.webServer>  \n    <modules>  \n      <!--WIF 4.5 modules -->  \n      <add name=\"SessionAuthenticationModule\" type=\"System.IdentityModel.Services.SessionAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\"/>  \n      <add name=\"WsFederationAuthenticationModule\" type=\"System.IdentityModel.Services.WSFederationAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\"/>  \n    </modules>  \n  </system.webServer>  \n</configuration>  \n```"
+  syntax:
+    content: 'public class SessionAuthenticationModule : System.IdentityModel.Services.HttpModuleBase'
+  inheritance:
+  - System.Object
+  - System.IdentityModel.Services.HttpModuleBase
+  implements: []
+  inheritedMembers:
+  - System.IdentityModel.Services.HttpModuleBase.Dispose
+  - System.IdentityModel.Services.HttpModuleBase.FederationConfiguration
+  - System.IdentityModel.Services.HttpModuleBase.Init(System.Web.HttpApplication)
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.#ctor
+  id: '#ctor'
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SessionAuthenticationModule()
+  nameWithType: SessionAuthenticationModule.SessionAuthenticationModule()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionAuthenticationModule()
+  type: Constructor
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.IdentityModel.Services.SessionAuthenticationModule&quot;></see> class."
+  remarks: "The <xref:System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode%2A> property is set to `false` and the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property is initialized to a default instance of the <xref:System.IdentityModel.Services.CookieHandlerElement.ChunkedCookieHandler%2A> class."
+  syntax:
+    content: public SessionAuthenticationModule ();
+    parameters: []
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(System.IdentityModel.Tokens.SessionSecurityToken,System.Boolean)
+  id: AuthenticateSessionSecurityToken(System.IdentityModel.Tokens.SessionSecurityToken,System.Boolean)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+  nameWithType: SessionAuthenticationModule.AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Authenticates the incoming request by validating the incoming session token. Upon successful validation, it updates the current HTTP context and thread principal with the specified  <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see>."
+  remarks: "The AuthenticateSessionSecurityToken method is called from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> method. It calls the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken%2A> method to validate the incoming token and update the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> and the <xref:System.Web.HttpContext.User%2A?displayProperty=fullName> properties. If the `writeCookie` parameter is `true`, the <xref:System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie%2A> method is invoked to write the session token to a cookie."
+  syntax:
+    content: public virtual void AuthenticateSessionSecurityToken (System.IdentityModel.Tokens.SessionSecurityToken sessionToken, bool writeCookie);
+    parameters:
+    - id: sessionToken
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "The session security token to use to authenticate the incoming HTTP request."
+    - id: writeCookie
+      type: System.Boolean
+      description: "\n     to write the session cookie; otherwise ."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(System.Web.HttpCookieCollection)
+  id: ContainsSessionTokenCookie(System.Web.HttpCookieCollection)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: ContainsSessionTokenCookie(HttpCookieCollection)
+  nameWithType: SessionAuthenticationModule.ContainsSessionTokenCookie(HttpCookieCollection)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(HttpCookieCollection)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Determines whether a session cookie is in the specified cookie collection."
+  syntax:
+    content: public bool ContainsSessionTokenCookie (System.Web.HttpCookieCollection httpCookieCollection);
+    parameters:
+    - id: httpCookieCollection
+      type: System.Web.HttpCookieCollection
+      description: "The collection of cookies in which to search."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    httpCookieCollection is null"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken
+  id: ContextSessionSecurityToken
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: ContextSessionSecurityToken
+  nameWithType: SessionAuthenticationModule.ContextSessionSecurityToken
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken
+  type: Property
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Gets the active <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> for the current <see cref=&quot;T:System.Web.HttpContext&quot;></see>."
+  syntax:
+    content: public virtual System.IdentityModel.Tokens.SessionSecurityToken ContextSessionSecurityToken { get; }
+    return:
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "The active session security token."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler
+  id: CookieHandler
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: CookieHandler
+  nameWithType: SessionAuthenticationModule.CookieHandler
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler
+  type: Property
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Gets the cookie handler that is used to read, write, and delete session cookies."
+  remarks: "The CookieHandler property is initialized by the <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration%2A> method. This method initializes the property based on the cookie handler specified on the <xref:System.IdentityModel.Services.Configuration.FederationConfiguration> object that is set on the <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=fullName> property. You can set the cookie handler in a configuration file through the [\\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element."
+  syntax:
+    content: public System.IdentityModel.Services.CookieHandler CookieHandler { get; set; }
+    return:
+      type: System.IdentityModel.Services.CookieHandler
+      description: "The cookie handler."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(System.Security.Claims.ClaimsPrincipal,System.String,System.DateTime,System.DateTime,System.Boolean)
+  id: CreateSessionSecurityToken(System.Security.Claims.ClaimsPrincipal,System.String,System.DateTime,System.DateTime,System.Boolean)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+  nameWithType: SessionAuthenticationModule.CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Creates a <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> from the specified parameters by using the configured session token handler."
+  syntax:
+    content: public System.IdentityModel.Tokens.SessionSecurityToken CreateSessionSecurityToken (System.Security.Claims.ClaimsPrincipal principal, string context, DateTime validFrom, DateTime validTo, bool isPersistent);
+    parameters:
+    - id: principal
+      type: System.Security.Claims.ClaimsPrincipal
+      description: "The principal to be captured in the token."
+    - id: context
+      type: System.String
+      description: "An application-defined context string."
+    - id: validFrom
+      type: System.DateTime
+      description: "The first instant in which this token is valid."
+    - id: validTo
+      type: System.DateTime
+      description: "The last instant in which this token is valid."
+    - id: isPersistent
+      type: System.Boolean
+      description: "\n     if the value should be persisted by the user agent; otherwise, ."
+    return:
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "To be added."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is not a valid session token handler configured. (There is no  configured in the <xref:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers%2A> property.)"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie
+  id: DeleteSessionTokenCookie
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: DeleteSessionTokenCookie()
+  nameWithType: SessionAuthenticationModule.DeleteSessionTokenCookie()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie()
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Deletes the session cookie and removes it from the cache."
+  remarks: "Deletes the session cookie by using the cookie handler specified by the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property. This method is called during sign-out by the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method."
+  syntax:
+    content: public void DeleteSessionTokenCookie ();
+    parameters: []
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(System.Web.HttpApplication)
+  id: InitializeModule(System.Web.HttpApplication)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: InitializeModule(HttpApplication)
+  nameWithType: SessionAuthenticationModule.InitializeModule(HttpApplication)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(HttpApplication)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Initializes the module and prepares it to handle events from the module&quot;s [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] application object."
+  remarks: "Adds the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> and the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest%2A> handlers to the <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=fullName> and <xref:System.Web.HttpApplication.PostAuthenticateRequest?displayProperty=fullName> events of the application object specified by the `context` parameter."
+  syntax:
+    content: protected override void InitializeModule (System.Web.HttpApplication context);
+    parameters:
+    - id: context
+      type: System.Web.HttpApplication
+      description: "The HTTP application object that contains this module."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration
+  id: InitializePropertiesFromConfiguration
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: InitializePropertiesFromConfiguration()
+  nameWithType: SessionAuthenticationModule.InitializePropertiesFromConfiguration()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration()
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Initializes the module properties based on definitions in the configuration file."
+  remarks: "Initializes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property from the handler specified in configuration by the <xref:System.IdentityModel.Services.Configuration.FederationConfiguration?displayProperty=fullName> object that is set on the <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=fullName> property. You can specify the cookie handler in a configuration file through the [\\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element."
+  syntax:
+    content: protected override void InitializePropertiesFromConfiguration ();
+    parameters: []
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode
+  id: IsReferenceMode
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: IsReferenceMode
+  nameWithType: SessionAuthenticationModule.IsReferenceMode
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode
+  type: Property
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Gets or sets a value that specifies whether the session information (claim values, etc.) should be stored in the session cookie or whether the session content should be stored on the server side, using the cookie to store just a reference."
+  remarks: "In reference mode, the <xref:System.IdentityModel.Tokens.SessionSecurityToken> is stored in a server-side cache (an object that derives from <xref:System.IdentityModel.Tokens.SessionSecurityTokenCache>). The issued cookie just contains a context identifier that is used to retrieve the token from the cache.      > [!IMPORTANT] >  To operate in reference mode, Microsoft recommends providing a handler for the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated?displayProperty=fullName> event in the global.asax.cs file and setting the <xref:System.IdentityModel.Tokens.SessionSecurityToken.IsReferenceMode%2A?displayProperty=fullName> property on the token passed in the <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=fullName> property. This will ensure that the session token operates in reference mode for every request and is favored over merely setting the IsReferenceMode property on the Session Authentication Module."
+  syntax:
+    content: public bool IsReferenceMode { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if issued cookies are in reference mode; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>, which specifies that issued cookies are not in reference mode."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(System.Object,System.EventArgs)
+  id: OnAuthenticateRequest(System.Object,System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnAuthenticateRequest(Object,EventArgs)
+  nameWithType: SessionAuthenticationModule.OnAuthenticateRequest(Object,EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(Object,EventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Handles the <see cref=&quot;E:System.Web.HttpApplication.AuthenticateRequest&quot;></see> event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline."
+  remarks: "This method does the following:      1.  Invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie%2A> method to read a <xref:System.IdentityModel.Tokens.SessionSecurityToken> from the session cookie, if one is present.      2.  If a session security token cannot be read (most likely because a session has not been established), return.      3.  Invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived%2A> method to raise the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> event. This provides an opportunity for the token read from the cookie to be modified or for the request to be canceled. The handler can also specify that the token should be reissued, by setting the <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.ReissueCookie%2A?displayProperty=fullName> property.      4.  If the token is to be reissued, removes it from the cache and invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated%2A> method to raise the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated> event. This provides opportunity for the token to again be modified. The reissue behavior can also be modified by setting the <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.WriteSessionCookie%2A?displayProperty=fullName> property in the event handler.      5.  Invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> method to authenticate the user. If successful, this has the effect of setting the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property to the principal that is contained in the <xref:System.IdentityModel.Tokens.SessionSecurityToken.ClaimsPrincipal%2A?displayProperty=fullName> property of the incoming token.      6.  If the session has expired, invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method.       The OnAuthenticateRequest method is added to the handlers for the <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=fullName> event in the <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule%2A> method."
+  syntax:
+    content: protected virtual void OnAuthenticateRequest (object sender, EventArgs eventArgs);
+    parameters:
+    - id: sender
+      type: System.Object
+      description: "The source for the event. This will be an  object."
+    - id: eventArgs
+      type: System.EventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is not a valid session token handler configured. (There is no  configured in the <xref:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers%2A> property.)"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(System.Object,System.EventArgs)
+  id: OnPostAuthenticateRequest(System.Object,System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnPostAuthenticateRequest(Object,EventArgs)
+  nameWithType: SessionAuthenticationModule.OnPostAuthenticateRequest(Object,EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(Object,EventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Handles the <see cref=&quot;E:System.Web.HttpApplication.PostAuthenticateRequest&quot;></see> event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline."
+  remarks: "The default implementation is empty.       The OnPostAuthenticateRequest handler is added to the handlers for the <xref:System.Web.HttpApplication.PostAuthenticateRequest?displayProperty=fullName> event in the <xref:System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule%2A> method."
+  syntax:
+    content: protected virtual void OnPostAuthenticateRequest (object sender, EventArgs e);
+    parameters:
+    - id: sender
+      type: System.Object
+      description: "The source for the event. This will be an  object."
+    - id: e
+      type: System.EventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs)
+  id: OnSessionSecurityTokenCreated(System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Raises the <see cref=&quot;E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated&quot;></see> event."
+  remarks: "Called from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> method."
+  syntax:
+    content: protected virtual void OnSessionSecurityTokenCreated (System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs args);
+    parameters:
+    - id: args
+      type: System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs)
+  id: OnSessionSecurityTokenReceived(System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Raises the <see cref=&quot;E:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived&quot;></see> event."
+  remarks: "Called from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> method."
+  syntax:
+    content: protected virtual void OnSessionSecurityTokenReceived (System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs args);
+    parameters:
+    - id: args
+      type: System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(System.EventArgs)
+  id: OnSignedOut(System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnSignedOut(EventArgs)
+  nameWithType: SessionAuthenticationModule.OnSignedOut(EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(EventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Raises the <see cref=&quot;E:System.IdentityModel.Services.SessionAuthenticationModule.SignedOut&quot;></see> event."
+  remarks: "This method is invoked from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method after the sign-out has been performed and the session cookie has been deleted."
+  syntax:
+    content: protected virtual void OnSignedOut (EventArgs e);
+    parameters:
+    - id: e
+      type: System.EventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(System.IdentityModel.Services.SigningOutEventArgs)
+  id: OnSigningOut(System.IdentityModel.Services.SigningOutEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnSigningOut(SigningOutEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSigningOut(SigningOutEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(SigningOutEventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Raises the <see cref=&quot;E:System.IdentityModel.Services.SessionAuthenticationModule.SigningOut&quot;></see> event."
+  remarks: "This method is invoked from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method to perform sign-out. It is invoked before the session cookie is deleted."
+  syntax:
+    content: protected virtual void OnSigningOut (System.IdentityModel.Services.SigningOutEventArgs e);
+    parameters:
+    - id: e
+      type: System.IdentityModel.Services.SigningOutEventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(System.IdentityModel.Services.ErrorEventArgs)
+  id: OnSignOutError(System.IdentityModel.Services.ErrorEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: OnSignOutError(ErrorEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSignOutError(ErrorEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(ErrorEventArgs)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Raises the <see cref=&quot;E:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError&quot;></see> event."
+  remarks: "This method is invoked from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method if an error occurs during sign-out."
+  syntax:
+    content: protected virtual void OnSignOutError (System.IdentityModel.Services.ErrorEventArgs e);
+    parameters:
+    - id: e
+      type: System.IdentityModel.Services.ErrorEventArgs
+      description: "The data for the event."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(System.Byte[])
+  id: ReadSessionTokenFromCookie(System.Byte[])
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: ReadSessionTokenFromCookie(Byte[])
+  nameWithType: SessionAuthenticationModule.ReadSessionTokenFromCookie(Byte[])
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(Byte[])
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Reads a <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> from the specified session cookie."
+  syntax:
+    content: public System.IdentityModel.Tokens.SessionSecurityToken ReadSessionTokenFromCookie (byte[] sessionCookie);
+    parameters:
+    - id: sessionCookie
+      type: System.Byte[]
+      description: "The cookie, in raw form, that contains the session token."
+    return:
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "To be added."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is not a valid session token handler configured. (There is no  configured in the <xref:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers%2A> property.)"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated
+  id: SessionSecurityTokenCreated
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SessionSecurityTokenCreated
+  nameWithType: SessionAuthenticationModule.SessionSecurityTokenCreated
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated
+  type: Event
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Occurs when a session security token has been created."
+  remarks: "You can use this event to modify the session security token before it is written to a cookie.       The SessionSecurityTokenCreated event is raised from within the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> method after a session token (<xref:System.IdentityModel.Tokens.SessionSecurityToken>) has been created. This happens, for example, if an event handler for the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived> event modifies the token.       You can use this event to modify properties of the session token before it is passed further along the pipeline and is used to authenticate the entity making the request (user).       In an event handler, you can access the token through the <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.SessionToken%2A?displayProperty=fullName> property. After modifying the token, you can ensure that it is written back to the cookie by setting the <xref:System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs.WriteSessionCookie%2A?displayProperty=fullName> property to `true`. Unlike, the SessionSecurityTokenCreated event, SessionSecurityTokenCreated is not a cancelable event."
+  example:
+  - "The following code shows a handler for the SessionSecurityTokenCreated event implemented in the global.asax.cs file of an ASP.NET web application. You must also add the handler to the event. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#6](~/add/codesnippet/CSharp/sam/global.asax.cs#6)]"
+  syntax:
+    content: public event EventHandler<System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs> SessionSecurityTokenCreated;
+    return:
+      type: System.EventHandler{System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs}
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived
+  id: SessionSecurityTokenReceived
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SessionSecurityTokenReceived
+  nameWithType: SessionAuthenticationModule.SessionSecurityTokenReceived
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived
+  type: Event
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Occurs when a session security token has been read from a cookie."
+  remarks: "The SessionSecurityTokenReceived event is raised from within the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest%2A> method after a session token (<xref:System.IdentityModel.Tokens.SessionSecurityToken>) has been successfully read from the session cookie.  \n  \n You can use this event to modify properties of the session token before it is passed further along the pipeline and is used to authenticate the entity making the request (user). One of the most common scenarios involves modifying the session expiration time (accessible through the <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A?displayProperty=fullName> property) to override the session expiration time set in configuration through the `lifetime` attribute of the [\\<sessionTokenRequirement>](../Topic/%3CsessionTokenRequirement%3E.md) element. By modifying this property on each request, you can implement a sliding session; that is, a session in which the lifetime is extended each time the user accesses the site.  \n  \n In an event handler, you can access the token through the <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.SessionToken%2A?displayProperty=fullName> property. After modifying the token, you can ensure that it is written back to the cookie by setting the <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs.ReissueCookie%2A?displayProperty=fullName> to `true`. Finally, the SessionSecurityTokenReceived event is a cancelable event, and you can set the <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> property of the <xref:System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs> to abort further processing of the request."
+  example:
+  - "The following code shows a handler for the SessionSecurityTokenReceived event implemented in the global.asax.cs file of an ASP.NET web application. You must also add the handler to the event. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#5](~/add/codesnippet/CSharp/sam/global.asax.cs#5)]"
+  syntax:
+    content: public event EventHandler<System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs> SessionSecurityTokenReceived;
+    return:
+      type: System.EventHandler{System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs}
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  id: SetPrincipalFromSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SetPrincipalFromSessionToken(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.SetPrincipalFromSessionToken(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(SessionSecurityToken)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Sets the principal on the <see cref=&quot;T:System.Web.HttpContext&quot;></see> and <see cref=&quot;T:System.Threading.Thread&quot;></see> to the principal that is contained in the specified session token."
+  remarks: "Invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken%2A> method and sets the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property and the <xref:System.Web.HttpContext.User%2A?displayProperty=fullName> property on <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName> using the identities that are returned.       This method is called from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> method."
+  syntax:
+    content: protected virtual void SetPrincipalFromSessionToken (System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken);
+    parameters:
+    - id: sessionSecurityToken
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "The session token from which to set the principal."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignedOut
+  id: SignedOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SignedOut
+  nameWithType: SessionAuthenticationModule.SignedOut
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignedOut
+  type: Event
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Occurs after the user is signed out."
+  remarks: "Raised from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method just after the <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A> method is invoked.       This event is not guaranteed to be called for every session. For example, the cookies may be deleted at the client-side, in which case, this event would never be raised because there is no server-side event for deleting the session."
+  example:
+  - "The following code shows a handler for the SignedOut event implemented in the global.asax.cs file of an ASP.NET web application. You must also add the handler to the event. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#3](~/add/codesnippet/CSharp/sam/global.asax.cs#3)]"
+  syntax:
+    content: public event EventHandler SignedOut;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SigningOut
+  id: SigningOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SigningOut
+  nameWithType: SessionAuthenticationModule.SigningOut
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SigningOut
+  type: Event
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Occurs before deleting the sign-in session."
+  remarks: "Raised from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method just before the <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A> method is invoked.       This event is not guaranteed to be called for every session. For example, the cookies may be deleted at the client-side, in which case, this event would never be raised because there is no server-side event for deleting the session."
+  example:
+  - "The following code shows a handler for the SigningOut event implemented in the global.asax.cs file of an ASP.NET web application. You must also add the handler to the event. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#4](~/add/codesnippet/CSharp/sam/global.asax.cs#4)]"
+  syntax:
+    content: public event EventHandler<System.IdentityModel.Services.SigningOutEventArgs> SigningOut;
+    return:
+      type: System.EventHandler{System.IdentityModel.Services.SigningOutEventArgs}
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignOut
+  id: SignOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SignOut()
+  nameWithType: SessionAuthenticationModule.SignOut()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignOut()
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Signs the current user out and raises the associated events."
+  remarks: "Invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut%2A>, <xref:System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie%2A>, and <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut%2A> methods to perform sign-out. If an exception occurs, the <xref:System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError%2A> method is invoked to raise the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOutError> event. You can set the <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> property of the <xref:System.IdentityModel.Services.ErrorEventArgs> object passed into the event handler for this event to cancel the sign-out and prevent the exception from being propagated to the client.       You can override this method to add application-specific behavior."
+  example:
+  - "The following code shows code for invoking the SignOut method from a SignOut.aspx page (SignOut.aspx.cs) in an ASP.NET web application. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#7](~/add/codesnippet/CSharp/sam/global.asax.cs#7)]"
+  syntax:
+    content: public virtual void SignOut ();
+    parameters: []
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.SignOut*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignOutError
+  id: SignOutError
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: SignOutError
+  nameWithType: SessionAuthenticationModule.SignOutError
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignOutError
+  type: Event
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Occurs when there is an error during sign-out."
+  remarks: "Raised from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.SignOut%2A> method when an error occurs during sign-out.       In an event handler, you can get the exception that resulted in the event being raised from the <xref:System.IdentityModel.Services.ErrorEventArgs.Exception%2A?displayProperty=fullName> property. You can cancel further processing of the exception, which has the result of not propagating the exception to the client, by setting the <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> property of the <xref:System.IdentityModel.Services.ErrorEventArgs> to `true`.       This event is not guaranteed to be called for every session. For example, the cookies may be deleted at the client-side, in which case, this event would never be raised because there is no server-side event for deleting the session."
+  example:
+  - "The following code shows a handler for the SignOutError event implemented in the global.asax.cs file of an ASP.NET web application. You must also add the handler to the event. A more complete example is shown in the <xref:System.IdentityModel.Services.SessionAuthenticationModule> overview topic.  \n  \n [!code-cs[WifSAM#2](~/add/codesnippet/CSharp/sam/global.asax.cs#2)]"
+  syntax:
+    content: public event EventHandler<System.IdentityModel.Services.ErrorEventArgs> SignOutError;
+    return:
+      type: System.EventHandler{System.IdentityModel.Services.ErrorEventArgs}
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)
+  id: TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: TryReadSessionTokenFromCookie(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.TryReadSessionTokenFromCookie(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(SessionSecurityToken)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Attempts to read a <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> from a session cookie and returns a value that indicates whether the session cookie was successfully read."
+  remarks: "Reads the cookie by using the cookie handler that is configured in the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property and then invokes the <xref:System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie%2A> method to read the token from the cookie."
+  syntax:
+    content: public bool TryReadSessionTokenFromCookie (out System.IdentityModel.Tokens.SessionSecurityToken sessionToken);
+    parameters:
+    - id: sessionToken
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "When this method returns, contains the session security token that was read from the session cookie."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  id: ValidateSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: ValidateSessionToken(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.ValidateSessionToken(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(SessionSecurityToken)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Validates the specified <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> and returns its identities."
+  remarks: "This method is called from the <xref:System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken%2A> method. It invokes the <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.ValidateToken%2A?displayProperty=fullName> method of the configured session token handler to validate the token and extract its identities."
+  syntax:
+    content: protected System.Collections.ObjectModel.ReadOnlyCollection<System.Security.Claims.ClaimsIdentity> ValidateSessionToken (System.IdentityModel.Tokens.SessionSecurityToken sessionSecurityToken);
+    parameters:
+    - id: sessionSecurityToken
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "The token to validate."
+    return:
+      type: System.Collections.ObjectModel.ReadOnlyCollection{System.Security.Claims.ClaimsIdentity}
+      description: "To be added."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken*
+  exceptions:
+  - type: System.IdentityModel.Services.FederatedSessionExpiredException
+    commentId: T:System.IdentityModel.Services.FederatedSessionExpiredException
+    description: "The token has expired."
+  - type: System.IdentityModel.Services.FederationException
+    commentId: T:System.IdentityModel.Services.FederationException
+    description: "The token start time is not yet valid."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is not a valid session token handler configured. (There is no  configured in the <xref:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers%2A> property.)"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)
+  id: WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  langs:
+  - csharp
+  name: WriteSessionTokenToCookie(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.WriteSessionTokenToCookie(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(SessionSecurityToken)
+  type: Method
+  assemblies:
+  - System.IdentityModel.Services
+  namespace: System.IdentityModel.Services
+  summary: "Writes the specified <see cref=&quot;T:System.IdentityModel.Tokens.SessionSecurityToken&quot;></see> to a session cookie."
+  remarks: "Writes the cookie by using the cookie handler that is configured in the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A> property."
+  syntax:
+    content: public void WriteSessionTokenToCookie (System.IdentityModel.Tokens.SessionSecurityToken sessionToken);
+    parameters:
+    - id: sessionToken
+      type: System.IdentityModel.Tokens.SessionSecurityToken
+      description: "The session security token to write."
+  overload: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sessionToken is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is not a valid session token handler configured. (There is no  configured in the <xref:System.IdentityModel.Configuration.IdentityConfiguration.SecurityTokenHandlers%2A> property.)"
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.IdentityModel.Services.HttpModuleBase
+  isExternal: false
+  name: System.IdentityModel.Services.HttpModuleBase
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.#ctor
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SessionAuthenticationModule()
+  nameWithType: SessionAuthenticationModule.SessionAuthenticationModule()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionAuthenticationModule()
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(System.IdentityModel.Tokens.SessionSecurityToken,System.Boolean)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+  nameWithType: SessionAuthenticationModule.AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken(SessionSecurityToken,Boolean)
+- uid: System.IdentityModel.Tokens.SessionSecurityToken
+  parent: System.IdentityModel.Tokens
+  isExternal: false
+  name: SessionSecurityToken
+  nameWithType: SessionSecurityToken
+  fullName: System.IdentityModel.Tokens.SessionSecurityToken
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(System.Web.HttpCookieCollection)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ContainsSessionTokenCookie(HttpCookieCollection)
+  nameWithType: SessionAuthenticationModule.ContainsSessionTokenCookie(HttpCookieCollection)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie(HttpCookieCollection)
+- uid: System.Web.HttpCookieCollection
+  parent: System.Web
+  isExternal: false
+  name: HttpCookieCollection
+  nameWithType: HttpCookieCollection
+  fullName: System.Web.HttpCookieCollection
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ContextSessionSecurityToken
+  nameWithType: SessionAuthenticationModule.ContextSessionSecurityToken
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: CookieHandler
+  nameWithType: SessionAuthenticationModule.CookieHandler
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler
+- uid: System.IdentityModel.Services.CookieHandler
+  parent: System.IdentityModel.Services
+  isExternal: false
+  name: CookieHandler
+  nameWithType: CookieHandler
+  fullName: System.IdentityModel.Services.CookieHandler
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(System.Security.Claims.ClaimsPrincipal,System.String,System.DateTime,System.DateTime,System.Boolean)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+  nameWithType: SessionAuthenticationModule.CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken(ClaimsPrincipal,String,DateTime,DateTime,Boolean)
+- uid: System.Security.Claims.ClaimsPrincipal
+  parent: System.Security.Claims
+  isExternal: false
+  name: ClaimsPrincipal
+  nameWithType: ClaimsPrincipal
+  fullName: System.Security.Claims.ClaimsPrincipal
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.DateTime
+  parent: System
+  isExternal: true
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: DeleteSessionTokenCookie()
+  nameWithType: SessionAuthenticationModule.DeleteSessionTokenCookie()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie()
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(System.Web.HttpApplication)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: InitializeModule(HttpApplication)
+  nameWithType: SessionAuthenticationModule.InitializeModule(HttpApplication)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule(HttpApplication)
+- uid: System.Web.HttpApplication
+  parent: System.Web
+  isExternal: false
+  name: HttpApplication
+  nameWithType: HttpApplication
+  fullName: System.Web.HttpApplication
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: InitializePropertiesFromConfiguration()
+  nameWithType: SessionAuthenticationModule.InitializePropertiesFromConfiguration()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration()
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: IsReferenceMode
+  nameWithType: SessionAuthenticationModule.IsReferenceMode
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(System.Object,System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnAuthenticateRequest(Object,EventArgs)
+  nameWithType: SessionAuthenticationModule.OnAuthenticateRequest(Object,EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest(Object,EventArgs)
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(System.Object,System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnPostAuthenticateRequest(Object,EventArgs)
+  nameWithType: SessionAuthenticationModule.OnPostAuthenticateRequest(Object,EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest(Object,EventArgs)
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated(SessionSecurityTokenCreatedEventArgs)
+- uid: System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs
+  parent: System.IdentityModel.Services
+  isExternal: false
+  name: SessionSecurityTokenCreatedEventArgs
+  nameWithType: SessionSecurityTokenCreatedEventArgs
+  fullName: System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived(SessionSecurityTokenReceivedEventArgs)
+- uid: System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs
+  parent: System.IdentityModel.Services
+  isExternal: false
+  name: SessionSecurityTokenReceivedEventArgs
+  nameWithType: SessionSecurityTokenReceivedEventArgs
+  fullName: System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(System.EventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSignedOut(EventArgs)
+  nameWithType: SessionAuthenticationModule.OnSignedOut(EventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut(EventArgs)
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(System.IdentityModel.Services.SigningOutEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSigningOut(SigningOutEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSigningOut(SigningOutEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut(SigningOutEventArgs)
+- uid: System.IdentityModel.Services.SigningOutEventArgs
+  parent: System.IdentityModel.Services
+  isExternal: false
+  name: SigningOutEventArgs
+  nameWithType: SigningOutEventArgs
+  fullName: System.IdentityModel.Services.SigningOutEventArgs
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(System.IdentityModel.Services.ErrorEventArgs)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSignOutError(ErrorEventArgs)
+  nameWithType: SessionAuthenticationModule.OnSignOutError(ErrorEventArgs)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError(ErrorEventArgs)
+- uid: System.IdentityModel.Services.ErrorEventArgs
+  parent: System.IdentityModel.Services
+  isExternal: false
+  name: ErrorEventArgs
+  nameWithType: ErrorEventArgs
+  fullName: System.IdentityModel.Services.ErrorEventArgs
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(System.Byte[])
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ReadSessionTokenFromCookie(Byte[])
+  nameWithType: SessionAuthenticationModule.ReadSessionTokenFromCookie(Byte[])
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie(Byte[])
+- uid: System.Byte[]
+  parent: System
+  isExternal: true
+  name: Byte
+  nameWithType: Byte
+  fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SessionSecurityTokenCreated
+  nameWithType: SessionAuthenticationModule.SessionSecurityTokenCreated
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenCreated
+- uid: System.EventHandler{System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs}
+  parent: System
+  isExternal: true
+  name: EventHandler<SessionSecurityTokenCreatedEventArgs>
+  nameWithType: EventHandler<SessionSecurityTokenCreatedEventArgs>
+  fullName: System.EventHandler<System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs
+    name: SessionSecurityTokenCreatedEventArgs
+    nameWithType: SessionSecurityTokenCreatedEventArgs
+    fullName: SessionSecurityTokenCreatedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SessionSecurityTokenReceived
+  nameWithType: SessionAuthenticationModule.SessionSecurityTokenReceived
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SessionSecurityTokenReceived
+- uid: System.EventHandler{System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs}
+  parent: System
+  isExternal: true
+  name: EventHandler<SessionSecurityTokenReceivedEventArgs>
+  nameWithType: EventHandler<SessionSecurityTokenReceivedEventArgs>
+  fullName: System.EventHandler<System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Services.SessionSecurityTokenReceivedEventArgs
+    name: SessionSecurityTokenReceivedEventArgs
+    nameWithType: SessionSecurityTokenReceivedEventArgs
+    fullName: SessionSecurityTokenReceivedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SetPrincipalFromSessionToken(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.SetPrincipalFromSessionToken(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken(SessionSecurityToken)
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignedOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SignedOut
+  nameWithType: SessionAuthenticationModule.SignedOut
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignedOut
+- uid: System.EventHandler
+  parent: System
+  isExternal: true
+  name: EventHandler
+  nameWithType: EventHandler
+  fullName: System.EventHandler
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SigningOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SigningOut
+  nameWithType: SessionAuthenticationModule.SigningOut
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SigningOut
+- uid: System.EventHandler{System.IdentityModel.Services.SigningOutEventArgs}
+  parent: System
+  isExternal: true
+  name: EventHandler<SigningOutEventArgs>
+  nameWithType: EventHandler<SigningOutEventArgs>
+  fullName: System.EventHandler<System.IdentityModel.Services.SigningOutEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.IdentityModel.Services.SigningOutEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Services.SigningOutEventArgs
+    name: SigningOutEventArgs
+    nameWithType: SigningOutEventArgs
+    fullName: SigningOutEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignOut
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SignOut()
+  nameWithType: SessionAuthenticationModule.SignOut()
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignOut()
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignOutError
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SignOutError
+  nameWithType: SessionAuthenticationModule.SignOutError
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.SignOutError
+- uid: System.EventHandler{System.IdentityModel.Services.ErrorEventArgs}
+  parent: System
+  isExternal: true
+  name: EventHandler<ErrorEventArgs>
+  nameWithType: EventHandler<ErrorEventArgs>
+  fullName: System.EventHandler<System.IdentityModel.Services.ErrorEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.IdentityModel.Services.ErrorEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Services.ErrorEventArgs
+    name: ErrorEventArgs
+    nameWithType: ErrorEventArgs
+    fullName: ErrorEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(System.IdentityModel.Tokens.SessionSecurityToken@)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: TryReadSessionTokenFromCookie(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.TryReadSessionTokenFromCookie(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie(SessionSecurityToken)
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ValidateSessionToken(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.ValidateSessionToken(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken(SessionSecurityToken)
+- uid: System.Collections.ObjectModel.ReadOnlyCollection{System.Security.Claims.ClaimsIdentity}
+  parent: System.Collections.ObjectModel
+  isExternal: true
+  name: ReadOnlyCollection<ClaimsIdentity>
+  nameWithType: ReadOnlyCollection<ClaimsIdentity>
+  fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Security.Claims.ClaimsIdentity>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Security.Claims.ClaimsIdentity>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Security.Claims.ClaimsIdentity
+    name: ClaimsIdentity
+    nameWithType: ClaimsIdentity
+    fullName: ClaimsIdentity
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(System.IdentityModel.Tokens.SessionSecurityToken)
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: WriteSessionTokenToCookie(SessionSecurityToken)
+  nameWithType: SessionAuthenticationModule.WriteSessionTokenToCookie(SessionSecurityToken)
+  fullName: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie(SessionSecurityToken)
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.#ctor*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SessionAuthenticationModule
+  nameWithType: SessionAuthenticationModule.SessionAuthenticationModule
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.AuthenticateSessionSecurityToken*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: AuthenticateSessionSecurityToken
+  nameWithType: SessionAuthenticationModule.AuthenticateSessionSecurityToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContainsSessionTokenCookie*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ContainsSessionTokenCookie
+  nameWithType: SessionAuthenticationModule.ContainsSessionTokenCookie
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ContextSessionSecurityToken*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ContextSessionSecurityToken
+  nameWithType: SessionAuthenticationModule.ContextSessionSecurityToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: CookieHandler
+  nameWithType: SessionAuthenticationModule.CookieHandler
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.CreateSessionSecurityToken*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: CreateSessionSecurityToken
+  nameWithType: SessionAuthenticationModule.CreateSessionSecurityToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.DeleteSessionTokenCookie*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: DeleteSessionTokenCookie
+  nameWithType: SessionAuthenticationModule.DeleteSessionTokenCookie
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializeModule*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: InitializeModule
+  nameWithType: SessionAuthenticationModule.InitializeModule
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.InitializePropertiesFromConfiguration*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: InitializePropertiesFromConfiguration
+  nameWithType: SessionAuthenticationModule.InitializePropertiesFromConfiguration
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.IsReferenceMode*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: IsReferenceMode
+  nameWithType: SessionAuthenticationModule.IsReferenceMode
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnAuthenticateRequest*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnAuthenticateRequest
+  nameWithType: SessionAuthenticationModule.OnAuthenticateRequest
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnPostAuthenticateRequest*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnPostAuthenticateRequest
+  nameWithType: SessionAuthenticationModule.OnPostAuthenticateRequest
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenCreated*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSessionSecurityTokenCreated
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenCreated
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSessionSecurityTokenReceived*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSessionSecurityTokenReceived
+  nameWithType: SessionAuthenticationModule.OnSessionSecurityTokenReceived
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignedOut*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSignedOut
+  nameWithType: SessionAuthenticationModule.OnSignedOut
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSigningOut*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSigningOut
+  nameWithType: SessionAuthenticationModule.OnSigningOut
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.OnSignOutError*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: OnSignOutError
+  nameWithType: SessionAuthenticationModule.OnSignOutError
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ReadSessionTokenFromCookie*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ReadSessionTokenFromCookie
+  nameWithType: SessionAuthenticationModule.ReadSessionTokenFromCookie
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SetPrincipalFromSessionToken*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SetPrincipalFromSessionToken
+  nameWithType: SessionAuthenticationModule.SetPrincipalFromSessionToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.SignOut*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: SignOut
+  nameWithType: SessionAuthenticationModule.SignOut
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.TryReadSessionTokenFromCookie*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: TryReadSessionTokenFromCookie
+  nameWithType: SessionAuthenticationModule.TryReadSessionTokenFromCookie
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.ValidateSessionToken*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: ValidateSessionToken
+  nameWithType: SessionAuthenticationModule.ValidateSessionToken
+- uid: System.IdentityModel.Services.SessionAuthenticationModule.WriteSessionTokenToCookie*
+  parent: System.IdentityModel.Services.SessionAuthenticationModule
+  isExternal: false
+  name: WriteSessionTokenToCookie
+  nameWithType: SessionAuthenticationModule.WriteSessionTokenToCookie

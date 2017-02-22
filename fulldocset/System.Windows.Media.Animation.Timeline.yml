@@ -1,0 +1,1615 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Windows.Media.Animation.Timeline
+  id: Timeline
+  children:
+  - System.Windows.Media.Animation.Timeline.#ctor
+  - System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan})
+  - System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration)
+  - System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration,System.Windows.Media.Animation.RepeatBehavior)
+  - System.Windows.Media.Animation.Timeline.AccelerationRatio
+  - System.Windows.Media.Animation.Timeline.AccelerationRatioProperty
+  - System.Windows.Media.Animation.Timeline.AllocateClock
+  - System.Windows.Media.Animation.Timeline.AutoReverse
+  - System.Windows.Media.Animation.Timeline.AutoReverseProperty
+  - System.Windows.Media.Animation.Timeline.BeginTime
+  - System.Windows.Media.Animation.Timeline.BeginTimeProperty
+  - System.Windows.Media.Animation.Timeline.Clone
+  - System.Windows.Media.Animation.Timeline.CloneCurrentValue
+  - System.Windows.Media.Animation.Timeline.Completed
+  - System.Windows.Media.Animation.Timeline.CreateClock
+  - System.Windows.Media.Animation.Timeline.CreateClock(System.Boolean)
+  - System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated
+  - System.Windows.Media.Animation.Timeline.CurrentStateInvalidated
+  - System.Windows.Media.Animation.Timeline.CurrentTimeInvalidated
+  - System.Windows.Media.Animation.Timeline.DecelerationRatio
+  - System.Windows.Media.Animation.Timeline.DecelerationRatioProperty
+  - System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty
+  - System.Windows.Media.Animation.Timeline.Duration
+  - System.Windows.Media.Animation.Timeline.DurationProperty
+  - System.Windows.Media.Animation.Timeline.FillBehavior
+  - System.Windows.Media.Animation.Timeline.FillBehaviorProperty
+  - System.Windows.Media.Animation.Timeline.FreezeCore(System.Boolean)
+  - System.Windows.Media.Animation.Timeline.GetAsFrozenCore(System.Windows.Freezable)
+  - System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore(System.Windows.Freezable)
+  - System.Windows.Media.Animation.Timeline.GetDesiredFrameRate(System.Windows.Media.Animation.Timeline)
+  - System.Windows.Media.Animation.Timeline.GetNaturalDuration(System.Windows.Media.Animation.Clock)
+  - System.Windows.Media.Animation.Timeline.GetNaturalDurationCore(System.Windows.Media.Animation.Clock)
+  - System.Windows.Media.Animation.Timeline.Name
+  - System.Windows.Media.Animation.Timeline.NameProperty
+  - System.Windows.Media.Animation.Timeline.RemoveRequested
+  - System.Windows.Media.Animation.Timeline.RepeatBehavior
+  - System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty
+  - System.Windows.Media.Animation.Timeline.SetDesiredFrameRate(System.Windows.Media.Animation.Timeline,System.Nullable{System.Int32})
+  - System.Windows.Media.Animation.Timeline.SpeedRatio
+  - System.Windows.Media.Animation.Timeline.SpeedRatioProperty
+  langs:
+  - csharp
+  name: Timeline
+  nameWithType: Timeline
+  fullName: System.Windows.Media.Animation.Timeline
+  type: Class
+  summary: "Defines a segment of time."
+  remarks: "A timeline represents a segment of time.  It provides properties that enable you to specify the length of that segment, when it should start, how many times it will repeat, how fast time progresses in that segment, and more.       Classes that inherit from the timeline class provide additional functionality, such as animation and media playback. The following are examples of some of the different types of specialized timelines available.      -   **Animations**: An <xref:System.Windows.Media.Animation.AnimationTimeline> is a type of timeline that produces output values. When you associate an animation with a property, the animation updates the property&quot;s value as it plays, thereby &quot;animating&quot; it. For an introduction to animations, see [Animation Overview](../Topic/Animation%20Overview.md). For information about the different ways to apply animations, see the [Property Animation Techniques Overview](../Topic/Property%20Animation%20Techniques%20Overview.md).      -   **MediaTimelines**: A <xref:System.Windows.Media.MediaTimeline> is a type of timeline that controls the playback of a media file.      -   **ParallelTimelines**: A <xref:System.Windows.Media.Animation.ParallelTimeline> is a type of timeline that groups other timelines.      -   **Storyboards**: A <xref:System.Windows.Media.Animation.Storyboard> is a special type of <xref:System.Windows.Media.Animation.ParallelTimeline> that provides object and property targeting information for the timelines it contains. For more information about <xref:System.Windows.Media.Animation.Storyboard> objects, see the [Storyboards Overview](../Topic/Storyboards%20Overview.md).       For more information about using timelines, see the [Animation Overview](../Topic/Animation%20Overview.md). For an introduction to the timing features of timelines, see the [Timing Behaviors Overview](../Topic/Timing%20Behaviors%20Overview.md).      ## Data Binding and Animating Timelines    Most timeline properties can be data bound or animated; however, because of the way the timing system works, data bound or animated timelines do not behave like other data bound or animated objects. To understand their behavior, it helps to understand what it means to activate a timeline.       When a timeline is applied, copies are made of the timeline and its child timelines. These copies are frozen (made read-only) and <xref:System.Windows.Media.Animation.Clock> objects are created from them. It&quot;s these clocks that do the actual work of animating the targeted properties. If a timeline was data bound or animated, a snapshot of its current values was made when its clock was created. Even though the original timeline might continue to change, its clock does not.       For a timeline to reflect data binding or animation changes, its clock must be regenerated. Clocks are not regenerated for you automatically. The following are several ways to apply timeline changes:      -   If the timeline is or belongs to a <xref:System.Windows.Media.Animation.Storyboard>, you can make it reflect changes by reapplying its storyboard using a <xref:System.Windows.Media.Animation.BeginStoryboard> or the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method. This has the side effect of also restarting the animation. In code, you can use the <xref:System.Windows.Media.Animation.Storyboard.Seek%2A> method to advance the storyboard back to its previous position.      -   If you applied an animation directly to a property using the <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%2A> method, call the <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%2A> method again and pass it the animation that&quot;s been modified.      -   If you are working directly at the clock level, create and apply a new set of clocks and use them to replace the previous set of generated clocks.       For an example of a data bound animation, see the [Key Spline Animation Sample](http://go.microsoft.com/fwlink/?LinkID=160011) .      ## Using a Timeline as a Timer    A timeline&quot;s clock will only progress when there&quot;s an event hander associated with it or (in the case of an <xref:System.Windows.Media.Animation.AnimationClock> object) it is associated with a property. For this reason (and others), it&quot;s not recommended that you use a Timeline as a timer."
+  syntax:
+    content: >-
+      [System.Windows.Localizability(System.Windows.LocalizationCategory.None, Readability=System.Windows.Readability.Unreadable)]
+
+      [System.Windows.Markup.RuntimeNameProperty("Name")]
+
+      public abstract class Timeline : System.Windows.Media.Animation.Animatable
+  inheritance:
+  - System.Object
+  - System.Windows.Threading.DispatcherObject
+  - System.Windows.DependencyObject
+  - System.Windows.Freezable
+  - System.Windows.Media.Animation.Animatable
+  implements: []
+  inheritedMembers:
+  - System.Windows.DependencyObject.ClearValue(System.Windows.DependencyProperty)
+  - System.Windows.DependencyObject.ClearValue(System.Windows.DependencyPropertyKey)
+  - System.Windows.DependencyObject.CoerceValue(System.Windows.DependencyProperty)
+  - System.Windows.DependencyObject.DependencyObjectType
+  - System.Windows.DependencyObject.Equals(System.Object)
+  - System.Windows.DependencyObject.GetHashCode
+  - System.Windows.DependencyObject.GetLocalValueEnumerator
+  - System.Windows.DependencyObject.GetValue(System.Windows.DependencyProperty)
+  - System.Windows.DependencyObject.InvalidateProperty(System.Windows.DependencyProperty)
+  - System.Windows.DependencyObject.IsSealed
+  - System.Windows.DependencyObject.ReadLocalValue(System.Windows.DependencyProperty)
+  - System.Windows.DependencyObject.SetCurrentValue(System.Windows.DependencyProperty,System.Object)
+  - System.Windows.DependencyObject.SetValue(System.Windows.DependencyProperty,System.Object)
+  - System.Windows.DependencyObject.SetValue(System.Windows.DependencyPropertyKey,System.Object)
+  - System.Windows.DependencyObject.ShouldSerializeProperty(System.Windows.DependencyProperty)
+  - System.Windows.Freezable.CanFreeze
+  - System.Windows.Freezable.Changed
+  - System.Windows.Freezable.CloneCore(System.Windows.Freezable)
+  - System.Windows.Freezable.CloneCurrentValueCore(System.Windows.Freezable)
+  - System.Windows.Freezable.CreateInstance
+  - System.Windows.Freezable.CreateInstanceCore
+  - System.Windows.Freezable.Freeze
+  - System.Windows.Freezable.Freeze(System.Windows.Freezable,System.Boolean)
+  - System.Windows.Freezable.GetAsFrozen
+  - System.Windows.Freezable.GetCurrentValueAsFrozen
+  - System.Windows.Freezable.IsFrozen
+  - System.Windows.Freezable.OnChanged
+  - System.Windows.Freezable.OnFreezablePropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyObject)
+  - System.Windows.Freezable.OnFreezablePropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyObject,System.Windows.DependencyProperty)
+  - System.Windows.Freezable.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)
+  - System.Windows.Freezable.ReadPreamble
+  - System.Windows.Freezable.WritePostscript
+  - System.Windows.Freezable.WritePreamble
+  - System.Windows.Media.Animation.Animatable.ApplyAnimationClock(System.Windows.DependencyProperty,System.Windows.Media.Animation.AnimationClock)
+  - System.Windows.Media.Animation.Animatable.ApplyAnimationClock(System.Windows.DependencyProperty,System.Windows.Media.Animation.AnimationClock,System.Windows.Media.Animation.HandoffBehavior)
+  - System.Windows.Media.Animation.Animatable.BeginAnimation(System.Windows.DependencyProperty,System.Windows.Media.Animation.AnimationTimeline)
+  - System.Windows.Media.Animation.Animatable.BeginAnimation(System.Windows.DependencyProperty,System.Windows.Media.Animation.AnimationTimeline,System.Windows.Media.Animation.HandoffBehavior)
+  - System.Windows.Media.Animation.Animatable.GetAnimationBaseValue(System.Windows.DependencyProperty)
+  - System.Windows.Media.Animation.Animatable.HasAnimatedProperties
+  - System.Windows.Media.Animation.Animatable.ShouldSerializeStoredWeakReference(System.Windows.DependencyObject)
+  - System.Windows.Threading.DispatcherObject.CheckAccess
+  - System.Windows.Threading.DispatcherObject.Dispatcher
+  - System.Windows.Threading.DispatcherObject.VerifyAccess
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.#ctor
+  id: '#ctor'
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Timeline()
+  nameWithType: Timeline.Timeline()
+  fullName: System.Windows.Media.Animation.Timeline.Timeline()
+  type: Constructor
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> class."
+  syntax:
+    content: protected Timeline ();
+    parameters: []
+  overload: System.Windows.Media.Animation.Timeline.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan})
+  id: '#ctor(System.Nullable{System.TimeSpan})'
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Timeline(Nullable<TimeSpan>)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>)
+  type: Constructor
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> class with the specified &lt;xref:System.Windows.Media.Animation.Timeline.BeginTime%2A&gt;."
+  syntax:
+    content: protected Timeline (Nullable<TimeSpan> beginTime);
+    parameters:
+    - id: beginTime
+      type: System.Nullable{System.TimeSpan}
+      description: "The time at which this  should begin. See the <xref:System.Windows.Media.Animation.Timeline.BeginTime%2A> property for more information."
+  overload: System.Windows.Media.Animation.Timeline.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration)
+  id: '#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration)'
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Timeline(Nullable<TimeSpan>,Duration)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>,Duration)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>,Duration)
+  type: Constructor
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> class with the specified &lt;xref:System.Windows.Media.Animation.Timeline.BeginTime%2A&gt; and &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt;."
+  remarks: ''
+  example:
+  - "<xref:System.Windows.Media.Animation.Timeline.BeginTime%2A>  \n  \n <xref:System.Windows.Media.Animation.Timeline.Duration%2A>"
+  syntax:
+    content: protected Timeline (Nullable<TimeSpan> beginTime, System.Windows.Duration duration);
+    parameters:
+    - id: beginTime
+      type: System.Nullable{System.TimeSpan}
+      description: "The time at which this  should begin. See the <xref:System.Windows.Media.Animation.Timeline.BeginTime%2A> property for more information."
+    - id: duration
+      type: System.Windows.Duration
+      description: "The length of time for which this timeline plays, not counting repetitions. See the <xref:System.Windows.Media.Animation.Timeline.Duration%2A> property for more information."
+  overload: System.Windows.Media.Animation.Timeline.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration,System.Windows.Media.Animation.RepeatBehavior)
+  id: '#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration,System.Windows.Media.Animation.RepeatBehavior)'
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+  type: Constructor
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> class with the specified &lt;xref:System.Windows.Media.Animation.Timeline.BeginTime%2A&gt;, &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt;, and &lt;xref:System.Windows.Media.Animation.Timeline.RepeatBehavior%2A&gt;."
+  remarks: ''
+  example:
+  - "<xref:System.Windows.Media.Animation.Timeline.BeginTime%2A>  \n  \n <xref:System.Windows.Media.Animation.Timeline.Duration%2A>"
+  syntax:
+    content: protected Timeline (Nullable<TimeSpan> beginTime, System.Windows.Duration duration, System.Windows.Media.Animation.RepeatBehavior repeatBehavior);
+    parameters:
+    - id: beginTime
+      type: System.Nullable{System.TimeSpan}
+      description: "The time at which this  should begin. See the <xref:System.Windows.Media.Animation.Timeline.BeginTime%2A> property for more information."
+    - id: duration
+      type: System.Windows.Duration
+      description: "The length of time for which this timeline plays, not counting repetitions. See the <xref:System.Windows.Media.Animation.Timeline.Duration%2A> property for more information."
+    - id: repeatBehavior
+      type: System.Windows.Media.Animation.RepeatBehavior
+      description: "The repeating behavior of this timeline, either as an iteration <xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A> or a repeat <xref:System.Windows.Media.Animation.RepeatBehavior.Duration%2A>. See the <xref:System.Windows.Media.Animation.Timeline.RepeatBehavior%2A> property for more information."
+  overload: System.Windows.Media.Animation.Timeline.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.AccelerationRatio
+  id: AccelerationRatio
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: AccelerationRatio
+  nameWithType: Timeline.AccelerationRatio
+  fullName: System.Windows.Media.Animation.Timeline.AccelerationRatio
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets a value specifying the percentage of the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt; spent accelerating the passage of time from zero to its maximum rate."
+  remarks: "Use the AccelerationRatio property to create animations that start slowly and then speed up as time progresses. The AccelerationRatio property is useful for creating ease-in effects or making movement seem more natural. Use the AccelerationRatio and <xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A> properties together to create animations that that start slowly, speed up, and then slow down again before finishing.      <a name=&quot;dependencyPropertyInfo_AccelerationRatio&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.AccelerationRatioProperty>|   |Metadata properties set to `true`|None|"
+  syntax:
+    content: public double AccelerationRatio { get; set; }
+    return:
+      type: System.Double
+      description: "A value between 0 and 1, inclusive, that specifies the percentage of the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt; spent accelerating the passage of time from zero to its maximum rate. If the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A&gt; property is also set, the sum of AccelerationRatio and &lt;xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A&gt; must be less than or equal to 1. The default value is 0."
+  overload: System.Windows.Media.Animation.Timeline.AccelerationRatio*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "AccelerationRatio is less than 0 or greater than 1."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The sum of AccelerationRatio and <xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A> exceeds 1."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.AccelerationRatioProperty
+  id: AccelerationRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: AccelerationRatioProperty
+  nameWithType: Timeline.AccelerationRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.AccelerationRatioProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty AccelerationRatioProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.AllocateClock
+  id: AllocateClock
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: AllocateClock()
+  nameWithType: Timeline.AllocateClock()
+  fullName: System.Windows.Media.Animation.Timeline.AllocateClock()
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Creates a <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> for this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  remarks: "This method is called by the <xref:System.Windows.Media.Animation.Timeline.CreateClock%2A> method and should not be called directly by your code."
+  syntax:
+    content: protected virtual System.Windows.Media.Animation.Clock AllocateClock ();
+    parameters: []
+    return:
+      type: System.Windows.Media.Animation.Clock
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.AllocateClock*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.AutoReverse
+  id: AutoReverse
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: AutoReverse
+  nameWithType: Timeline.AutoReverse
+  fullName: System.Windows.Media.Animation.Timeline.AutoReverse
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets a value that indicates whether the timeline plays in reverse after it completes a forward iteration."
+  remarks: "If the AutoReverse property is set to `true`, the timeline plays for twice the length of time specified by its <xref:System.Windows.Media.Animation.Timeline.Duration%2A> property.      ### AutoReverse and Repetitions    When a timeline&quot;s AutoReverse property is set to `true` and its <xref:System.Windows.Media.Animation.Timeline.RepeatBehavior%2A> property causes it to repeat, each forward iteration is followed by a backward iteration. This makes one repetition. For example, a timeline with an AutoReverse value of `true` with an iteration <xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A> of 2 would play forward once, then backwards, then forwards again, and then backwards again.      <a name=&quot;dependencyPropertyInfo_AutoReverse&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.AutoReverseProperty>|   |Metadata properties set to `true`|None|"
+  syntax:
+    content: public bool AutoReverse { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the timeline plays in reverse at the end of each iteration; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Windows.Media.Animation.Timeline.AutoReverse*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.AutoReverseProperty
+  id: AutoReverseProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: AutoReverseProperty
+  nameWithType: Timeline.AutoReverseProperty
+  fullName: System.Windows.Media.Animation.Timeline.AutoReverseProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty AutoReverseProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.BeginTime
+  id: BeginTime
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: BeginTime
+  nameWithType: Timeline.BeginTime
+  fullName: System.Windows.Media.Animation.Timeline.BeginTime
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets the time at which this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> should begin."
+  remarks: "The BeginTime property is useful for creating timelines that play in a sequence: by increasing the BeginTime of successive timelines that share the same parent, you can stagger their play times.  \n  \n## Negative Values  \n A negative BeginTime value causes a <xref:System.Windows.Media.Animation.Timeline> to behave as though it started at some time in the past. For example, a <xref:System.Windows.Media.Animation.Timeline> with a BeginTime of negative 2.5 seconds and a <xref:System.Windows.Media.Animation.Timeline.Duration%2A> of 5 seconds will appear to be half-way finished when it starts.  \n  \n## BeginTime and SpeedRatio  \n The time described by the BeginTime property is measured in the timeline's parent's time. For example, a timeline with a BeginTime of 5 whose parent has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 2 actually starts after 2.5 seconds.  \n  \n A timeline's own <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> setting does not affect its BeginTime. For example, a timeline with a BeginTime of 5 seconds, a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 2, and a parent timeline with a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 starts after 5 seconds, not 2.5.  \n  \n<a name=\"dependencyPropertyInfo_BeginTime\"></a>   \n## Dependency Property Information  \n  \n|||  \n|-|-|  \n|Identifier field|<xref:System.Windows.Media.Animation.Timeline.BeginTimeProperty>|  \n|Metadata properties set to `true`|None|  \n  \n<a name=\"xamlAttributeUsage_BeginTime\"></a>   \n## XAML Attribute Usage  \n \\<*object* BeginTime=\"[-][*days*.]*hours*:*minutes*:*seconds*[.*fractionalSeconds*]\"/>  \n  \n \\- or -  \n  \n \\<*object* BeginTime=\"[-][*days*.]*hours*:*minutes*\"/>  \n  \n \\- or -  \n  \n \\<*object* BeginTime=\"[-]*days*\"/>  \n  \n \\- or -  \n  \n \\<*object* BeginTime=\"{[x:Null Markup Extension](../Topic/x:Null%20Markup%20Extension.md)}\"/>  \n  \n<a name=\"xamlValues_BeginTime\"></a>   \n## XAML Values  \n Items in square brackets (`[` and `]`) are optional.  \n  \n *days*  \n <xref:System.Int32?displayProperty=fullName>  \n  \n A value greater than or equal to 0 that describes the number of days spanned by this begin time.  \n  \n *hours*  \n <xref:System.Int32?displayProperty=fullName>  \n  \n A value between 0 and 23 that represents the number of hours spanned by this begin time.  \n  \n *minutes*  \n <xref:System.Int32?displayProperty=fullName>  \n  \n A value between 0 and 59 that represents the number of minutes spanned by this begin time.  \n  \n *seconds*  \n <xref:System.Int32?displayProperty=fullName>  \n  \n A value between 0 and 59 that represents the number of seconds spanned by this begin time.  \n  \n *fractionalSeconds*  \n <xref:System.Int32?displayProperty=fullName>  \n  \n A value consisting of 1 to 7 digits that represents fractional seconds.  \n  \n For the complete <xref:System.TimeSpan> syntax, see the Remarks section of the <xref:System.TimeSpan.Parse%2A> page."
+  example:
+  - "A timeline's BeginTime property determines the beginning of a timeline's active period. If the timeline has a parent timeline, the BeginTime property determines how long it takes the timeline to start after its parent starts. If the timeline is a root timeline (a <xref:System.Windows.Media.Animation.Storyboard>, for example), the BeginTime property determines how long the timeline takes to start playing after it is triggered.  \n  \n The following example shows several different timelines with different BeginTime settings.  \n  \n [!code-xml[timingbehaviors_snip#_graphicsmm_BeginTimeExampleWholePage](~/add/codesnippet/Xaml/timingbehaviors_snip.project/BeginTimeExample.xaml#_graphicsmm_begintimeexamplewholepage)]"
+  syntax:
+    content: public Nullable<TimeSpan> BeginTime { get; set; }
+    return:
+      type: System.Nullable{System.TimeSpan}
+      description: "The time at which this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> should begin, relative to its parent&quot;s BeginTime. If this timeline is a root timeline, the time is relative to its interactive begin time (the moment at which the timeline was triggered). This value may be positive, negative, or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>; a <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> value means the timeline never plays. The default value is zero."
+  overload: System.Windows.Media.Animation.Timeline.BeginTime*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.BeginTimeProperty
+  id: BeginTimeProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: BeginTimeProperty
+  nameWithType: Timeline.BeginTimeProperty
+  fullName: System.Windows.Media.Animation.Timeline.BeginTimeProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.BeginTime%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty BeginTimeProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.Clone
+  id: Clone
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Clone()
+  nameWithType: Timeline.Clone()
+  fullName: System.Windows.Media.Animation.Timeline.Clone()
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Creates a modifiable clone of this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>, making deep copies of this object&quot;s values."
+  remarks: "This method is used to produce modifiable copies of frozen <xref:System.Windows.Freezable> objects (or any <xref:System.Windows.Freezable> object). For convenience, this method shadows the inherited version with a strongly typed implementation.       For more information, see <xref:System.Windows.Freezable.Clone%2A?displayProperty=fullName>.       When copying dependency properties, this method copies resource references and data bindings (but they might no longer resolve) but not animations or their current values."
+  syntax:
+    content: public System.Windows.Media.Animation.Timeline Clone ();
+    parameters: []
+    return:
+      type: System.Windows.Media.Animation.Timeline
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.Clone*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CloneCurrentValue
+  id: CloneCurrentValue
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CloneCurrentValue()
+  nameWithType: Timeline.CloneCurrentValue()
+  fullName: System.Windows.Media.Animation.Timeline.CloneCurrentValue()
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Creates a modifiable clone of this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> object, making deep copies of this object&quot;s current values."
+  remarks: "This method is used to produce modifiable copies of frozen <xref:System.Windows.Freezable> objects (or any <xref:System.Windows.Freezable> object). For convenience, this method shadows the inherited version with a strongly typed implementation.       For more information, see <xref:System.Windows.Freezable.CloneCurrentValue%2A?displayProperty=fullName>.       Resource references, data bindings, and animations are not copied, but their current values are."
+  syntax:
+    content: public System.Windows.Media.Animation.Timeline CloneCurrentValue ();
+    parameters: []
+    return:
+      type: System.Windows.Media.Animation.Timeline
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.CloneCurrentValue*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.Completed
+  id: Completed
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Completed
+  nameWithType: Timeline.Completed
+  fullName: System.Windows.Media.Animation.Timeline.Completed
+  type: Event
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: 'Occurs when this timeline has completely finished playing: it will no longer enter its active period.'
+  remarks: "If this timeline is the root timeline of a timeline tree, it has completed playing after it reaches the end of its active period (which includes repeats) and all its children have reached the end of their active periods. If this timeline is a child timeline, it is considered to have completely finished playing when the root timeline of the timeline tree to which it belongs reaches the end of its active period and all its child timelines have finished playing.       Stopping a timeline does not trigger its completed event, but skipping it to its fill period does.       The <xref:System.Object> parameter of the <xref:System.EventHandler> event handler is the timeline&quot;s <xref:System.Windows.Media.Animation.Clock>.       Although this event handler appears to be associated with a timeline, it actually registers with the <xref:System.Windows.Media.Animation.Clock> created for this timeline.  For more information, see the [Timing Events Overview](../Topic/Timing%20Events%20Overview.md)."
+  example:
+  - "In the following example, two <xref:System.Windows.Media.Animation.Storyboard> objects are used to create an animation transition between two images, stored using <xref:System.Windows.Media.ImageSource> objects and displayed using an <xref:System.Windows.Controls.Image> control. One storyboard shrinks the image control until it disappears. After it completes, the old <xref:System.Windows.Media.ImageSource> is swapped with the other <xref:System.Windows.Media.ImageSource>, and a second storyboard that expands the image control until it is full-sized again.  \n  \n [!code-xml[timingbehaviors_snip#TimelineCompletedExampleMarkupUsingWholePage](~/add/codesnippet/Xaml/timingbehaviors_snip.project/TimelineCompletedExample.xaml#timelinecompletedexamplemarkupusingwholepage)]  \n  \n [!CODE [timingbehaviors_snip#TimelineCompletedExampleCodeBehindUsingWholePage](../CodeSnippet/VS_Snippets_Wpf/timingbehaviors_snip#timelinecompletedexamplecodebehindusingwholepage)]"
+  syntax:
+    content: public event EventHandler Completed;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CreateClock
+  id: CreateClock
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CreateClock()
+  nameWithType: Timeline.CreateClock()
+  fullName: System.Windows.Media.Animation.Timeline.CreateClock()
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Creates a new, controllable <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> from this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>. If this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> has children, a tree of clocks is created with this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> as the root."
+  remarks: 'Although this <xref:System.Windows.Media.Animation.Timeline> may be the child of one or more <xref:System.Windows.Media.Animation.TimelineGroup> objects, this information is ignored: this method treats the current <xref:System.Windows.Media.Animation.Timeline> as a root <xref:System.Windows.Media.Animation.Timeline>.'
+  syntax:
+    content: public System.Windows.Media.Animation.Clock CreateClock ();
+    parameters: []
+    return:
+      type: System.Windows.Media.Animation.Clock
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.CreateClock*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CreateClock(System.Boolean)
+  id: CreateClock(System.Boolean)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CreateClock(Boolean)
+  nameWithType: Timeline.CreateClock(Boolean)
+  fullName: System.Windows.Media.Animation.Timeline.CreateClock(Boolean)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Creates a new <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> from this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> and specifies whether the new <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> is controllable. If this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> has children, a tree of clocks is created with this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> as the root."
+  remarks: 'Although this <xref:System.Windows.Media.Animation.Timeline> may be the child of one or more <xref:System.Windows.Media.Animation.TimelineGroup> objects, this information is ignored: this method treats the current <xref:System.Windows.Media.Animation.Timeline> as a root <xref:System.Windows.Media.Animation.Timeline>.'
+  syntax:
+    content: public System.Windows.Media.Animation.Clock CreateClock (bool hasControllableRoot);
+    parameters:
+    - id: hasControllableRoot
+      type: System.Boolean
+      description: "\n     if the root  returned should return a  from its <xref:System.Windows.Media.Animation.Clock.Controller%2A> property so that the  tree can be interactively controlled; otherwise, ."
+    return:
+      type: System.Windows.Media.Animation.Clock
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.CreateClock*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated
+  id: CurrentGlobalSpeedInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CurrentGlobalSpeedInvalidated
+  nameWithType: Timeline.CurrentGlobalSpeedInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated
+  type: Event
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Occurs when the rate at which time progresses for the timeline&quot;s clock changes."
+  remarks: "The current global speed of a timeline&quot;s clock changes in the following circumstances:      -   The clock changes direction because of its timeline&quot;s <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> setting.      -   The clock accelerates or decelerates because of its timeline&quot;s <xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A> or <xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A> property settings.      -   The clock is paused or resumed.      -   The clock becomes inactive or reactivates.      -   The <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> of one of the clock&quot;s parent changes.       The CurrentGlobalSpeedInvalidated event is useful for tracking when a timeline&quot;s clock becomes paused; in your event handler, use your storyboard&quot;s <xref:System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed%2A> method or check the clock&quot;s <xref:System.Windows.Media.Animation.Clock.IsPaused%2A> property to determine whether its clock is paused; compare this against a previously cached value to determine whether it changed.       The <xref:System.Object> parameter of the <xref:System.EventHandler> event handler is the timeline&quot;s <xref:System.Windows.Media.Animation.Clock>.       Although this event handler appears to be associated with a timeline, it actually registers with the <xref:System.Windows.Media.Animation.Clock> created for this timeline.  For more information, see the [Timing Events Overview](../Topic/Timing%20Events%20Overview.md)."
+  example:
+  - "The following example shows how to register for the CurrentGlobalSpeedInvalidated event.  \n  \n [!code-cs[timingbehaviors_procedural_snip#TimelineCurrentGlobalSpeedInvalidatedExampleWholePage](~/add/codesnippet/CSharp/TimingBehavior_csharp/TimelineCurrentGlobalSpeedInvalidatedExample.cs#timelinecurrentglobalspeedinvalidatedexamplewholepage)]\n [!code-vb[timingbehaviors_procedural_snip#TimelineCurrentGlobalSpeedInvalidatedExampleWholePage](~/add/codesnippet/VisualBasic/timingbehavior_vb/timelinecurrentglobalspeedinvalidatedexample.vb#timelinecurrentglobalspeedinvalidatedexamplewholepage)]"
+  syntax:
+    content: public event EventHandler CurrentGlobalSpeedInvalidated;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CurrentStateInvalidated
+  id: CurrentStateInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CurrentStateInvalidated
+  nameWithType: Timeline.CurrentStateInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentStateInvalidated
+  type: Event
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Occurs when the &lt;xref:System.Windows.Media.Animation.Clock.CurrentState%2A&gt; property of the timeline&quot;s <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> is updated."
+  remarks: "Use the CurrentStateInvalidated event when you want to be notified  when a timeline&quot;s <xref:System.Windows.Media.Animation.Clock> starts, stops, or fills.       Pausing a <xref:System.Windows.Media.Animation.Clock> does not change its <xref:System.Windows.Media.Animation.Clock.CurrentState%2A>. To be notified when a clock becomes paused, use the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event.       Although this event occurs when the <xref:System.Windows.Media.Animation.ClockState> becomes invalid, that doesn&quot;t necessarily mean the <xref:System.Windows.Media.Animation.ClockState> changed: a <xref:System.Windows.Media.Animation.Clock> that switches from <xref:System.Windows.Media.Animation.ClockState> to <xref:System.Windows.Media.Animation.ClockState> and then back to <xref:System.Windows.Media.Animation.ClockState> in the same tick will cause this event to fire, but its <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> property won&quot;t actually change.       The <xref:System.Object> parameter of the <xref:System.EventHandler> event handler is the  <xref:System.Windows.Media.Animation.Clock> that was created for this timeline.       Although this event handler appears to be associated with a timeline, it actually registers with the <xref:System.Windows.Media.Animation.Clock> created for this timeline.  For more information, see the [Timing Events Overview](../Topic/Timing%20Events%20Overview.md)."
+  syntax:
+    content: public event EventHandler CurrentStateInvalidated;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.CurrentTimeInvalidated
+  id: CurrentTimeInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: CurrentTimeInvalidated
+  nameWithType: Timeline.CurrentTimeInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentTimeInvalidated
+  type: Event
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Occurs when the &lt;xref:System.Windows.Media.Animation.Clock.CurrentTime%2A&gt; property of the timeline&quot;s <see cref=&quot;T:System.Windows.Media.Animation.Clock&quot;></see> is updated."
+  remarks: "Use the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> event when you want to be notified when the <xref:System.Windows.Media.Animation.Clock.CurrentTime%2A> of a timeline&quot;s <xref:System.Windows.Media.Animation.Clock> is updated.       The <xref:System.Object> parameter of the <xref:System.EventHandler> event handler is the timeline&quot;s <xref:System.Windows.Media.Animation.Clock>.       Although this event handler appears to be associated with a timeline, it actually registers with the <xref:System.Windows.Media.Animation.Clock> created for this timeline.  For more information, see the [Timing Events Overview](../Topic/Timing%20Events%20Overview.md)."
+  example:
+  - "The following example shows how to register for the CurrentTimeInvalidated event.  \n  \n [!code-cs[timingbehaviors_procedural_snip#TimelineCurrentTimeInvalidatedExampleWholePage](~/add/codesnippet/CSharp/TimingBehavior_csharp/TimelineCurrentTimeInvalidatedExample.cs#timelinecurrenttimeinvalidatedexamplewholepage)]\n [!code-vb[timingbehaviors_procedural_snip#TimelineCurrentTimeInvalidatedExampleWholePage](~/add/codesnippet/VisualBasic/timingbehavior_vb/timelinecurrenttimeinvalidatedexample.vb#timelinecurrenttimeinvalidatedexamplewholepage)]"
+  syntax:
+    content: public event EventHandler CurrentTimeInvalidated;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.DecelerationRatio
+  id: DecelerationRatio
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: DecelerationRatio
+  nameWithType: Timeline.DecelerationRatio
+  fullName: System.Windows.Media.Animation.Timeline.DecelerationRatio
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets a value specifying the percentage of the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt; spent decelerating the passage of time from its maximum rate to zero."
+  remarks: "Use the DecelerationRatio property to create animations that slow down before stopping. The DecelerationRatio property is useful for creating ease-in effects or making movement seem more natural. Use the <xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A> and DecelerationRatio properties together to create animations that that start slowly, speed up, and then slow down again before finishing.      <a name=&quot;dependencyPropertyInfo_DecelerationRatio&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.DecelerationRatioProperty>|   |Metadata properties set to `true`|None|"
+  syntax:
+    content: public double DecelerationRatio { get; set; }
+    return:
+      type: System.Double
+      description: "A value between 0 and 1, inclusive, that specifies the percentage of the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt; spent decelerating the passage of time from its maximum rate to zero. If the timeline&quot;s &lt;xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A&gt; property is also set, the sum of DecelerationRatio and &lt;xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A&gt; must be less than or equal to 1. The default value is 0."
+  overload: System.Windows.Media.Animation.Timeline.DecelerationRatio*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "DecelerationRatio is less than 0 or greater than 1."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The sum of <xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A> and DecelerationRatio exceeds 1."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.DecelerationRatioProperty
+  id: DecelerationRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: DecelerationRatioProperty
+  nameWithType: Timeline.DecelerationRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.DecelerationRatioProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies for the &lt;xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty DecelerationRatioProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty
+  id: DesiredFrameRateProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: DesiredFrameRateProperty
+  nameWithType: Timeline.DesiredFrameRateProperty
+  fullName: System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.DesiredFrameRate%2A&gt; attached property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty DesiredFrameRateProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.Duration
+  id: Duration
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Duration
+  nameWithType: Timeline.Duration
+  fullName: System.Windows.Media.Animation.Timeline.Duration
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets the length of time for which this timeline plays, not counting repetitions."
+  remarks: "A timeline's simple duration constitutes the time for a single forward iteration versus the total play time, which includes repetitions.  \n  \n## Default Duration Behavior  \n The behavior of a Duration structure with a value of <xref:System.Windows.Duration.Automatic%2A> depends on the type of timeline:  \n  \n|||  \n|-|-|  \n|**Timeline**|**Behavior**|  \n|<xref:System.Windows.Media.Animation.Timeline>|Undetermined (<xref:System.Windows.Media.Animation.Timeline> is abstract)|  \n|<xref:System.Windows.Media.Animation.ParallelTimeline>,<br /><br /> <xref:System.Windows.Media.Animation.Storyboard>,<br /><br /> <xref:System.Windows.Media.Animation.TimelineGroup>|Expands to fit child timelines|  \n|\\<*Type*>Animation (Known as a \"From/To/By\" or \"basic\" animations)|1 second|  \n|\\<*Type*>AnimationUsingKeyFrames (Known as key frame animations)|Sum of all key frame <xref:System.Windows.Media.Animation.KeyTime> values|  \n  \n<a name=\"dependencyPropertyInfo_Duration\"></a>   \n## Dependency Property Information  \n  \n|||  \n|-|-|  \n|Identifier field|<xref:System.Windows.Media.Animation.Timeline.DurationProperty>|  \n|Metadata properties set to `true`|None|"
+  example:
+  - "<xref:System.Windows.Media.Animation.ParallelTimeline> and <xref:System.Windows.Media.Animation.Storyboard> are types of <xref:System.Windows.Media.Animation.TimelineGroup> objects. The duration of a <xref:System.Windows.Media.Animation.TimelineGroup> is determined by the duration of its child timelines. For example, the <xref:System.Windows.Media.Animation.Storyboard> below will run for six seconds (duration of 6 seconds) because that is when its last child Timeline (<xref:System.Windows.Media.Animation.DoubleAnimation>) ends.  \n  \n> [!NOTE]\n>  Note: code has been omitted from the following examples, which are provided for illustrative purposed only.  \n  \n [xaml]  \n  \n```  \n...  \n  <Storyboard>  \n    <DoubleAnimation Duration=\"0:0:2\" …/>  \n    <DoubleAnimation Duration=\"0:0:4\" BeginTime=\"0:0:2\" …/>  \n  </Storyboard>   \n...  \n```  \n  \n Examples of \\<*Type*>Animations include <xref:System.Windows.Media.Animation.DoubleAnimation>, <xref:System.Windows.Media.Animation.PointAnimation>, <xref:System.Windows.Media.Animation.ColorAnimation>, etc. If no Duration is specified for these types of animations, they will run for one second.  \n  \n [xaml]  \n  \n```  \n...  \n  <!-- With no Duration specified, this animation will run for   \n       one second -->  \n  <DoubleAnimation .../>  \n...  \n```  \n  \n Examples of \\<*Type*>AnimationUsingKeyFrames include <xref:System.Windows.Media.Animation.DoubleAnimationUsingKeyFrames>, <xref:System.Windows.Media.Animation.PointAnimationUsingKeyFrames>, etc. If no Duration is specified for these types of animations they will run until all key frames are finished.  \n  \n [xaml]  \n  \n```  \n...  \n  <Storyboard>  \n  \n    <!-- This key frame animation will end at 4.5 seconds  \n         Because that is when its last KeyFrame KeyTime ends. -->  \n    <DoubleAnimationUsingKeyFrames ...>  \n      <LinearDoubleKeyFrame ... KeyTime=\"0:0:3\" />  \n      <DiscreteDoubleKeyFrame ... KeyTime=\"0:0:3.5\" />  \n      <DiscreteDoubleKeyFrame ... KeyTime=\"0:0:4\" />  \n      <DiscreteDoubleKeyFrame ... KeyTime=\"0:0:4.5\" />  \n    </DoubleAnimationUsingKeyFrames>  \n  </Storyboard>   \n...  \n```"
+  syntax:
+    content: public System.Windows.Duration Duration { get; set; }
+    return:
+      type: System.Windows.Duration
+      description: 'The timeline''s simple duration: the amount of time this timeline takes to complete a single forward iteration. The default value is &lt;xref:System.Windows.Duration.Automatic%2A&gt;.'
+  overload: System.Windows.Media.Animation.Timeline.Duration*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.DurationProperty
+  id: DurationProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: DurationProperty
+  nameWithType: Timeline.DurationProperty
+  fullName: System.Windows.Media.Animation.Timeline.DurationProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.Duration%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty DurationProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.FillBehavior
+  id: FillBehavior
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: FillBehavior
+  nameWithType: Timeline.FillBehavior
+  fullName: System.Windows.Media.Animation.Timeline.FillBehavior
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets a value that specifies how the <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> behaves after it reaches the end of its active period."
+  remarks: "Set an animations FillBehavior property to <xref:System.Windows.Media.Animation.FillBehavior> when you want the animation to hold its value after it reaches the end of its active period. An animation that has reached the end of its active period that has a FillBehavior setting of <xref:System.Windows.Media.Animation.FillBehavior> is said to be in its fill period. When you don&quot;t want an animation to hold its value after it reaches the end of its active period, set its       FillBehavior property to <xref:System.Windows.Media.Animation.FillBehavior>.       Because an animation in its fill period continues to override its target property&quot;s value, attempting to set the target property&quot;s value through other means might appear to have no effect. For an example showing how to set a property value after it has been animated, see [How to: Set a Property After Animating It with a Storyboard](../Topic/How%20to:%20Set%20a%20Property%20After%20Animating%20It%20with%20a%20Storyboard.md).       A child timeline stops playing and filling when its parent timeline stops; if you want a child timeline to fill, make sure its parent timeline has a FillBehavior of <xref:System.Windows.Media.Animation.FillBehavior>.      <a name=&quot;dependencyPropertyInfo_FillBehavior&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.FillBehaviorProperty>|   |Metadata properties set to `true`|None|"
+  syntax:
+    content: public System.Windows.Media.Animation.FillBehavior FillBehavior { get; set; }
+    return:
+      type: System.Windows.Media.Animation.FillBehavior
+      description: "A value that specifies how the timeline behaves after it reaches the end of its active period but its parent is inside its active or fill period. The default value is <see cref=&quot;T:System.Windows.Media.Animation.FillBehavior&quot;></see>."
+  overload: System.Windows.Media.Animation.Timeline.FillBehavior*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.FillBehaviorProperty
+  id: FillBehaviorProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: FillBehaviorProperty
+  nameWithType: Timeline.FillBehaviorProperty
+  fullName: System.Windows.Media.Animation.Timeline.FillBehaviorProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty FillBehaviorProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.FreezeCore(System.Boolean)
+  id: FreezeCore(System.Boolean)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: FreezeCore(Boolean)
+  nameWithType: Timeline.FreezeCore(Boolean)
+  fullName: System.Windows.Media.Animation.Timeline.FreezeCore(Boolean)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Makes this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> unmodifiable or determines whether it can be made unmodifiable."
+  remarks: "Do not call this method directly (except when calling base in an implementation). This method is called internally by <xref:System.Windows.Freezable.Freeze%2A>."
+  syntax:
+    content: protected override bool FreezeCore (bool isChecking);
+    parameters:
+    - id: isChecking
+      type: System.Boolean
+      description: "\n     to check if this instance can be frozen;  to freeze this instance."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.FreezeCore*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.GetAsFrozenCore(System.Windows.Freezable)
+  id: GetAsFrozenCore(System.Windows.Freezable)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: GetAsFrozenCore(Freezable)
+  nameWithType: Timeline.GetAsFrozenCore(Freezable)
+  fullName: System.Windows.Media.Animation.Timeline.GetAsFrozenCore(Freezable)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Makes this instance a clone of the specified <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see> object."
+  remarks: "When copying dependency properties, this method copies resource references and data bindings (but they might no longer resolve) but not animations or their current values. Note that if these properties contain resource references or data bindings, <xref:System.Windows.Freezable.GetAsFrozen%2A> will fail when trying to freeze the object and will throw an <xref:System.InvalidOperationException>.       This method is called by the <xref:System.Windows.Freezable.GetAsFrozen%2A> method and should not be called directly from your code, except when calling the base implementation while overriding this method. To create a frozen copy of the current object, call <xref:System.Windows.Freezable.GetAsFrozen%2A> instead of calling this method directly.       For more information, see <xref:System.Windows.Freezable.GetAsFrozenCore%2A?displayProperty=fullName>."
+  syntax:
+    content: protected override void GetAsFrozenCore (System.Windows.Freezable sourceFreezable);
+    parameters:
+    - id: sourceFreezable
+      type: System.Windows.Freezable
+      description: "The  instance to clone."
+  overload: System.Windows.Media.Animation.Timeline.GetAsFrozenCore*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore(System.Windows.Freezable)
+  id: GetCurrentValueAsFrozenCore(System.Windows.Freezable)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: GetCurrentValueAsFrozenCore(Freezable)
+  nameWithType: Timeline.GetCurrentValueAsFrozenCore(Freezable)
+  fullName: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore(Freezable)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Makes this instance a frozen clone of the specified <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>. Resource references, data bindings, and animations are not copied, but their current values are."
+  remarks: "This method is called by the <xref:System.Windows.Freezable.GetCurrentValueAsFrozen%2A> method and should not be called directly from your code, except when calling the base implementation while overriding this method. To create a frozen copy of the current object, call <xref:System.Windows.Freezable.GetCurrentValueAsFrozen%2A> instead of calling this method directly.       For more information see <xref:System.Windows.Freezable.GetCurrentValueAsFrozenCore%2A?displayProperty=fullName>."
+  syntax:
+    content: protected override void GetCurrentValueAsFrozenCore (System.Windows.Freezable sourceFreezable);
+    parameters:
+    - id: sourceFreezable
+      type: System.Windows.Freezable
+      description: "The  to copy and freeze."
+  overload: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate(System.Windows.Media.Animation.Timeline)
+  id: GetDesiredFrameRate(System.Windows.Media.Animation.Timeline)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: GetDesiredFrameRate(Timeline)
+  nameWithType: Timeline.GetDesiredFrameRate(Timeline)
+  fullName: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate(Timeline)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets the desired frame rate of the specified <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  remarks: "This method provides read access to the <xref:System.Windows.Media.Animation.Timeline.DesiredFrameRate%2A> attached property. For more information, see the <xref:System.Windows.Media.Animation.Timeline.DesiredFrameRate%2A> page."
+  syntax:
+    content: public static Nullable<int> GetDesiredFrameRate (System.Windows.Media.Animation.Timeline timeline);
+    parameters:
+    - id: timeline
+      type: System.Windows.Media.Animation.Timeline
+      description: "The timeline from which to retrieve the desired frame rate."
+    return:
+      type: System.Nullable{System.Int32}
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDuration(System.Windows.Media.Animation.Clock)
+  id: GetNaturalDuration(System.Windows.Media.Animation.Clock)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: GetNaturalDuration(Clock)
+  nameWithType: Timeline.GetNaturalDuration(Clock)
+  fullName: System.Windows.Media.Animation.Timeline.GetNaturalDuration(Clock)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Returns the length of a single iteration of this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  remarks: "This method should only be called when the <xref:System.Windows.Media.Animation.Timeline.Duration%2A> property is set to <xref:System.Windows.Duration.Automatic%2A>. If <xref:System.Windows.Media.Animation.Timeline.Duration%2A> is <xref:System.Windows.Duration.Automatic%2A>, the natural duration is determined by that particular class&quot;s implementation of <xref:System.Windows.Media.Animation.Timeline.GetNaturalDurationCore%2A>.       If GetNaturalDuration returns <xref:System.Windows.Duration.Automatic%2A>, it means that the natural duration is unknown, which implies a natural duration of <xref:System.Windows.Duration.Forever%2A>. Such is the case for streaming media.       Note that passing this method a clock other than the one that was created for this timeline is possible, but will provide unreliable results."
+  syntax:
+    content: protected System.Windows.Duration GetNaturalDuration (System.Windows.Media.Animation.Clock clock);
+    parameters:
+    - id: clock
+      type: System.Windows.Media.Animation.Clock
+      description: "The  that was created for this ."
+    return:
+      type: System.Windows.Duration
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.GetNaturalDuration*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore(System.Windows.Media.Animation.Clock)
+  id: GetNaturalDurationCore(System.Windows.Media.Animation.Clock)
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: GetNaturalDurationCore(Clock)
+  nameWithType: Timeline.GetNaturalDurationCore(Clock)
+  fullName: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore(Clock)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Returns the length of a single iteration of this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>. This method provides the implementation for &lt;xref:System.Windows.Media.Animation.Timeline.GetNaturalDuration%2A&gt;."
+  remarks: "This method provides the implementation for <xref:System.Windows.Media.Animation.Timeline.GetNaturalDuration%2A> and should not be called directly from your code. Use <xref:System.Windows.Media.Animation.Timeline.GetNaturalDuration%2A> instead."
+  syntax:
+    content: protected virtual System.Windows.Duration GetNaturalDurationCore (System.Windows.Media.Animation.Clock clock);
+    parameters:
+    - id: clock
+      type: System.Windows.Media.Animation.Clock
+      description: "The  that was created for this ."
+    return:
+      type: System.Windows.Duration
+      description: "To be added."
+  overload: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.Name
+  id: Name
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: Name
+  nameWithType: Timeline.Name
+  fullName: System.Windows.Media.Animation.Timeline.Name
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets the name of this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  syntax:
+    content: public string Name { get; set; }
+    return:
+      type: System.String
+      description: "The name of this timeline. The default value is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  overload: System.Windows.Media.Animation.Timeline.Name*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.NameProperty
+  id: NameProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: NameProperty
+  nameWithType: Timeline.NameProperty
+  fullName: System.Windows.Media.Animation.Timeline.NameProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.Name%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty NameProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.RemoveRequested
+  id: RemoveRequested
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: RemoveRequested
+  nameWithType: Timeline.RemoveRequested
+  fullName: System.Windows.Media.Animation.Timeline.RemoveRequested
+  type: Event
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Occurs when the clock created for this timeline or one of its parent timelines is removed."
+  remarks: "This event is raised by applying a <xref:System.Windows.Media.Animation.RemoveStoryboard> action to a storyboard, using a Storyboard&quot;s <xref:System.Windows.Media.Animation.Storyboard.Remove%2A> method, or (when working directly with clocks) calling the <xref:System.Windows.Media.Animation.ClockController.Remove%2A?displayProperty=fullName> method.       Although this event handler appears to be associated with a timeline, it actually registers with the <xref:System.Windows.Media.Animation.Clock> created for this timeline.  For more information, see the [Timing Events Overview](../Topic/Timing%20Events%20Overview.md)."
+  syntax:
+    content: public event EventHandler RemoveRequested;
+    return:
+      type: System.EventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.RepeatBehavior
+  id: RepeatBehavior
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: RepeatBehavior
+  nameWithType: Timeline.RepeatBehavior
+  fullName: System.Windows.Media.Animation.Timeline.RepeatBehavior
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets the repeating behavior of this timeline."
+  remarks: "If an iteration <xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A> is specified and the timeline&quot;s <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> property is set to `true`, a single repetition consists of one forward iteration and one backward iteration. A timeline with an <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> property set to true an iteration <xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A> of 2 would play forwards, then backwards, then forwards again, and then backwards again.       Instead of specifying the number of times a timeline plays, you can also specify the total length of time you want the timeline to play. For a timeline to repeat, this <xref:System.Windows.Media.Animation.RepeatBehavior.Duration%2A?displayProperty=fullName> value should be greater than the timeline&quot;s <xref:System.Windows.Media.Animation.Timeline.Duration%2A>. For example, a timeline with a <xref:System.Windows.Media.Animation.Timeline.Duration%2A> of 2 seconds and a <xref:System.Windows.Media.Animation.RepeatBehavior.Duration%2A?displayProperty=fullName> of 4 seconds will play twice. If the <xref:System.Windows.Media.Animation.RepeatBehavior.Duration%2A?displayProperty=fullName> is less than the timeline&quot;s <xref:System.Windows.Media.Animation.Timeline.Duration%2A>, the timeline&quot;s active period is cut short.       For more information about repeating timelines, see [Animation Overview](../Topic/Animation%20Overview.md).      <a name=&quot;dependencyPropertyInfo_RepeatBehavior&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty>|   |Metadata properties set to `true`|None|"
+  syntax:
+    content: public System.Windows.Media.Animation.RepeatBehavior RepeatBehavior { get; set; }
+    return:
+      type: System.Windows.Media.Animation.RepeatBehavior
+      description: "An iteration &lt;xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A&gt; that specifies the number of times the timeline should play, a &lt;xref:System.TimeSpan&gt; value that specifies the total the length of this timeline&quot;s active period, or the special value &lt;xref:System.Windows.Media.Animation.RepeatBehavior.Forever%2A&gt;, which specifies that the timeline should repeat indefinitely. The default value is a <see cref=&quot;T:System.Windows.Media.Animation.RepeatBehavior&quot;></see> with a &lt;xref:System.Windows.Media.Animation.RepeatBehavior.Count%2A&gt; of `1`, which indicates that the timeline plays once."
+  overload: System.Windows.Media.Animation.Timeline.RepeatBehavior*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty
+  id: RepeatBehaviorProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: RepeatBehaviorProperty
+  nameWithType: Timeline.RepeatBehaviorProperty
+  fullName: System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies the &lt;xref:System.Windows.Media.Animation.Timeline.RepeatBehavior%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty RepeatBehaviorProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate(System.Windows.Media.Animation.Timeline,System.Nullable{System.Int32})
+  id: SetDesiredFrameRate(System.Windows.Media.Animation.Timeline,System.Nullable{System.Int32})
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: SetDesiredFrameRate(Timeline,Nullable<Int32>)
+  nameWithType: Timeline.SetDesiredFrameRate(Timeline,Nullable<Int32>)
+  fullName: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate(Timeline,Nullable<Int32>)
+  type: Method
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Sets the desired frame rate of the specified <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  remarks: "This method sets the <xref:System.Windows.Media.Animation.Timeline.DesiredFrameRate%2A> attached property. For more information, see the <xref:System.Windows.Media.Animation.Timeline.DesiredFrameRate%2A> page."
+  syntax:
+    content: public static void SetDesiredFrameRate (System.Windows.Media.Animation.Timeline timeline, Nullable<int> desiredFrameRate);
+    parameters:
+    - id: timeline
+      type: System.Windows.Media.Animation.Timeline
+      description: "The  to which `desiredFrameRate` is assigned."
+    - id: desiredFrameRate
+      type: System.Nullable{System.Int32}
+      description: "The maximum number of frames this timeline should generate each second, or  if the system should control the number of frames."
+  overload: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.SpeedRatio
+  id: SpeedRatio
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: SpeedRatio
+  nameWithType: Timeline.SpeedRatio
+  fullName: System.Windows.Media.Animation.Timeline.SpeedRatio
+  type: Property
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Gets or sets the rate, relative to its parent, at which time progresses for this <see cref=&quot;T:System.Windows.Media.Animation.Timeline&quot;></see>."
+  remarks: "A timeline&quot;s SpeedRatio setting does not have an effect on its <xref:System.Windows.Media.Animation.Timeline.BeginTime%2A>; that time is relative to the timeline&quot;s parent or, if the timeline is a root timeline, the moment at which the timeline&quot;s clock was begun.       If <xref:System.Windows.Media.Animation.Timeline.AccelerationRatio%2A> or <xref:System.Windows.Media.Animation.Timeline.DecelerationRatio%2A> are specified, this SpeedRatio is the average ratio over the natural length of the timeline.      <a name=&quot;dependencyPropertyInfo_SpeedRatio&quot;></a>    ## Dependency Property Information      |||   |-|-|   |Identifier field|<xref:System.Windows.Media.Animation.Timeline.SpeedRatioProperty>|   |Metadata properties set to `true`|None|"
+  example:
+  - "A timeline's SpeedRatio property controls its rate of progress, relative to its parent. If the timeline is a root, its <xref:System.Windows.Media.MediaPlayer.SpeedRatio%2A> is relative to the default timeline speed. The following example shows several timelines with different SpeedRatio settings.  \n  \n [!code-xml[timingbehaviors_snip#_graphicsmm_SpeedExampleWholePage](~/add/codesnippet/Xaml/timingbehaviors_snip.project/SpeedExample.xaml#_graphicsmm_speedexamplewholepage)]"
+  syntax:
+    content: public double SpeedRatio { get; set; }
+    return:
+      type: System.Double
+      description: "A finite value greater than 0 that describes the rate at which time progresses for this timeline, relative to the speed of the timeline&quot;s parent or, if this is a root timeline, the default timeline speed. The default value is 1."
+  overload: System.Windows.Media.Animation.Timeline.SpeedRatio*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "SpeedRatio is less than 0 or is not a finite value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Windows.Media.Animation.Timeline.SpeedRatioProperty
+  id: SpeedRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  langs:
+  - csharp
+  name: SpeedRatioProperty
+  nameWithType: Timeline.SpeedRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.SpeedRatioProperty
+  type: Field
+  assemblies:
+  - PresentationCore
+  namespace: System.Windows.Media.Animation
+  summary: "Identifies for the &lt;xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A&gt; dependency property."
+  syntax:
+    content: public static readonly System.Windows.DependencyProperty SpeedRatioProperty;
+    return:
+      type: System.Windows.DependencyProperty
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Windows.Media.Animation.Animatable
+  isExternal: false
+  name: System.Windows.Media.Animation.Animatable
+- uid: System.Windows.Media.Animation.Timeline.#ctor
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Timeline()
+  nameWithType: Timeline.Timeline()
+  fullName: System.Windows.Media.Animation.Timeline.Timeline()
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan})
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Timeline(Nullable<TimeSpan>)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>)
+- uid: System.Nullable{System.TimeSpan}
+  parent: System
+  isExternal: true
+  name: Nullable<TimeSpan>
+  nameWithType: Nullable<TimeSpan>
+  fullName: System.Nullable<System.TimeSpan>
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.TimeSpan>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.TimeSpan
+    name: TimeSpan
+    nameWithType: TimeSpan
+    fullName: TimeSpan
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Timeline(Nullable<TimeSpan>,Duration)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>,Duration)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>,Duration)
+- uid: System.Windows.Duration
+  parent: System.Windows
+  isExternal: false
+  name: Duration
+  nameWithType: Duration
+  fullName: System.Windows.Duration
+- uid: System.Windows.Media.Animation.Timeline.#ctor(System.Nullable{System.TimeSpan},System.Windows.Duration,System.Windows.Media.Animation.RepeatBehavior)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+  nameWithType: Timeline.Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+  fullName: System.Windows.Media.Animation.Timeline.Timeline(Nullable<TimeSpan>,Duration,RepeatBehavior)
+- uid: System.Windows.Media.Animation.RepeatBehavior
+  parent: System.Windows.Media.Animation
+  isExternal: false
+  name: RepeatBehavior
+  nameWithType: RepeatBehavior
+  fullName: System.Windows.Media.Animation.RepeatBehavior
+- uid: System.Windows.Media.Animation.Timeline.AccelerationRatio
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AccelerationRatio
+  nameWithType: Timeline.AccelerationRatio
+  fullName: System.Windows.Media.Animation.Timeline.AccelerationRatio
+- uid: System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: System.Windows.Media.Animation.Timeline.AccelerationRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AccelerationRatioProperty
+  nameWithType: Timeline.AccelerationRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.AccelerationRatioProperty
+- uid: System.Windows.DependencyProperty
+  parent: System.Windows
+  isExternal: false
+  name: DependencyProperty
+  nameWithType: DependencyProperty
+  fullName: System.Windows.DependencyProperty
+- uid: System.Windows.Media.Animation.Timeline.AllocateClock
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AllocateClock()
+  nameWithType: Timeline.AllocateClock()
+  fullName: System.Windows.Media.Animation.Timeline.AllocateClock()
+- uid: System.Windows.Media.Animation.Clock
+  parent: System.Windows.Media.Animation
+  isExternal: false
+  name: Clock
+  nameWithType: Clock
+  fullName: System.Windows.Media.Animation.Clock
+- uid: System.Windows.Media.Animation.Timeline.AutoReverse
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AutoReverse
+  nameWithType: Timeline.AutoReverse
+  fullName: System.Windows.Media.Animation.Timeline.AutoReverse
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Windows.Media.Animation.Timeline.AutoReverseProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AutoReverseProperty
+  nameWithType: Timeline.AutoReverseProperty
+  fullName: System.Windows.Media.Animation.Timeline.AutoReverseProperty
+- uid: System.Windows.Media.Animation.Timeline.BeginTime
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: BeginTime
+  nameWithType: Timeline.BeginTime
+  fullName: System.Windows.Media.Animation.Timeline.BeginTime
+- uid: System.Windows.Media.Animation.Timeline.BeginTimeProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: BeginTimeProperty
+  nameWithType: Timeline.BeginTimeProperty
+  fullName: System.Windows.Media.Animation.Timeline.BeginTimeProperty
+- uid: System.Windows.Media.Animation.Timeline.Clone
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Clone()
+  nameWithType: Timeline.Clone()
+  fullName: System.Windows.Media.Animation.Timeline.Clone()
+- uid: System.Windows.Media.Animation.Timeline
+  parent: System.Windows.Media.Animation
+  isExternal: false
+  name: Timeline
+  nameWithType: Timeline
+  fullName: System.Windows.Media.Animation.Timeline
+- uid: System.Windows.Media.Animation.Timeline.CloneCurrentValue
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CloneCurrentValue()
+  nameWithType: Timeline.CloneCurrentValue()
+  fullName: System.Windows.Media.Animation.Timeline.CloneCurrentValue()
+- uid: System.Windows.Media.Animation.Timeline.Completed
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Completed
+  nameWithType: Timeline.Completed
+  fullName: System.Windows.Media.Animation.Timeline.Completed
+- uid: System.EventHandler
+  parent: System
+  isExternal: true
+  name: EventHandler
+  nameWithType: EventHandler
+  fullName: System.EventHandler
+- uid: System.Windows.Media.Animation.Timeline.CreateClock
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CreateClock()
+  nameWithType: Timeline.CreateClock()
+  fullName: System.Windows.Media.Animation.Timeline.CreateClock()
+- uid: System.Windows.Media.Animation.Timeline.CreateClock(System.Boolean)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CreateClock(Boolean)
+  nameWithType: Timeline.CreateClock(Boolean)
+  fullName: System.Windows.Media.Animation.Timeline.CreateClock(Boolean)
+- uid: System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CurrentGlobalSpeedInvalidated
+  nameWithType: Timeline.CurrentGlobalSpeedInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated
+- uid: System.Windows.Media.Animation.Timeline.CurrentStateInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CurrentStateInvalidated
+  nameWithType: Timeline.CurrentStateInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentStateInvalidated
+- uid: System.Windows.Media.Animation.Timeline.CurrentTimeInvalidated
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CurrentTimeInvalidated
+  nameWithType: Timeline.CurrentTimeInvalidated
+  fullName: System.Windows.Media.Animation.Timeline.CurrentTimeInvalidated
+- uid: System.Windows.Media.Animation.Timeline.DecelerationRatio
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: DecelerationRatio
+  nameWithType: Timeline.DecelerationRatio
+  fullName: System.Windows.Media.Animation.Timeline.DecelerationRatio
+- uid: System.Windows.Media.Animation.Timeline.DecelerationRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: DecelerationRatioProperty
+  nameWithType: Timeline.DecelerationRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.DecelerationRatioProperty
+- uid: System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: DesiredFrameRateProperty
+  nameWithType: Timeline.DesiredFrameRateProperty
+  fullName: System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty
+- uid: System.Windows.Media.Animation.Timeline.Duration
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Duration
+  nameWithType: Timeline.Duration
+  fullName: System.Windows.Media.Animation.Timeline.Duration
+- uid: System.Windows.Media.Animation.Timeline.DurationProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: DurationProperty
+  nameWithType: Timeline.DurationProperty
+  fullName: System.Windows.Media.Animation.Timeline.DurationProperty
+- uid: System.Windows.Media.Animation.Timeline.FillBehavior
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: FillBehavior
+  nameWithType: Timeline.FillBehavior
+  fullName: System.Windows.Media.Animation.Timeline.FillBehavior
+- uid: System.Windows.Media.Animation.FillBehavior
+  parent: System.Windows.Media.Animation
+  isExternal: false
+  name: FillBehavior
+  nameWithType: FillBehavior
+  fullName: System.Windows.Media.Animation.FillBehavior
+- uid: System.Windows.Media.Animation.Timeline.FillBehaviorProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: FillBehaviorProperty
+  nameWithType: Timeline.FillBehaviorProperty
+  fullName: System.Windows.Media.Animation.Timeline.FillBehaviorProperty
+- uid: System.Windows.Media.Animation.Timeline.FreezeCore(System.Boolean)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: FreezeCore(Boolean)
+  nameWithType: Timeline.FreezeCore(Boolean)
+  fullName: System.Windows.Media.Animation.Timeline.FreezeCore(Boolean)
+- uid: System.Windows.Media.Animation.Timeline.GetAsFrozenCore(System.Windows.Freezable)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetAsFrozenCore(Freezable)
+  nameWithType: Timeline.GetAsFrozenCore(Freezable)
+  fullName: System.Windows.Media.Animation.Timeline.GetAsFrozenCore(Freezable)
+- uid: System.Windows.Freezable
+  parent: System.Windows
+  isExternal: false
+  name: Freezable
+  nameWithType: Freezable
+  fullName: System.Windows.Freezable
+- uid: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore(System.Windows.Freezable)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetCurrentValueAsFrozenCore(Freezable)
+  nameWithType: Timeline.GetCurrentValueAsFrozenCore(Freezable)
+  fullName: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore(Freezable)
+- uid: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate(System.Windows.Media.Animation.Timeline)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetDesiredFrameRate(Timeline)
+  nameWithType: Timeline.GetDesiredFrameRate(Timeline)
+  fullName: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate(Timeline)
+- uid: System.Nullable{System.Int32}
+  parent: System
+  isExternal: true
+  name: Nullable<Int32>
+  nameWithType: Nullable<Int32>
+  fullName: System.Nullable<System.Int32>
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.Int32>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Int32
+    name: Int32
+    nameWithType: Int32
+    fullName: Int32
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDuration(System.Windows.Media.Animation.Clock)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetNaturalDuration(Clock)
+  nameWithType: Timeline.GetNaturalDuration(Clock)
+  fullName: System.Windows.Media.Animation.Timeline.GetNaturalDuration(Clock)
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore(System.Windows.Media.Animation.Clock)
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetNaturalDurationCore(Clock)
+  nameWithType: Timeline.GetNaturalDurationCore(Clock)
+  fullName: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore(Clock)
+- uid: System.Windows.Media.Animation.Timeline.Name
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Name
+  nameWithType: Timeline.Name
+  fullName: System.Windows.Media.Animation.Timeline.Name
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Windows.Media.Animation.Timeline.NameProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: NameProperty
+  nameWithType: Timeline.NameProperty
+  fullName: System.Windows.Media.Animation.Timeline.NameProperty
+- uid: System.Windows.Media.Animation.Timeline.RemoveRequested
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: RemoveRequested
+  nameWithType: Timeline.RemoveRequested
+  fullName: System.Windows.Media.Animation.Timeline.RemoveRequested
+- uid: System.Windows.Media.Animation.Timeline.RepeatBehavior
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: RepeatBehavior
+  nameWithType: Timeline.RepeatBehavior
+  fullName: System.Windows.Media.Animation.Timeline.RepeatBehavior
+- uid: System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: RepeatBehaviorProperty
+  nameWithType: Timeline.RepeatBehaviorProperty
+  fullName: System.Windows.Media.Animation.Timeline.RepeatBehaviorProperty
+- uid: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate(System.Windows.Media.Animation.Timeline,System.Nullable{System.Int32})
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: SetDesiredFrameRate(Timeline,Nullable<Int32>)
+  nameWithType: Timeline.SetDesiredFrameRate(Timeline,Nullable<Int32>)
+  fullName: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate(Timeline,Nullable<Int32>)
+- uid: System.Windows.Media.Animation.Timeline.SpeedRatio
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: SpeedRatio
+  nameWithType: Timeline.SpeedRatio
+  fullName: System.Windows.Media.Animation.Timeline.SpeedRatio
+- uid: System.Windows.Media.Animation.Timeline.SpeedRatioProperty
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: SpeedRatioProperty
+  nameWithType: Timeline.SpeedRatioProperty
+  fullName: System.Windows.Media.Animation.Timeline.SpeedRatioProperty
+- uid: System.Windows.Media.Animation.Timeline.#ctor*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Timeline
+  nameWithType: Timeline.Timeline
+- uid: System.Windows.Media.Animation.Timeline.AccelerationRatio*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AccelerationRatio
+  nameWithType: Timeline.AccelerationRatio
+- uid: System.Windows.Media.Animation.Timeline.AllocateClock*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AllocateClock
+  nameWithType: Timeline.AllocateClock
+- uid: System.Windows.Media.Animation.Timeline.AutoReverse*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: AutoReverse
+  nameWithType: Timeline.AutoReverse
+- uid: System.Windows.Media.Animation.Timeline.BeginTime*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: BeginTime
+  nameWithType: Timeline.BeginTime
+- uid: System.Windows.Media.Animation.Timeline.Clone*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Clone
+  nameWithType: Timeline.Clone
+- uid: System.Windows.Media.Animation.Timeline.CloneCurrentValue*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CloneCurrentValue
+  nameWithType: Timeline.CloneCurrentValue
+- uid: System.Windows.Media.Animation.Timeline.CreateClock*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: CreateClock
+  nameWithType: Timeline.CreateClock
+- uid: System.Windows.Media.Animation.Timeline.DecelerationRatio*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: DecelerationRatio
+  nameWithType: Timeline.DecelerationRatio
+- uid: System.Windows.Media.Animation.Timeline.Duration*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Duration
+  nameWithType: Timeline.Duration
+- uid: System.Windows.Media.Animation.Timeline.FillBehavior*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: FillBehavior
+  nameWithType: Timeline.FillBehavior
+- uid: System.Windows.Media.Animation.Timeline.FreezeCore*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: FreezeCore
+  nameWithType: Timeline.FreezeCore
+- uid: System.Windows.Media.Animation.Timeline.GetAsFrozenCore*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetAsFrozenCore
+  nameWithType: Timeline.GetAsFrozenCore
+- uid: System.Windows.Media.Animation.Timeline.GetCurrentValueAsFrozenCore*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetCurrentValueAsFrozenCore
+  nameWithType: Timeline.GetCurrentValueAsFrozenCore
+- uid: System.Windows.Media.Animation.Timeline.GetDesiredFrameRate*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetDesiredFrameRate
+  nameWithType: Timeline.GetDesiredFrameRate
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDuration*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetNaturalDuration
+  nameWithType: Timeline.GetNaturalDuration
+- uid: System.Windows.Media.Animation.Timeline.GetNaturalDurationCore*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: GetNaturalDurationCore
+  nameWithType: Timeline.GetNaturalDurationCore
+- uid: System.Windows.Media.Animation.Timeline.Name*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: Name
+  nameWithType: Timeline.Name
+- uid: System.Windows.Media.Animation.Timeline.RepeatBehavior*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: RepeatBehavior
+  nameWithType: Timeline.RepeatBehavior
+- uid: System.Windows.Media.Animation.Timeline.SetDesiredFrameRate*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: SetDesiredFrameRate
+  nameWithType: Timeline.SetDesiredFrameRate
+- uid: System.Windows.Media.Animation.Timeline.SpeedRatio*
+  parent: System.Windows.Media.Animation.Timeline
+  isExternal: false
+  name: SpeedRatio
+  nameWithType: Timeline.SpeedRatio

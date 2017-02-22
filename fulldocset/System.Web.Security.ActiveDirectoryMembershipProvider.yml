@@ -1,0 +1,1688 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider
+  id: ActiveDirectoryMembershipProvider
+  children:
+  - System.Web.Security.ActiveDirectoryMembershipProvider.#ctor
+  - System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName
+  - System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword(System.String,System.String,System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  - System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser(System.String,System.Boolean)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset
+  - System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  - System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods
+  - System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail(System.String,System.Int32,System.Int32,System.Int32@)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName(System.String,System.Int32,System.Int32,System.Int32@)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers(System.Int32,System.Int32,System.Int32@)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword(System.String,System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.Object,System.Boolean)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.String,System.Boolean)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail(System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  - System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  - System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  - System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  - System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  - System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat
+  - System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  - System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  - System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  - System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword(System.String,System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser(System.String)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser(System.Web.Security.MembershipUser)
+  - System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser(System.String,System.String)
+  langs:
+  - csharp
+  name: ActiveDirectoryMembershipProvider
+  nameWithType: ActiveDirectoryMembershipProvider
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider
+  type: Class
+  summary: "Manages storage of membership information for an ASP.NET application in Active Directory and Active Directory Application Mode servers."
+  remarks: "This class is used by the <xref:System.Web.Security.Membership> and <xref:System.Web.Security.MembershipUser> classes to provide membership services for an ASP.NET application using an Active Directory (AD) or Active Directory Application Mode (ADAM) server.  \n  \n> [!NOTE]\n>  Using an ADAM server requires specific configuration. For more information, see the ADAM Configuration section below.  \n  \n> [!IMPORTANT]\n>  The ActiveDirectoryMembershipProvider instance works only in the full-trust policy default configuration of ASP.NET. In order to use the ActiveDirectoryMembershipProvider instance at any partial-trust level, either you must make changes to the appropriate trust policy file for your application or you must create a \"sandbox\" assembly that is deployed in the GAC.  \n>   \n>  The ActiveDirectoryMembershipProvider class requires unrestricted <xref:System.DirectoryServices.DirectoryServicesPermission> permission to run. This permission is not added to any of the partial-trust policy files supplied with ASP.NET. Although adding the <xref:System.DirectoryServices.DirectoryServicesPermission> permission to a partial-trust policy file will enable use of the ActiveDirectoryMembershipProvider class, doing so makes the <xref:System.DirectoryServices> namespace classes available to any code running in your ASP.NET pages. This option is not recommended for any Web servers that need to run in a secure, locked-down mode.  \n>   \n>  As an alternative, you can create a \"sandbox\" assembly that calls the ActiveDirectoryMembershipProvider class. This assembly can contain either a wrapper class that forwards method calls to the ActiveDirectoryMembershipProvider class or a class that derives from the ActiveDirectoryMembershipProvider class. In either case, the wrapper class must assert unrestricted <xref:System.DirectoryServices.DirectoryServicesPermission> permission. Deploy the sandbox assembly in the GAC and mark the assembly with the <xref:System.Security.AllowPartiallyTrustedCallersAttribute> (APTCA) attribute. This will enable your partially trusted ASP.NET code to call your wrapper class, and since the wrapper class internally asserts the unrestricted <xref:System.DirectoryServices.DirectoryServicesPermission> permission, your wrapper class will be able to successfully call the provider  \n  \n You must create a [connectionStrings Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b6ffbb2e-a4d1-410e-8f7e-9755e92c65de) entry in the Web.config file that identifies the Active Directory server, Active Directory domain, or ADAM application partition to use. The provider will only operate at domain scope, or in a subscope within a domain. The following table lists allowed connection strings and the scope used.  \n  \n|Connection string|Scope|  \n|-----------------------|-----------|  \n|LDAP://\\<domain or server>:[port]<br /><br /> Port number is optional for ADAM and not needed for Active Directory.|The provider runs against the specified domain or server. With AD, user creation and deletion is done in the default users container. All other operations, including any search methods, will be rooted at the default naming context for the domain.<br /><br /> If the connection string specifies an Active Directory domain rather than a specific server and the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the ActiveDirectoryMembershipProvider instance will always connect to the server with the PDC role for the domain to ensure that password changes take effect and are available when the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser%2A> method is called.<br /><br /> This connection string is not allowed when using ADAM, and will throw a <xref:System.NotSupportedException>.|  \n|LDAP://\\<domain or server>:[port]/\\<container dn><br /><br /> Port number is optional for ADAM and not needed for Active Directory.|The provider runs against the specified domain or server. User creation and deletion is only done in the specified container. All other operations, including any search methods, perform subtree searches rooted at the container.<br /><br /> For ADAM servers, the container specifies the root of an application partition, or a container within an application partition.<br /><br /> We recommend that the connection string define a specific container to improve performance.|  \n  \n The ActiveDirectoryMembershipProvider instance maps directory attributes to <xref:System.Web.Security.ActiveDirectoryMembershipUser> properties. Default attributes are used if no attribute mapping is done in the Web.config file. For more information on attribute mappings, see the individual properties in the <xref:System.Web.Security.ActiveDirectoryMembershipUser> class documentation.  \n  \n The following table lists the <xref:System.Web.Security.ActiveDirectoryMembershipUser> properties and their default attribute mappings.  \n  \n> [!IMPORTANT]\n>  The ActiveDirectoryMembershipProvider class does not explicitly check that provider attributes are not mapped to core attributes of the user object in the directory. You must ensure that sensitive information from the directory is not exposed through mapped attributes.  \n  \n|Property|Default directory attribute|Can be mapped?|  \n|--------------|---------------------------------|--------------------|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.ProviderUserKey%2A>|securityIdentifier|No|  \n|<xref:System.Web.Security.MembershipUser.UserName%2A>|userPrincipalName|Yes, but must be either userPrincipalName or sAMAccountName|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.Comment%2A>|comment|No|  \n|<xref:System.Web.Security.MembershipUser.CreationDate%2A>|whenCreated|No|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.Email%2A>|mail|Yes, but must be a single-valued attribute of type Unicode String.|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.LastActivityDate%2A>|n/a|Not supported by ActiveDirectoryMembershipProvider.|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.LastLoginDate%2A>|n/a|Not supported by ActiveDirectoryMembershipProvider.|  \n|<xref:System.Web.Security.MembershipUser.LastPasswordChangedDate%2A>|pwdLastSet|No|  \n|<xref:System.Web.Security.MembershipUser.PasswordQuestion%2A>|none|Yes, but must be a single-valued attribute of type Unicode String.|  \n|<xref:System.Web.Security.ActiveDirectoryMembershipUser.IsApproved%2A>|User-Account-Control (AD)<br /><br /> mDS-UserAccountDisabled (ADAM)|No|  \n|<xref:System.Web.Security.MembershipUser.IsLockedOut%2A>|computed from lockoutTime and the AD lockout duration (AD on Windows 2000)<br /><br /> msDS-User-Account-Control-Computed (AD on Windows Server 2003)<br /><br /> msDS-User-Account-Control-Computed (ADAM)|No|  \n|<xref:System.Web.Security.MembershipUser.LastLockoutDate%2A>|If user is locked out due to too many bad password attempts, the lockout time attribute is returned.<br /><br /> If user is locked out due to too many bad password answer attempts, the value stored in the attribute defined by `attributeMapFailedPasswordAnswerLockoutTime` is returned.<br /><br /> If user is locked out due to both a bad password and too many bad password attempts, the most recent date/time value is returned.<br /><br /> If the account is not locked out, return 1/1/1754 for SQL compatibility.|No|  \n  \n When both the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> and <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> properties are `true`, the ActiveDirectoryMembershipProvider class supports password-reset security by requiring the user to answer a predetermined question. To support the question and answer, you must set the following configuration attributes using the [add Element for providers for membership (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/8423ec7f-a06d-4606-977e-a46400b2fc18) in the application configuration file.  \n  \n|Configuration attribute|Attribute type|  \n|-----------------------------|--------------------|  \n|`attributeMapPasswordQuestion`|Must be a single-valued attribute of type Unicode String.|  \n|`attributeMapPasswordAnswer`|Must be a single-valued attribute of type Unicode String.|  \n|`attributeMapFailedPasswordAnswerCount`|Must be a single-valued attribute of type Integer.|  \n|`attributeMapFailedPasswordAnswerTime`|Must be a single-valued attribute of type Large Integer/Interval.|  \n|`attributeMapFailedPasswordAnswerLockoutTime`|Must be a single-valued attribute of type Large Integer/Interval.|  \n  \n For more information on using password-reset security, see the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> property.  \n  \n## Active Directory connections  \n When the ActiveDirectoryMembershipProvider class is used to connect to an Active Directory or an Active Directory Application Mode (ADAM) server, the `connectionProtection` attribute that is set using the [add Element for providers for membership (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/8423ec7f-a06d-4606-977e-a46400b2fc18) in the application configuration file may restrict the types of operations the ActiveDirectoryMembershipProvider class can perform over the connection. The `connectionProtection` attribute also determines the methods the ActiveDirectoryMembershipProvider instance will use to create the connection to the Active Directory or ADAM server.  \n  \n The following table shows the effect of the `connectionProtection` attribute when connecting to an Active Directory.  \n  \n|`connectionProtection` setting|Effect|  \n|------------------------------------|------------|  \n|<xref:System.Web.Security.ActiveDirectoryConnectionProtection>|The ActiveDirectoryMembershipProvider class will connect to an Active Directory, with these restrictions.<br /><br /> -   Any method that sets a password will fail. Active Directory requires a secure connection when changing passwords.<br />-   You must explicitly set the `connectionUsername` and `connectionPassword` attributes using the [add Element for providers for membership (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/8423ec7f-a06d-4606-977e-a46400b2fc18) in the application configuration file; otherwise, the ActiveDirectoryMembershipProvider instance will throw a <xref:System.Configuration.Provider.ProviderException> exception.|  \n|`Secure`|The ActiveDirectoryMembershipProvider class will attempt to connect to Active Directory using SSL. If SSL fails, a second attempt to connect to Active Directory using sign-and-seal will be made. If both attempts fail, the ActiveDirectoryMembershipProvider instance will throw a <xref:System.Configuration.Provider.ProviderException> exception.<br /><br /> Both process credentials and explicit credentials are supported.|  \n  \n The following table shows the effect of the `connectionProtection` attribute when connecting to an ADAM server.  \n  \n|`connectionProtection` setting|Effect|  \n|------------------------------------|------------|  \n|<xref:System.Web.Security.ActiveDirectoryConnectionProtection>|The ActiveDirectoryMembershipProvider class will connect to an ADAM server, with this restriction.<br /><br /> -   Any method that sets passwords will fail unless you explicitly configure the ADAM server to allow passwords to be sent and changed over an insecure connection.<br /><br /> Both process credentials and explicit credentials are supported.|  \n|`Secure`|The ActiveDirectoryMembershipProvider class will attempt to connect to the ADAM server using SSL. If a connection cannot be made, the ActiveDirectoryMembershipProvider instance will throw a <xref:System.Configuration.Provider.ProviderException> exception.<br /><br /> Both process credentials and explicit credentials are supported.|  \n  \n## ADAM Configuration  \n When using an ADAM server, the ADAM instance must contain a schema that defines the `User` class. You can import the `User` class with an LDIF import of the `MS-User.ldf` file available in the ADAM install directory.  \n  \n The ActiveDirectoryMembershipProvider class will work with an ADAM server configured to use the default network ports. The following table shows the defaults expected for the ADAM server.  \n  \n|connectionProtection setting|Expected ADAM port|  \n|----------------------------------|------------------------|  \n|<xref:System.Web.Security.ActiveDirectoryConnectionProtection>|389|  \n|`Secure`|636|  \n  \n If your ADAM server is not using the default ports, see article Q817583, \"Active Directory Services does not request secure authorization over an SSL connection,\" in the [Microsoft Knowledge Base](http://go.microsoft.com/fwlink/?linkid=37115)."
+  example:
+  - "The following code examples show the Web.config file for an ASP.NET application configured to use an ActiveDirectoryMembershipProvider instance. The first example uses the default mappings for Active Directory attributes, and does not support password-reset security with question-and-answer nor the ability to call search methods. The second example shows all the attribute settings allowed for an ActiveDirectoryMembershipProvider instance.  \n  \n The first example is a simple configuration file using default mappings for Active Directory attributes.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```  \n  \n This example shows all of the attribute settings that are available for an instance of ActiveDirectoryMembershipProvider.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership  \n      defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"  \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,  \n          System.Web, Version=1.0.3600, Culture=neutral,  \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          connectionStringName=\"ADService\"  \n          connectionUsername=\"UserWithAppropriateRights\"  \n          connectionPassword=\"PasswordForUser\"  \n          connectionProtection=\"Secure\"  \n          enablePasswordReset=\"true\"  \n          enableSearchMethods=\"true\"  \n          requiresQuestionAndAnswer=\"true\"  \n          applicationName=\"/\"  \n          description=\"Default AD connection\"  \n          requiresUniqueEmail=\"false\"  \n          clientSearchTimeout=\"30\"  \n          serverSearchTimeout=\"30\"  \n          timeoutUnit=\"Minutes\"  \n          attributeMapPasswordQuestion=\"department\"  \n          attributeMapPasswordAnswer=\"division\"  \n          attributeMapFailedPasswordAnswerCount=\"singleIntAttribute\"  \n         attributeMapFailedPasswordAnswerTime=\"singleLargeIntAttribute\"  \n         attributeMapFailedPasswordAnswerLockoutTime=\"singleLargeIntAttribute\"  \n          attributeMapEmail = \"mail\"  \n          attributeMapUsername = \"userPrincipalName\"  \n          maxInvalidPasswordAttempts = \"5\"  \n          passwordAttemptWindow = \"10\"  \n          passwordAnswerAttemptLockoutDuration = \"30\"  \n          minRequiredPasswordLength=\"7\"  \n          minRequiredNonalphanumericCharacters=\"1\"  \n          passwordStrengthRegularExpression=\"  \n          @\\\"(?=.{6,})(?=(.*\\d){1,})(?=(.*\\W){1,})\" />  \n        />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```  \n  \n `clientSearchTimeout` and `serverSearchTimeout` default to minutes. To change the units, set the `timeoutUnit` attribute value to one of \"Days\", \"Hours\", \"Minutes\", \"Seconds\", or \"Milliseconds\". If the attribute is not specified, the default is \"Minutes\"."
+  syntax:
+    content: 'public class ActiveDirectoryMembershipProvider : System.Web.Security.MembershipProvider'
+  inheritance:
+  - System.Web.Security.MembershipProvider
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.#ctor
+  id: '#ctor'
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ActiveDirectoryMembershipProvider()
+  nameWithType: ActiveDirectoryMembershipProvider.ActiveDirectoryMembershipProvider()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ActiveDirectoryMembershipProvider()
+  type: Constructor
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Creates a new instance of the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> class."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> constructor is called by ASP.NET to create an instance of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class as specified in the configuration for the application. This constructor is not intended to be used from your code."
+  syntax:
+    content: public ActiveDirectoryMembershipProvider ();
+    parameters: []
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName
+  id: ApplicationName
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ApplicationName
+  nameWithType: ActiveDirectoryMembershipProvider.ApplicationName
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "The name of the application using the custom membership provider."
+  remarks: "The ApplicationName property can be set to the name of the ASP.NET application; however, the application name is not used by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class.       Therefore, unlike other <xref:System.Web.Security.MembershipProvider> implementations, all ASP.NET applications that access the same Active Directory data store will always share the same user data."
+  syntax:
+    content: public override string ApplicationName { get; set; }
+    return:
+      type: System.String
+      description: "The name of the application using the custom membership provider."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "An attempt was made to set the ApplicationName property."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the ApplicationName property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword(System.String,System.String,System.String)
+  id: ChangePassword(System.String,System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ChangePassword(String,String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePassword(String,String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword(String,String,String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Changes the password for the specified user."
+  remarks: "The ChangePassword method is used to update the user&quot;s password in the Active Directory data store. Regardless of the credentials that the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance is configured to use, the provider connects to the Active Directory server using the `username` and `oldPassword` parameters as the connection credentials.       If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the user cannot change his or her password if the account was previously locked because the user made too many attempts to answer the password question. The user will need to wait the number of minutes specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property before changing the password.       If the password change succeeds and the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, then the user&quot;s bad password answer tracking counters are reset.       The provider finds the user instance to update by performing a subtree search for the user name starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       To change passwords on an Active Directory server the `connectionProtection` attribute must be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>.       When using an ADAM server, the `connectionProtection` attribute can be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>, but only if you explicitly configure the ADAM server to allow password change over unsecured connections."
+  syntax:
+    content: public override bool ChangePassword (string username, string oldPassword, string newPassword);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The name of the user to update the password for."
+    - id: oldPassword
+      type: System.String
+      description: "The current password for the specified user."
+    - id: newPassword
+      type: System.String
+      description: "The new password for the specified user."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    username is empty, or exceeds the maximum length for the user name (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to the  attribute and the username parameter contains backslashes.  \n  \n \\- or -  \n  \n oldPassword or newPassword is a zero-length string.  \n  \n \\- or -  \n  \n oldPassword or newPassword exceeds the maximum password length (usually 128 characters).  \n  \n \\- or -  \n  \n newPassword is less than the minimum password size specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength%2A> property  \n  \n \\- or -  \n  \n newPassword contains fewer than the number of non-alphabetic characters specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters%2A> property.  \n  \n \\- or -  \n  \n newPassword fails validation by the regular expression defined in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression%2A> property."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is .  \n  \n \\- or -  \n  \n oldPassword is .  \n  \n \\- or -  \n  \n newPassword is ."
+  - type: System.Web.Security.MembershipPasswordException
+    commentId: T:System.Web.Security.MembershipPasswordException
+    description: "\n    newPassword does not meet the complexity requirements defined by the Active Directory server."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "A secure connection could not be made to an Active Directory Application Mode server."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The ChangePassword method is called before the  instance is initialized."
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "An unhandled exception occurred."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)
+  id: ChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ChangePasswordQuestionAndAnswer(String,String,String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(String,String,String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(String,String,String,String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Updates the password question and answer for a user in the Active Directory store."
+  remarks: "The method is called by the <xref:System.Web.Security.ActiveDirectoryMembershipUser> class to update the password question and answer for a user in the Active Directory membership store.       Requiring a password question and answer provides an additional layer of security when resetting a user&quot;s password. When creating a user name, a user can supply a question and answer that can later be used to reset a forgotten password. The ChangePasswordQuestionAndAnswer method updates the password question and answer for a membership user to new values.       In order to use the ChangePasswordQuestionAndAnswer method, you must set these additional attributes in your application&quot;s configuration file:      -   `requiresQuestionAndAnswer` must be `true.`      -   `attributeMapPasswordQuestion` and `attributeMapPasswordAnswer` must be mapped to attributes in the Active Directory schema.       If the above criteria are not met, a <xref:System.Configuration.Provider.ProviderException> is thrown at initialization.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance connects to the Active Directory data store with the credentials provided in the `username` and `password` parameters to validate the user name/password combination. The actual update of the question and answer is performed with the configured connection credentials of the provider.       If an incorrect password is supplied to the ChangePasswordQuestionAndAnswer method, the directory server will increment the counters that track invalid password attempts. This can result in the user being locked and unable to log on until either the lock status is cleared by a call to the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser%2A> method or the locked duration specified in the directory passes.       If the update to the question and answer succeeds and the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the user&quot;s bad password answer tracking counters are reset.       The password answer is encrypted using the <xref:System.Web.Security.MembershipProvider.EncryptPassword%2A> method before it is stored in the Active Directory data store. The encryption key and algorithm are specified by the [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) configuration element. The decryption attribute on the [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) element must be specified, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class does not support auto-generated encryption keys.       The maximum length for the password question is 256 characters. The maximum length for the password answer is 128 characters.       Leading and trailing spaces are trimmed from all parameter values except for `password`.       The provider finds the user instance to update by performing a subtree search for the user name starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings."
+  syntax:
+    content: public override bool ChangePasswordQuestionAndAnswer (string username, string password, string newPasswordQuestion, string newPasswordAnswer);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The user to change the password question and answer for."
+    - id: password
+      type: System.String
+      description: "The password for the specified user."
+    - id: newPasswordQuestion
+      type: System.String
+      description: "The new password question for the specified user."
+    - id: newPasswordAnswer
+      type: System.String
+      description: "The new password answer for the specified user."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The administrator has not mapped the password question-and-answer fields to attributes of the Active Directory schema."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    username is empty, or exceeds the maximum length for the user name (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to the  attribute and the username parameter contains backslashes.  \n  \n \\- or -  \n  \n password is a zero-length string.  \n  \n \\- or -  \n  \n password exceeds the maximum password length (usually 128 characters).  \n  \n \\- or -  \n  \n newPasswordQuestion is empty and the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> property value is .  \n  \n \\- or -  \n  \n newPasswordQuestion exceeds 256 characters.  \n  \n \\- or -  \n  \n newPasswordAnswer exceeds 128 characters after the answer is encrypted."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is .  \n  \n \\- or -  \n  \n password is .  \n  \n \\- or -  \n  \n newPasswordQuestion is  and <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> property is .  \n  \n \\- or -  \n  \n newPasswordAnswer is  and <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> property is ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) configuration element indicates an auto-generated machine encryption key. You must explicitly set the  attribute of the [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) element to store password answers with the ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The ChangePasswordQuestionAndAnswer method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)
+  id: CreateUser(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+  nameWithType: ActiveDirectoryMembershipProvider.CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Adds a new user to the Active Directory data store."
+  remarks: "The CreateUser method is called by the <xref:System.Web.Security.Membership> class to create a new user in the Active Directory data store.       For both Active Directory and Active Directory Application Mode (ADAM) servers, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class requires that the instance class in the directory be `user`. Alternative user classes such as `inetOrgPerson` are not supported.       When using an Active Directory server and the user name is mapped to the `userPrincipalName` attribute, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class will automatically generate a random 20-character user name for the `sAMAccountName` parameter on your behalf.       Parameters default to the following maximum lengths.      |Parameter|Maximum length|   |---------------|--------------------|   |`username`|64 characters if using the `userPrincipalName` attribute. If using the `sAMAccountName` attribute, the common restriction is 20 characters or less.|   |`password`|128 characters.|   |`email`|256 characters.|   |`passwordQuestion`|256 characters.|   |`passwordAnswer`|128 characters before and after encrypting.|       The <xref:System.Web.Security.ActiveDirectoryMembershipUser.Comment%2A> property on the returned <xref:System.Web.Security.ActiveDirectoryMembershipUser> instance is limited to 1024 characters.       If the directory schema has been modified by reducing the maximum allowable lengths for these attributes, these lengths will take precedence.       Before creating the user, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class will make sure the user name is unique. If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance is configured to require unique e-mail addresses, it will also make sure the e-mail address is unique.       In an Active Directory user-name uniqueness is enforced by performing a GC search when the user name is mapped to `userPrincipalName`. If `sAMAccountName` is used, then the directory will automatically enforce uniqueness of the `sAMAccountName` across the Active Directory domain.       An ADAM server will automatically enforce user name uniqueness of the `userPrincipalName` across all application partitions.       Uniqueness of the e-mail address is enforced by performing a subtree search for a duplicate e-mail address starting at the root of the container in which users are created. This is either the default user container (if connected to an Active Directory and no container was specified in the connection string) or the container specified in the connection string.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class creates the user directly in the user container specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       For passwords to be set on an Active Directory server, the `connectionProtection` attribute must be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>.       When an ADAM server is being used, the `connectionProtection` attribute can be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>, but only if you explicitly configure the ADAM server to allow password changes over unsecured connections.       Leading and trailing spaces are trimmed from all string parameter values except `password`.      > [!IMPORTANT] >  You cannot create new users unless the credentials used to connect to the Active Directory server have either Domain Administrator rights (not recommended) or the &quot;create child instance,&quot; &quot;delete child instance,&quot; and &quot;set password&quot; access rights. The &quot;delete child instance&quot; access right is required because creating a user is a multi-step process, and if any step of user creation fails, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class will delete the user instance rather than leave a partially constructed user instance in the directory."
+  syntax:
+    content: public override System.Web.Security.MembershipUser CreateUser (string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out System.Web.Security.MembershipCreateStatus status);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The user name for the new user."
+    - id: password
+      type: System.String
+      description: "The password for the new user."
+    - id: email
+      type: System.String
+      description: "The e-mail address of the new user."
+    - id: passwordQuestion
+      type: System.String
+      description: "The password question for the new user."
+    - id: passwordAnswer
+      type: System.String
+      description: "The password answer for the new user."
+    - id: isApproved
+      type: System.Boolean
+      description: "Whether or not the new user is approved to be validated."
+    - id: providerUserKey
+      type: System.Object
+      description: "The unique identifier from the membership data source for the user. This parameter must be  when using the  class."
+    - id: status
+      type: System.Web.Security.MembershipCreateStatus
+      description: "When this method returns, contains one of the <xref:System.Web.Security.MembershipCreateStatus> enumeration values indicating whether the user was created successfully."
+    return:
+      type: System.Web.Security.MembershipUser
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The providerUserKey parameter is not ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The administrator has not mapped the password question-and-answer fields to attributes of the Active Directory schema, and either the passwordQuestion or passwordAnswer parameter is not ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) configuration element indicates an auto-generated machine encryption key. You must explicitly set the  attribute of the [machineKey Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/4b5699a9-bc21-4c4a-85f1-8b3b8ebd2d46) element to store password answers with the .  \n  \n \\- or -  \n  \n The  was unable to establish a secure connection to the directory when attempting to set the password for the new user."
+  - type: System.Runtime.InteropServices.COMException
+    commentId: T:System.Runtime.InteropServices.COMException
+    description: "An error occurred while attempting to create the user."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The CreateUser method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  id: CurrentConnectionProtection
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: CurrentConnectionProtection
+  nameWithType: ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the current level of security being used to protect communications with the server."
+  remarks: "The CurrentConnectionProtection property indicates the current level of security that the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance is configured to use. The CurrentConnectionProtection property is based on the `connnectionProtection` attribute set with the [add Element for providers for membership (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/8423ec7f-a06d-4606-977e-a46400b2fc18) in the application configuration file.       The `connectionProtection` attribute can only be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection> or <xref:System.Web.Security.ActiveDirectoryConnectionProtection> in the configuration file.       See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to use the SSL security protocol to connect to an Active Directory server.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,  \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          connectionProtection=\"SignAndSeal\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public System.Web.Security.ActiveDirectoryConnectionProtection CurrentConnectionProtection { get; }
+    return:
+      type: System.Web.Security.ActiveDirectoryConnectionProtection
+      description: "One of the <see cref=&quot;T:System.Web.Security.ActiveDirectoryConnectionProtection&quot;></see> values."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the CurrentConnectionProtection property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser(System.String,System.Boolean)
+  id: DeleteUser(System.String,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: DeleteUser(String,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.DeleteUser(String,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser(String,Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Removes a user&quot;s membership information from the Active Directory data store."
+  remarks: "The DeleteUser method immediately removes the user identified by the `username` parameter. Since the Active Directory data store does not store user information in separate areas of the directory, the `deleteAllRelatedData` parameter is ignored, although it must be set to either `true` or `false` when calling the DeleteUser method.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class finds the user instance to delete by performing a single-level search for the user name in the users container determined by the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       `username` must be 64 characters or less.      > [!IMPORTANT] >  You cannot delete users unless the credentials used to connect to the Active Directory server have either Domain Administrator rights (not recommended) or the &quot;delete child instances&quot; access right."
+  syntax:
+    content: public override bool DeleteUser (string username, bool deleteAllRelatedData);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The name of the user to delete."
+    - id: deleteAllRelatedData
+      type: System.Boolean
+      description: "This parameter is ignored by the DeleteUser method."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    username is empty, or exceeds the maximum length for the user name (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to the  attribute and the userName parameter contains backslashes."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is ."
+  - type: System.Runtime.InteropServices.COMException
+    commentId: T:System.Runtime.InteropServices.COMException
+    description: "An error occurred while attempting to delete the user."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The DeleteUser method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset
+  id: EnablePasswordReset
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: EnablePasswordReset
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordReset
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating whether the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> instance is configured to allow users to reset their passwords."
+  remarks: "The EnablePasswordReset property indicates whether you can use the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword%2A> method to reset a user&quot;s password. The EnablePasswordReset property is set in your application&quot;s configuration file using the `enablePasswordReset` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element.       You can only set the EnablePasswordReset property `true` when the following [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element settings have been made.      -   `requiresQuestionAndAnswer` must be `true`.      -   The Active Directory schema must be modified to contain attributes for storing the password question and answer, as well as the three tracking fields for password-answer change attempts.      -   `attributeMapPasswordQuestion`, `attributeMapPasswordAnswer`, `attributeMapFailedPasswordAnswerCount`, `attributeMapFailedPasswordAnswerTime`, and `attributeMapFailedPasswordAnswerLockoutTime` must be mapped to attributes in the Active Directory schema.       If the above criteria are not met, a <xref:System.Configuration.Provider.ProviderException> is thrown at initialization.       When the connection string in the application configuration file specifies an Active Directory domain rather than a specific server, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance will always connect to the domain controller that has the PDC role for the domain to ensure that password changes take effect and are available when the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser%2A> method is called.      > [!NOTE] >  Even if the EnablePasswordReset property is `true`, you cannot reset user passwords unless the credentials used to connect to the Active Directory server have either Domain Administrator rights (not recommended) or the &quot;reset password&quot; access right."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to enable password resets. It uses the explicit credentials of a user given the \"reset password\" access right.  \n  \n> [!IMPORTANT]\n>  When you place user credentials in your Web.config file, there are potential security threats. Users with access rights to the directory containing the Web.config file can read the file, and thus see the credentials. For details on how to protect against this threat, see [Encrypting Configuration Information Using Protected Configuration](../Topic/Encrypting%20Configuration%20Information%20Using%20Protected%20Configuration.md).  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          connectionUsername=\"UserWithResetPasswordRights\"  \n          connectionPassword=\"PasswordForUser\"  \n          enablePasswordReset=\"true\"  \n          requiresQuestionAndAnswer=\"true\"  \n          attributeMapPasswordQuestion=\"PasswordQuestionADAttribute\"  \n          attributeMapPasswordAnswer=\"PasswordAnswerADAttribute\"  \n          attributeMapFailedPasswordAnswerCount=\"AnswerCountADAttribute\"  \n          attributeMapFailedPasswordAnswerTime=\"AnswerTimeADAttribute\"  \n          attributeMapFailedPasswordAnswerLockoutTime=\"LockOutTimeADAttribute\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override bool EnablePasswordReset { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if password reset is allowed; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the EnablePasswordReset property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  id: EnablePasswordRetrieval
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: EnablePasswordRetrieval
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating whether the user&quot;s password can be retrieved from the Active Directory data store. This property always returns <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class does not support password retrieval."
+  syntax:
+    content: public override bool EnablePasswordRetrieval { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> to indicate that password retrieval is not supported by the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> class."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the EnablePasswordRetrieval property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods
+  id: EnableSearchMethods
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: EnableSearchMethods
+  nameWithType: ActiveDirectoryMembershipProvider.EnableSearchMethods
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating whether search-oriented <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> methods are available."
+  remarks: "Because searching an Active Directory server is potentially resource intensive, the EnableSearchMethods property enables you to turn off search-oriented <xref:System.Web.Security.ActiveDirectoryMembershipProvider> methods. The EnableSearchMethods property is set in your application&quot;s configuration file using the `enableSearchMethods` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element.       When the EnableSearchMethods property is `false`, the following methods are not available:      -   <xref:System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName%2A>      -   <xref:System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail%2A>      -   <xref:System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers%2A>       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       We recommend that you do not enable searching on production systems until you have confirmed that the search queries issued by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class do not adversely impact your directory server&quot;s performance. Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class is designed for a stateless Web environment, it is unable to use the paging optimizations exposed by the underlying <xref:System.DirectoryServices> APIs. This means that paging operations during searches against large directories are very expensive and should be avoided. Search operations are always issued against the directory server configured in the connection string, or an automatically selected server in the case of a connection string pointing at a domain. The provider does not use a global catalog for its search methods."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to enable searching an Active Directory server.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          enableSearchMethods=\"true\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public bool EnableSearchMethods { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if search methods are available; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the EnableSearchMethods property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail(System.String,System.Int32,System.Int32,System.Int32@)
+  id: FindUsersByEmail(System.String,System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: FindUsersByEmail(String,Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByEmail(String,Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail(String,Int32,Int32,Int32)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Returns a collection of membership users from the Active Directory data store based on the user&quot;s e-mail address."
+  remarks: "The FindUsersByEmail method gets a <xref:System.Web.Security.MembershipUserCollection> containing the user records from the Active Directory store that match the `emailToMatch` parameters. The user records are returned sorted in ascending order by e-mail address.       The `emailToMatch` parameter is limited to 256 characters.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class will issue the search using both the `clientSearchTimeout` and `serverSearchTimeout` configuration values. Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class performs searches against the directory server using pages with 512 rows per page, the time-outs apply to each page of results fetched by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class. For example, if a search query results in 1,000 rows of data, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class will fetch this information as two pages of data. This means that the client and search time-outs will start counting from zero when the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class requests the second page of data.       The results returned by the FindUsersByEmail method are constrained by the `pageIndex` and `pageSize` parameters. The `pageSize` parameter specifies the maximum number of <xref:System.Web.Security.MembershipUser> instances to return in the <xref:System.Web.Security.MembershipUserCollection>. The `pageIndex` parameter specifies which page of results to return, where 0 (zero) indicates the first page.       The `totalRecords` parameter is an `out` parameter that is set to the total number of matching membership users found in the Active Directory data store. For example, if there are 13 users for the configured data store, and the `pageIndex` value was 1 with a `pageSize` of 5, the <xref:System.Web.Security.MembershipUserCollection> returned would contain the sixth through the tenth users. The `totalRecords` parameter would be set to 13.       You can control whether to allow searching for users, by setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property in the application&quot;s configuration file using the `enableSearchMethods` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. Setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property to `false` causes the FindUsersByEmail method to throw a <xref:System.NotSupportedException> exception.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       We recommend that you do not enable searching on production systems until you have confirmed that the search queries issued by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class do not adversely impact your directory server&quot;s performance. Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class is designed for a stateless Web environment, it is unable to use the paging optimizations exposed by the underlying <xref:System.DirectoryServices> APIs. This means that paging operations during searches against large directories are very expensive and should be avoided. Search operations are always issued against the directory server configured in the connection string, or an automatically selected server in the case of a connection string pointing at a domain. The provider does not use a global catalog for its search methods."
+  syntax:
+    content: public override System.Web.Security.MembershipUserCollection FindUsersByEmail (string emailToMatch, int pageIndex, int pageSize, out int totalRecords);
+    parameters:
+    - id: emailToMatch
+      type: System.String
+      description: "E-mail address or portion of e-mail address to search for."
+    - id: pageIndex
+      type: System.Int32
+      description: "The index of the page of results to return. `pageIndex` is zero-based."
+    - id: pageSize
+      type: System.Int32
+      description: "The size of the page of results to return."
+    - id: totalRecords
+      type: System.Int32
+      description: "When this method returns, contains the total number of users returned in the collection. This parameter is passed uninitialized."
+    return:
+      type: System.Web.Security.MembershipUserCollection
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The FindUsersByEmail method is called before the  instance is initialized."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    emailToMatch is empty.  \n  \n \\- or -  \n  \n emailToMatch exceeds 256 characters.  \n  \n \\- or -  \n  \n pageIndex is less than 0.  \n  \n \\- or -  \n  \n pageSize is less than 1.  \n  \n \\- or -  \n  \n pageSize multiplied by pageIndex, plus pageSize, minus 1 is greater than <xref:System.Int32.MaxValue>."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName(System.String,System.Int32,System.Int32,System.Int32@)
+  id: FindUsersByName(System.String,System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: FindUsersByName(String,Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByName(String,Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName(String,Int32,Int32,Int32)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Returns a collection of users from the Active Directory data store based on the user name."
+  remarks: "The FindUsersByName method returns a <xref:System.Web.Security.MembershipUserCollection> instance containing the user records from the Active Directory data store for all user names that match the `userNameToMatch` parameters. The records are returned sorted alphabetically by user name.       The results returned by the FindUsersByName method are constrained by the `pageIndex` and `pageSize` parameters. The `pageSize` parameter specifies the maximum number of <xref:System.Web.Security.MembershipUser> instances to return in the <xref:System.Web.Security.MembershipUserCollection>. The `pageIndex` parameter specifies which page of results to return, where 0 (zero) indicates the first page.       The `totalRecords` parameter is an `out` parameter that is set to the total number of matching membership users found in the Active Directory data store. For example, if there are 13 users for the configured data store, and the `pageIndex` value was 1 with a `pageSize` of 5, the <xref:System.Web.Security.MembershipUserCollection> returned would contain the sixth through the tenth users. The `totalRecords` parameter would be set to 13.       You can control whether to allow searching for users, by setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property in the application&quot;s configuration file using the `enableSearchMethods` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. Setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property value to `false` causes the FindUsersByName method to throw a <xref:System.NotSupportedException> exception.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       We recommend that you do not enable searching on production systems until you have confirmed that the search queries issued by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class do not adversely impact your directory server&quot;s performance. Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class is designed for a stateless Web environment, it is unable to use the paging optimizations exposed by the underlying <xref:System.DirectoryServices> APIs. This means that paging operations during searches against large directories are very expensive and should be avoided. Search operations are always issued against the directory server configured in the connection string, or an automatically selected server in the case of a connection string pointing at a domain. The provider does not use a global catalog for its search methods."
+  syntax:
+    content: public override System.Web.Security.MembershipUserCollection FindUsersByName (string usernameToMatch, int pageIndex, int pageSize, out int totalRecords);
+    parameters:
+    - id: usernameToMatch
+      type: System.String
+      description: "The user name or portion of a user name to search for."
+    - id: pageIndex
+      type: System.Int32
+      description: "The index of the page of results to return. `pageIndex` is zero-based."
+    - id: pageSize
+      type: System.Int32
+      description: "The size of the page of results to return."
+    - id: totalRecords
+      type: System.Int32
+      description: "When this method returns, contains the total number of records returned in the collection. This parameter is passed uninitialized."
+    return:
+      type: System.Web.Security.MembershipUserCollection
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The FindUsersByName method is called before the  instance is initialized."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    usernameToMatch is empty, or exceeds the maximum length for the user name (usually 256 characters).  \n  \n \\- or -  \n  \n usernameToMatch contains commas.  \n  \n \\- or -  \n  \n pageIndex is less than 0.  \n  \n -or  \n  \n pageSize is less than 1.  \n  \n \\- or -  \n  \n pageSize multiplied by pageIndex, plus pageSize, minus 1 is greater than <xref:System.Int32.MaxValue>."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    usernameToMatch is ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword
+  id: GeneratePassword
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GeneratePassword()
+  nameWithType: ActiveDirectoryMembershipProvider.GeneratePassword()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Generates a random password."
+  remarks: "The GeneratePassword method of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class calls the <xref:System.Web.Security.Membership.GeneratePassword%2A> method of the <xref:System.Web.Security.Membership> class to retrieve a random password. The password length is set to the value of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength%2A> property. The password length can never be less than 14.       You can specifically call the <xref:System.Web.Security.Membership.GeneratePassword%2A> method by referencing the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class directly from the Provider property of the <xref:System.Web.Security.Membership> class.       The generated password only contains alphanumeric characters and the following punctuation marks: !@#$%^&*()_-+=[{]};:<>&#124;./?. No hidden or non-printable control characters are included in the generated password.       The generated password will contain at least the number of non-alphanumeric characters specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters%2A> property. The generated password will not be tested with the regular expression in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression%2A> property.      > [!NOTE] >  The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class does not generate passwords that match complexity requirements set in the directory. It is possible to generate a random password that fails the password complexity rules set by the directory."
+  syntax:
+    content: public virtual string GeneratePassword ();
+    parameters: []
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers(System.Int32,System.Int32,System.Int32@)
+  id: GetAllUsers(System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetAllUsers(Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.GetAllUsers(Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers(Int32,Int32,Int32)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a collection of all the users stored in an Active Directory data source."
+  remarks: "This method is called by the <xref:System.Web.Security.Membership> class to retrieve user information from the Active Directory data store specified in the ASP.NET application&quot;s configuration file.       The results returned by the GetAllUsers method are constrained by the `pageIndex` and `pageSize` parameters. The `pageSize` parameter specifies the maximum number of <xref:System.Web.Security.MembershipUser> instances to return in the <xref:System.Web.Security.MembershipUserCollection> collection. The `pageIndex` parameter specifies which page of results to return, where 0 (zero) indicates the first page.       The `totalRecords` parameter is an `out` parameter that is set to the total number of matching membership users found in the Active Directory data store. For example, if there are 13 users for the configured data store, and the `pageIndex` value was 1 with la `pageSize` of 5, the <xref:System.Web.Security.MembershipUserCollection> returned would contain the sixth through the tenth users. The `totalRecords` parameter would be set to 13.       You can control whether to allow searching for users by setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property in the application&quot;s configuration file using the `enableSearchMethods` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. Setting the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property to `false` causes the GetAllUsers method to throw a <xref:System.NotSupportedException> exception.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       We recommend that you do not enable searching on production systems until you have confirmed that the search queries issued by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class do not adversely impact your directory server&quot;s performance. Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class is designed for a stateless Web environment, it is unable to use the paging optimizations exposed by the underlying <xref:System.DirectoryServices> APIs. This means that paging operations during searches against large directories are very expensive and should be avoided. Search operations are always issued against the directory server configured in the connection string, or an automatically selected server in the case of a connection string pointing at a domain. The provider does not use a global catalog for its search methods."
+  syntax:
+    content: public override System.Web.Security.MembershipUserCollection GetAllUsers (int pageIndex, int pageSize, out int totalRecords);
+    parameters:
+    - id: pageIndex
+      type: System.Int32
+      description: "The index of the page of results to return. `pageIndex` is zero-based."
+    - id: pageSize
+      type: System.Int32
+      description: "The size of the page of results to return."
+    - id: totalRecords
+      type: System.Int32
+      description: "When this method returns, contains the total number of records returned in the collection. This parameter is passed uninitialized."
+    return:
+      type: System.Web.Security.MembershipUserCollection
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The GetAllUsers method is called before the  instance is initialized."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    pageIndex is less than 0.  \n  \n -or  \n  \n pageSize is less than 1.  \n  \n \\- or -  \n  \n pageSize multiplied by pageIndex, plus pageSize, minus 1 is greater than <xref:System.Int32.MaxValue>."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline
+  id: GetNumberOfUsersOnline
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetNumberOfUsersOnline()
+  nameWithType: ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Throws a &lt;xref:System.NotSupportedException&gt; exception in all cases."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class does not support returning the number of users online."
+  syntax:
+    content: public override int GetNumberOfUsersOnline ();
+    parameters: []
+    return:
+      type: System.Int32
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "Any call to the GetNumberOfUsersOnline method."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword(System.String,System.String)
+  id: GetPassword(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetPassword(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.GetPassword(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword(String,String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Returns the password of the specified user from the database. The <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> class does not support this method."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class does not support returning the user&quot;s password."
+  syntax:
+    content: public override string GetPassword (string username, string passwordAnswer);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The user to retrieve the password for."
+    - id: passwordAnswer
+      type: System.String
+      description: "The password answer for the user."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The  does not support password retrieval."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.Object,System.Boolean)
+  id: GetUser(System.Object,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetUser(Object,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUser(Object,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(Object,Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the membership user information associated with the specified user key."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.GetUser%2A> method is called by the <xref:System.Web.Security.Membership> class to retrieve information on the specified user from the Active Directory data store.       The search looks for a user instance where the `objectSID` attribute matches the `providerUserKey` parameter.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings."
+  syntax:
+    content: public override System.Web.Security.MembershipUser GetUser (object providerUserKey, bool userIsOnline);
+    parameters:
+    - id: providerUserKey
+      type: System.Object
+      description: "The unique identifier for the user."
+    - id: userIsOnline
+      type: System.Boolean
+      description: "The GetUser method ignores this parameter."
+    return:
+      type: System.Web.Security.MembershipUser
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The GetUser method is called before the  instance is initialized."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    providerUserKey is not of type ."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    providerUserKey is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.String,System.Boolean)
+  id: GetUser(System.String,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetUser(String,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUser(String,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(String,Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the membership user information associated with the specified user name."
+  remarks: "The GetUser method is called by the <xref:System.Web.Security.Membership> class to retrieve information on the specified user from the Active Directory data store.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       Leading and trailing spaces are trimmed from the `username` parameter value."
+  syntax:
+    content: public override System.Web.Security.MembershipUser GetUser (string username, bool userIsOnline);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The name of the user to get information for."
+    - id: userIsOnline
+      type: System.Boolean
+      description: "The GetUser method ignores this parameter."
+    return:
+      type: System.Web.Security.MembershipUser
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    username is empty, or exceeds the maximum length for the user name (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to the  attribute and the username parameter contains backslashes."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The GetUser method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail(System.String)
+  id: GetUserNameByEmail(System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: GetUserNameByEmail(String)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUserNameByEmail(String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the user name associated with the specified e-mail address."
+  remarks: "This method is called by the <xref:System.Web.Security.Membership> class to retrieve a user name from the Active Directory data store based on the e-mail address for the user.       If more than one user in the membership data store has the same e-mail address, the first user name encountered is returned. You can set the `requiresUniqueEmail` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element to `true` in the application configuration file to ensure that each e-mail address in the database is unique.       Leading and trailing spaces are trimmed from the `email` parameter value. If the e-mail address is empty after trimming, an <xref:System.ArgumentException> is thrown. If the e-mail address is `null`, all user names in the Active Directory data store are searched, and the first user name is returned.       We recommend that you do not enable searching on production systems until you have confirmed that the search queries issued by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class do not adversely impact your directory server&quot;s performance.      > [!IMPORTANT] >  The GetUserNameByEmail method will run even when the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods%2A> property is `false`.       Since the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class is designed for a stateless Web environment, it is unable to use the paging optimizations exposed by the underlying <xref:System.DirectoryServices> APIs. This means that paging operations during searches against large directories are very expensive and should be avoided. Search operations are always issued against the directory server configured in the connection string, or an automatically selected server in the case of a connection string pointing at a domain. The provider does not use a global catalog for its search methods.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings."
+  syntax:
+    content: public override string GetUserNameByEmail (string email);
+    parameters:
+    - id: email
+      type: System.String
+      description: "The e-mail address to search for."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    email exceeds 256 characters  \n  \n \\- or -  \n  \n after trimming, email is empty."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "More than one user exists in the data store with the same e-mail address and the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail%2A> property value is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The provider is not initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)
+  id: Initialize(System.String,System.Collections.Specialized.NameValueCollection)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: Initialize(String,NameValueCollection)
+  nameWithType: ActiveDirectoryMembershipProvider.Initialize(String,NameValueCollection)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize(String,NameValueCollection)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Initializes the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> instance with the property values from the application&quot;s configuration files. This method is not intended to be called from your code."
+  remarks: "This method initializes the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> object with the property values specified in the ASP.NET application configuration file (Web.config) and is not intended to be used directly from your code."
+  syntax:
+    content: public override void Initialize (string name, System.Collections.Specialized.NameValueCollection config);
+    parameters:
+    - id: name
+      type: System.String
+      description: "The name of the  instance to initialize."
+    - id: config
+      type: System.Collections.Specialized.NameValueCollection
+      description: "A  containing the names and values of the configuration options for the membership provider."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    config is ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The  attribute specified in the application configuration exceeds 256 characters.  \n  \n \\- or -  \n  \n The  attribute is empty or does not exist in the application configuration.  \n  \n \\- or -  \n  \n The connection string specified in the  attribute in the application configuration file is empty or does not exist.  \n  \n \\- or -  \n  \n The  attribute is set to a value other than  or  in the application configuration file.  \n  \n \\- or -  \n  \n The  attribute is specified in the application configuration file but its value is empty.  \n  \n \\- or -  \n  \n The  attribute is specified in the application configuration file but its value is empty.  \n  \n \\- or -  \n  \n Either the  attribute or the  attribute is specified in the application configuration file, but not both.  \n  \n \\- or -  \n  \n The  attribute is specified but is not a positive integer.  \n  \n \\- or -  \n  \n The  attribute is specified but is not a positive integer.  \n  \n \\- or -  \n  \n The  attribute is specified, but is not a Boolean value.  \n  \n \\- or -  \n  \n The  attribute is specified, but is not a Boolean value.  \n  \n \\- or -  \n  \n The  attribute is specified, but is not a Boolean value.  \n  \n \\- or -  \n  \n The  attribute is specified, but is not a Boolean value.  \n  \n \\- or -  \n  \n The  attribute is specified and it is either negative or greater than 128.  \n  \n \\- or -  \n  \n The  attribute is specified and it is either negative or greater than 128.  \n  \n \\- or -  \n  \n The regular expression specified in the  attribute in the application configuration file is not a valid regular expression  \n  \n \\- or -  \n  \n The  attribute is specified, but it is an empty string.  \n  \n \\- or -  \n  \n The  attribute does not begin with \"LDAP\".  \n  \n \\- or -  \n  \n The connection string specified in the  attribute is invalid.  \n  \n \\- or -  \n  \n The connection string in the  attribute specifies a server-less bind.  \n  \n \\- or -  \n  \n The  could not establish a connection with the domain or directory server.  \n  \n \\- or -  \n  \n The  attribute is set to , but neither an SSL nor a signed and sealed connection can be established with the server.  \n  \n \\- or -  \n  \n The  attribute is set to  but the  and  attributes are not set.  \n  \n \\- or -  \n  \n The  attribute is set to  but the  could not establish an SSL connection with an ADAM server.  \n  \n \\- or -  \n  \n The  attribute specifies either the global catalog (GC) or an SSL global catalog port.  \n  \n \\- or -  \n  \n The  attribute specifies an Active Directory server or domain, but the  could not retrieve the default naming context for the domain.  \n  \n \\- or -  \n  \n The  attribute specifies an Active Directory server or domain, but the  could not retrieve the default users container.  \n  \n \\- or -  \n  \n The  attribute specifies an ADAM server, but it does not specify an application partition or container.  \n  \n \\- or -  \n  \n The  attribute specifies an application partition or container, but the specified container does not exist.  \n  \n \\- or -  \n  \n The  attribute specifies a container that is not allowed to contain user instances.  \n  \n An attribute mapping is specified but its value was empty.  \n  \n \\- or -  \n  \n An attribute mapping is specified twice.  \n  \n \\- or -  \n  \n An attribute mapping is specified but the attribute does not exist on the user instance.  \n  \n \\- or -  \n  \n An attribute mapping is specified but the directory attribute is not of the correct data type.  \n  \n \\- or -  \n  \n An attribute mapping is specified but the directory attribute is multi-valued.  \n  \n \\- or -  \n  \n The  attribute is specified but was mapped to neither the `sAMAccountName` nor the `userPrincipalName` directory attribute when connecting to an Active Directory.  \n  \n \\- or -  \n  \n The  attribute is specified but was not mapped to the `userPrincipalName` directory attribute when connecting to an ADAM server.  \n  \n \\- or -  \n  \n The  attribute is  and the  attribute is  in the application configuration file.  \n  \n \\- or -  \n  \n The  attribute was specified but is not a non-zero positive integer.  \n  \n \\- or -  \n  \n The  attribute was specified but is not a non-zero positive integer.  \n  \n \\- or -  \n  \n The  attribute was specified but is not a non-zero positive integer.  \n  \n \\- or -  \n  \n The  attribute is  and any of the , , and  attributes are empty.  \n  \n \\- or -  \n  \n The  attribute is  but either the  or the  attribute is empty.  \n  \n \\- or -  \n  \n An attribute specified in the application configuration file is not valid."
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The application is running in a hosted environment and the  is set to ."
+  - type: System.Runtime.InteropServices.COMException
+    commentId: T:System.Runtime.InteropServices.COMException
+    description: "An error occurred while querying the directory."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  id: MaxInvalidPasswordAttempts
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: MaxInvalidPasswordAttempts
+  nameWithType: ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the number of failed answer attempts a user is allowed for the password-reset question."
+  remarks: "When the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the user must answer the password question to reset his or her password. The user is allowed a limited number of answer attempts within the time window established by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow%2A> property. If the number of password answer attempts is greater than or equal to the value stored in the MaxInvalidPasswordAttempts property, the user is locked out of further attempts for the number of minutes stored in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property.      > [!NOTE] >  This property does not control the number of failed logon attempts a user can make before being locked out. The Active Directory server handles failed logon attempts and is not affected by the value of this property.       The MaxInvalidPasswordAttempts property is set in your application&quot;s configuration file using the `maxInvalidPasswordAttempts` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. If the property is not set in the application&quot;s configuration file, the MaxInvalidPasswordAttempts property is set to the default value of `5`."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to lock out users who make three failed attempts to enter the password answer in a 10-minute time window. If the user is locked out, no further attempts to answer the password question may be made for 15 minutes.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,  \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          maxInvalidPasswordAttempts=\"3\"  \n          passwordAttemptWindow=\"10\"  \n          passwordAnswerAttemptLockoutDuration=\"15\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override int MaxInvalidPasswordAttempts { get; }
+    return:
+      type: System.Int32
+      description: "The number of failed password answer attempts a user is allowed before the account is locked. The default is `5`."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the MaxInvalidPasswordAttempts property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  id: MinRequiredNonAlphanumericCharacters
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: MinRequiredNonAlphanumericCharacters
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the minimum number of special characters that must be present in a valid password."
+  remarks: "The MinRequiredNonAlphanumericCharacters property returns the minimum number of special, non-alphanumeric characters that must be entered to create a valid password.       The MinRequiredNonAlphanumericCharacters property value is set in the application configuration using the `minRequiredNonalphanumericCharacters` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element.       A non-alphanumeric character is a character for which the <xref:System.Char.IsLetterOrDigit%2A> method returns `false`."
+  example:
+  - "The following example shows the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element in the `system.web` section of the application's Web.config file. It specifies that the application use an instance of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class to provide membership services, and sets the `minRequiredNonalphanumericCharacters` attribute to one character.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          minRequiredNonalphanumericCharacters = \"1\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override int MinRequiredNonAlphanumericCharacters { get; }
+    return:
+      type: System.Int32
+      description: "The minimum number of special characters that must be present in a valid password."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The MinRequiredNonAlphanumericCharacters property is accessed before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  id: MinRequiredPasswordLength
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: MinRequiredPasswordLength
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the minimum length required for a password."
+  remarks: "The MinRequiredPasswordLength property gets the minimum number of characters that must be entered to create a valid password.       The MinRequiredPasswordLength property value is set in the application configuration using the `minRequiredPasswordLength` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element."
+  example:
+  - "The following example shows the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element in the `system.web` section of the application's Web.config file. It specifies that the application use an instance of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class to provide membership services, and sets the `minRequiredPasswordLength` attribute to seven characters.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          minRequiredPasswordLength = \"7\" />  \n  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override int MinRequiredPasswordLength { get; }
+    return:
+      type: System.Int32
+      description: "The minimum length required for a password."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The MinRequiredPasswordLength property is accessed before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  id: PasswordAnswerAttemptLockoutDuration
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: PasswordAnswerAttemptLockoutDuration
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Get the length of time for which a user account is locked out after the user makes too many bad password-answer attempts."
+  remarks: "When the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the user must answer the password question to reset his or her password. If the user fails to supply the correct answer a consecutive number of times equal to the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts%2A> property value within the observation time period specified by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow%2A> property, the user is locked out of further attempts for the number of minutes contained in the PasswordAnswerAttemptLockoutDuration property.      > [!NOTE] >  This property does not set the duration a user is locked out after failing to enter a valid password. The Active Directory server handles failed logon attempts and is not affected by the value of this property. We recommend that the PasswordAnswerAttemptLockoutDuration property be set to the same value as the account lockout duration specified for too many failed logon attempts in the Active Directory configuration. This will present consistent auto-lockout behavior for users regardless of whether they were locked out due to failed logon attempts or to bad password answers.       The PasswordAnswerAttemptLockoutDuration property is set in your application&quot;s configuration file using the `passwordAnswerAttemptLockoutDuration` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. If the property is not set in the application&quot;s configuration file, the PasswordAnswerAttemptLockoutDuration property is set to the default value of 30 minutes."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to lock out users who make three failed attempts to enter the password answer in a 10-minute time window. If the user is locked out, no further attempts to answer the password question may be made for 15 minutes.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          maxInvalidPasswordAttempts=\"3\"  \n          passwordAttemptWindow=\"10\"  \n          passwordAnswerAttemptLockoutDuration=\"15\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public int PasswordAnswerAttemptLockoutDuration { get; }
+    return:
+      type: System.Int32
+      description: "The time, in minutes, that a user is locked out after providing too many incorrect password answers."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the PasswordAnswerAttemptLockoutDuration property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  id: PasswordAttemptWindow
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: PasswordAttemptWindow
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the time window during which consecutive failed attempts to provide a valid password or a valid password answer are tracked."
+  remarks: "The PasswordAttemptWindow property works in conjunction with the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts%2A> property to help guard against an unwanted source guessing the password or password answer of a membership user through repeated attempts. When users are attempting to log in, change their password, or reset their password, only a certain number of consecutive attempts are allowed within a specified time window. The length of the time window is specified by the PasswordAttemptWindow property, which identifies the number of minutes allowed between invalid attempts. If the number of consecutive failed attempts a user makes to reset his or her password equals the value stored in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts%2A> property, and the time elapsed since the last invalid attempt is less than the number of minutes specified for the PasswordAttemptWindow property, then the user account s locked out for the number of minutes contained in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property. If the interval between the current failed attempt and the last failed attempt is greater than the PasswordAttemptWindow property setting, the current invalid attempt is counted as the first attempt. If a valid password answer is supplied before the maximum number of allowed invalid attempts is reached, the count of invalid password-answer attempts is set to zero. If a valid password is supplied before the maximum number of allowed invalid attempts is reached, the count of invalid password attempts and the count of invalid password-answer attempts are set to zero.       We recommend that the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property be set to the same value as the account lockout duration that is specified for the maximum number of failed logon attempts in the Active Directory configuration. This will present consistent auto-lockout behavior for users whether they were locked out due to failed logon attempts or to bad password answers.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property is set in your application&quot;s configuration file using the `passwordAttemptWindow` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. If the property is not set in the application&quot;s configuration file, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property is set to the default value of 10 minutes."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to lock out users who make three failed attempts to enter the password answer in a 10-minute time window. If the user is locked out, no further attempts to answer the password question may be made for 15 minutes.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,  \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          maxInvalidPasswordAttempts=\"3\"  \n          passwordAttemptWindow=\"10\"  \n        passwordAnswerAttemptLockoutDuration=\"15\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override int PasswordAttemptWindow { get; }
+    return:
+      type: System.Int32
+      description: "The time window, in minutes, during which consecutive failed attempts to provide a valid password or a valid password answer are tracked. The default is 10 minutes. If the interval between each failed attempt is greater than the PasswordAttemptWindow property setting, the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> instance treats each failed attempt as if it were the first failed attempt."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the PasswordAttemptWindow property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat
+  id: PasswordFormat
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: PasswordFormat
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordFormat
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating the format of passwords in the Active Directory data store."
+  remarks: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> property does not support password retrieval. The behavior of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> object is the same as other providers working with `Hashed` passwords."
+  syntax:
+    content: public override System.Web.Security.MembershipPasswordFormat PasswordFormat { get; }
+    return:
+      type: System.Web.Security.MembershipPasswordFormat
+      description: "One of the &lt;xref:System.Web.Security.MembershipPasswordFormat&gt; values. The PasswordFormat property always returns &lt;xref:System.Web.Security.MembershipPasswordFormat&gt;."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  id: PasswordStrengthRegularExpression
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: PasswordStrengthRegularExpression
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets the regular expression used to evaluate a password."
+  remarks: "The PasswordStrengthRegularExpression property gets the regular expression used to evaluate password complexity.       The PasswordStrengthRegularExpression property is not used to validate auto-generated passwords in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword%2A> method.       The PasswordStrengthRegularExpression property is set in the application configuration using the `passwordStrengthRegularExpression` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element."
+  example:
+  - "The following example shows the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) configuration element in the `system.web` section of the application's Web.config file. It specifies that the application use an instance of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class to provide membership services and sets the `passwordStrengthRegularExpression` attribute to a regular expression that validates that the password meets the following criteria:  \n  \n-   Is greater than seven characters.  \n  \n-   Contains at least one digit.  \n  \n-   Contains at least one special (non-alphanumeric) character.  \n  \n If the password does not meet these criteria, the password is not accepted by the membership provider.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          passwordStrengthRegularExpression=  \n            \"@\\\"(?=.{6,})(?=(.*\\d){1,})(?=(.*\\W){1,})\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override string PasswordStrengthRegularExpression { get; }
+    return:
+      type: System.String
+      description: "A regular expression used to evaluate a password."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The PasswordStrengthRegularExpression property is accessed before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  id: RequiresQuestionAndAnswer
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: RequiresQuestionAndAnswer
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating whether the membership provider is configured to require a password question and answer when creating a user."
+  remarks: "The RequiresQuestionAndAnswer property is set in your application&quot;s configuration file using the `requiresQuestionAndAnswer` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. If the property is not set in the application&quot;s configuration file, the RequiresQuestionAndAnswer property is set to the default value of `false`.       When the `requiresQuestionAndAnswer` attribute is set to `true`, you must also set these additional attributes.      -   `attributeMapPasswordQuestion` and `attributeMapPasswordAnswer` must be mapped to attributes in the Active Directory schema.       If the above criteria are not met, a <xref:System.Configuration.Provider.ProviderException> is thrown at initialization.      > [!NOTE] >  You can require a password question and answer when creating a user, but set the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property to `false` to prevent users from changing their passwords using the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to enable password resets. It uses the explicit credentials of a user given the \"reset password\" access right.  \n  \n> [!IMPORTANT]\n>  When you place user credentials in your Web.config file, there are potential security threats. Users with access rights to the directory containing the Web.config file can read the file, and thus see the credentials. For details on how to protect against this threat, see [Encrypting Configuration Information Using Protected Configuration](../Topic/Encrypting%20Configuration%20Information%20Using%20Protected%20Configuration.md).  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,  \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          connectionUsername=\"UserWithResetPasswordRights\"  \n          connectionPassword=\"PasswordForUser\"  \n          enablePasswordReset=\"true\"  \n          requiresQuestionAndAnswer=\"true\"  \n          attributeMapPasswordQuestion=\"PasswordQuestionADAttribute\"  \n          attributeMapPasswordAnswer=\"PasswordAnswerADAttribute\"  \n          attributeMapFailedPasswordAnswerCount=\"AnswerCountADAttribute\"  \n          attributeMapFailedPasswordAnswerTime=\"AnswerTimeADAttribute\"  \n          attributeMapFailedPasswordAnswerLockoutTime=\"LockOutTimeADAttribute\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override bool RequiresQuestionAndAnswer { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <see cref=&quot;T:System.Web.Security.ActiveDirectoryMembershipProvider&quot;></see> object is configured to require a password question and answer for a user; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the RequiresQuestionAndAnswer property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  id: RequiresUniqueEmail
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: RequiresUniqueEmail
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Gets a value indicating whether an e-mail address stored on the Active Directory server must be unique."
+  remarks: "When the RequiresUniqueEmail property is `true`, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance ensures that the e-mail address is not used by any other user within the current scope when either the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser%2A> or <xref:System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser%2A> method is called.       The RequiresUniqueEmail property is set in your application&quot;s configuration file using the `requiresUniqueEmail` attribute of the [membership Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/b9c1ee8f-33ca-4361-8666-b42a0fe86049) element. If the property is not set in the application&quot;s configuration file, the RequiresUniqueEmail property is set to the default value of `false`."
+  example:
+  - "The following code example shows a Web.config entry that configures an <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to require unique e-mail addresses for users stored on the Active Directory server.  \n  \n```  \n<configuration>  \n  <connectionStrings>  \n    <add name=\"ADService\" connectionString=\"LDAP://ldapServer/\" />  \n  </connectionStrings>  \n  <system.web>  \n    <membership defaultProvider=\"AspNetActiveDirectoryMembershipProvider\">  \n      <providers>  \n        <add name=\"AspNetActiveDirectoryMembershipProvider\"   \n          type=\"System.Web.Security.ActiveDirectoryMembershipProvider,   \n          System.Web, Version=2.0.3600, Culture=neutral,   \n          PublicKeyToken=b03f5f7f11d50a3a\"  \n          requiresUniqueEmail=\"true\" />  \n      </providers>  \n    </membership>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public override bool RequiresUniqueEmail { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if e-mail addresses must be unique; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "An attempt to access the RequiresUniqueEmail property was made before the  instance was initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword(System.String,System.String)
+  id: ResetPassword(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ResetPassword(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ResetPassword(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword(String,String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Resets a user&quot;s password to a new, automatically generated password."
+  remarks: "The method is called by the <xref:System.Web.Security.Membership> class to reset the password for a user in the Active Directory data store to a new randomly generated value. The new password is returned.      > [!NOTE] >  The random password created by the ResetPassword method is not guaranteed to pass the regular expression in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression%2A> property. However, the random password will meet the criteria established by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength%2A> and <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters%2A> properties.       If an incorrect answer is supplied to the ResetPassword method, the internal counter that tracks invalid password-answer attempts is incremented by one. This can result in the user being unable to log on until the lock status is cleared by a call to the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser%2A> method. If the correct password answer is supplied and the user is not currently locked out, then the internal counter that tracks invalid password attempts is reset to zero. For more information, see the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts%2A> and <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow%2A> properties.       Leading and trailing spaces are trimmed from all parameter values.       You can call the ResetPassword method directly by first obtaining a reference to the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance from the <xref:System.Web.Security.Membership.Provider%2A?displayProperty=fullName> property.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       To set passwords on an Active Directory server, the `connectionProtection` attribute must be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>.       When using an ADAM server, the `connectionProtection` attribute can be set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>, but only if you explicitly configure the ADAM server to allow password changes over unsecured connections.      > [!IMPORTANT] >  You cannot reset passwords unless the credentials used to connect to the Active Directory server have either Domain Administrator rights (not recommended) or the &quot;reset password&quot; access right.       To reset a password, all of the following conditions must be true:      -   The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property must be set to `true`.      -   The Active Directory schema must be modified to contain attributes for storing the password question and answer, and the three tracking fields for password answer changes.      -   The `attributeMapPasswordQuestion`, `attributeMapPasswordAnswer`, `attributMapFailedPasswordAnswerCount`, `attributeMapFailedPasswordAnswerTime`, and `attributeMapFailedPasswordAnswerLockedTime` attributes must be set in the application configuration file.      -   The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer%2A> property must be set to `true`.      -   The security context for connecting to the Active Directory data store (either the process account or the explicit credentials) must have sufficient privileges to change passwords. The credentials used to connect to the Active Directory server have either Domain Administrator rights (not recommended) or the &quot;reset password&quot; access right.      > [!NOTE] >  Security policies set on the Active Directory server may make it impossible for the ResetPassword method to generate a password that satisfies the policies. The default implementation of the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword%2A> method will generate passwords that satisfy the default password policies on domain controllers running Windows Server 2003 SP1. If the password cannot be reset due to security policies on the Active Directory server, a <xref:System.Configuration.Provider.ProviderException> is thrown."
+  syntax:
+    content: public override string ResetPassword (string username, string passwordAnswer);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The user to reset the password for."
+    - id: passwordAnswer
+      type: System.String
+      description: "The password answer for the specified user."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The ResetPassword method is called before the  instance is initialized."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property value is ."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    passwordAnswer is .  \n  \n \\- or -  \n  \n username is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    passwordAnswer is empty after trimming  \n  \n \\- or -  \n  \n passwordAnswer exceeds 128 characters.  \n  \n \\- or -  \n  \n username is empty, or exceeds the maximum length allowed for user names (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to  but the username parameter contains backslashes."
+  - type: System.Web.Security.MembershipPasswordException
+    commentId: T:System.Web.Security.MembershipPasswordException
+    description: "The user is locked out because of too many bad logon attempts or too many attempted password-answer reset attempts.  \n  \n \\- or -  \n  \n passwordAnswer does not match the stored password answer."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The user specified in username does not exist in the Active Directory data store.  \n  \n \\- or -  \n  \n A generated password does not pass a custom validation handler.  \n  \n \\- or -  \n  \n The generated password is not complex enough to satisfy custom password policies set on the Active Directory server.  \n  \n \\- or -  \n  \n A secure connection cannot be made to an Active Directory Application Mode server to set the new password."
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: "An unhandled exception occurred."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser(System.String)
+  id: UnlockUser(System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: UnlockUser(String)
+  nameWithType: ActiveDirectoryMembershipProvider.UnlockUser(String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Clears a lock so that a membership user can be validated."
+  remarks: "Users are most commonly locked out and cannot be validated by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser%2A> method when the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts%2A> property is exceeded within the time specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow%2A> property or when too many attempts have been made to log on using the wrong password.       If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, when a user is unlocked the counters for bad passwords are reset.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.       Leading and trailing spaces are trimmed from the `username` parameter value."
+  syntax:
+    content: public override bool UnlockUser (string username);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The name of the membership user to clear the lock status for."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    username is empty, or exceeds the maximum length allowed for user names (usually 256 characters).  \n  \n \\- or -  \n  \n username contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to  but the username parameter contains backslashes."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The UnlockUser method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser(System.Web.Security.MembershipUser)
+  id: UpdateUser(System.Web.Security.MembershipUser)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: UpdateUser(MembershipUser)
+  nameWithType: ActiveDirectoryMembershipProvider.UpdateUser(MembershipUser)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser(MembershipUser)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Updates information about a user in the Active Directory data store."
+  remarks: "This method is called by the <xref:System.Web.Security.Membership> class to update user information in the Active Directory data store. The <xref:System.Web.Security.MembershipUser.Email%2A>, <xref:System.Web.Security.MembershipUser.Comment%2A>, and <xref:System.Web.Security.MembershipUser.IsApproved%2A> property values are updated for the specified membership user. All other properties are ignored.       The maximum length for the `username` parameter is 256 characters. The maximum length for the <xref:System.Web.Security.MembershipUser.Email%2A> property is 256 characters.       The password for a membership user cannot be updated using the UpdateUser method. To update the password for a membership user, use the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword%2A> method.       The provider uses a subtree search starting at the search point specified in the connection string. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings."
+  syntax:
+    content: public override void UpdateUser (System.Web.Security.MembershipUser user);
+    parameters:
+    - id: user
+      type: System.Web.Security.MembershipUser
+      description: "A <xref:System.Web.Security.MembershipUser> instance representing the user to update and the updated information for the user."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The UpdateUser method is called before the  instance is initialized."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    user is .  \n  \n \\- or -  \n  \n The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail%2A> property is  but the email address from the supplied <xref:System.Web.Security.MembershipUser> instance is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The <xref:System.Web.Security.MembershipUser.Email%2A> property is empty after trimming.  \n  \n \\- or -  \n  \n The <xref:System.Web.Security.MembershipUser.Email%2A> property exceeds 256 characters.  \n  \n \\- or -  \n  \n The <xref:System.Web.Security.MembershipUser.Comment%2A> property exceeds 1024 characters.  \n  \n \\- or -  \n  \n The <xref:System.Web.Security.MembershipUser.Comment%2A> property is empty.  \n  \n \\- or -  \n  \n The user name from the supplied <xref:System.Web.Security.MembershipUser> instance is empty, or exceeds the maximum length allowed for user names (usually 256 characters).  \n  \n \\- or -  \n  \n The user name from the supplied <xref:System.Web.Security.MembershipUser> instance contains commas.  \n  \n \\- or -  \n  \n The user name is mapped to  but the user name from the supplied <xref:System.Web.Security.MembershipUser> instance contains backslashes."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The specified user is not found in the Active Directory data store.  \n  \n \\- or -  \n  \n The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail%2A> property is , and the new value of the <xref:System.Web.Security.MembershipUser.Email%2A> property duplicates an existing e-mail address."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser(System.String,System.String)
+  id: ValidateUser(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  langs:
+  - csharp
+  name: ValidateUser(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ValidateUser(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser(String,String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.Security
+  summary: "Verifies that the specified user name and password exist in the Active Directory data store."
+  remarks: "This method is called by the <xref:System.Web.Security.Membership> class to validate user credentials against the Active Directory data store.       If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true` and the supplied credentials are valid, the user&quot;s tracking counters for bad password answers are reset.       The ValidateUser method may return `false` when the correct credentials are supplied, under the following circumstances:      1.  The user account was locked out by the directory server because of too many failed logon attempts. The user will not be able to log on until the directory&quot;s lockout duration passes.      2.  If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the user account will be locked if the user supplied a bad password answer too many times. The user&quot;s account will unlock after the time specified in the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration%2A> property has passed.      3.  The user must exist in the container specified in the connection string. Valid credentials are supplied for a user account located in a different container or in a different domain. The user must exist in the container specified in the connection string.       When validating a user, the provider validates the credentials by connecting to the Active Directory data store using the specified user name and password, not the credentials configured in the application configuration file.       However, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance will connect to the directory using the configured credentials for the following reasons.      -   To confirm that a user exists within the search scope as determined by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance&quot;s connection string. The provider uses a subtree search starting at the search point specified in the connection string to determine whether a user exists. The user must exist in the specified container. Credentials that are valid outside the connection string&quot;s specified container will not be validated. See the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> class topic for more information about connection strings.      -   If the <xref:System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset%2A> property is `true`, the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance will use the configured credentials to load the user instance to check whether the user has been locked out because he or she has made too many failed attempts to change the password answer.      > [!IMPORTANT] >  Connecting to an Active Directory domain controller with the &quot;Guest&quot; account enabled is a potential security threat. All validation attempts made on an Active Directory domain controller with the &quot;Guest&quot; account enabled will succeed. To improve security when using an Active Directory domain controller, you should disable the &quot;Guest&quot; account on the domain controller.       The <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance will attempt a concurrent bind against Active Directory when one of the following conditions is met:      -   The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection%2A> property is set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection>.      -   The <xref:System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection%2A> property is set to <xref:System.Web.Security.ActiveDirectoryConnectionProtection> and SSL is chosen by the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance to secure the connection.       In addition, for a concurrent bind to be made, the following conditions must be true:      -   The directory server must be running on Windows Server 2003.      -   The operating system of the Web server running the <xref:System.Web.Security.ActiveDirectoryMembershipProvider> instance must support concurrent binds (for example, Windows Server 2003).       When a concurrent bind is used, the last logon date for the user is not updated in the directory; therefore, the <xref:System.Web.Security.ActiveDirectoryMembershipUser.LastLoginDate%2A> property cannot be relied on.       Leading and trailing spaces are trimmed from the `username` parameter."
+  syntax:
+    content: public override bool ValidateUser (string username, string password);
+    parameters:
+    - id: username
+      type: System.String
+      description: "The name of the user to validate."
+    - id: password
+      type: System.String
+      description: "The password for the specified user."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The ValidateUser method is called before the  instance is initialized."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Web.Security.MembershipProvider
+  isExternal: false
+  name: System.Web.Security.MembershipProvider
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.#ctor
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ActiveDirectoryMembershipProvider()
+  nameWithType: ActiveDirectoryMembershipProvider.ActiveDirectoryMembershipProvider()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ActiveDirectoryMembershipProvider()
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ApplicationName
+  nameWithType: ActiveDirectoryMembershipProvider.ApplicationName
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword(System.String,System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ChangePassword(String,String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePassword(String,String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword(String,String,String)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ChangePasswordQuestionAndAnswer(String,String,String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(String,String,String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer(String,String,String,String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+  nameWithType: ActiveDirectoryMembershipProvider.CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser(String,String,String,String,String,Boolean,Object,MembershipCreateStatus)
+- uid: System.Web.Security.MembershipUser
+  parent: System.Web.Security
+  isExternal: true
+  name: MembershipUser
+  nameWithType: MembershipUser
+  fullName: System.Web.Security.MembershipUser
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Web.Security.MembershipCreateStatus
+  parent: System.Web.Security
+  isExternal: true
+  name: MembershipCreateStatus
+  nameWithType: MembershipCreateStatus
+  fullName: System.Web.Security.MembershipCreateStatus
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: CurrentConnectionProtection
+  nameWithType: ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+- uid: System.Web.Security.ActiveDirectoryConnectionProtection
+  parent: System.Web.Security
+  isExternal: false
+  name: ActiveDirectoryConnectionProtection
+  nameWithType: ActiveDirectoryConnectionProtection
+  fullName: System.Web.Security.ActiveDirectoryConnectionProtection
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser(System.String,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: DeleteUser(String,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.DeleteUser(String,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser(String,Boolean)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnablePasswordReset
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordReset
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnablePasswordRetrieval
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnableSearchMethods
+  nameWithType: ActiveDirectoryMembershipProvider.EnableSearchMethods
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail(System.String,System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: FindUsersByEmail(String,Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByEmail(String,Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail(String,Int32,Int32,Int32)
+- uid: System.Web.Security.MembershipUserCollection
+  parent: System.Web.Security
+  isExternal: true
+  name: MembershipUserCollection
+  nameWithType: MembershipUserCollection
+  fullName: System.Web.Security.MembershipUserCollection
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName(System.String,System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: FindUsersByName(String,Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByName(String,Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName(String,Int32,Int32,Int32)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GeneratePassword()
+  nameWithType: ActiveDirectoryMembershipProvider.GeneratePassword()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword()
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers(System.Int32,System.Int32,System.Int32@)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetAllUsers(Int32,Int32,Int32)
+  nameWithType: ActiveDirectoryMembershipProvider.GetAllUsers(Int32,Int32,Int32)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers(Int32,Int32,Int32)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetNumberOfUsersOnline()
+  nameWithType: ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline()
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline()
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetPassword(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.GetPassword(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword(String,String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.Object,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetUser(Object,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUser(Object,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(Object,Boolean)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(System.String,System.Boolean)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetUser(String,Boolean)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUser(String,Boolean)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser(String,Boolean)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail(System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetUserNameByEmail(String)
+  nameWithType: ActiveDirectoryMembershipProvider.GetUserNameByEmail(String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail(String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: Initialize(String,NameValueCollection)
+  nameWithType: ActiveDirectoryMembershipProvider.Initialize(String,NameValueCollection)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize(String,NameValueCollection)
+- uid: System.Collections.Specialized.NameValueCollection
+  parent: System.Collections.Specialized
+  isExternal: false
+  name: NameValueCollection
+  nameWithType: NameValueCollection
+  fullName: System.Collections.Specialized.NameValueCollection
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MaxInvalidPasswordAttempts
+  nameWithType: ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MinRequiredNonAlphanumericCharacters
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MinRequiredPasswordLength
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordAnswerAttemptLockoutDuration
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordAttemptWindow
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordFormat
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordFormat
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat
+- uid: System.Web.Security.MembershipPasswordFormat
+  parent: System.Web.Security
+  isExternal: true
+  name: MembershipPasswordFormat
+  nameWithType: MembershipPasswordFormat
+  fullName: System.Web.Security.MembershipPasswordFormat
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordStrengthRegularExpression
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: RequiresQuestionAndAnswer
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: RequiresUniqueEmail
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ResetPassword(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ResetPassword(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword(String,String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser(System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: UnlockUser(String)
+  nameWithType: ActiveDirectoryMembershipProvider.UnlockUser(String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser(String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser(System.Web.Security.MembershipUser)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: UpdateUser(MembershipUser)
+  nameWithType: ActiveDirectoryMembershipProvider.UpdateUser(MembershipUser)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser(MembershipUser)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser(System.String,System.String)
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ValidateUser(String,String)
+  nameWithType: ActiveDirectoryMembershipProvider.ValidateUser(String,String)
+  fullName: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser(String,String)
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.#ctor*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ActiveDirectoryMembershipProvider
+  nameWithType: ActiveDirectoryMembershipProvider.ActiveDirectoryMembershipProvider
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ApplicationName*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ApplicationName
+  nameWithType: ActiveDirectoryMembershipProvider.ApplicationName
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePassword*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ChangePassword
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePassword
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ChangePasswordQuestionAndAnswer
+  nameWithType: ActiveDirectoryMembershipProvider.ChangePasswordQuestionAndAnswer
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CreateUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: CreateUser
+  nameWithType: ActiveDirectoryMembershipProvider.CreateUser
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.CurrentConnectionProtection*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: CurrentConnectionProtection
+  nameWithType: ActiveDirectoryMembershipProvider.CurrentConnectionProtection
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.DeleteUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: DeleteUser
+  nameWithType: ActiveDirectoryMembershipProvider.DeleteUser
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordReset*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnablePasswordReset
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordReset
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnablePasswordRetrieval*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnablePasswordRetrieval
+  nameWithType: ActiveDirectoryMembershipProvider.EnablePasswordRetrieval
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.EnableSearchMethods*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: EnableSearchMethods
+  nameWithType: ActiveDirectoryMembershipProvider.EnableSearchMethods
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByEmail*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: FindUsersByEmail
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByEmail
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.FindUsersByName*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: FindUsersByName
+  nameWithType: ActiveDirectoryMembershipProvider.FindUsersByName
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GeneratePassword*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GeneratePassword
+  nameWithType: ActiveDirectoryMembershipProvider.GeneratePassword
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetAllUsers*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetAllUsers
+  nameWithType: ActiveDirectoryMembershipProvider.GetAllUsers
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetNumberOfUsersOnline
+  nameWithType: ActiveDirectoryMembershipProvider.GetNumberOfUsersOnline
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetPassword*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetPassword
+  nameWithType: ActiveDirectoryMembershipProvider.GetPassword
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetUser
+  nameWithType: ActiveDirectoryMembershipProvider.GetUser
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.GetUserNameByEmail*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: GetUserNameByEmail
+  nameWithType: ActiveDirectoryMembershipProvider.GetUserNameByEmail
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.Initialize*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: Initialize
+  nameWithType: ActiveDirectoryMembershipProvider.Initialize
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MaxInvalidPasswordAttempts
+  nameWithType: ActiveDirectoryMembershipProvider.MaxInvalidPasswordAttempts
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MinRequiredNonAlphanumericCharacters
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredNonAlphanumericCharacters
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.MinRequiredPasswordLength*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: MinRequiredPasswordLength
+  nameWithType: ActiveDirectoryMembershipProvider.MinRequiredPasswordLength
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordAnswerAttemptLockoutDuration
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAnswerAttemptLockoutDuration
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordAttemptWindow*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordAttemptWindow
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordAttemptWindow
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordFormat*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordFormat
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordFormat
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: PasswordStrengthRegularExpression
+  nameWithType: ActiveDirectoryMembershipProvider.PasswordStrengthRegularExpression
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: RequiresQuestionAndAnswer
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresQuestionAndAnswer
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.RequiresUniqueEmail*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: RequiresUniqueEmail
+  nameWithType: ActiveDirectoryMembershipProvider.RequiresUniqueEmail
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ResetPassword*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ResetPassword
+  nameWithType: ActiveDirectoryMembershipProvider.ResetPassword
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UnlockUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: UnlockUser
+  nameWithType: ActiveDirectoryMembershipProvider.UnlockUser
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.UpdateUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: UpdateUser
+  nameWithType: ActiveDirectoryMembershipProvider.UpdateUser
+- uid: System.Web.Security.ActiveDirectoryMembershipProvider.ValidateUser*
+  parent: System.Web.Security.ActiveDirectoryMembershipProvider
+  isExternal: false
+  name: ValidateUser
+  nameWithType: ActiveDirectoryMembershipProvider.ValidateUser

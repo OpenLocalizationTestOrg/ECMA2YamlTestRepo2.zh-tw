@@ -1,0 +1,554 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  id: ProxyWebPartManager
+  children:
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.#ctor
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit(System.EventArgs)
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections
+  - System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible
+  langs:
+  - csharp
+  name: ProxyWebPartManager
+  nameWithType: ProxyWebPartManager
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  type: Class
+  summary: "Provides a way for developers to declare static connections in a content page when a <see cref=&quot;T:System.Web.UI.WebControls.WebParts.WebPartManager&quot;></see> control has been declared in the content page&quot;s associated master page."
+  remarks: "The ProxyWebPartManager control exists for the particular scenario of declaring static connections in content pages when a <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control has already been declared in a master page.       By design, a Web page that uses Web Parts controls must contain one (and only one) <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control that manages all Web Parts controls on the page. When a Web Parts application uses master pages, it is common to place the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page, because all the content pages are merged with the master page at run time and the single <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control will manage all the Web Parts controls from all content pages. However, when developers want to declare static connections in the content pages of such an application, they might seem to face a limitation. A static Web Parts connection can be declared only by adding an <`asp:webpartconnection>` element as a child of a `<staticconnections>` element, which itself must be a child of a `<asp:webpartmanager>` element. But because the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control was already declared in the master page, and is the one permitted <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control, developers cannot declare additional <xref:System.Web.UI.WebControls.WebParts.WebPartManager> controls in the content pages to add static connections.       The ProxyWebPartManager control takes the place of the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in this scenario. Developers declare an `<asp:proxywebpartmanager>` element instead of an `<asp:webpartmanager>` element in their content pages, and can then declare static connections as child elements. At run time, the connections in the ProxyWebPartManager control are simply added to the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.StaticConnections%2A> collection of the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control and treated like any other connection.       Because the ProxyWebPartManager control is used only in this particular development scenario, it has more limited functionality than the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> class. In fact, although the ProxyWebPartManager control acts as a proxy to contain static connections for the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in content pages, it does not inherit from the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control. It inherits directly from the <xref:System.Web.UI.Control> class, and overrides only a few of the base members. The <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming%2A>, <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible%2A>, and <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID%2A> properties are overridden and assigned values that prevent them from being used. Other inherited properties are overridden to adjust their design-time behavior, but otherwise they have the same behavior as the base properties. These include the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls%2A> and <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID%2A> properties. Finally, the ProxyWebPartManager class has one non-inherited property. The <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections%2A> property returns its own collection of static connections (a <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection> object).       As for methods, the ProxyWebPartManager class similarly overrides only a few methods, mostly to restrict their use. The inherited <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus%2A> method is made unusable by throwing an exception if called. The <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection%2A> method always returns an empty control collection, which has the effect of preventing it from being able to contain a collection of controls. Finally, the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit%2A> method calls the base method, and then assigns the collection of connections referenced by the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections%2A> property to the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.StaticConnections%2A?displayProperty=fullName> property of the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control. This has the effect of rolling up all the static connections declared in all content pages and making them part of the connections collection maintained by the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page."
+  example:
+  - "The following code example demonstrates how to use the ProxyWebPartManager class to declare static connections on content pages in an application that uses master pages. The example has five parts:  \n  \n-   A user control that enables you to change the Web Parts display mode on a page.  \n  \n-   Source code for an interface and two <xref:System.Web.UI.WebControls.WebParts.WebPart> controls acting as the provider and the consumer for a connection.  \n  \n-   A master Web page that hosts the user control, the content pages, and the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control for the application.  \n  \n-   A content Web page that hosts a ProxyWebPartManager control, the two custom <xref:System.Web.UI.WebControls.WebParts.WebPart> controls, and a static connection to connect the two controls.  \n  \n-   An explanation of how to run the example page.  \n  \n The first part of this code example is the user control that enables users to change display modes on a Web page. Save the following source code to an .ascx file, giving it the file name that is assigned to the `Src` attribute of the `Register` directive for this user control, which is near the top of the hosting master page. For details about display modes and a description of the source code in this control, see [Walkthrough: Changing Display Modes on a Web Parts Page](../Topic/Walkthrough:%20Changing%20Display%20Modes%20on%20a%20Web%20Parts%20Page.md).  \n  \n [!code-cs[WebParts_ProxyWebPartManager_Overview#6](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_112_1.ascx)]\n [!code-vb[WebParts_ProxyWebPartManager_Overview#6](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_112_1.ascx)]  \n  \n The second part of the code example is the source code for the interface and controls. The source file contains a simple interface named `IZipCode`. There is also a <xref:System.Web.UI.WebControls.WebParts.WebPart> class named `ZipCodeWebPart` that implements the interface and acts as the provider control. Its `ProvideIZipCode` method is the callback method that implements the interface's only member. The method simply returns an instance of the interface. Note that the method is marked with a `ConnectionProvider` attribute in its metadata. This is the mechanism for identifying the method as the callback method for the provider's connection point. The other <xref:System.Web.UI.WebControls.WebParts.WebPart> class is named `WeatherWebPart`, and it acts as the consumer for the connection. This class has a method named `GetZipCode` that gets an instance of the `IZipCode` interface from the provider control. Note that this method is marked as the consumer's connection point method with a `ConnectionConsumer` attribute in its metadata.  \n  \n For the code example to run, you must compile this source code. You can compile it explicitly and put the resulting assembly in your Web site's Bin folder or the global assembly cache. Alternatively, you can put the source code in your site's App_Code folder, where it will be dynamically compiled at run time. This code example uses dynamic compilation. For a walkthrough that demonstrates how to compile, see [Walkthrough: Developing and Using a Custom Web Server Control](../Topic/Walkthrough:%20Developing%20and%20Using%20a%20Custom%20Web%20Server%20Control.md).  \n  \n [!code-cs[WebParts_ProxyWebPartManager_Overview#4](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_112_2.cs)]\n [!code-vb[WebParts_ProxyWebPartManager_Overview#4](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_112_2.vb)]  \n  \n The third part of the code example is the master page. You should take the following source code and save it in a file, naming it MasterPageCS.master or MasterPageVB.master (depending on which language you use). Note that the master page contains a `Register` directive to register the user control, and it references the user control itself in the body of the page. The master page also declares the single `<asp:webpartmanager>` element used for this page and all related content pages. Finally, the master page has an `<asp: contentplaceholder>` element that declares the point in the page where the content page is inserted.  \n  \n [!CODE [WebParts_ProxyWebPartManager_Overview#1](../CodeSnippet/VS_Snippets_WebNet/WebParts_ProxyWebPartManager_Overview#1)]  \n  \n The fourth part of the code example is the content page. You should copy the following source code and save it in a file with an .aspx extension. Notice that its `Page` directive contains a `MasterFile` attribute to refer to the master page. Also, this page has a `Register` directive to register the file in the App_Code folder that contains the dynamically compiled custom <xref:System.Web.UI.WebControls.WebParts.WebPart> controls that participate in the connection. Within the `<asp:content>` tags of the page, there is an <`asp:proxywebpartmanager>` element, with a child `<staticconnections>` element, which in turn has a child `<asp:webpartconnection>` element to declare the details of the connection. Within the `<script>` tags on the page, the `Button1_Click` method adds some code that accesses the main <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page and the ProxyWebPartManager control in the content page, and writes some of their details to the page.  \n  \n [!code-cs[WebParts_ProxyWebPartManager_Overview#2](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_112_4.aspx)]\n [!code-vb[WebParts_ProxyWebPartManager_Overview#2](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_112_4.aspx)]  \n  \n After you load the page in a browser, click the **WebPartManager Information** button and observe the information about the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page, and the ProxyWebPartManager control in the content page. For example, note that they both have the same count in their respective properties that track static connections (the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections%2A> property). Note also that although the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control has a <xref:System.Web.UI.WebControls.WebParts.WebPartManager.WebParts%2A> property that tracks the number of <xref:System.Web.UI.WebControls.WebParts.WebPart> controls it manages, the ProxyWebPartManager control has no such property, as its only purpose is to contain static connections."
+  syntax:
+    content: >-
+      [System.ComponentModel.Bindable(false)]
+
+      [System.ComponentModel.Designer("System.Web.UI.Design.WebControls.WebParts.ProxyWebPartManagerDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+
+      [System.Web.UI.NonVisualControl]
+
+      [System.Web.UI.ParseChildren(true)]
+
+      [System.Web.UI.PersistChildren(false)]
+
+      public class ProxyWebPartManager : System.Web.UI.Control
+  inheritance:
+  - System.Object
+  - System.Web.UI.Control
+  implements: []
+  inheritedMembers:
+  - System.Web.UI.Control.Adapter
+  - System.Web.UI.Control.AddedControl(System.Web.UI.Control,System.Int32)
+  - System.Web.UI.Control.AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.ApplyStyleSheetSkin(System.Web.UI.Page)
+  - System.Web.UI.Control.AppRelativeTemplateSourceDirectory
+  - System.Web.UI.Control.BeginRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.BindingContainer
+  - System.Web.UI.Control.BuildProfileTree(System.String,System.Boolean)
+  - System.Web.UI.Control.ChildControlsCreated
+  - System.Web.UI.Control.ClearCachedClientID
+  - System.Web.UI.Control.ClearChildControlState
+  - System.Web.UI.Control.ClearChildState
+  - System.Web.UI.Control.ClearChildViewState
+  - System.Web.UI.Control.ClearEffectiveClientIDMode
+  - System.Web.UI.Control.ClientIDMode
+  - System.Web.UI.Control.ClientIDSeparator
+  - System.Web.UI.Control.Context
+  - System.Web.UI.Control.CreateChildControls
+  - System.Web.UI.Control.DataBind
+  - System.Web.UI.Control.DataBind(System.Boolean)
+  - System.Web.UI.Control.DataBindChildren
+  - System.Web.UI.Control.DataBinding
+  - System.Web.UI.Control.DataItemContainer
+  - System.Web.UI.Control.DataKeysContainer
+  - System.Web.UI.Control.DesignMode
+  - System.Web.UI.Control.Dispose
+  - System.Web.UI.Control.Disposed
+  - System.Web.UI.Control.EnableViewState
+  - System.Web.UI.Control.EndRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.EnsureChildControls
+  - System.Web.UI.Control.EnsureID
+  - System.Web.UI.Control.Events
+  - System.Web.UI.Control.FindControl(System.String)
+  - System.Web.UI.Control.FindControl(System.String,System.Int32)
+  - System.Web.UI.Control.GetDesignModeState
+  - System.Web.UI.Control.GetRouteUrl(System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetRouteUrl(System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetUniqueIDRelativeTo(System.Web.UI.Control)
+  - System.Web.UI.Control.HasChildViewState
+  - System.Web.UI.Control.HasControls
+  - System.Web.UI.Control.HasEvents
+  - System.Web.UI.Control.ID
+  - System.Web.UI.Control.IdSeparator
+  - System.Web.UI.Control.Init
+  - System.Web.UI.Control.IsChildControlStateCleared
+  - System.Web.UI.Control.IsLiteralContent
+  - System.Web.UI.Control.IsTrackingViewState
+  - System.Web.UI.Control.IsViewStateEnabled
+  - System.Web.UI.Control.Load
+  - System.Web.UI.Control.LoadControlState(System.Object)
+  - System.Web.UI.Control.LoadViewState(System.Object)
+  - System.Web.UI.Control.LoadViewStateByID
+  - System.Web.UI.Control.MapPathSecure(System.String)
+  - System.Web.UI.Control.NamingContainer
+  - System.Web.UI.Control.OnBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.OnDataBinding(System.EventArgs)
+  - System.Web.UI.Control.OnLoad(System.EventArgs)
+  - System.Web.UI.Control.OnPreRender(System.EventArgs)
+  - System.Web.UI.Control.OnUnload(System.EventArgs)
+  - System.Web.UI.Control.OpenFile(System.String)
+  - System.Web.UI.Control.Page
+  - System.Web.UI.Control.Parent
+  - System.Web.UI.Control.PreRender
+  - System.Web.UI.Control.RaiseBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.RemovedControl(System.Web.UI.Control)
+  - System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter,System.Web.UI.Adapters.ControlAdapter)
+  - System.Web.UI.Control.RenderingCompatibility
+  - System.Web.UI.Control.ResolveAdapter
+  - System.Web.UI.Control.ResolveClientUrl(System.String)
+  - System.Web.UI.Control.ResolveUrl(System.String)
+  - System.Web.UI.Control.SaveControlState
+  - System.Web.UI.Control.SaveViewState
+  - System.Web.UI.Control.SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.SetRenderMethodDelegate(System.Web.UI.RenderMethod)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object,System.Object)
+  - System.Web.UI.Control.Site
+  - System.Web.UI.Control.System#Web#UI#IControlBuilderAccessor#ControlBuilder
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#GetDesignModeState
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetOwnerControl(System.Web.UI.Control)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#UserData
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#DataBindings
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#HasDataBindings
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#Expressions
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#HasExpressions
+  - System.Web.UI.Control.System#Web#UI#IParserAccessor#AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.TemplateControl
+  - System.Web.UI.Control.TemplateSourceDirectory
+  - System.Web.UI.Control.TrackViewState
+  - System.Web.UI.Control.UniqueID
+  - System.Web.UI.Control.Unload
+  - System.Web.UI.Control.ValidateRequestMode
+  - System.Web.UI.Control.ViewState
+  - System.Web.UI.Control.ViewStateIgnoresCase
+  - System.Web.UI.Control.ViewStateMode
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.#ctor
+  id: '#ctor'
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: ProxyWebPartManager()
+  nameWithType: ProxyWebPartManager.ProxyWebPartManager()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ProxyWebPartManager()
+  type: Constructor
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.UI.WebControls.WebParts.ProxyWebPartManager&quot;></see> class."
+  syntax:
+    content: public ProxyWebPartManager ();
+    parameters: []
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID
+  id: ClientID
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: ClientID
+  nameWithType: ProxyWebPartManager.ClientID
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Gets the control ID for HTML markup that is generated by ASP.NET."
+  syntax:
+    content: public override string ClientID { get; }
+    return:
+      type: System.String
+      description: "The control ID for HTML markup that is generated by ASP.NET."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls
+  id: Controls
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: Controls
+  nameWithType: ProxyWebPartManager.Controls
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Gets a <see cref=&quot;T:System.Web.UI.ControlCollection&quot;></see> object that represents the child controls for a specified server control in the UI hierarchy."
+  syntax:
+    content: public override System.Web.UI.ControlCollection Controls { get; }
+    return:
+      type: System.Web.UI.ControlCollection
+      description: "The collection of child controls for the specified server control."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection
+  id: CreateControlCollection
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: CreateControlCollection()
+  nameWithType: ProxyWebPartManager.CreateControlCollection()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Overrides the base property to prevent the <see cref=&quot;T:System.Web.UI.WebControls.WebParts.ProxyWebPartManager&quot;></see> control from containing controls."
+  remarks: "The CreateControlCollection method overrides the base method to prevent the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control from containing and returning collections of controls. Its only purpose is to enable static connections to be declared in content pages within an application that uses master pages."
+  syntax:
+    content: protected override System.Web.UI.ControlCollection CreateControlCollection ();
+    parameters: []
+    return:
+      type: System.Web.UI.ControlCollection
+      description: "To be added."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming
+  id: EnableTheming
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: EnableTheming
+  nameWithType: ProxyWebPartManager.EnableTheming
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Overrides the base property to prevent themes from being used."
+  remarks: "The EnableTheming property overrides the base property to prevent themes from being used with the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control. This is to prevent it coming into conflict with any themes being used with the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page (its <xref:System.Web.UI.WebControls.WebParts.WebPartManager.EnableTheming%2A?displayProperty=fullName> property always returns `true`)."
+  syntax:
+    content: public override bool EnableTheming { get; set; }
+    return:
+      type: System.Boolean
+      description: "Always returns <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>, to prevent themes from being used."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "A caller tries to assign a value to this property."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus
+  id: Focus
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: Focus()
+  nameWithType: ProxyWebPartManager.Focus()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Overrides the base method to prevent the method from being called."
+  remarks: "The Focus method overrides the base method and throws an exception if any caller attempts to call the method. This is because the inherited <xref:System.Web.UI.Control.Focus%2A?displayProperty=fullName> method is designed for controls with a user interface (UI), but the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control has no UI and therefore has no need to set the focus."
+  syntax:
+    content: public override void Focus ();
+    parameters: []
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "A caller tries to call this method."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit(System.EventArgs)
+  id: OnInit(System.EventArgs)
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: OnInit(EventArgs)
+  nameWithType: ProxyWebPartManager.OnInit(EventArgs)
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit(EventArgs)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Raises the <see cref=&quot;E:System.Web.UI.Control.Init&quot;></see> event and initializes the control."
+  remarks: "The OnInit method calls the base method, and then carries out tasks to initialize the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control. An important task of this method is to assign the collection of connections referenced by the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections%2A> property to the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control&quot;s <xref:System.Web.UI.WebControls.WebParts.WebPartManager.StaticConnections%2A?displayProperty=fullName> collection."
+  syntax:
+    content: protected override void OnInit (EventArgs e);
+    parameters:
+    - id: e
+      type: System.EventArgs
+      description: "An <xref:System.EventArgs> that contains the event data."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The  control from the associated master page is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID
+  id: SkinID
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: SkinID
+  nameWithType: ProxyWebPartManager.SkinID
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Overrides the base property to prevent a value from being assigned."
+  remarks: "The SkinID property overrides the base property to prevent a value from being assigned to it, which has the effect of preventing skins from being used with the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control. This is done because the control never exposes a user interface (UI) on a page. The same behavior is implemented by the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control for its <xref:System.Web.UI.WebControls.WebParts.WebPartManager.SkinID%2A?displayProperty=fullName> property."
+  syntax:
+    content: public override string SkinID { get; set; }
+    return:
+      type: System.String
+      description: "Always returns an empty string (&quot;&quot;)."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "A caller tries to assign a value to this property."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections
+  id: StaticConnections
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: StaticConnections
+  nameWithType: ProxyWebPartManager.StaticConnections
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Gets a collection of static connections declared within the <xref uid=&quot;langword_csharp_&lt;asp:proxywebpartmanager&gt;&quot; name=&quot;&lt;asp:proxywebpartmanager&gt;&quot; href=&quot;&quot;></xref> element on a content page."
+  remarks: "The StaticConnections property references the collection of <xref:System.Web.UI.WebControls.WebParts.WebPartConnection> objects declared in an `<asp:proxywebpartmanager>` element. The connections contained in this collection are added to the static connections of the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> controls (referenced by its <xref:System.Web.UI.WebControls.WebParts.WebPartManager.StaticConnections%2A?displayProperty=fullName> collection), and treated exactly like any other connections associated with the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control.       The declarative element that corresponds to the StaticConnections property is the `<staticconnections>` element. In an application that uses master pages, the `<staticconnections>` element is added as a child of the `<asp:proxywebpartmanager>` element on a content page, and an `<asp:webpartconnection>` element in turn is added as a child of the `<staticconnections>` element. Multiple `<asp:webpartconnection>` elements can be added to one `<staticconnections>` element, and multiple content pages can declare static connections as part of a master pages application."
+  example:
+  - "The following code example demonstrates how to use the StaticConnections property on the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> class. This code example shows only the relevant portion of the code from the content page that declares the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control and the static connection. For the other pages required to run the code example, and a description of how to set them up, see the Example section of the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> class overview.  \n  \n The following code is the content page that declares the `<staticconnections>` element as a child of the `<asp:proxywebpartmanager>` element. Also note that the `Button1_Click` method checks the count of the StaticConnections property on the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control and writes it to the page.  \n  \n [!code-cs[WebParts_ProxyWebPartManager_Overview#2](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_1319_1.aspx)]\n [!code-vb[WebParts_ProxyWebPartManager_Overview#2](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_1319_1.aspx)]  \n  \n After you load the page in a browser, click the **WebPartManager Information** button and observe the information about the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control in the master page, and the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control in the content page. For example, note that they both have the same count in their respective properties that track static connections (the StaticConnections property)."
+  syntax:
+    content: public System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection StaticConnections { get; }
+    return:
+      type: System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection
+      description: "A <see cref=&quot;T:System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection&quot;></see> that contains all static <see cref=&quot;T:System.Web.UI.WebControls.WebParts.WebPartConnection&quot;></see> objects declared within an <xref uid=&quot;langword_csharp_&lt;asp:proxywebpartmanager&gt;&quot; name=&quot;&lt;asp:proxywebpartmanager&gt;&quot; href=&quot;&quot;></xref> element."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible
+  id: Visible
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  langs:
+  - csharp
+  name: Visible
+  nameWithType: ProxyWebPartManager.Visible
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls.WebParts
+  summary: "Overrides the base property to prevent a value from being assigned."
+  remarks: "The Visible property overrides the base property to prevent the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control from ever being made visible. The <xref:System.Web.UI.WebControls.WebParts.ProxyWebPartManager> control, like the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control, has no user interface (UI) and is never displayed to the user."
+  syntax:
+    content: public override bool Visible { get; set; }
+    return:
+      type: System.Boolean
+      description: "Always returns <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>, to prevent the control from being made visible."
+  overload: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "A caller tries to assign a value to this property."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Web.UI.Control
+  isExternal: false
+  name: System.Web.UI.Control
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.#ctor
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: ProxyWebPartManager()
+  nameWithType: ProxyWebPartManager.ProxyWebPartManager()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ProxyWebPartManager()
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: ClientID
+  nameWithType: ProxyWebPartManager.ClientID
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Controls
+  nameWithType: ProxyWebPartManager.Controls
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls
+- uid: System.Web.UI.ControlCollection
+  parent: System.Web.UI
+  isExternal: false
+  name: ControlCollection
+  nameWithType: ControlCollection
+  fullName: System.Web.UI.ControlCollection
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: CreateControlCollection()
+  nameWithType: ProxyWebPartManager.CreateControlCollection()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection()
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: EnableTheming
+  nameWithType: ProxyWebPartManager.EnableTheming
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Focus()
+  nameWithType: ProxyWebPartManager.Focus()
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus()
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit(System.EventArgs)
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: OnInit(EventArgs)
+  nameWithType: ProxyWebPartManager.OnInit(EventArgs)
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit(EventArgs)
+- uid: System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: SkinID
+  nameWithType: ProxyWebPartManager.SkinID
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: StaticConnections
+  nameWithType: ProxyWebPartManager.StaticConnections
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection
+  parent: System.Web.UI.WebControls.WebParts
+  isExternal: false
+  name: ProxyWebPartConnectionCollection
+  nameWithType: ProxyWebPartConnectionCollection
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartConnectionCollection
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Visible
+  nameWithType: ProxyWebPartManager.Visible
+  fullName: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.#ctor*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: ProxyWebPartManager
+  nameWithType: ProxyWebPartManager.ProxyWebPartManager
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.ClientID*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: ClientID
+  nameWithType: ProxyWebPartManager.ClientID
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Controls*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Controls
+  nameWithType: ProxyWebPartManager.Controls
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.CreateControlCollection*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: CreateControlCollection
+  nameWithType: ProxyWebPartManager.CreateControlCollection
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.EnableTheming*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: EnableTheming
+  nameWithType: ProxyWebPartManager.EnableTheming
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Focus*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Focus
+  nameWithType: ProxyWebPartManager.Focus
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.OnInit*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: OnInit
+  nameWithType: ProxyWebPartManager.OnInit
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.SkinID*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: SkinID
+  nameWithType: ProxyWebPartManager.SkinID
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.StaticConnections*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: StaticConnections
+  nameWithType: ProxyWebPartManager.StaticConnections
+- uid: System.Web.UI.WebControls.WebParts.ProxyWebPartManager.Visible*
+  parent: System.Web.UI.WebControls.WebParts.ProxyWebPartManager
+  isExternal: false
+  name: Visible
+  nameWithType: ProxyWebPartManager.Visible

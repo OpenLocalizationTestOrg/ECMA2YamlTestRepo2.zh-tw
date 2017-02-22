@@ -1,0 +1,2576 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.HttpRequest
+  id: HttpRequest
+  children:
+  - System.Web.HttpRequest.#ctor(System.String,System.String,System.String)
+  - System.Web.HttpRequest.Abort
+  - System.Web.HttpRequest.AcceptTypes
+  - System.Web.HttpRequest.AnonymousID
+  - System.Web.HttpRequest.ApplicationPath
+  - System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath
+  - System.Web.HttpRequest.BinaryRead(System.Int32)
+  - System.Web.HttpRequest.Browser
+  - System.Web.HttpRequest.ClientCertificate
+  - System.Web.HttpRequest.ContentEncoding
+  - System.Web.HttpRequest.ContentLength
+  - System.Web.HttpRequest.ContentType
+  - System.Web.HttpRequest.Cookies
+  - System.Web.HttpRequest.CurrentExecutionFilePath
+  - System.Web.HttpRequest.CurrentExecutionFilePathExtension
+  - System.Web.HttpRequest.FilePath
+  - System.Web.HttpRequest.Files
+  - System.Web.HttpRequest.Filter
+  - System.Web.HttpRequest.Form
+  - System.Web.HttpRequest.GetBufferedInputStream
+  - System.Web.HttpRequest.GetBufferlessInputStream
+  - System.Web.HttpRequest.GetBufferlessInputStream(System.Boolean)
+  - System.Web.HttpRequest.Headers
+  - System.Web.HttpRequest.HttpChannelBinding
+  - System.Web.HttpRequest.HttpMethod
+  - System.Web.HttpRequest.InputStream
+  - System.Web.HttpRequest.InsertEntityBody
+  - System.Web.HttpRequest.InsertEntityBody(System.Byte[],System.Int32,System.Int32)
+  - System.Web.HttpRequest.IsAuthenticated
+  - System.Web.HttpRequest.IsLocal
+  - System.Web.HttpRequest.IsSecureConnection
+  - System.Web.HttpRequest.Item(System.String)
+  - System.Web.HttpRequest.LogonUserIdentity
+  - System.Web.HttpRequest.MapImageCoordinates(System.String)
+  - System.Web.HttpRequest.MapPath(System.String)
+  - System.Web.HttpRequest.MapPath(System.String,System.String,System.Boolean)
+  - System.Web.HttpRequest.MapRawImageCoordinates(System.String)
+  - System.Web.HttpRequest.Params
+  - System.Web.HttpRequest.Path
+  - System.Web.HttpRequest.PathInfo
+  - System.Web.HttpRequest.PhysicalApplicationPath
+  - System.Web.HttpRequest.PhysicalPath
+  - System.Web.HttpRequest.QueryString
+  - System.Web.HttpRequest.RawUrl
+  - System.Web.HttpRequest.ReadEntityBodyMode
+  - System.Web.HttpRequest.RequestContext
+  - System.Web.HttpRequest.RequestType
+  - System.Web.HttpRequest.SaveAs(System.String,System.Boolean)
+  - System.Web.HttpRequest.ServerVariables
+  - System.Web.HttpRequest.TimedOutToken
+  - System.Web.HttpRequest.TlsTokenBindingInfo
+  - System.Web.HttpRequest.TotalBytes
+  - System.Web.HttpRequest.Unvalidated
+  - System.Web.HttpRequest.Url
+  - System.Web.HttpRequest.UrlReferrer
+  - System.Web.HttpRequest.UserAgent
+  - System.Web.HttpRequest.UserHostAddress
+  - System.Web.HttpRequest.UserHostName
+  - System.Web.HttpRequest.UserLanguages
+  - System.Web.HttpRequest.ValidateInput
+  langs:
+  - csharp
+  name: HttpRequest
+  nameWithType: HttpRequest
+  fullName: System.Web.HttpRequest
+  type: Class
+  summary: "Enables ASP.NET to read the HTTP values sent by a client during a Web request."
+  remarks: "The methods and properties of the HttpRequest class are exposed through the `Request` properties of the <xref:System.Web.HttpApplication>, <xref:System.Web.HttpContext>, <xref:System.Web.UI.Page>, and <xref:System.Web.UI.UserControl> classes.       To access data from the <xref:System.Web.HttpRequest.QueryString%2A>, <xref:System.Web.HttpRequest.Form%2A>, <xref:System.Web.HttpRequest.Cookies%2A>, or <xref:System.Web.HttpRequest.ServerVariables%2A> collections, you can write `Request[&quot;key&quot;]`, as shown in the example for the <xref:System.Web.HttpRequest.QueryString%2A> property.      > [!NOTE] >  Unicode support for HttpRequest class members requires IIS version 6.0 or later."
+  example:
+  - "The following examples access the HttpRequest instance for the current request by using the <xref:System.Web.UI.Page.Request%2A> property of the <xref:System.Web.UI.Page> class.  \n  \n You can use simplified syntax for accessing data from the <xref:System.Web.HttpRequest.QueryString%2A>, <xref:System.Web.HttpRequest.Form%2A>, <xref:System.Web.HttpRequest.Cookies%2A>, or <xref:System.Web.HttpRequest.ServerVariables%2A> collections. You can write `Request[\"key\"]`.  \n  \n The first example shows how to retrieve a query string value when loading a page.  \n  \n```c#  \npublic partial class AddToCart : Page  \n{  \n    protected void Page_Load(object sender, EventArgs e)  \n    {  \n        string rawId = Request[\"ProductID\"];  \n        int productId;  \n        if (!String.IsNullOrEmpty(rawId) && int.TryParse(rawId, out productId))  \n        {  \n            using (ShoppingCartActions usersShoppingCart = new ShoppingCartActions())  \n            {  \n                usersShoppingCart.AddToCart(productId);  \n            }  \n        }  \n        else  \n        {  \n            throw new Exception(\"Tried to call AddToCart.aspx without setting a ProductId.\");  \n        }  \n        Response.Redirect(\"ShoppingCart.aspx\");  \n    }  \n}  \n```  \n  \n```vb  \nPublic Class AddToCart  \n    Inherits Page  \n  \n    Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load  \n        Dim rawId = Request(\"ProductID\")  \n        Dim productId As Integer  \n        If Not String.IsNullOrEmpty(rawId) And Integer.TryParse(rawId, productId) Then  \n            Using usersShoppingCart As New ShoppingCartActions()  \n                usersShoppingCart.AddToCart(productId)  \n            End Using  \n  \n        Else  \n            Throw New Exception(\"Tried to call AddToCart.aspx without setting a ProductId.\")  \n        End If  \n        Response.Redirect(\"ShoppingCart.aspx\")  \n    End Sub  \nEnd Class  \n```  \n  \n The next example shows how to check if the request is authenticated and retrieve the raw URL.  \n  \n```c#  \npublic partial class RestrictedPage : Page  \n{  \n    protected void Page_Load(object sender, EventArgs e)  \n    {  \n        if (!Request.IsAuthenticated)  \n        {  \n            var rawUrl = Request.RawUrl;  \n            Response.Redirect(\"/Account/Login?ru=\" + Server.HtmlEncode(rawUrl));  \n        }  \n    }  \n}  \n```  \n  \n```vb  \nPublic Class RestrictedPage  \n    Inherits Page  \n  \n    Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load  \n        If Not Request.IsAuthenticated Then  \n            Dim rawUrl = Request.RawUrl  \n            Response.Redirect(\"/Account/Login?ru=\" + Server.HtmlEncode(rawUrl))  \n        End If  \n    End Sub  \nEnd Class  \n```  \n  \n A Visual Studio Web site project with source code is available to accompany this topic: [Download](http://go.microsoft.com/fwlink/?LinkID=191455).  \n  \n This example uses the <xref:System.IO.StreamWriter> class to write the values of several HttpRequest class properties to a file. For properties that are of type string, the values are HTML encoded as they are written to the file. Properties that represent a collection are looped through, and each key/value pair that they contain is written to the file.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#1](~/add/codesnippet/VisualBasic/t-system.web.httprequest_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#1](~/add/codesnippet/CSharp/t-system.web.httprequest_1.aspx)]"
+  syntax:
+    content: public sealed class HttpRequest
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.#ctor(System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.String)'
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: HttpRequest(String,String,String)
+  nameWithType: HttpRequest.HttpRequest(String,String,String)
+  fullName: System.Web.HttpRequest.HttpRequest(String,String,String)
+  type: Constructor
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Initializes an <see cref=&quot;T:System.Web.HttpRequest&quot;></see> object."
+  remarks: "You do not need to create your own instance of the <xref:System.Web.HttpRequest> class. The methods and properties of the <xref:System.Web.HttpRequest> class are exposed through the `Request` property of the <xref:System.Web.HttpApplication>, <xref:System.Web.HttpContext>, <xref:System.Web.UI.Page>, and <xref:System.Web.UI.UserControl> classes."
+  syntax:
+    content: public HttpRequest (string filename, string url, string queryString);
+    parameters:
+    - id: filename
+      type: System.String
+      description: "The name of the file associated with the request."
+    - id: url
+      type: System.String
+      description: "The information regarding the URL of the current request."
+    - id: queryString
+      type: System.String
+      description: "The entire query string sent with the request (everything after the`&quot;?&quot;`)."
+  overload: System.Web.HttpRequest.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Abort
+  id: Abort
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Abort()
+  nameWithType: HttpRequest.Abort()
+  fullName: System.Web.HttpRequest.Abort()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Forcibly terminates the underlying TCP connection, causing any outstanding I/O to fail. You might use this method in response to an attack by a malicious HTTP client."
+  remarks: "This method is thread-safe. Any thread may call it at any time.       This method can only be used in integrated mode. If you invoke it in classic mode, an exception is thrown. To determine the pipeline mode, use <xref:System.Web.HttpRuntime.UsingIntegratedPipeline%2A>."
+  syntax:
+    content: public void Abort ();
+    parameters: []
+  overload: System.Web.HttpRequest.Abort*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.AcceptTypes
+  id: AcceptTypes
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: AcceptTypes
+  nameWithType: HttpRequest.AcceptTypes
+  fullName: System.Web.HttpRequest.AcceptTypes
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a string array of client-supported MIME accept types."
+  remarks: ''
+  example:
+  - "The following code example captures the multiple values returned by the AcceptTypes property into an object variable and writes the number and name of each valueto a separate line of HTTP output.  \n  \n [!code-vb[Classic HttpRequest.AcceptTypes Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_0_1.vb)]\n [!code-cs[Classic HttpRequest.AcceptTypes Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_0_1.cs)]"
+  syntax:
+    content: public string[] AcceptTypes { get; }
+    return:
+      type: System.String[]
+      description: "A string array of client-supported MIME accept types."
+  overload: System.Web.HttpRequest.AcceptTypes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.AnonymousID
+  id: AnonymousID
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: AnonymousID
+  nameWithType: HttpRequest.AnonymousID
+  fullName: System.Web.HttpRequest.AnonymousID
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the anonymous identifier for the user, if present."
+  remarks: "The AnonymousID property assigns a long-lived unique identifier to a non-authenticated user, which can be used to track the user or assign profile properties to that user without storing data in a `Session` object. By default, the AnonymousID property is tracked using a cookie, but it can be set to use the URI when the <xref:System.Web.Configuration.SessionStateSection.Cookieless%2A> attribute in the anonymous identification configuration section is set to either the <xref:System.Web.HttpCookieMode>, <xref:System.Web.HttpCookieMode>, or <xref:System.Web.HttpCookieMode> value. You must explicitly clear the cookie if you no longer want it available, for example when an anonymous user is authenticated.       Anonymous identification is used when there is a need to identify entities that are not authenticated and when authorization is required. For more information, see [anonymousIdentification Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/2bd927ef-9057-4703-9c55-4cfb6d7d0929)"
+  example:
+  - "The following example shows how to use the AnonymousID property by handling the <xref:System.Web.Security.AnonymousIdentificationModule.Creating> event in the Global.asax file. This example has two parts:  \n  \n-   A method in the Global.asax file that handles the <xref:System.Web.Security.AnonymousIdentificationModule.Creating> event.  \n  \n-   A Web Forms page.  \n  \n The first part of the code example shows how to set the AnonymousID property by handling the <xref:System.Web.Security.AnonymousIdentificationModule.Creating> event in the Global.asax file. The method that is named `AnonymousIdentification_Creating` sets the AnonymousID property when an anonymous ID is created.  \n  \n [!code-cs[System.Web.HttpRequest_AnonymousID#2](~/add/codesnippet/CSharp/p-system.web.httprequest_5_1.cs)]\n [!code-vb[System.Web.HttpRequest_AnonymousID#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_5_1.vb)]  \n  \n The second part of the code example shows how to display the new AnonymousID that is created by the `AnonymousIdentification_Creating` event handler in the preceding example.  \n  \n [!code-cs[System.Web.HttpRequest_AnonymousID#1](~/add/codesnippet/CSharp/p-system.web.httprequest_5_2.aspx)]\n [!code-vb[System.Web.HttpRequest_AnonymousID#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_5_2.aspx)]"
+  syntax:
+    content: public string AnonymousID { get; }
+    return:
+      type: System.String
+      description: "A string representing the current anonymous user identifier."
+  overload: System.Web.HttpRequest.AnonymousID*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ApplicationPath
+  id: ApplicationPath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ApplicationPath
+  nameWithType: HttpRequest.ApplicationPath
+  fullName: System.Web.HttpRequest.ApplicationPath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the ASP.NET application&quot;s virtual application root path on the server."
+  remarks: "Use this property to construct a URL relative to the application root from a page or Web user control that is not in the root directory. This allows pages and shared controls that exist at different levels of a directory structure to use the same code to link to resources at fixed locations in the application."
+  example:
+  - "The following example uses the <xref:System.IO.StreamWriter.Write%2A> method to HTML-encode and then write the value of the ApplicationPath property to a text file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class. It assumes the existence of a <xref:System.IO.StreamWriter> object named `sw`.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_6_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/CSharp/p-system.web.httprequest_6_1.aspx)]  \n  \n The following example uses the ApplicationPath property to programmatically construct a path to a resource that is in a fixed location in the application. The page that references the resource does not have to be located in the same directory as the resource.  \n  \n [!code-cs[System.Web.HttpRequest.ApplicationPath#2](~/add/codesnippet/CSharp/p-system.web.httprequest_6_2.aspx)]\n [!code-vb[System.Web.HttpRequest.ApplicationPath#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_6_2.aspx)]  \n  \n If you run this example in a Web application that is named WebSite1,  `/WebSite1` will be displayed as the value of the ApplicationPath property and `/WebSite1/images/Image1.gif` will be displayed as the complete path of the image."
+  syntax:
+    content: public string ApplicationPath { get; }
+    return:
+      type: System.String
+      description: "The virtual path of the current application."
+  overload: System.Web.HttpRequest.ApplicationPath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath
+  id: AppRelativeCurrentExecutionFilePath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: AppRelativeCurrentExecutionFilePath
+  nameWithType: HttpRequest.AppRelativeCurrentExecutionFilePath
+  fullName: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the virtual path of the application root and makes it relative by using the tilde (~) notation for the application root (as in &quot;~/page.aspx&quot;)."
+  remarks: "Use this property to provide URL information that will stay the same even if the application changes location. This allows the same URL-mapping code to be used in a test environment and in the final deployment environment, or to be used by copies of Web applications in different domains."
+  example:
+  - "The following example uses the AppRelativeCurrentExecutionFilePath property to set the URL of an <xref:System.Web.UI.WebControls.Image> control to an image in the same directory as the page. Run this page at different levels of a directory structure to see the resulting AppRelativeCurrentExecutionFilePath property values.  \n  \n [!code-vb[System.Web.HttpRequest.AppRelativeCurrentExecutionPath#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_31_1.aspx)]\n [!code-cs[System.Web.HttpRequest.AppRelativeCurrentExecutionPath#1](~/add/codesnippet/CSharp/p-system.web.httprequest_31_1.aspx)]  \n  \n The following example uses the AppRelativeCurrentExecutionFilePath property to programmatically set the path to a resource, based on the current path of the page.  \n  \n [!code-cs[System.Web.HttpRequest.ApplicationPath#1](~/add/codesnippet/CSharp/p-system.web.httprequest_31_2.aspx)]\n [!code-vb[System.Web.HttpRequest.ApplicationPath#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_31_2.aspx)]"
+  syntax:
+    content: public string AppRelativeCurrentExecutionFilePath { get; }
+    return:
+      type: System.String
+      description: "The virtual path of the application root for the current request."
+  overload: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.BinaryRead(System.Int32)
+  id: BinaryRead(System.Int32)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: BinaryRead(Int32)
+  nameWithType: HttpRequest.BinaryRead(Int32)
+  fullName: System.Web.HttpRequest.BinaryRead(Int32)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Performs a binary read of a specified number of bytes from the current input stream."
+  remarks: "The BinaryRead method is provided for compatibility with ASP."
+  syntax:
+    content: public byte[] BinaryRead (int count);
+    parameters:
+    - id: count
+      type: System.Int32
+      description: "The number of bytes to read."
+    return:
+      type: System.Byte[]
+      description: "To be added."
+  overload: System.Web.HttpRequest.BinaryRead*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    count is 0.  \n  \n \\- or -  \n  \n count is greater than the number of bytes available."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Browser
+  id: Browser
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Browser
+  nameWithType: HttpRequest.Browser
+  fullName: System.Web.HttpRequest.Browser
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets or sets information about the requesting client&quot;s browser capabilities."
+  remarks: ''
+  example:
+  - "The following code example sends a list of the browser's capabilities back to the client in an HTML page.  \n  \n [!code-vb[Classic HttpRequest.Browser Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_14_1.vb)]\n [!code-cs[Classic HttpRequest.Browser Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_14_1.cs)]"
+  syntax:
+    content: public System.Web.HttpBrowserCapabilities Browser { get; set; }
+    return:
+      type: System.Web.HttpBrowserCapabilities
+      description: "An <see cref=&quot;T:System.Web.HttpBrowserCapabilities&quot;></see> object listing the capabilities of the client&quot;s browser."
+  overload: System.Web.HttpRequest.Browser*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ClientCertificate
+  id: ClientCertificate
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ClientCertificate
+  nameWithType: HttpRequest.ClientCertificate
+  fullName: System.Web.HttpRequest.ClientCertificate
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the current request&quot;s client security certificate."
+  remarks: ''
+  example:
+  - "The following code example sends the client's certificate settings back to the client in an HTML page.  \n  \n [!code-vb[Classic HttpRequest.ClientCertificate Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_12_1.vb)]\n [!code-cs[Classic HttpRequest.ClientCertificate Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_12_1.cs)]"
+  syntax:
+    content: public System.Web.HttpClientCertificate ClientCertificate { get; }
+    return:
+      type: System.Web.HttpClientCertificate
+      description: "An <see cref=&quot;T:System.Web.HttpClientCertificate&quot;></see> object containing information about the client&quot;s security certificate settings."
+  overload: System.Web.HttpRequest.ClientCertificate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ContentEncoding
+  id: ContentEncoding
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ContentEncoding
+  nameWithType: HttpRequest.ContentEncoding
+  fullName: System.Web.HttpRequest.ContentEncoding
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets or sets the character set of the entity-body."
+  remarks: "Default content encoding can be specified in the [globalization Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/e2dffc8e-ebd2-439b-a2fd-e3ac5e620da7) of a configuration file. If content encoding is also specified by the client, the default configuration settings are overridden."
+  example:
+  - "The following code example assigns a value representing the description of the current HTTP encoding to a string variable.  \n  \n [!code-cs[Classic HttpRequest.ContentEncoding Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_18_1.cs)]\n [!code-vb[Classic HttpRequest.ContentEncoding Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_18_1.vb)]"
+  syntax:
+    content: public System.Text.Encoding ContentEncoding { get; set; }
+    return:
+      type: System.Text.Encoding
+      description: "An &lt;xref:System.Text.Encoding&gt; object representing the client&quot;s character set."
+  overload: System.Web.HttpRequest.ContentEncoding*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ContentLength
+  id: ContentLength
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ContentLength
+  nameWithType: HttpRequest.ContentLength
+  fullName: System.Web.HttpRequest.ContentLength
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Specifies the length, in bytes, of content sent by the client."
+  remarks: ''
+  example:
+  - "The following code example assigns the value representing the content length of the incoming request to an integer variable.  \n  \n [!code-vb[Classic HttpRequest.ContentLength Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_17_1.vb)]\n [!code-cs[Classic HttpRequest.ContentLength Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_17_1.cs)]"
+  syntax:
+    content: public int ContentLength { get; }
+    return:
+      type: System.Int32
+      description: "The length, in bytes, of content sent by the client."
+  overload: System.Web.HttpRequest.ContentLength*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ContentType
+  id: ContentType
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ContentType
+  nameWithType: HttpRequest.ContentType
+  fullName: System.Web.HttpRequest.ContentType
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets or sets the MIME content type of the incoming request."
+  remarks: ''
+  example:
+  - "The following code example assigns the value representing the content type of the incoming request to a string variable.  \n  \n [!code-vb[Classic HttpRequest.ContentType Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_33_1.vb)]\n [!code-cs[Classic HttpRequest.ContentType Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_33_1.cs)]  \n  \n The following example shows output that might be produced by this code.  \n  \n `GET`  \n  \n `127.0.0.1`  \n  \n `127.0.0.1`  \n  \n `GET`"
+  syntax:
+    content: public string ContentType { get; set; }
+    return:
+      type: System.String
+      description: "A string representing the MIME content type of the incoming request, for example, &quot;text/html&quot;. Additional common MIME types include &quot;audio.wav&quot;, &quot;image/gif&quot;, and &quot;application/pdf&quot;."
+  overload: System.Web.HttpRequest.ContentType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Cookies
+  id: Cookies
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Cookies
+  nameWithType: HttpRequest.Cookies
+  fullName: System.Web.HttpRequest.Cookies
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a collection of cookies sent by the client."
+  remarks: "ASP.NET includes two intrinsic cookie collections. The collection accessed through the Cookies collection of <xref:System.Web.HttpRequest> contains cookies transmitted by the client to the server in the `Cookie` header. The collection accessed through the <xref:System.Web.HttpResponse.Cookies%2A> collection of <xref:System.Web.HttpResponse> contains new cookies created on the server and transmitted to the client in the `Set-Cookie` header.      > [!NOTE] >  After you add a cookie by using the <xref:System.Web.HttpResponse.Cookies%2A?displayProperty=fullName> collection, the cookie is immediately available in the Cookies collection, even if the response has not been sent to the client."
+  example:
+  - "The following code example loops through all cookies sent by the client and sends the name, expiration date, security parameter, and values of each cookie to the HTTP output.  \n  \n [!code-cs[Classic HttpRequest.Cookies Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_21_1.cs)]\n [!code-vb[Classic HttpRequest.Cookies Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_21_1.vb)]"
+  syntax:
+    content: public System.Web.HttpCookieCollection Cookies { get; }
+    return:
+      type: System.Web.HttpCookieCollection
+      description: "An <see cref=&quot;T:System.Web.HttpCookieCollection&quot;></see> object representing the client&quot;s cookie variables."
+  overload: System.Web.HttpRequest.Cookies*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.CurrentExecutionFilePath
+  id: CurrentExecutionFilePath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: CurrentExecutionFilePath
+  nameWithType: HttpRequest.CurrentExecutionFilePath
+  fullName: System.Web.HttpRequest.CurrentExecutionFilePath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the virtual path of the current request."
+  remarks: "CurrentExecutionFilePath returns the file path to the currently executing page handler. For redirect scenarios using <xref:System.Web.HttpServerUtility.Execute%2A> and <xref:System.Web.HttpServerUtility.Transfer%2A> methods this means that the CurrentExecutionFilePath property returns the path to the page redirected to (child page). However, when the client is redirected to another page, the <xref:System.Web.HttpRequest.FilePath%2A> property returns the path to the original page."
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the CurrentExecutionFilePath property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_3_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/CSharp/p-system.web.httprequest_3_1.aspx)]"
+  syntax:
+    content: public string CurrentExecutionFilePath { get; }
+    return:
+      type: System.String
+      description: "The virtual path of the current request."
+  overload: System.Web.HttpRequest.CurrentExecutionFilePath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.CurrentExecutionFilePathExtension
+  id: CurrentExecutionFilePathExtension
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: CurrentExecutionFilePathExtension
+  nameWithType: HttpRequest.CurrentExecutionFilePathExtension
+  fullName: System.Web.HttpRequest.CurrentExecutionFilePathExtension
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the extension of the file name that is specified in the &lt;xref:System.Web.HttpRequest.CurrentExecutionFilePath%2A&gt; property."
+  syntax:
+    content: public string CurrentExecutionFilePathExtension { get; }
+    return:
+      type: System.String
+      description: "The extension of the file name that is specified in the &lt;xref:System.Web.HttpRequest.CurrentExecutionFilePath%2A&gt; property."
+  overload: System.Web.HttpRequest.CurrentExecutionFilePathExtension*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.FilePath
+  id: FilePath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: FilePath
+  nameWithType: HttpRequest.FilePath
+  fullName: System.Web.HttpRequest.FilePath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the virtual path of the current request."
+  remarks: "The FilePath property does not include the <xref:System.Web.HttpRequest.PathInfo%2A> trailer. For example, for the URL http://www.contoso.com/virdir/page.html/tail, the FilePath value is /virdir/page.html."
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the FilePath property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_27_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/CSharp/p-system.web.httprequest_27_1.aspx)]"
+  syntax:
+    content: public string FilePath { get; }
+    return:
+      type: System.String
+      description: "The virtual path of the current request."
+  overload: System.Web.HttpRequest.FilePath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Files
+  id: Files
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Files
+  nameWithType: HttpRequest.Files
+  fullName: System.Web.HttpRequest.Files
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the collection of files uploaded by the client, in multipart MIME format."
+  remarks: "The file collection is populated only when the HTTP request `Content-Type` value is &quot;multipart/form-data&quot;."
+  example:
+  - "The following code example displays the names of all files in the Files collection.  \n  \n [!code-cs[Classic HttpRequest.Files Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_28_1.cs)]\n [!code-vb[Classic HttpRequest.Files Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_28_1.vb)]"
+  syntax:
+    content: public System.Web.HttpFileCollection Files { get; }
+    return:
+      type: System.Web.HttpFileCollection
+      description: "An <see cref=&quot;T:System.Web.HttpFileCollection&quot;></see> object representing a collection of files uploaded by the client. The items of the <see cref=&quot;T:System.Web.HttpFileCollection&quot;></see> object are of type <see cref=&quot;T:System.Web.HttpPostedFile&quot;></see>."
+  overload: System.Web.HttpRequest.Files*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Filter
+  id: Filter
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Filter
+  nameWithType: HttpRequest.Filter
+  fullName: System.Web.HttpRequest.Filter
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets or sets the filter to use when reading the current input stream."
+  remarks: ''
+  example:
+  - "The following code example creates two new classes, `QQQ1` and `QQQ2` that filter the <xref:System.Web.HttpRequest.InputStream%2A>. Put the classes into the Global.asax file in an ASP.NET application's directory so that all input for all ASP.NET Web pages in the application will be filtered.  \n  \n [!code-vb[System.Web.HttpRequest.Filter#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_4_1.aspx)]\n [!code-cs[System.Web.HttpRequest.Filter#1](~/add/codesnippet/CSharp/p-system.web.httprequest_4_1.aspx)]"
+  syntax:
+    content: public System.IO.Stream Filter { get; set; }
+    return:
+      type: System.IO.Stream
+      description: "A &lt;xref:System.IO.Stream&gt; object to be used as the filter."
+  overload: System.Web.HttpRequest.Filter*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The specified <xref:System.IO.Stream> is invalid."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Form
+  id: Form
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Form
+  nameWithType: HttpRequest.Form
+  fullName: System.Web.HttpRequest.Form
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a collection of form variables."
+  remarks: "The Form property is populated when the HTTP request `Content-Type` value is either &quot;application/x-www-form-urlencoded&quot; or &quot;multipart/form-data&quot;."
+  example:
+  - "The following example shows how to read the values in the form collection posted from a browser. Each name/value pair in the collection represents a control in the form and its value.  \n  \n [!code-vb[Classic HttpRequest.Form Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_32_1.vb)]\n [!code-cs[Classic HttpRequest.Form Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_32_1.cs)]"
+  syntax:
+    content: public System.Collections.Specialized.NameValueCollection Form { get; }
+    return:
+      type: System.Collections.Specialized.NameValueCollection
+      description: "A <see cref=&quot;T:System.Collections.Specialized.NameValueCollection&quot;></see> representing a collection of form variables."
+  overload: System.Web.HttpRequest.Form*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.GetBufferedInputStream
+  id: GetBufferedInputStream
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: GetBufferedInputStream()
+  nameWithType: HttpRequest.GetBufferedInputStream()
+  fullName: System.Web.HttpRequest.GetBufferedInputStream()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a &lt;xref:System.IO.Stream&gt; object that can be used to read the incoming HTTP entity body."
+  remarks: "This method is identical to <xref:System.Web.HttpRequest.GetBufferlessInputStream%2A> except that it also copies the bytes that are read to the internal storage that is used by ASP.NET to populate the <xref:System.Web.HttpRequest.Form%2A>, <xref:System.Web.HttpRequest.Files%2A>, and <xref:System.Web.HttpRequest.InputStream%2A> properties. Because this information is preserved, downstream code such as ASP.NET Web Forms pages (.aspx files) will run successfully. This is not the case with the <xref:System.Web.HttpRequest.GetBufferlessInputStream%2A> method."
+  syntax:
+    content: public System.IO.Stream GetBufferedInputStream ();
+    parameters: []
+    return:
+      type: System.IO.Stream
+      description: "To be added."
+  overload: System.Web.HttpRequest.GetBufferedInputStream*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The request&quot;s entity body has already been loaded and parsed. Examples of properties that cause the entity body to be loaded and parsed include the following:      -   The <xref:System.Web.HttpRequest.Form%2A> property.      -   The <xref:System.Web.HttpRequest.Files%2A> property.      -   The <xref:System.Web.HttpRequest.InputStream%2A> property.      -   The <xref:System.Web.HttpRequest.GetBufferlessInputStream%2A> method.       To avoid this exception, call the <xref:System.Web.HttpRequest.ReadEntityBodyMode%2A> method first. This exception is also thrown if the client disconnects while the entity body is being read."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.GetBufferlessInputStream
+  id: GetBufferlessInputStream
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: GetBufferlessInputStream()
+  nameWithType: HttpRequest.GetBufferlessInputStream()
+  fullName: System.Web.HttpRequest.GetBufferlessInputStream()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a &lt;xref:System.IO.Stream&gt; object that can be used to read the incoming HTTP entity body."
+  remarks: "This method provides an alternative to using the <xref:System.Web.HttpRequest.InputStream%2A> property. The <xref:System.Web.HttpRequest.InputStream%2A> property waits until the whole request has been received before it returns a <xref:System.IO.Stream> object. In contrast, the GetBufferlessInputStream method returns the <xref:System.IO.Stream> object immediately. You can use the method to begin processing the entity body before the complete contents of the body have been received.       The entity body (or as much of it as you request and has been received) is returned only when you use the object that is returned by this method to read the stream, by calling methods such as the <xref:System.IO.Stream.Read%2A> method. You use parameters of the <xref:System.IO.Stream.Read%2A> method to specify how much of the entity body to read.       The <xref:System.IO.Stream> object returned by ASP.NET from this method supports both synchronous and asynchronous read methods. The <xref:System.IO.Stream> object implements both the <xref:System.IO.Stream.BeginRead%2A> and <xref:System.IO.Stream.EndRead%2A> methods. The asynchronous methods let you asynchronously read the request entity in chunks, while ASP.NET releases the current thread in between each iteration of an asynchronous read loop.       This method can be useful if the request is uploading a large file and you want to begin accessing the file contents before the upload is finished. However, you should only use this method for scenarios where you want to take over all processing of the entity body. This means that you cannot use this method from an .aspx page, because by the time an .aspx page runs, the entity body has already been read."
+  syntax:
+    content: public System.IO.Stream GetBufferlessInputStream ();
+    parameters: []
+    return:
+      type: System.IO.Stream
+      description: "To be added."
+  overload: System.Web.HttpRequest.GetBufferlessInputStream*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The request&quot;s entity body has already been loaded and parsed. Examples of properties that cause the entity body to be loaded and parsed include the following:      -   <xref:System.Web.HttpRequest.Form%2A>      -   <xref:System.Web.HttpRequest.InputStream%2A>      -   <xref:System.Web.HttpRequest.Files%2A>      -   <xref:System.Web.HttpRequest.GetBufferedInputStream%2A>       To avoid this exception, call the <xref:System.Web.HttpRequest.ReadEntityBodyMode%2A> method first. This exception is also thrown if the client disconnects while the entity body is being read."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.GetBufferlessInputStream(System.Boolean)
+  id: GetBufferlessInputStream(System.Boolean)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: GetBufferlessInputStream(Boolean)
+  nameWithType: HttpRequest.GetBufferlessInputStream(Boolean)
+  fullName: System.Web.HttpRequest.GetBufferlessInputStream(Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a &lt;xref:System.IO.Stream&gt; object that can be used to read the incoming HTTP entity body, optionally disabling the request-length limit that is set in the &lt;xref:System.Web.Configuration.HttpRuntimeSection.MaxRequestLength%2A&gt; property."
+  remarks: "For more information about this method, see the <xref:System.Web.HttpRequest.GetBufferlessInputStream> overload."
+  syntax:
+    content: public System.IO.Stream GetBufferlessInputStream (bool disableMaxRequestLength);
+    parameters:
+    - id: disableMaxRequestLength
+      type: System.Boolean
+      description: "\n     to disable the request-length limit; otherwise, ."
+    return:
+      type: System.IO.Stream
+      description: "To be added."
+  overload: System.Web.HttpRequest.GetBufferlessInputStream*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The request&quot;s entity body has already been loaded and parsed. Examples of properties that cause the entity body to be loaded and parsed include the following:      -   The <xref:System.Web.HttpRequest.Form%2A> property.      -   The <xref:System.Web.HttpRequest.Files%2A> property.      -   The <xref:System.Web.HttpRequest.InputStream%2A> property.      -   The <xref:System.Web.HttpRequest.GetBufferedInputStream%2A> method.       To avoid this exception, call the <xref:System.Web.HttpRequest.ReadEntityBodyMode%2A> method first. This exception is also thrown if the client disconnects while the entity body is being read."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Headers
+  id: Headers
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Headers
+  nameWithType: HttpRequest.Headers
+  fullName: System.Web.HttpRequest.Headers
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a collection of HTTP headers."
+  remarks: "For a listing of all possible headers, see [Request Header Fields](http://go.microsoft.com/fwlink/?LinkId=73147) on the W3C Web site."
+  example:
+  - "The following code example displays the names and values of all headers in the HTTP request.  \n  \n [!code-cs[Classic HttpRequest.Headers Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_24_1.cs)]\n [!code-vb[Classic HttpRequest.Headers Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_24_1.vb)]"
+  syntax:
+    content: public System.Collections.Specialized.NameValueCollection Headers { get; }
+    return:
+      type: System.Collections.Specialized.NameValueCollection
+      description: "A <see cref=&quot;T:System.Collections.Specialized.NameValueCollection&quot;></see> of headers."
+  overload: System.Web.HttpRequest.Headers*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.HttpChannelBinding
+  id: HttpChannelBinding
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: HttpChannelBinding
+  nameWithType: HttpRequest.HttpChannelBinding
+  fullName: System.Web.HttpRequest.HttpChannelBinding
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the &lt;xref:System.Security.Authentication.ExtendedProtection.ChannelBinding&gt; object of the current <see cref=&quot;T:System.Web.HttpWorkerRequest&quot;></see> instance."
+  syntax:
+    content: public System.Security.Authentication.ExtendedProtection.ChannelBinding HttpChannelBinding { get; }
+    return:
+      type: System.Security.Authentication.ExtendedProtection.ChannelBinding
+      description: "The &lt;xref:System.Security.Authentication.ExtendedProtection.ChannelBinding&gt; object of the current <see cref=&quot;T:System.Web.HttpWorkerRequest&quot;></see> instance."
+  overload: System.Web.HttpRequest.HttpChannelBinding*
+  exceptions:
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "The current  object is not a  object or a  object."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.HttpMethod
+  id: HttpMethod
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: HttpMethod
+  nameWithType: HttpRequest.HttpMethod
+  fullName: System.Web.HttpRequest.HttpMethod
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the HTTP data transfer method (such as <xref uid=&quot;langword_csharp_GET&quot; name=&quot;GET&quot; href=&quot;&quot;></xref>, <xref uid=&quot;langword_csharp_POST&quot; name=&quot;POST&quot; href=&quot;&quot;></xref>, or <xref uid=&quot;langword_csharp_HEAD&quot; name=&quot;HEAD&quot; href=&quot;&quot;></xref>) used by the client."
+  remarks: ''
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the HttpMethod property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/VisualBasic/p-system.web.httprequest_2_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/CSharp/p-system.web.httprequest_2_1.aspx)]  \n  \n The following example shows output that is produced by this code.  \n  \n `GET`  \n  \n `127.0.0.1`  \n  \n `127.0.0.1`  \n  \n `GET`"
+  syntax:
+    content: public string HttpMethod { get; }
+    return:
+      type: System.String
+      description: "The HTTP data transfer method used by the client."
+  overload: System.Web.HttpRequest.HttpMethod*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.InputStream
+  id: InputStream
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: InputStream
+  nameWithType: HttpRequest.InputStream
+  fullName: System.Web.HttpRequest.InputStream
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the contents of the incoming HTTP entity body."
+  remarks: ''
+  example:
+  - "The following code example copies the contents of an InputStream into a string.  \n  \n [!code-cs[Classic HttpRequest.InputStream Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_10_1.aspx)]\n [!code-vb[Classic HttpRequest.InputStream Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_10_1.vb)]"
+  syntax:
+    content: public System.IO.Stream InputStream { get; }
+    return:
+      type: System.IO.Stream
+      description: "A &lt;xref:System.IO.Stream&gt; object representing the contents of the incoming HTTP content body."
+  overload: System.Web.HttpRequest.InputStream*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.InsertEntityBody
+  id: InsertEntityBody
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: InsertEntityBody()
+  nameWithType: HttpRequest.InsertEntityBody()
+  fullName: System.Web.HttpRequest.InsertEntityBody()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Provides IIS with a copy of the HTTP request entity body."
+  remarks: "IIS does not maintain a copy of the request after it has been read. Therefore, it is recommended that only the handler for an HTTP request should read the request entity.       The InsertEntityBody method overload provides IIS with a copy of the request entity if it was previously read by ASP.NET. This method overload is useful for cases where ASP.NET has read the entity request and you want to reuse the existing request data."
+  syntax:
+    content: public void InsertEntityBody ();
+    parameters: []
+  overload: System.Web.HttpRequest.InsertEntityBody*
+  exceptions:
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "The method was invoked on a version of IIS earlier than IIS 7.0."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.InsertEntityBody(System.Byte[],System.Int32,System.Int32)
+  id: InsertEntityBody(System.Byte[],System.Int32,System.Int32)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: InsertEntityBody(Byte[],Int32,Int32)
+  nameWithType: HttpRequest.InsertEntityBody(Byte[],Int32,Int32)
+  fullName: System.Web.HttpRequest.InsertEntityBody(Byte[],Int32,Int32)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Provides IIS with a copy of the HTTP request entity body and with information about the request entity object."
+  remarks: "IIS does not maintain a copy of the request after it has been read. Therefore, it is recommended that only the handler for an HTTP request should read the request entity.       The InsertEntityBody method overload is useful when you want to perform custom processing, such as inserting a different entity body into memory."
+  syntax:
+    content: public void InsertEntityBody (byte[] buffer, int offset, int count);
+    parameters:
+    - id: buffer
+      type: System.Byte[]
+      description: "An array that contains the request entity data."
+    - id: offset
+      type: System.Int32
+      description: "The zero-based position in `buffer` at which to begin storing the request entity data."
+    - id: count
+      type: System.Int32
+      description: "The number of bytes to read into the `buffer` array."
+  overload: System.Web.HttpRequest.InsertEntityBody*
+  exceptions:
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "The method was invoked on a version of IIS earlier than IIS 7.0."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    buffer is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    offset is a negative value."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The number of items in count is larger than the available space in buffer, given the offset value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.IsAuthenticated
+  id: IsAuthenticated
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: IsAuthenticated
+  nameWithType: HttpRequest.IsAuthenticated
+  fullName: System.Web.HttpRequest.IsAuthenticated
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a value indicating whether the request has been authenticated."
+  remarks: ''
+  example:
+  - "The following code example uses the IsAuthenticated property to determine whether the current request has been authenticated. If it has not been authenticated, the request is redirected to another page where users can enter their credentials into the Web application. This is a common technique used in the default page for an application.  \n  \n [!code-vb[System.Web.HttpRequest_Sample3#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_15_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample3#1](~/add/codesnippet/CSharp/p-system.web.httprequest_15_1.aspx)]"
+  syntax:
+    content: public bool IsAuthenticated { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the request is authenticated; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.HttpRequest.IsAuthenticated*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.IsLocal
+  id: IsLocal
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: IsLocal
+  nameWithType: HttpRequest.IsLocal
+  fullName: System.Web.HttpRequest.IsLocal
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a value indicating whether the request is from the local computer."
+  remarks: "The IsLocal property returns `true` if the IP address of the request originator is 127.0.0.1 or if the IP address of the request is the same as the server&quot;s IP address."
+  syntax:
+    content: public bool IsLocal { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the request is from the local computer; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.HttpRequest.IsLocal*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.IsSecureConnection
+  id: IsSecureConnection
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: IsSecureConnection
+  nameWithType: HttpRequest.IsSecureConnection
+  fullName: System.Web.HttpRequest.IsSecureConnection
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a value indicating whether the HTTP connection uses secure sockets (that is, HTTPS)."
+  remarks: ''
+  example:
+  - "The following code example determines whether the IsSecureConnection property is set to false. If it is, the <xref:System.Web.HttpResponse.SuppressContent%2A> property is set to true to stop the response from being sent.  \n  \n [!code-cs[System.Web.HttpResponse_Sample5#3](~/add/codesnippet/CSharp/p-system.web.httprequest_13_1.aspx)]\n [!code-vb[System.Web.HttpResponse_Sample5#3](~/add/codesnippet/VisualBasic/p-system.web.httprequest_13_1.aspx)]"
+  syntax:
+    content: public bool IsSecureConnection { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the connection is an SSL connection; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.HttpRequest.IsSecureConnection*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Item(System.String)
+  id: Item(System.String)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Item(String)
+  nameWithType: HttpRequest.Item(String)
+  fullName: System.Web.HttpRequest.Item(String)
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the specified object from the &lt;xref:System.Web.HttpRequest.QueryString%2A&gt;, &lt;xref:System.Web.HttpRequest.Form%2A&gt;, &lt;xref:System.Web.HttpRequest.Cookies%2A&gt;, or &lt;xref:System.Web.HttpRequest.ServerVariables%2A&gt; collections."
+  syntax:
+    content: public string this[string key] { get; }
+    parameters:
+    - id: key
+      type: System.String
+      description: "The name of the collection member to get."
+    return:
+      type: System.String
+      description: "The &lt;xref:System.Web.HttpRequest.QueryString%2A&gt;, &lt;xref:System.Web.HttpRequest.Form%2A&gt;, &lt;xref:System.Web.HttpRequest.Cookies%2A&gt;, or &lt;xref:System.Web.HttpRequest.ServerVariables%2A&gt; collection member specified in the <span class=&quot;paramref&quot;>key</span> parameter. If the specified <span class=&quot;paramref&quot;>key</span> is not found, then <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> is returned."
+  overload: System.Web.HttpRequest.Item*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.LogonUserIdentity
+  id: LogonUserIdentity
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: LogonUserIdentity
+  nameWithType: HttpRequest.LogonUserIdentity
+  fullName: System.Web.HttpRequest.LogonUserIdentity
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the <see cref=&quot;T:System.Security.Principal.WindowsIdentity&quot;></see> type for the current user."
+  remarks: "The LogonUserIdentity property exposes the properties and methods of the <xref:System.Security.Principal.WindowsIdentity> object for the currently connected user to Microsoft Internet Information Services (IIS). The instance of the <xref:System.Security.Principal.WindowsIdentity> class that is exposed by LogonUserIdentity tracks the IIS request token and provides easy access to this token for the current HTTP request being processed inside of ASP.NET. An instance of the <xref:System.Security.Principal.WindowsIdentity> class is automatically created so it does not need to be constructed to in order to gain access to its methods and properties."
+  example:
+  - "The following code example shows how to retrieve the LogonUserIdentity property for the current user and write out the values of each item in a text file. Place this code on the ASP.NET page referenced by the form's `ACTION` attribute.  \n  \n [!code-vb[System.Web.HttpRequest_LogonUserIdentity#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_35_1.aspx)]\n [!code-cs[System.Web.HttpRequest_LogonUserIdentity#1](~/add/codesnippet/CSharp/p-system.web.httprequest_35_1.aspx)]"
+  syntax:
+    content: public System.Security.Principal.WindowsIdentity LogonUserIdentity { get; }
+    return:
+      type: System.Security.Principal.WindowsIdentity
+      description: "A <see cref=&quot;T:System.Security.Principal.WindowsIdentity&quot;></see> object for the current Microsoft Internet Information Services (IIS) authentication settings."
+  overload: System.Web.HttpRequest.LogonUserIdentity*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The Web application is running in IIS 7 integrated mode and the  event has not yet been raised."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.MapImageCoordinates(System.String)
+  id: MapImageCoordinates(System.String)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: MapImageCoordinates(String)
+  nameWithType: HttpRequest.MapImageCoordinates(String)
+  fullName: System.Web.HttpRequest.MapImageCoordinates(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Maps an incoming image-field form parameter to appropriate x-coordinate and y-coordinate values."
+  syntax:
+    content: public int[] MapImageCoordinates (string imageFieldName);
+    parameters:
+    - id: imageFieldName
+      type: System.String
+      description: "The name of the form image map."
+    return:
+      type: System.Int32[]
+      description: "To be added."
+  overload: System.Web.HttpRequest.MapImageCoordinates*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.MapPath(System.String)
+  id: MapPath(System.String)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: MapPath(String)
+  nameWithType: HttpRequest.MapPath(String)
+  fullName: System.Web.HttpRequest.MapPath(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Maps the specified virtual path to a physical path."
+  remarks: >-
+    > [!CAUTION]
+
+    >  The MapPath property potentially contains sensitive information about the hosting environment. The return value should not be displayed to users.
+  example:
+  - "The following code example uses the MapPath method to convert a virtual path to a fully qualified physical path on the server. This example has two parts:  \n  \n-   An .aspx page maps the path, reads the file, and displays results of the read operation.  \n  \n-   A class, `UpperCaseFilterStream`, that changes all characters passed through it to uppercase.  \n  \n The first part of the example shows how to convert a virtual path to a fully qualified physical path using the MapPath method. This physical path is then passed to a <xref:System.IO.StreamReader> object, which obtains the contents of the file. The <xref:System.Web.HttpResponse.Write%2A> method is then called to display the content of the file on the page. The <xref:System.Web.HttpResponse.Filter%2A> property is used to attach a filter to the response stream that makes the text displayed to the page all uppercase.  \n  \n [!code-vb[System.Web.HttpRequest_Samples2#1](~/add/codesnippet/VisualBasic/m-system.web.httprequest_0_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Samples2#1](~/add/codesnippet/CSharp/m-system.web.httprequest_0_1.aspx)]  \n  \n The second part of the example shows a class that inherits from <xref:System.IO.Stream> and converts all characters in a stream to uppercase. Put this code in the `App_Code` folder for your application.  \n  \n [!code-cs[System.Web.HttpRequest_Samples2#2](~/add/codesnippet/CSharp/m-system.web.httprequest_0_2.cs)]\n [!code-vb[System.Web.HttpRequest_Samples2#2](~/add/codesnippet/VisualBasic/m-system.web.httprequest_0_2.vb)]"
+  syntax:
+    content: public string MapPath (string virtualPath);
+    parameters:
+    - id: virtualPath
+      type: System.String
+      description: "The virtual path (absolute or relative) for the current request."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.HttpRequest.MapPath*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "No  object is defined for the request."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.MapPath(System.String,System.String,System.Boolean)
+  id: MapPath(System.String,System.String,System.Boolean)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: MapPath(String,String,Boolean)
+  nameWithType: HttpRequest.MapPath(String,String,Boolean)
+  fullName: System.Web.HttpRequest.MapPath(String,String,Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Maps the specified virtual path to a physical path."
+  remarks: >-
+    > [!CAUTION]
+
+    >  The MapPath property potentially contains sensitive information about the hosting environment. The return value should not be displayed to users.
+  syntax:
+    content: public string MapPath (string virtualPath, string baseVirtualDir, bool allowCrossAppMapping);
+    parameters:
+    - id: virtualPath
+      type: System.String
+      description: "The virtual path (absolute or relative) for the current request."
+    - id: baseVirtualDir
+      type: System.String
+      description: "The virtual base directory path used for relative resolution."
+    - id: allowCrossAppMapping
+      type: System.Boolean
+      description: "\n     to indicate that `virtualPath` may belong to another application; otherwise, ."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.HttpRequest.MapPath*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "No  object is defined for the request."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.MapRawImageCoordinates(System.String)
+  id: MapRawImageCoordinates(System.String)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: MapRawImageCoordinates(String)
+  nameWithType: HttpRequest.MapRawImageCoordinates(String)
+  fullName: System.Web.HttpRequest.MapRawImageCoordinates(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Maps an incoming image field form parameter into appropriate x and y coordinate values."
+  syntax:
+    content: public double[] MapRawImageCoordinates (string imageFieldName);
+    parameters:
+    - id: imageFieldName
+      type: System.String
+      description: "The name of the image field."
+    return:
+      type: System.Double[]
+      description: "To be added."
+  overload: System.Web.HttpRequest.MapRawImageCoordinates*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Params
+  id: Params
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Params
+  nameWithType: HttpRequest.Params
+  fullName: System.Web.HttpRequest.Params
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a combined collection of &lt;xref:System.Web.HttpRequest.QueryString%2A&gt;, &lt;xref:System.Web.HttpRequest.Form%2A&gt;, &lt;xref:System.Web.HttpRequest.Cookies%2A&gt;, and &lt;xref:System.Web.HttpRequest.ServerVariables%2A&gt; items."
+  remarks: "Name-value pairs are added to the collection in the following order:      1.  Query-string parameters.      2.  Form fields.      3.  Cookies.      4.  Server variables."
+  example:
+  - "The following code example shows how to loop through the Params property for a page and how to display each key/value pair.  \n  \n [!code-cs[System.Web.HttpRequest.Params#1](~/add/codesnippet/CSharp/p-system.web.httprequest_7_1.aspx)]\n [!code-vb[System.Web.HttpRequest.Params#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_7_1.aspx)]"
+  syntax:
+    content: public System.Collections.Specialized.NameValueCollection Params { get; }
+    return:
+      type: System.Collections.Specialized.NameValueCollection
+      description: "A <see cref=&quot;T:System.Collections.Specialized.NameValueCollection&quot;></see> object."
+  overload: System.Web.HttpRequest.Params*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Path
+  id: Path
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Path
+  nameWithType: HttpRequest.Path
+  fullName: System.Web.HttpRequest.Path
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the virtual path of the current request."
+  remarks: "The Path is the concatenation of the <xref:System.Web.HttpRequest.FilePath%2A> and the <xref:System.Web.HttpRequest.PathInfo%2A> trailer. For example, for the URL http://www.contoso.com/virdir/page.html/tail, the Path is /virdir/page.html/tail."
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the Path property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/VisualBasic/p-system.web.httprequest_29_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#2](~/add/codesnippet/CSharp/p-system.web.httprequest_29_1.aspx)]"
+  syntax:
+    content: public string Path { get; }
+    return:
+      type: System.String
+      description: "The virtual path of the current request."
+  overload: System.Web.HttpRequest.Path*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.PathInfo
+  id: PathInfo
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: PathInfo
+  nameWithType: HttpRequest.PathInfo
+  fullName: System.Web.HttpRequest.PathInfo
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the additional path information for a resource with a URL extension."
+  remarks: "For the URL Http://www.contoso.com/virdir/page.html/tail, the PathInfo value is /tail."
+  example:
+  - "The following code example determines whether the PathInfo property contains an empty string. If it does, the <xref:System.IO.StreamWriter.Write%2A> method writes a string indicating this to a file. If it does not, the <xref:System.Web.HttpUtility.HtmlEncode%2A> method HTML-encodes the value of the PathInfo property and the <xref:System.IO.TextWriter.WriteLine%2A> method writes the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#4](~/add/codesnippet/VisualBasic/p-system.web.httprequest_19_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#4](~/add/codesnippet/CSharp/p-system.web.httprequest_19_1.aspx)]"
+  syntax:
+    content: public string PathInfo { get; }
+    return:
+      type: System.String
+      description: "The additional path information for a resource."
+  overload: System.Web.HttpRequest.PathInfo*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.PhysicalApplicationPath
+  id: PhysicalApplicationPath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: PhysicalApplicationPath
+  nameWithType: HttpRequest.PhysicalApplicationPath
+  fullName: System.Web.HttpRequest.PhysicalApplicationPath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the physical file system path of the currently executing server application&quot;s root directory."
+  remarks: ''
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the PhysicalApplicationPath property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/VisualBasic/p-system.web.httprequest_1_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/CSharp/p-system.web.httprequest_1_1.aspx)]"
+  syntax:
+    content: public string PhysicalApplicationPath { get; }
+    return:
+      type: System.String
+      description: "The file system path of the current application&quot;s root directory."
+  overload: System.Web.HttpRequest.PhysicalApplicationPath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.PhysicalPath
+  id: PhysicalPath
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: PhysicalPath
+  nameWithType: HttpRequest.PhysicalPath
+  fullName: System.Web.HttpRequest.PhysicalPath
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the physical file system path corresponding to the requested URL."
+  remarks: "In redirect scenarios using <xref:System.Web.HttpServerUtility.Execute%2A> and <xref:System.Web.HttpServerUtility.Transfer%2A>, the PhysicalPath property returns the path to the original page. To find the physical path of the currently executing page use the <xref:System.Web.HttpRequest.MapPath%2A> method with the input argument set as the <xref:System.Web.HttpRequest.CurrentExecutionFilePath%2A> property."
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the PhysicalPath property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/VisualBasic/p-system.web.httprequest_20_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/CSharp/p-system.web.httprequest_20_1.aspx)]"
+  syntax:
+    content: public string PhysicalPath { get; }
+    return:
+      type: System.String
+      description: "The file system path of the current request."
+  overload: System.Web.HttpRequest.PhysicalPath*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.QueryString
+  id: QueryString
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: QueryString
+  nameWithType: HttpRequest.QueryString
+  fullName: System.Web.HttpRequest.QueryString
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the collection of HTTP query string variables."
+  remarks: ''
+  example:
+  - "The following code example shows two ways to get the value of a query string variable named “fullname”. In each case, if the URL is `http://www.contoso.com/default.aspx?fullname=Fadi%20Fakhouri`, then the value returned is \"Fadi Fakhouri\" because the `%20` is URL-decoded into a space character. If the URL doesn’t have a `fullname` query string ID, the returned value would be `null`.  \n  \n The first line of code looks for the key “fullname” only in the query string; the second line looks for the key “fullname” in all of the HTTP request collections. For more information about the second line, see <xref:System.Web.HttpRequest.Item%2A>.  \n  \n```c#  \nstring fullname1 = Request.QueryString[\"fullname\"];  \nstring fullname2 = Request[\"fullname\"];  \n  \n```  \n  \n```vb  \nDim fullname1 As String = Request.QueryString(\"fullname\")  \nDim fullname2 As String = Request(\"fullname\")  \n```"
+  syntax:
+    content: public System.Collections.Specialized.NameValueCollection QueryString { get; }
+    return:
+      type: System.Collections.Specialized.NameValueCollection
+      description: "The query string variables sent by the client. Keys and values are URL-decoded."
+  overload: System.Web.HttpRequest.QueryString*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.RawUrl
+  id: RawUrl
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: RawUrl
+  nameWithType: HttpRequest.RawUrl
+  fullName: System.Web.HttpRequest.RawUrl
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the raw URL of the current request."
+  remarks: "The raw URL is defined as the part of the URL following the domain information. In the URL string http://www.contoso.com/articles/recent.aspx, the raw URL is /articles/recent.aspx. The raw URL includes the query string, if present."
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the RawUrl property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/VisualBasic/p-system.web.httprequest_22_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#5](~/add/codesnippet/CSharp/p-system.web.httprequest_22_1.aspx)]"
+  syntax:
+    content: public string RawUrl { get; }
+    return:
+      type: System.String
+      description: "The raw URL of the current request."
+  overload: System.Web.HttpRequest.RawUrl*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ReadEntityBodyMode
+  id: ReadEntityBodyMode
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ReadEntityBodyMode
+  nameWithType: HttpRequest.ReadEntityBodyMode
+  fullName: System.Web.HttpRequest.ReadEntityBodyMode
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a value that indicates whether the request entity body has been read, and if so, how it was read."
+  remarks: "This method is used to avoid the exception that is thrown if the entity body has already been read and an attempt is made to read it by using an incompatible method. Methods and properties that read the entity body include the following:      -   The <xref:System.Web.HttpRequest.Form%2A> property.      -   The <xref:System.Web.HttpRequest.Files%2A> property.      -   The <xref:System.Web.HttpRequest.InputStream%2A> property.      -   The <xref:System.Web.HttpRequest.GetBufferedInputStream%2A> method.      -   The <xref:System.Web.HttpRequest.GetBufferlessInputStream%2A> method."
+  syntax:
+    content: public System.Web.ReadEntityBodyMode ReadEntityBodyMode { get; }
+    return:
+      type: System.Web.ReadEntityBodyMode
+      description: "The value that indicates how the request entity body was read, or that it has not been read."
+  overload: System.Web.HttpRequest.ReadEntityBodyMode*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.RequestContext
+  id: RequestContext
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: RequestContext
+  nameWithType: HttpRequest.RequestContext
+  fullName: System.Web.HttpRequest.RequestContext
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the &lt;xref:System.Web.Routing.RequestContext&gt; instance of the current request."
+  remarks: "This property provides access to the <xref:System.Web.Routing.RouteData> object for the current request. For more information about ASP.NET routing, see.[ASP.NET Routing](../Topic/ASP.NET%20Routing.md)."
+  syntax:
+    content: public System.Web.Routing.RequestContext RequestContext { get; set; }
+    return:
+      type: System.Web.Routing.RequestContext
+      description: "The &lt;xref:System.Web.Routing.RequestContext&gt; instance of the current request. For non-routed requests, the &lt;xref:System.Web.Routing.RequestContext&gt; object that is returned is empty."
+  overload: System.Web.HttpRequest.RequestContext*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.RequestType
+  id: RequestType
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: RequestType
+  nameWithType: HttpRequest.RequestType
+  fullName: System.Web.HttpRequest.RequestType
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets or sets the HTTP data transfer method (<xref uid=&quot;langword_csharp_GET&quot; name=&quot;GET&quot; href=&quot;&quot;></xref> or <xref uid=&quot;langword_csharp_POST&quot; name=&quot;POST&quot; href=&quot;&quot;></xref>) used by the client."
+  remarks: ''
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the RequestType property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/VisualBasic/p-system.web.httprequest_25_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/CSharp/p-system.web.httprequest_25_1.aspx)]"
+  syntax:
+    content: public string RequestType { get; set; }
+    return:
+      type: System.String
+      description: "A string representing the HTTP invocation type sent by the client."
+  overload: System.Web.HttpRequest.RequestType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.SaveAs(System.String,System.Boolean)
+  id: SaveAs(System.String,System.Boolean)
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: SaveAs(String,Boolean)
+  nameWithType: HttpRequest.SaveAs(String,Boolean)
+  fullName: System.Web.HttpRequest.SaveAs(String,Boolean)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Saves an HTTP request to disk."
+  remarks: "Saving the request context to disk can be useful in debugging."
+  example:
+  - "The following code example calls the SaveAs method when a page is loaded. The call specifies that the request be saved as a text file in a directory where the ASP.NET process identity has been granted write permissions, and that any header information included in the request is included in the file.  \n  \n [!code-cs[System.Web.HttpRequest_Sample6#1](~/add/codesnippet/CSharp/m-system.web.httprequest_1_1.aspx)]\n [!code-vb[System.Web.HttpRequest_Sample6#1](~/add/codesnippet/VisualBasic/m-system.web.httprequest_1_1.aspx)]"
+  syntax:
+    content: public void SaveAs (string filename, bool includeHeaders);
+    parameters:
+    - id: filename
+      type: System.String
+      description: "The physical drive path."
+    - id: includeHeaders
+      type: System.Boolean
+      description: "A Boolean value specifying whether an HTTP header should be saved to disk."
+  overload: System.Web.HttpRequest.SaveAs*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The <xref:System.Web.Configuration.HttpRuntimeSection.RequireRootedSaveAsPath%2A> property of the  is set to  but filename is not an absolute path."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ServerVariables
+  id: ServerVariables
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ServerVariables
+  nameWithType: HttpRequest.ServerVariables
+  fullName: System.Web.HttpRequest.ServerVariables
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a collection of Web server variables."
+  remarks: "For a list of server variables supported by IIS, see [IIS Server Variables](http://go.microsoft.com/fwlink/?LinkId=52471)."
+  example:
+  - "The following code example displays the names and values of all named server variables.  \n  \n [!code-cs[Classic HttpRequest.ServerVariables Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_30_1.cs)]\n [!code-vb[Classic HttpRequest.ServerVariables Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_30_1.vb)]"
+  syntax:
+    content: public System.Collections.Specialized.NameValueCollection ServerVariables { get; }
+    return:
+      type: System.Collections.Specialized.NameValueCollection
+      description: "A <see cref=&quot;T:System.Collections.Specialized.NameValueCollection&quot;></see> of server variables."
+  overload: System.Web.HttpRequest.ServerVariables*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.TimedOutToken
+  id: TimedOutToken
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: TimedOutToken
+  nameWithType: HttpRequest.TimedOutToken
+  fullName: System.Web.HttpRequest.TimedOutToken
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a &lt;xref:System.Threading.CancellationToken&gt; object that is tripped when a request times out."
+  remarks: "The timeout period can be specified in the Web.config file (see <xref:System.Web.Configuration.HttpRuntimeSection.ExecutionTimeout%2A?displayProperty=fullName>) or programmatically (see <xref:System.Web.HttpServerUtility.ScriptTimeout%2A?displayProperty=fullName>). The timeout period is measured from the time the request comes in. If the default timeout of 110 seconds is in effect, the cancellation token will be tripped no earlier than 110 seconds after request processing begins. You can change the <xref:System.Web.HttpServerUtility.ScriptTimeout%2A?displayProperty=fullName> property value, and as long this token hasn&quot;t tripped yet, the new timeout value will be respected.       Currently the token only provides 15 second granularity, which means that if the timeout value is 110 seconds, the token will be tripped sometime between 110 and 125 seconds after request processing begins. The granularity may change in the future.       Even though this property is thread-safe, there are restrictions on its use. For more information, see <xref:System.Web.HttpResponse.ClientDisconnectedToken%2A?displayProperty=fullName>.       This property is meaningless if WebSockets request processing has started."
+  syntax:
+    content: public System.Threading.CancellationToken TimedOutToken { get; }
+    return:
+      type: System.Threading.CancellationToken
+      description: "The cancellation token."
+  overload: System.Web.HttpRequest.TimedOutToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.TlsTokenBindingInfo
+  id: TlsTokenBindingInfo
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: TlsTokenBindingInfo
+  nameWithType: HttpRequest.TlsTokenBindingInfo
+  fullName: System.Web.HttpRequest.TlsTokenBindingInfo
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the TLS token binding information. The property enables applications to retrieve token information from incoming HTTP requests for enhanced authentication."
+  remarks: "This property returns `null` on non-windows10 platforms."
+  syntax:
+    content: public System.Web.ITlsTokenBindingInfo TlsTokenBindingInfo { get; }
+    return:
+      type: System.Web.ITlsTokenBindingInfo
+      description: "The binding token for the current connection."
+  overload: System.Web.HttpRequest.TlsTokenBindingInfo*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.TotalBytes
+  id: TotalBytes
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: TotalBytes
+  nameWithType: HttpRequest.TotalBytes
+  fullName: System.Web.HttpRequest.TotalBytes
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the number of bytes in the current input stream."
+  remarks: ''
+  example:
+  - "The following code example determines whether the TotalBytes property value is greater than 1000 bytes and writes that information to a file.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#6](~/add/codesnippet/VisualBasic/p-system.web.httprequest_23_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#6](~/add/codesnippet/CSharp/p-system.web.httprequest_23_1.aspx)]"
+  syntax:
+    content: public int TotalBytes { get; }
+    return:
+      type: System.Int32
+      description: "The number of bytes in the input stream."
+  overload: System.Web.HttpRequest.TotalBytes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Unvalidated
+  id: Unvalidated
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Unvalidated
+  nameWithType: HttpRequest.Unvalidated
+  fullName: System.Web.HttpRequest.Unvalidated
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the HTTP request values without triggering request validation."
+  remarks: "Request validation checks for HTML markup and script that might indicate a potential cross-site scripting attack. By default, all values are checked using request validation and if any values contain markup or script, ASP.NET throws an <xref:System.Web.HttpRequestValidationException> exception. Use this method if you anticipate that the request will contain markup (for example, you are allowing users to post content that contains markup) and you want to get the raw value of a request.      > [!IMPORTANT] >  If you use this property, you must manually check the data for potential cross-site scripting attacks."
+  syntax:
+    content: public System.Web.UnvalidatedRequestValues Unvalidated { get; }
+    return:
+      type: System.Web.UnvalidatedRequestValues
+      description: "The HTTP request values that have not been checked using request validation."
+  overload: System.Web.HttpRequest.Unvalidated*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.Url
+  id: Url
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: Url
+  nameWithType: HttpRequest.Url
+  fullName: System.Web.HttpRequest.Url
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets information about the URL of the current request."
+  remarks: ''
+  example:
+  - "The following code example assigns the <xref:System.Uri> object of the current request to an object variable and displays the value of two properties of the URL object to the HTTP output.  \n  \n [!code-cs[Classic HttpRequest.Url Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_34_1.cs)]\n [!code-vb[Classic HttpRequest.Url Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_34_1.vb)]"
+  syntax:
+    content: public Uri Url { get; }
+    return:
+      type: System.Uri
+      description: "A &lt;xref:System.Uri&gt; object that contains the URL of the current request."
+  overload: System.Web.HttpRequest.Url*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.UrlReferrer
+  id: UrlReferrer
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: UrlReferrer
+  nameWithType: HttpRequest.UrlReferrer
+  fullName: System.Web.HttpRequest.UrlReferrer
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets information about the URL of the client&quot;s previous request that linked to the current URL."
+  remarks: ''
+  example:
+  - "The following code example displays the value of two properties of the URL that referred the client to the current application.  \n  \n [!code-cs[Classic HttpRequest.UrlReferrer Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_8_1.cs)]\n [!code-vb[Classic HttpRequest.UrlReferrer Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_8_1.vb)]"
+  syntax:
+    content: public Uri UrlReferrer { get; }
+    return:
+      type: System.Uri
+      description: "A &lt;xref:System.Uri&gt; object."
+  overload: System.Web.HttpRequest.UrlReferrer*
+  exceptions:
+  - type: System.UriFormatException
+    commentId: T:System.UriFormatException
+    description: "The HTTP  request header is malformed and cannot be converted to a <xref:System.Uri> object."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.UserAgent
+  id: UserAgent
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: UserAgent
+  nameWithType: HttpRequest.UserAgent
+  fullName: System.Web.HttpRequest.UserAgent
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the raw user agent string of the client browser."
+  remarks: ''
+  example:
+  - "The following code example assigns the type identification of the requesting browser to a string variable.  \n  \n [!code-cs[Classic HttpRequest.UserAgent Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_26_1.cs)]\n [!code-vb[Classic HttpRequest.UserAgent Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_26_1.vb)]"
+  syntax:
+    content: public string UserAgent { get; }
+    return:
+      type: System.String
+      description: "The raw user agent string of the client browser."
+  overload: System.Web.HttpRequest.UserAgent*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.UserHostAddress
+  id: UserHostAddress
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: UserHostAddress
+  nameWithType: HttpRequest.UserHostAddress
+  fullName: System.Web.HttpRequest.UserHostAddress
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the IP host address of the remote client."
+  remarks: ''
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the UserHostAddress property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/VisualBasic/p-system.web.httprequest_9_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/CSharp/p-system.web.httprequest_9_1.aspx)]"
+  syntax:
+    content: public string UserHostAddress { get; }
+    return:
+      type: System.String
+      description: "The IP address of the remote client."
+  overload: System.Web.HttpRequest.UserHostAddress*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.UserHostName
+  id: UserHostName
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: UserHostName
+  nameWithType: HttpRequest.UserHostName
+  fullName: System.Web.HttpRequest.UserHostName
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets the DNS name of the remote client."
+  remarks: ''
+  example:
+  - "The following code example uses the <xref:System.Web.HttpUtility.HtmlEncode%2A> method to HTML-encode the value of the UserHostName property and the <xref:System.IO.TextWriter.WriteLine%2A> method to write the encoded value to the file. This code example is part of a larger example provided for the <xref:System.Web.HttpRequest> class.  \n  \n [!code-vb[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/VisualBasic/p-system.web.httprequest_11_1.aspx)]\n [!code-cs[System.Web.HttpRequest_Sample1#7](~/add/codesnippet/CSharp/p-system.web.httprequest_11_1.aspx)]"
+  syntax:
+    content: public string UserHostName { get; }
+    return:
+      type: System.String
+      description: "The DNS name of the remote client."
+  overload: System.Web.HttpRequest.UserHostName*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.UserLanguages
+  id: UserLanguages
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: UserLanguages
+  nameWithType: HttpRequest.UserLanguages
+  fullName: System.Web.HttpRequest.UserLanguages
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Gets a sorted string array of client language preferences."
+  remarks: ''
+  example:
+  - "The following code example captures the multiple values returned by the UserLanguages property into a string array and writes each language name to a separate line of HTTP output.  \n  \n The language names are provided by the browser, and there is no definitive list of all possible codes.  Typically these consist of a two-character codes for the language, a hyphen, and a two-character code for the culture, such as \"en-us\" for U.S. English and \"fr-ca\" for Canadian French.  \n  \n [!code-vb[Classic HttpRequest.UserLanguages Example#1](~/add/codesnippet/VisualBasic/p-system.web.httprequest_16_1.vb)]\n [!code-cs[Classic HttpRequest.UserLanguages Example#1](~/add/codesnippet/CSharp/p-system.web.httprequest_16_1.cs)]"
+  syntax:
+    content: public string[] UserLanguages { get; }
+    return:
+      type: System.String[]
+      description: "A sorted string array of client language preferences, or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if empty."
+  overload: System.Web.HttpRequest.UserLanguages*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.HttpRequest.ValidateInput
+  id: ValidateInput
+  parent: System.Web.HttpRequest
+  langs:
+  - csharp
+  name: ValidateInput()
+  nameWithType: HttpRequest.ValidateInput()
+  fullName: System.Web.HttpRequest.ValidateInput()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web
+  summary: "Causes validation to occur for the collections accessed through the &lt;xref:System.Web.HttpRequest.Cookies%2A&gt;, &lt;xref:System.Web.HttpRequest.Form%2A&gt;, and &lt;xref:System.Web.HttpRequest.QueryString%2A&gt; properties."
+  remarks: "The <xref:System.Web.HttpRequest> class uses input validation flags to track whether to perform validation on the request collections accessed through the <xref:System.Web.HttpRequest.Cookies%2A>, <xref:System.Web.HttpRequest.Form%2A>, and <xref:System.Web.HttpRequest.QueryString%2A> properties. The ValidateInput method sets these flags so that when the get accessors for the <xref:System.Web.HttpRequest.Cookies%2A>, <xref:System.Web.HttpRequest.Form%2A>, or <xref:System.Web.HttpRequest.QueryString%2A> property are invoked, input validation is performed. Validation works by checking all input data against a hard-coded list of potentially dangerous data.       If the validation feature is enabled by page directive or configuration, this method is called during the page&quot;s `ProcessRequest` processing phase. The ValidateInput method can be called by your code if the validation feature is not enabled."
+  syntax:
+    content: public void ValidateInput ();
+    parameters: []
+  overload: System.Web.HttpRequest.ValidateInput*
+  exceptions:
+  - type: System.Web.HttpRequestValidationException
+    commentId: T:System.Web.HttpRequestValidationException
+    description: "Potentially dangerous data was received from the client."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Web.HttpRequest.#ctor(System.String,System.String,System.String)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpRequest(String,String,String)
+  nameWithType: HttpRequest.HttpRequest(String,String,String)
+  fullName: System.Web.HttpRequest.HttpRequest(String,String,String)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.HttpRequest.Abort
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Abort()
+  nameWithType: HttpRequest.Abort()
+  fullName: System.Web.HttpRequest.Abort()
+- uid: System.Web.HttpRequest.AcceptTypes
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AcceptTypes
+  nameWithType: HttpRequest.AcceptTypes
+  fullName: System.Web.HttpRequest.AcceptTypes
+- uid: System.String[]
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Web.HttpRequest.AnonymousID
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AnonymousID
+  nameWithType: HttpRequest.AnonymousID
+  fullName: System.Web.HttpRequest.AnonymousID
+- uid: System.Web.HttpRequest.ApplicationPath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ApplicationPath
+  nameWithType: HttpRequest.ApplicationPath
+  fullName: System.Web.HttpRequest.ApplicationPath
+- uid: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AppRelativeCurrentExecutionFilePath
+  nameWithType: HttpRequest.AppRelativeCurrentExecutionFilePath
+  fullName: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath
+- uid: System.Web.HttpRequest.BinaryRead(System.Int32)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: BinaryRead(Int32)
+  nameWithType: HttpRequest.BinaryRead(Int32)
+  fullName: System.Web.HttpRequest.BinaryRead(Int32)
+- uid: System.Byte[]
+  parent: System
+  isExternal: true
+  name: Byte
+  nameWithType: Byte
+  fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Web.HttpRequest.Browser
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Browser
+  nameWithType: HttpRequest.Browser
+  fullName: System.Web.HttpRequest.Browser
+- uid: System.Web.HttpBrowserCapabilities
+  parent: System.Web
+  isExternal: false
+  name: HttpBrowserCapabilities
+  nameWithType: HttpBrowserCapabilities
+  fullName: System.Web.HttpBrowserCapabilities
+- uid: System.Web.HttpRequest.ClientCertificate
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ClientCertificate
+  nameWithType: HttpRequest.ClientCertificate
+  fullName: System.Web.HttpRequest.ClientCertificate
+- uid: System.Web.HttpClientCertificate
+  parent: System.Web
+  isExternal: false
+  name: HttpClientCertificate
+  nameWithType: HttpClientCertificate
+  fullName: System.Web.HttpClientCertificate
+- uid: System.Web.HttpRequest.ContentEncoding
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentEncoding
+  nameWithType: HttpRequest.ContentEncoding
+  fullName: System.Web.HttpRequest.ContentEncoding
+- uid: System.Text.Encoding
+  parent: System.Text
+  isExternal: true
+  name: Encoding
+  nameWithType: Encoding
+  fullName: System.Text.Encoding
+- uid: System.Web.HttpRequest.ContentLength
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentLength
+  nameWithType: HttpRequest.ContentLength
+  fullName: System.Web.HttpRequest.ContentLength
+- uid: System.Web.HttpRequest.ContentType
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentType
+  nameWithType: HttpRequest.ContentType
+  fullName: System.Web.HttpRequest.ContentType
+- uid: System.Web.HttpRequest.Cookies
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Cookies
+  nameWithType: HttpRequest.Cookies
+  fullName: System.Web.HttpRequest.Cookies
+- uid: System.Web.HttpCookieCollection
+  parent: System.Web
+  isExternal: false
+  name: HttpCookieCollection
+  nameWithType: HttpCookieCollection
+  fullName: System.Web.HttpCookieCollection
+- uid: System.Web.HttpRequest.CurrentExecutionFilePath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: CurrentExecutionFilePath
+  nameWithType: HttpRequest.CurrentExecutionFilePath
+  fullName: System.Web.HttpRequest.CurrentExecutionFilePath
+- uid: System.Web.HttpRequest.CurrentExecutionFilePathExtension
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: CurrentExecutionFilePathExtension
+  nameWithType: HttpRequest.CurrentExecutionFilePathExtension
+  fullName: System.Web.HttpRequest.CurrentExecutionFilePathExtension
+- uid: System.Web.HttpRequest.FilePath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: FilePath
+  nameWithType: HttpRequest.FilePath
+  fullName: System.Web.HttpRequest.FilePath
+- uid: System.Web.HttpRequest.Files
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Files
+  nameWithType: HttpRequest.Files
+  fullName: System.Web.HttpRequest.Files
+- uid: System.Web.HttpFileCollection
+  parent: System.Web
+  isExternal: false
+  name: HttpFileCollection
+  nameWithType: HttpFileCollection
+  fullName: System.Web.HttpFileCollection
+- uid: System.Web.HttpRequest.Filter
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Filter
+  nameWithType: HttpRequest.Filter
+  fullName: System.Web.HttpRequest.Filter
+- uid: System.IO.Stream
+  parent: System.IO
+  isExternal: true
+  name: Stream
+  nameWithType: Stream
+  fullName: System.IO.Stream
+- uid: System.Web.HttpRequest.Form
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Form
+  nameWithType: HttpRequest.Form
+  fullName: System.Web.HttpRequest.Form
+- uid: System.Collections.Specialized.NameValueCollection
+  parent: System.Collections.Specialized
+  isExternal: false
+  name: NameValueCollection
+  nameWithType: NameValueCollection
+  fullName: System.Collections.Specialized.NameValueCollection
+- uid: System.Web.HttpRequest.GetBufferedInputStream
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: GetBufferedInputStream()
+  nameWithType: HttpRequest.GetBufferedInputStream()
+  fullName: System.Web.HttpRequest.GetBufferedInputStream()
+- uid: System.Web.HttpRequest.GetBufferlessInputStream
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: GetBufferlessInputStream()
+  nameWithType: HttpRequest.GetBufferlessInputStream()
+  fullName: System.Web.HttpRequest.GetBufferlessInputStream()
+- uid: System.Web.HttpRequest.GetBufferlessInputStream(System.Boolean)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: GetBufferlessInputStream(Boolean)
+  nameWithType: HttpRequest.GetBufferlessInputStream(Boolean)
+  fullName: System.Web.HttpRequest.GetBufferlessInputStream(Boolean)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.HttpRequest.Headers
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Headers
+  nameWithType: HttpRequest.Headers
+  fullName: System.Web.HttpRequest.Headers
+- uid: System.Web.HttpRequest.HttpChannelBinding
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpChannelBinding
+  nameWithType: HttpRequest.HttpChannelBinding
+  fullName: System.Web.HttpRequest.HttpChannelBinding
+- uid: System.Security.Authentication.ExtendedProtection.ChannelBinding
+  parent: System.Security.Authentication.ExtendedProtection
+  isExternal: true
+  name: ChannelBinding
+  nameWithType: ChannelBinding
+  fullName: System.Security.Authentication.ExtendedProtection.ChannelBinding
+- uid: System.Web.HttpRequest.HttpMethod
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpMethod
+  nameWithType: HttpRequest.HttpMethod
+  fullName: System.Web.HttpRequest.HttpMethod
+- uid: System.Web.HttpRequest.InputStream
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: InputStream
+  nameWithType: HttpRequest.InputStream
+  fullName: System.Web.HttpRequest.InputStream
+- uid: System.Web.HttpRequest.InsertEntityBody
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: InsertEntityBody()
+  nameWithType: HttpRequest.InsertEntityBody()
+  fullName: System.Web.HttpRequest.InsertEntityBody()
+- uid: System.Web.HttpRequest.InsertEntityBody(System.Byte[],System.Int32,System.Int32)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: InsertEntityBody(Byte[],Int32,Int32)
+  nameWithType: HttpRequest.InsertEntityBody(Byte[],Int32,Int32)
+  fullName: System.Web.HttpRequest.InsertEntityBody(Byte[],Int32,Int32)
+- uid: System.Web.HttpRequest.IsAuthenticated
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsAuthenticated
+  nameWithType: HttpRequest.IsAuthenticated
+  fullName: System.Web.HttpRequest.IsAuthenticated
+- uid: System.Web.HttpRequest.IsLocal
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsLocal
+  nameWithType: HttpRequest.IsLocal
+  fullName: System.Web.HttpRequest.IsLocal
+- uid: System.Web.HttpRequest.IsSecureConnection
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsSecureConnection
+  nameWithType: HttpRequest.IsSecureConnection
+  fullName: System.Web.HttpRequest.IsSecureConnection
+- uid: System.Web.HttpRequest.Item(System.String)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Item(String)
+  nameWithType: HttpRequest.Item(String)
+  fullName: System.Web.HttpRequest.Item(String)
+- uid: System.Web.HttpRequest.LogonUserIdentity
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: LogonUserIdentity
+  nameWithType: HttpRequest.LogonUserIdentity
+  fullName: System.Web.HttpRequest.LogonUserIdentity
+- uid: System.Security.Principal.WindowsIdentity
+  parent: System.Security.Principal
+  isExternal: false
+  name: WindowsIdentity
+  nameWithType: WindowsIdentity
+  fullName: System.Security.Principal.WindowsIdentity
+- uid: System.Web.HttpRequest.MapImageCoordinates(System.String)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapImageCoordinates(String)
+  nameWithType: HttpRequest.MapImageCoordinates(String)
+  fullName: System.Web.HttpRequest.MapImageCoordinates(String)
+- uid: System.Int32[]
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32[]
+  spec.csharp:
+  - uid: System.Int32
+    name: Int32
+    nameWithType: Int32
+    fullName: Int32[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Web.HttpRequest.MapPath(System.String)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapPath(String)
+  nameWithType: HttpRequest.MapPath(String)
+  fullName: System.Web.HttpRequest.MapPath(String)
+- uid: System.Web.HttpRequest.MapPath(System.String,System.String,System.Boolean)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapPath(String,String,Boolean)
+  nameWithType: HttpRequest.MapPath(String,String,Boolean)
+  fullName: System.Web.HttpRequest.MapPath(String,String,Boolean)
+- uid: System.Web.HttpRequest.MapRawImageCoordinates(System.String)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapRawImageCoordinates(String)
+  nameWithType: HttpRequest.MapRawImageCoordinates(String)
+  fullName: System.Web.HttpRequest.MapRawImageCoordinates(String)
+- uid: System.Double[]
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double[]
+  spec.csharp:
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: Double[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Web.HttpRequest.Params
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Params
+  nameWithType: HttpRequest.Params
+  fullName: System.Web.HttpRequest.Params
+- uid: System.Web.HttpRequest.Path
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Path
+  nameWithType: HttpRequest.Path
+  fullName: System.Web.HttpRequest.Path
+- uid: System.Web.HttpRequest.PathInfo
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PathInfo
+  nameWithType: HttpRequest.PathInfo
+  fullName: System.Web.HttpRequest.PathInfo
+- uid: System.Web.HttpRequest.PhysicalApplicationPath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PhysicalApplicationPath
+  nameWithType: HttpRequest.PhysicalApplicationPath
+  fullName: System.Web.HttpRequest.PhysicalApplicationPath
+- uid: System.Web.HttpRequest.PhysicalPath
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PhysicalPath
+  nameWithType: HttpRequest.PhysicalPath
+  fullName: System.Web.HttpRequest.PhysicalPath
+- uid: System.Web.HttpRequest.QueryString
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: QueryString
+  nameWithType: HttpRequest.QueryString
+  fullName: System.Web.HttpRequest.QueryString
+- uid: System.Web.HttpRequest.RawUrl
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RawUrl
+  nameWithType: HttpRequest.RawUrl
+  fullName: System.Web.HttpRequest.RawUrl
+- uid: System.Web.HttpRequest.ReadEntityBodyMode
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ReadEntityBodyMode
+  nameWithType: HttpRequest.ReadEntityBodyMode
+  fullName: System.Web.HttpRequest.ReadEntityBodyMode
+- uid: System.Web.ReadEntityBodyMode
+  parent: System.Web
+  isExternal: false
+  name: ReadEntityBodyMode
+  nameWithType: ReadEntityBodyMode
+  fullName: System.Web.ReadEntityBodyMode
+- uid: System.Web.HttpRequest.RequestContext
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RequestContext
+  nameWithType: HttpRequest.RequestContext
+  fullName: System.Web.HttpRequest.RequestContext
+- uid: System.Web.Routing.RequestContext
+  parent: System.Web.Routing
+  isExternal: true
+  name: RequestContext
+  nameWithType: RequestContext
+  fullName: System.Web.Routing.RequestContext
+- uid: System.Web.HttpRequest.RequestType
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RequestType
+  nameWithType: HttpRequest.RequestType
+  fullName: System.Web.HttpRequest.RequestType
+- uid: System.Web.HttpRequest.SaveAs(System.String,System.Boolean)
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: SaveAs(String,Boolean)
+  nameWithType: HttpRequest.SaveAs(String,Boolean)
+  fullName: System.Web.HttpRequest.SaveAs(String,Boolean)
+- uid: System.Web.HttpRequest.ServerVariables
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ServerVariables
+  nameWithType: HttpRequest.ServerVariables
+  fullName: System.Web.HttpRequest.ServerVariables
+- uid: System.Web.HttpRequest.TimedOutToken
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TimedOutToken
+  nameWithType: HttpRequest.TimedOutToken
+  fullName: System.Web.HttpRequest.TimedOutToken
+- uid: System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Web.HttpRequest.TlsTokenBindingInfo
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TlsTokenBindingInfo
+  nameWithType: HttpRequest.TlsTokenBindingInfo
+  fullName: System.Web.HttpRequest.TlsTokenBindingInfo
+- uid: System.Web.ITlsTokenBindingInfo
+  parent: System.Web
+  isExternal: false
+  name: ITlsTokenBindingInfo
+  nameWithType: ITlsTokenBindingInfo
+  fullName: System.Web.ITlsTokenBindingInfo
+- uid: System.Web.HttpRequest.TotalBytes
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TotalBytes
+  nameWithType: HttpRequest.TotalBytes
+  fullName: System.Web.HttpRequest.TotalBytes
+- uid: System.Web.HttpRequest.Unvalidated
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Unvalidated
+  nameWithType: HttpRequest.Unvalidated
+  fullName: System.Web.HttpRequest.Unvalidated
+- uid: System.Web.UnvalidatedRequestValues
+  parent: System.Web
+  isExternal: false
+  name: UnvalidatedRequestValues
+  nameWithType: UnvalidatedRequestValues
+  fullName: System.Web.UnvalidatedRequestValues
+- uid: System.Web.HttpRequest.Url
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Url
+  nameWithType: HttpRequest.Url
+  fullName: System.Web.HttpRequest.Url
+- uid: System.Uri
+  parent: System
+  isExternal: true
+  name: Uri
+  nameWithType: Uri
+  fullName: System.Uri
+- uid: System.Web.HttpRequest.UrlReferrer
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UrlReferrer
+  nameWithType: HttpRequest.UrlReferrer
+  fullName: System.Web.HttpRequest.UrlReferrer
+- uid: System.Web.HttpRequest.UserAgent
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserAgent
+  nameWithType: HttpRequest.UserAgent
+  fullName: System.Web.HttpRequest.UserAgent
+- uid: System.Web.HttpRequest.UserHostAddress
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserHostAddress
+  nameWithType: HttpRequest.UserHostAddress
+  fullName: System.Web.HttpRequest.UserHostAddress
+- uid: System.Web.HttpRequest.UserHostName
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserHostName
+  nameWithType: HttpRequest.UserHostName
+  fullName: System.Web.HttpRequest.UserHostName
+- uid: System.Web.HttpRequest.UserLanguages
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserLanguages
+  nameWithType: HttpRequest.UserLanguages
+  fullName: System.Web.HttpRequest.UserLanguages
+- uid: System.Web.HttpRequest.ValidateInput
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ValidateInput()
+  nameWithType: HttpRequest.ValidateInput()
+  fullName: System.Web.HttpRequest.ValidateInput()
+- uid: System.Web.HttpRequest.#ctor*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpRequest
+  nameWithType: HttpRequest.HttpRequest
+- uid: System.Web.HttpRequest.Abort*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Abort
+  nameWithType: HttpRequest.Abort
+- uid: System.Web.HttpRequest.AcceptTypes*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AcceptTypes
+  nameWithType: HttpRequest.AcceptTypes
+- uid: System.Web.HttpRequest.AnonymousID*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AnonymousID
+  nameWithType: HttpRequest.AnonymousID
+- uid: System.Web.HttpRequest.ApplicationPath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ApplicationPath
+  nameWithType: HttpRequest.ApplicationPath
+- uid: System.Web.HttpRequest.AppRelativeCurrentExecutionFilePath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: AppRelativeCurrentExecutionFilePath
+  nameWithType: HttpRequest.AppRelativeCurrentExecutionFilePath
+- uid: System.Web.HttpRequest.BinaryRead*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: BinaryRead
+  nameWithType: HttpRequest.BinaryRead
+- uid: System.Web.HttpRequest.Browser*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Browser
+  nameWithType: HttpRequest.Browser
+- uid: System.Web.HttpRequest.ClientCertificate*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ClientCertificate
+  nameWithType: HttpRequest.ClientCertificate
+- uid: System.Web.HttpRequest.ContentEncoding*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentEncoding
+  nameWithType: HttpRequest.ContentEncoding
+- uid: System.Web.HttpRequest.ContentLength*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentLength
+  nameWithType: HttpRequest.ContentLength
+- uid: System.Web.HttpRequest.ContentType*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ContentType
+  nameWithType: HttpRequest.ContentType
+- uid: System.Web.HttpRequest.Cookies*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Cookies
+  nameWithType: HttpRequest.Cookies
+- uid: System.Web.HttpRequest.CurrentExecutionFilePath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: CurrentExecutionFilePath
+  nameWithType: HttpRequest.CurrentExecutionFilePath
+- uid: System.Web.HttpRequest.CurrentExecutionFilePathExtension*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: CurrentExecutionFilePathExtension
+  nameWithType: HttpRequest.CurrentExecutionFilePathExtension
+- uid: System.Web.HttpRequest.FilePath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: FilePath
+  nameWithType: HttpRequest.FilePath
+- uid: System.Web.HttpRequest.Files*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Files
+  nameWithType: HttpRequest.Files
+- uid: System.Web.HttpRequest.Filter*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Filter
+  nameWithType: HttpRequest.Filter
+- uid: System.Web.HttpRequest.Form*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Form
+  nameWithType: HttpRequest.Form
+- uid: System.Web.HttpRequest.GetBufferedInputStream*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: GetBufferedInputStream
+  nameWithType: HttpRequest.GetBufferedInputStream
+- uid: System.Web.HttpRequest.GetBufferlessInputStream*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: GetBufferlessInputStream
+  nameWithType: HttpRequest.GetBufferlessInputStream
+- uid: System.Web.HttpRequest.Headers*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Headers
+  nameWithType: HttpRequest.Headers
+- uid: System.Web.HttpRequest.HttpChannelBinding*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpChannelBinding
+  nameWithType: HttpRequest.HttpChannelBinding
+- uid: System.Web.HttpRequest.HttpMethod*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: HttpMethod
+  nameWithType: HttpRequest.HttpMethod
+- uid: System.Web.HttpRequest.InputStream*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: InputStream
+  nameWithType: HttpRequest.InputStream
+- uid: System.Web.HttpRequest.InsertEntityBody*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: InsertEntityBody
+  nameWithType: HttpRequest.InsertEntityBody
+- uid: System.Web.HttpRequest.IsAuthenticated*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsAuthenticated
+  nameWithType: HttpRequest.IsAuthenticated
+- uid: System.Web.HttpRequest.IsLocal*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsLocal
+  nameWithType: HttpRequest.IsLocal
+- uid: System.Web.HttpRequest.IsSecureConnection*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: IsSecureConnection
+  nameWithType: HttpRequest.IsSecureConnection
+- uid: System.Web.HttpRequest.Item*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Item
+  nameWithType: HttpRequest.Item
+- uid: System.Web.HttpRequest.LogonUserIdentity*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: LogonUserIdentity
+  nameWithType: HttpRequest.LogonUserIdentity
+- uid: System.Web.HttpRequest.MapImageCoordinates*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapImageCoordinates
+  nameWithType: HttpRequest.MapImageCoordinates
+- uid: System.Web.HttpRequest.MapPath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapPath
+  nameWithType: HttpRequest.MapPath
+- uid: System.Web.HttpRequest.MapRawImageCoordinates*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: MapRawImageCoordinates
+  nameWithType: HttpRequest.MapRawImageCoordinates
+- uid: System.Web.HttpRequest.Params*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Params
+  nameWithType: HttpRequest.Params
+- uid: System.Web.HttpRequest.Path*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Path
+  nameWithType: HttpRequest.Path
+- uid: System.Web.HttpRequest.PathInfo*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PathInfo
+  nameWithType: HttpRequest.PathInfo
+- uid: System.Web.HttpRequest.PhysicalApplicationPath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PhysicalApplicationPath
+  nameWithType: HttpRequest.PhysicalApplicationPath
+- uid: System.Web.HttpRequest.PhysicalPath*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: PhysicalPath
+  nameWithType: HttpRequest.PhysicalPath
+- uid: System.Web.HttpRequest.QueryString*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: QueryString
+  nameWithType: HttpRequest.QueryString
+- uid: System.Web.HttpRequest.RawUrl*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RawUrl
+  nameWithType: HttpRequest.RawUrl
+- uid: System.Web.HttpRequest.ReadEntityBodyMode*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ReadEntityBodyMode
+  nameWithType: HttpRequest.ReadEntityBodyMode
+- uid: System.Web.HttpRequest.RequestContext*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RequestContext
+  nameWithType: HttpRequest.RequestContext
+- uid: System.Web.HttpRequest.RequestType*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: RequestType
+  nameWithType: HttpRequest.RequestType
+- uid: System.Web.HttpRequest.SaveAs*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: SaveAs
+  nameWithType: HttpRequest.SaveAs
+- uid: System.Web.HttpRequest.ServerVariables*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ServerVariables
+  nameWithType: HttpRequest.ServerVariables
+- uid: System.Web.HttpRequest.TimedOutToken*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TimedOutToken
+  nameWithType: HttpRequest.TimedOutToken
+- uid: System.Web.HttpRequest.TlsTokenBindingInfo*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TlsTokenBindingInfo
+  nameWithType: HttpRequest.TlsTokenBindingInfo
+- uid: System.Web.HttpRequest.TotalBytes*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: TotalBytes
+  nameWithType: HttpRequest.TotalBytes
+- uid: System.Web.HttpRequest.Unvalidated*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Unvalidated
+  nameWithType: HttpRequest.Unvalidated
+- uid: System.Web.HttpRequest.Url*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: Url
+  nameWithType: HttpRequest.Url
+- uid: System.Web.HttpRequest.UrlReferrer*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UrlReferrer
+  nameWithType: HttpRequest.UrlReferrer
+- uid: System.Web.HttpRequest.UserAgent*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserAgent
+  nameWithType: HttpRequest.UserAgent
+- uid: System.Web.HttpRequest.UserHostAddress*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserHostAddress
+  nameWithType: HttpRequest.UserHostAddress
+- uid: System.Web.HttpRequest.UserHostName*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserHostName
+  nameWithType: HttpRequest.UserHostName
+- uid: System.Web.HttpRequest.UserLanguages*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: UserLanguages
+  nameWithType: HttpRequest.UserLanguages
+- uid: System.Web.HttpRequest.ValidateInput*
+  parent: System.Web.HttpRequest
+  isExternal: false
+  name: ValidateInput
+  nameWithType: HttpRequest.ValidateInput

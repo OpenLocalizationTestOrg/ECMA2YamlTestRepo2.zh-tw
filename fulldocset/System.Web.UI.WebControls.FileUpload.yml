@@ -1,0 +1,749 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.UI.WebControls.FileUpload
+  id: FileUpload
+  children:
+  - System.Web.UI.WebControls.FileUpload.#ctor
+  - System.Web.UI.WebControls.FileUpload.AddAttributesToRender(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.WebControls.FileUpload.AllowMultiple
+  - System.Web.UI.WebControls.FileUpload.FileBytes
+  - System.Web.UI.WebControls.FileUpload.FileContent
+  - System.Web.UI.WebControls.FileUpload.FileName
+  - System.Web.UI.WebControls.FileUpload.HasFile
+  - System.Web.UI.WebControls.FileUpload.HasFiles
+  - System.Web.UI.WebControls.FileUpload.OnPreRender(System.EventArgs)
+  - System.Web.UI.WebControls.FileUpload.PostedFile
+  - System.Web.UI.WebControls.FileUpload.PostedFiles
+  - System.Web.UI.WebControls.FileUpload.Render(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.WebControls.FileUpload.SaveAs(System.String)
+  langs:
+  - csharp
+  name: FileUpload
+  nameWithType: FileUpload
+  fullName: System.Web.UI.WebControls.FileUpload
+  type: Class
+  summary: "Displays a text box control and a browse button that enable users to select a file to upload to the server."
+  remarks: "In this topic:  \n  \n-   [Introduction](#introduction)  \n  \n-   [Saving Uploaded Files](#saving_uploaded_files)  \n  \n-   [Security Considerations](#security_considerations)  \n  \n-   [Memory Limitations](#memory_limitations)  \n  \n-   [Using the FileUpload Control with the UpdatePanel Control](#using_the_FileUpload_Control_with_the_UpdatePanel_control)  \n  \n-   [Declarative Syntax](#DeclarativeSyntax)  \n  \n<a name=\"introduction\"></a>   \n## Introduction  \n The FileUpload class displays a text box control and a browse button that enable users to select a file on the client and upload it to the Web server. The user specifies the file to upload by entering the full path of the file on the local computer (for example, **C:\\MyFiles\\TestFile.txt**) in the text box of the control. Alternately, the user can select the file by clicking the **Browse** button, and then locating it in the **Choose File** dialog box.  \n  \n Use the <xref:System.Web.UI.WebControls.FileUpload.FileName%2A> property to get the name of a file on a client to upload by using the FileUpload control. The file name that this property returns does not include the path of the file on the client.  \n  \n The <xref:System.Web.UI.WebControls.FileUpload.FileContent%2A> property gets a <xref:System.IO.Stream> object that points to a file to upload. Use this property to access the contents of the file as bytes. For example, you can use the <xref:System.IO.Stream> object that is returned by the <xref:System.Web.UI.WebControls.FileUpload.FileContent%2A> property to read the contents of the file as bytes and store them in a byte array. Alternatively, you can use the <xref:System.Web.UI.WebControls.FileUpload.FileBytes%2A> property to retrieve all the bytes in the file.  \n  \n The <xref:System.Web.UI.WebControls.FileUpload.PostedFile%2A> property gets the underlying <xref:System.Web.HttpPostedFile> object for the file to upload. You can use this property to access additional properties on the file. The <xref:System.Web.HttpPostedFile.ContentLength%2A> property gets the length of the file. The <xref:System.Web.HttpPostedFile.ContentType%2A> property gets the MIME content type of the file. In addition, you can use the <xref:System.Web.UI.WebControls.FileUpload.PostedFile%2A> property to access the <xref:System.Web.HttpPostedFile.FileName%2A> property, the <xref:System.Web.HttpPostedFile.InputStream%2A> property, and the <xref:System.Web.HttpPostedFile.SaveAs%2A> method. However, the same functionality is provided by the <xref:System.Web.UI.WebControls.FileUpload.FileName%2A> property, the <xref:System.Web.UI.WebControls.FileUpload.FileContent%2A> property, and the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method.  \n  \n<a name=\"saving_uploaded_files\"></a>   \n## Saving Uploaded Files  \n The FileUpload control does not automatically save a file to the server after the user selects the file to upload. You must explicitly provide a control or mechanism to allow the user to submit the specified file. For example, you can provide a button that the user clicks to upload the file. The code that you write to save the specified file should call the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method, which saves the contents of a file to a specified path on the server. Typically, the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called in an event-handling method for an event that raises a post back to the server. For example, if you provide a button to submit a file, you could include the code to save the file inside the event-handling method for the click event.  \n  \n Before calling the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method to save the file to the server, use the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> property to verify that the FileUpload control contains a file. If the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> returns `true`, call the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method. If it returns `false`, display a message to the user indicating that the control does not contain a file. Do not check the <xref:System.Web.UI.WebControls.FileUpload.PostedFile%2A> property to determine whether a file to upload exists because, by default, this property contains 0 bytes. As a result, even when the FileUpload control is blank, the <xref:System.Web.UI.WebControls.FileUpload.PostedFile%2A> property returns a non-null value.  \n  \n<a name=\"security_considerations\"></a>   \n## Security Considerations  \n When you call the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method, you must specify the full path of the directory in which to save the uploaded file. If you do not explicitly specify a path in your application code, an exception is thrown when a user attempts to upload a file. This behavior helps keep the files on the server secure by preventing users from being able to write to arbitrary locations in your application's directory structure, as well as preventing access to sensitive root directories.  \n  \n The <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method writes the uploaded file to the specified directory. Therefore, the ASP.NET application must have write access to the directory on the server. There are two ways that the application can get write access. You can explicitly grant write access to the account under which the application is running, in the directory in which the uploaded files will be saved. Alternatively, you can increase the level of trust that is granted to the ASP.NET application. To get write access to the executing directory for the application, the application must be granted the <xref:System.Web.AspNetHostingPermission> object with the trust level set to the <xref:System.Web.AspNetHostingPermissionLevel?displayProperty=fullName> value. Increasing the level of trust increases the application's access to resources on the server. Note that this is not a secure approach, because a malicious user who gains control of your application will also be able to run under this higher level of trust. It is a best practice to run an ASP.NET application in the context of a user with the minimum privileges that are required for the application to run. For more information about security in ASP.NET applications, see [Basic Security Practices for Web Applications](../Topic/Basic%20Security%20Practices%20for%20Web%20Applications.md) and [ASP.NET Trust Levels and Policy Files](../Topic/ASP.NET%20Trust%20Levels%20and%20Policy%20Files.md).  \n  \n<a name=\"memory_limitations\"></a>   \n## Memory Limitations  \n One way to guard against denial of service attacks is to limit the size of the files that can be uploaded by using the FileUpload control. You should set a size limit that is appropriate for the types of files that you expect to be uploaded. The default size limit is 4096 kilobytes (KB), or 4 megabytes (MB). You can allow larger files to be uploaded by setting the `maxRequestLength` attribute of the  element. To increase the maximum allowable file size for the entire application, set the `maxRequestLength` attribute in the Web.config file. To increase the maximum allowable file size for a specified page, set the `maxRequestLength` attribute inside the `location` element in Web.config. For an example, see [location Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/922ef7d5-da38-4661-b1c6-5b9e5ceda1d5).  \n  \n When uploading large files, a user might also receive the following error message:  \n  \n `aspnet_wp.exe (PID: 1520) was recycled because memory consumption exceeded 460 MB (60 percent of available RAM).`  \n  \n If your users encounter this error message, increase the value of the `memoryLimit` attribute in the  of element the Web.config file for the application. The `memoryLimit` attribute specifies the maximum amount of memory that a worker process can use. If the worker process exceeds the `memoryLimit` amount, a new process is created to replace it, and all current requests are reassigned to the new process.  \n  \n To control whether the file to upload is temporarily stored in memory or on the server while the request is being processed, set the `requestLengthDiskThreshold` attribute of the  element. This attribute enables you to manage the size of the input stream buffer. The default is 256 bytes. The value that you specify should not exceed the value that you specify for the `maxRequestLength` attribute.  \n  \n<a name=\"using_the_FileUpload_Control_with_the_UpdatePanel_control\"></a>   \n## Using the FileUpload Control with the UpdatePanel Control  \n The FileUpload control is designed to be used only in postback scenarios and not in asynchronous postback scenarios during partial-page rendering. When you use a FileUpload control inside an <xref:System.Web.UI.UpdatePanel> control, the file must be uploaded by using a control that is a <xref:System.Web.UI.PostBackTrigger> object for the panel. <xref:System.Web.UI.UpdatePanel> controls are used to update selected regions of a page instead of updating the whole page with a postback. For more information, see [UpdatePanel Control Overview](../Topic/UpdatePanel%20Control%20Overview.md) and [Partial-Page Rendering Overview](../Topic/Partial-Page%20Rendering%20Overview.md).  \n  \n<a name=\"DeclarativeSyntax\"></a>   \n## Declarative Syntax  \n  \n```  \n<asp:FileUpload  \n    AccessKey=\"string\"  \n    BackColor=\"color name|#dddddd\"  \n    BorderColor=\"color name|#dddddd\"  \n    BorderStyle=\"NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|  \n        Inset|Outset\"  \n    BorderWidth=\"size\"  \n    CssClass=\"string\"  \n    Enabled=\"True|False\"  \n    EnableTheming=\"True|False\"  \n    EnableViewState=\"True|False\"  \n    Font-Bold=\"True|False\"  \n    Font-Italic=\"True|False\"  \n    Font-Names=\"string\"  \n    Font-Overline=\"True|False\"  \n    Font-Size=\"string|Smaller|Larger|XX-Small|X-Small|Small|Medium|  \n        Large|X-Large|XX-Large\"  \n    Font-Strikeout=\"True|False\"  \n    Font-Underline=\"True|False\"  \n    ForeColor=\"color name|#dddddd\"  \n    Height=\"size\"  \n    ID=\"string\"  \n    OnDataBinding=\"DataBinding event handler\"  \n    OnDisposed=\"Disposed event handler\"  \n    OnInit=\"Init event handler\"  \n    OnLoad=\"Load event handler\"  \n    OnPreRender=\"PreRender event handler\"  \n    OnUnload=\"Unload event handler\"  \n    runat=\"server\"  \n    SkinID=\"string\"  \n    Style=\"string\"  \n    TabIndex=\"integer\"  \n    ToolTip=\"string\"  \n    Visible=\"True|False\"  \n    Width=\"size\"  \n/>  \n```"
+  example:
+  - "A Visual Studio Web site project with source code is available to accompany this topic: [Download](http://go.microsoft.com/fwlink/?LinkId=191897).  \n  \n This section contains the following four examples:  \n  \n-   The first example demonstrates how to create a FileUpload control that saves files to a path that is specified in code.  \n  \n-   The second example demonstrates how to create a FileUpload control that saves files to a specified directory in the file system for the application.  \n  \n-   The third example demonstrates how to create a FileUpload control that saves files to a specified path and limits the size of the file that can be uploaded.  \n  \n-   The fourth example demonstrates how to create a FileUpload control that saves files to a specified path and allows only files that have the .doc or .xls file name extensions to be uploaded.  \n  \n> [!CAUTION]\n>  These examples demonstrate the basic syntax for the FileUpload control, but they do not demonstrate all the necessary error checking that should be completed before to saving the file. For a more complete example, see <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A>.  \n  \n The following example demonstrates how to create a FileUpload control that saves files to a path that is specified in code. The <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called to save the file to the specified path on the server.  \n  \n [!code-vb[FileUploadClass1#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_338_1.aspx)]\n [!code-cs[FileUploadClass1#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_338_1.aspx)]  \n  \n The following example demonstrates how to create a FileUpload control that saves files to a specified directory in the file system for the application. The <xref:System.Web.HttpRequest.PhysicalApplicationPath%2A?displayProperty=fullName> property is used to get the physical file system path of the root directory for the currently executing server application. The <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called to save the file to the specified path on the server.  \n  \n [!code-vb[FileUploadClass2#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_338_2.aspx)]\n [!code-cs[FileUploadClass2#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_338_2.aspx)]  \n  \n The following example demonstrates how to create a FileUpload control that saves files to a path that is specified in the code. The control limits the size of the file that can be uploaded to 5 MB. The <xref:System.Web.UI.WebControls.FileUpload.PostedFile%2A> property is used to access the underlying <xref:System.Web.HttpPostedFile.ContentLength%2A> property and return the size of the file. If the size of the file to upload is less than 2 MB, the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called to save the file to the specified path on the server. In addition to checking for the maximum file size setting in your application code, you can set the `maxRequestLength` attribute of the  element to a maximum allowable size in the configuration file for your application.  \n  \n [!code-vb[FileUploadClass3#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_338_3.aspx)]\n [!code-cs[FileUploadClass3#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_338_3.aspx)]  \n  \n The following example demonstrates how to create a FileUpload control that saves files to a path that is specified in the code. This example allows only files that have the .doc or .xls file name extensions to be uploaded. The <xref:System.IO.Path.GetExtension%2A?displayProperty=fullName> method is called to return the extension of the file to upload. If the file has a .doc or .xls file name extension, the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called to save the file to the specified path on the server.  \n  \n [!code-vb[FileUploadClass4#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_338_4.aspx)]\n [!code-cs[FileUploadClass4#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_338_4.aspx)]"
+  syntax:
+    content: >-
+      [System.ComponentModel.Designer("System.Web.UI.Design.WebControls.PreviewControlDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+
+      [System.Web.UI.ControlValueProperty("FileBytes")]
+
+      [System.Web.UI.ValidationProperty("FileName")]
+
+      public class FileUpload : System.Web.UI.WebControls.WebControl
+  inheritance:
+  - System.Object
+  - System.Web.UI.Control
+  - System.Web.UI.WebControls.WebControl
+  implements: []
+  inheritedMembers:
+  - System.Web.UI.Control.Adapter
+  - System.Web.UI.Control.AddedControl(System.Web.UI.Control,System.Int32)
+  - System.Web.UI.Control.AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.ApplyStyleSheetSkin(System.Web.UI.Page)
+  - System.Web.UI.Control.AppRelativeTemplateSourceDirectory
+  - System.Web.UI.Control.BeginRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.BindingContainer
+  - System.Web.UI.Control.BuildProfileTree(System.String,System.Boolean)
+  - System.Web.UI.Control.ChildControlsCreated
+  - System.Web.UI.Control.ClearCachedClientID
+  - System.Web.UI.Control.ClearChildControlState
+  - System.Web.UI.Control.ClearChildState
+  - System.Web.UI.Control.ClearChildViewState
+  - System.Web.UI.Control.ClearEffectiveClientIDMode
+  - System.Web.UI.Control.ClientID
+  - System.Web.UI.Control.ClientIDMode
+  - System.Web.UI.Control.ClientIDSeparator
+  - System.Web.UI.Control.Context
+  - System.Web.UI.Control.Controls
+  - System.Web.UI.Control.CreateChildControls
+  - System.Web.UI.Control.CreateControlCollection
+  - System.Web.UI.Control.DataBind
+  - System.Web.UI.Control.DataBind(System.Boolean)
+  - System.Web.UI.Control.DataBindChildren
+  - System.Web.UI.Control.DataBinding
+  - System.Web.UI.Control.DataItemContainer
+  - System.Web.UI.Control.DataKeysContainer
+  - System.Web.UI.Control.DesignMode
+  - System.Web.UI.Control.Dispose
+  - System.Web.UI.Control.Disposed
+  - System.Web.UI.Control.EnableViewState
+  - System.Web.UI.Control.EndRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.EnsureChildControls
+  - System.Web.UI.Control.EnsureID
+  - System.Web.UI.Control.Events
+  - System.Web.UI.Control.FindControl(System.String)
+  - System.Web.UI.Control.FindControl(System.String,System.Int32)
+  - System.Web.UI.Control.Focus
+  - System.Web.UI.Control.GetDesignModeState
+  - System.Web.UI.Control.GetRouteUrl(System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetRouteUrl(System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetUniqueIDRelativeTo(System.Web.UI.Control)
+  - System.Web.UI.Control.HasChildViewState
+  - System.Web.UI.Control.HasControls
+  - System.Web.UI.Control.HasEvents
+  - System.Web.UI.Control.ID
+  - System.Web.UI.Control.IdSeparator
+  - System.Web.UI.Control.Init
+  - System.Web.UI.Control.IsChildControlStateCleared
+  - System.Web.UI.Control.IsLiteralContent
+  - System.Web.UI.Control.IsTrackingViewState
+  - System.Web.UI.Control.IsViewStateEnabled
+  - System.Web.UI.Control.Load
+  - System.Web.UI.Control.LoadControlState(System.Object)
+  - System.Web.UI.Control.LoadViewStateByID
+  - System.Web.UI.Control.MapPathSecure(System.String)
+  - System.Web.UI.Control.NamingContainer
+  - System.Web.UI.Control.OnBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.OnDataBinding(System.EventArgs)
+  - System.Web.UI.Control.OnInit(System.EventArgs)
+  - System.Web.UI.Control.OnLoad(System.EventArgs)
+  - System.Web.UI.Control.OnUnload(System.EventArgs)
+  - System.Web.UI.Control.OpenFile(System.String)
+  - System.Web.UI.Control.Page
+  - System.Web.UI.Control.Parent
+  - System.Web.UI.Control.PreRender
+  - System.Web.UI.Control.RaiseBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.RemovedControl(System.Web.UI.Control)
+  - System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter,System.Web.UI.Adapters.ControlAdapter)
+  - System.Web.UI.Control.RenderingCompatibility
+  - System.Web.UI.Control.ResolveAdapter
+  - System.Web.UI.Control.ResolveClientUrl(System.String)
+  - System.Web.UI.Control.ResolveUrl(System.String)
+  - System.Web.UI.Control.SaveControlState
+  - System.Web.UI.Control.SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.SetRenderMethodDelegate(System.Web.UI.RenderMethod)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object,System.Object)
+  - System.Web.UI.Control.Site
+  - System.Web.UI.Control.System#Web#UI#IControlBuilderAccessor#ControlBuilder
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#GetDesignModeState
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetOwnerControl(System.Web.UI.Control)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#UserData
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#DataBindings
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#HasDataBindings
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#Expressions
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#HasExpressions
+  - System.Web.UI.Control.System#Web#UI#IParserAccessor#AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.TemplateControl
+  - System.Web.UI.Control.TemplateSourceDirectory
+  - System.Web.UI.Control.UniqueID
+  - System.Web.UI.Control.Unload
+  - System.Web.UI.Control.ValidateRequestMode
+  - System.Web.UI.Control.ViewState
+  - System.Web.UI.Control.ViewStateIgnoresCase
+  - System.Web.UI.Control.ViewStateMode
+  - System.Web.UI.Control.Visible
+  - System.Web.UI.WebControls.WebControl.AccessKey
+  - System.Web.UI.WebControls.WebControl.ApplyStyle(System.Web.UI.WebControls.Style)
+  - System.Web.UI.WebControls.WebControl.Attributes
+  - System.Web.UI.WebControls.WebControl.BackColor
+  - System.Web.UI.WebControls.WebControl.BorderColor
+  - System.Web.UI.WebControls.WebControl.BorderStyle
+  - System.Web.UI.WebControls.WebControl.BorderWidth
+  - System.Web.UI.WebControls.WebControl.ControlStyle
+  - System.Web.UI.WebControls.WebControl.ControlStyleCreated
+  - System.Web.UI.WebControls.WebControl.CopyBaseAttributes(System.Web.UI.WebControls.WebControl)
+  - System.Web.UI.WebControls.WebControl.CreateControlStyle
+  - System.Web.UI.WebControls.WebControl.CssClass
+  - System.Web.UI.WebControls.WebControl.DisabledCssClass
+  - System.Web.UI.WebControls.WebControl.Enabled
+  - System.Web.UI.WebControls.WebControl.EnableTheming
+  - System.Web.UI.WebControls.WebControl.Font
+  - System.Web.UI.WebControls.WebControl.ForeColor
+  - System.Web.UI.WebControls.WebControl.HasAttributes
+  - System.Web.UI.WebControls.WebControl.Height
+  - System.Web.UI.WebControls.WebControl.IsEnabled
+  - System.Web.UI.WebControls.WebControl.LoadViewState(System.Object)
+  - System.Web.UI.WebControls.WebControl.MergeStyle(System.Web.UI.WebControls.Style)
+  - System.Web.UI.WebControls.WebControl.RenderBeginTag(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.WebControls.WebControl.RenderContents(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.WebControls.WebControl.RenderEndTag(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.WebControls.WebControl.SaveViewState
+  - System.Web.UI.WebControls.WebControl.SkinID
+  - System.Web.UI.WebControls.WebControl.Style
+  - System.Web.UI.WebControls.WebControl.SupportsDisabledAttribute
+  - System.Web.UI.WebControls.WebControl.System#Web#UI#IAttributeAccessor#GetAttribute(System.String)
+  - System.Web.UI.WebControls.WebControl.System#Web#UI#IAttributeAccessor#SetAttribute(System.String,System.String)
+  - System.Web.UI.WebControls.WebControl.TabIndex
+  - System.Web.UI.WebControls.WebControl.TagKey
+  - System.Web.UI.WebControls.WebControl.TagName
+  - System.Web.UI.WebControls.WebControl.ToolTip
+  - System.Web.UI.WebControls.WebControl.TrackViewState
+  - System.Web.UI.WebControls.WebControl.Width
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.#ctor
+  id: '#ctor'
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: FileUpload()
+  nameWithType: FileUpload.FileUpload()
+  fullName: System.Web.UI.WebControls.FileUpload.FileUpload()
+  type: Constructor
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> class."
+  remarks: "Use the FileUpload constructor to initialize a new instance of the <xref:System.Web.UI.WebControls.FileUpload> class. The <xref:System.Web.UI.WebControls.FileUpload> control does not automatically save a file to the server after the user selects the file to upload. You must explicitly provide a control or mechanism to allow the user to submit the specified file. For example, you can provide a button that the user clicks to upload the file."
+  example:
+  - "The following example demonstrates how to initialize a new instance of the <xref:System.Web.UI.WebControls.FileUpload> class. Note that this example demonstrates the constructor syntax but does not add functionality to the control after it is created.  \n  \n This example is part of a larger example provided for the <xref:System.Web.UI.WebControls.FileUpload> class.  \n  \n [!code-vb[FileUploadCstr#1](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_212_1.aspx)]"
+  syntax:
+    content: public FileUpload ();
+    parameters: []
+  overload: System.Web.UI.WebControls.FileUpload.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.AddAttributesToRender(System.Web.UI.HtmlTextWriter)
+  id: AddAttributesToRender(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: AddAttributesToRender(HtmlTextWriter)
+  nameWithType: FileUpload.AddAttributesToRender(HtmlTextWriter)
+  fullName: System.Web.UI.WebControls.FileUpload.AddAttributesToRender(HtmlTextWriter)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Adds the HTML attributes and styles of a <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control to render to the specified <see cref=&quot;T:System.Web.UI.HtmlTextWriter&quot;></see> object."
+  remarks: "The AddAttributesToRender method is primarily used by control developers to insert the appropriate attributes and styles to the <xref:System.Web.UI.HtmlTextWriter?displayProperty=fullName> output stream for a <xref:System.Web.UI.WebControls.FileUpload> control. The AddAttributesToRender method overrides the <xref:System.Web.UI.WebControls.WebControl.AddAttributesToRender%2A?displayProperty=fullName> method."
+  syntax:
+    content: protected override void AddAttributesToRender (System.Web.UI.HtmlTextWriter writer);
+    parameters:
+    - id: writer
+      type: System.Web.UI.HtmlTextWriter
+      description: "An  that represents the output stream to render HTML content on the client."
+  overload: System.Web.UI.WebControls.FileUpload.AddAttributesToRender*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.AllowMultiple
+  id: AllowMultiple
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: AllowMultiple
+  nameWithType: FileUpload.AllowMultiple
+  fullName: System.Web.UI.WebControls.FileUpload.AllowMultiple
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a value that specifies whether multiple files can be selected for upload."
+  syntax:
+    content: public virtual bool AllowMultiple { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if multiple files can be selected; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.FileUpload.AllowMultiple*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.FileBytes
+  id: FileBytes
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: FileBytes
+  nameWithType: FileUpload.FileBytes
+  fullName: System.Web.UI.WebControls.FileUpload.FileBytes
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets an array of the bytes in a file that is specified by using a <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control."
+  remarks: "The <xref:System.Web.UI.WebControls.FileUpload> control does not automatically read the file from the client. You must explicitly provide a control or mechanism to allow the user to submit the specified file. For example, you can provide a button that the user can click to upload the file. The code that you write to save the specified file could call the FileBytes property, which returns the contents of the file.       Before calling the FileBytes property, you should use the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> property to verify that the <xref:System.Web.UI.WebControls.FileUpload> control contains a file to upload. If the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> returns `true`, call the FileBytes property. If it returns `false`, display a message to the user indicating that the control does not contain a file. If you do not provide error-handling code to verify that a file exists, an attempt to save a nonexistent file throws an <xref:System.Web.HttpException> exception."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control. When the user clicks the **Upload file** button, the contents of the file are displayed as bytes in a text box on the page. This example uses the FileBytes property to upload the entire file.  \n  \n [!code-cs[FileUploadFileBytes#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_816_1.aspx)]\n [!code-vb[FileUploadFileBytes#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_816_1.aspx)]"
+  syntax:
+    content: public byte[] FileBytes { get; }
+    return:
+      type: System.Byte[]
+      description: "A &lt;xref:System.Byte&gt; array that contains the contents of the specified file."
+  overload: System.Web.UI.WebControls.FileUpload.FileBytes*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The entire file was not read."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.FileContent
+  id: FileContent
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: FileContent
+  nameWithType: FileUpload.FileContent
+  fullName: System.Web.UI.WebControls.FileUpload.FileContent
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets a &lt;xref:System.IO.Stream&gt; object that points to a file to upload using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control."
+  remarks: "The FileContent property gets a <xref:System.IO.Stream> object that points to a file to upload by using the <xref:System.Web.UI.WebControls.FileUpload> control. Use the FileContent property to access the contents of the file. For example, you can use the <xref:System.IO.Stream> object that is returned by this property to read the contents of the file as bytes and store them in a byte array."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control. The FileContent property is used to read the contents of the file into a byte array. When the user clicks the **Upload file** button, the contents of the file are displayed as bytes in a text box on the page.  \n  \n [!code-cs[FileUpload.FileContent#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_458_1.aspx)]\n [!code-vb[FileUpload.FileContent#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_458_1.aspx)]"
+  syntax:
+    content: public System.IO.Stream FileContent { get; }
+    return:
+      type: System.IO.Stream
+      description: "A &lt;xref:System.IO.Stream&gt; that points to a file to upload using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see>."
+  overload: System.Web.UI.WebControls.FileUpload.FileContent*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.FileName
+  id: FileName
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: FileName
+  nameWithType: FileUpload.FileName
+  fullName: System.Web.UI.WebControls.FileUpload.FileName
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets the name of a file on a client to upload using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control."
+  remarks: "Gets the name of a file on a client to upload using the <xref:System.Web.UI.WebControls.FileUpload> control. The file name that the FileName property returns does not include the path of the file on the client."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control that saves files to a path that is specified in code. The FileName property is used to get the name of the file to upload. The <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called to save the file to the specified path on the server, using the same name the file has on the client. Note that this example demonstrates the basic syntax for this control, but does not demonstrate all the necessary error checking that should be done before saving the file. For a more complete example, see <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A>.  \n  \n [!code-vb[FileUploadClass1#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_813_1.aspx)]\n [!code-cs[FileUploadClass1#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_813_1.aspx)]"
+  syntax:
+    content: public string FileName { get; }
+    return:
+      type: System.String
+      description: "A string that specifies the name of a file on a client to upload using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see>."
+  overload: System.Web.UI.WebControls.FileUpload.FileName*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.HasFile
+  id: HasFile
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: HasFile
+  nameWithType: FileUpload.HasFile
+  fullName: System.Web.UI.WebControls.FileUpload.HasFile
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets a value indicating whether the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control contains a file."
+  remarks: "The HasFile property gets a value indicating whether the <xref:System.Web.UI.WebControls.FileUpload> control contains a file to upload. Use this property to verify that a file to upload exists before performing operations on the file. For example, before calling the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method to save the file to disk, use the HasFile property to verify that the file exists. If HasFile returns `true`, call the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method. If it returns `false`, display a message to the user indicating that the control does not contain a file."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control that performs error checking. Before saving the file, the HasFile method is called to verify that the control contains a file to upload. In addition, the <xref:System.IO.File.Exists%2A?displayProperty=fullName> method is called to check whether a file with the same name already occurs in the path. If it does, the name of the file to upload is prefixed with an underscore character before the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method is called. This prevents the existing file from being overwritten.  \n  \n [!code-vb[FileUpload.SaveAs#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_287_1.aspx)]\n [!code-cs[FileUpload.SaveAs#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_287_1.aspx)]"
+  syntax:
+    content: public bool HasFile { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> contains a file; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.FileUpload.HasFile*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.HasFiles
+  id: HasFiles
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: HasFiles
+  nameWithType: FileUpload.HasFiles
+  fullName: System.Web.UI.WebControls.FileUpload.HasFiles
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets a value that indicates whether any files have been uploaded."
+  remarks: "This method also returns `false` if an empty file (zero bytes) is uploaded."
+  syntax:
+    content: public bool HasFiles { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if any files have been uploaded; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.FileUpload.HasFiles*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.OnPreRender(System.EventArgs)
+  id: OnPreRender(System.EventArgs)
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: OnPreRender(EventArgs)
+  nameWithType: FileUpload.OnPreRender(EventArgs)
+  fullName: System.Web.UI.WebControls.FileUpload.OnPreRender(EventArgs)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Raises the <see cref=&quot;E:System.Web.UI.Control.PreRender&quot;></see> event for the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control."
+  remarks: "The OnPreRender method notifies the <xref:System.Web.UI.WebControls.FileUpload> control to perform any necessary pre-rendering steps before saving view state and rendering content."
+  syntax:
+    content: protected override void OnPreRender (EventArgs e);
+    parameters:
+    - id: e
+      type: System.EventArgs
+      description: "An <xref:System.EventArgs?displayProperty=fullName> object that contains the event data."
+  overload: System.Web.UI.WebControls.FileUpload.OnPreRender*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.PostedFile
+  id: PostedFile
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: PostedFile
+  nameWithType: FileUpload.PostedFile
+  fullName: System.Web.UI.WebControls.FileUpload.PostedFile
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets the underlying <see cref=&quot;T:System.Web.HttpPostedFile&quot;></see> object for a file that is uploaded by using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control."
+  remarks: "The PostedFile property gets the underlying <xref:System.Web.HttpPostedFile> object for a file that is uploaded by using the <xref:System.Web.UI.WebControls.FileUpload> control. Use this property to access additional properties on the uploaded file.       You can use the <xref:System.Web.HttpPostedFile.ContentLength%2A> property to get the length of the file. You can use the <xref:System.Web.HttpPostedFile.ContentType%2A> property to get the MIME content type of the file. In addition, you can use the PostedFile property to access the <xref:System.Web.HttpPostedFile.FileName%2A> property, the <xref:System.Web.HttpPostedFile.InputStream%2A> property, and the <xref:System.Web.HttpPostedFile.SaveAs%2A> method. However, the same functionality is provided by the <xref:System.Web.UI.WebControls.FileUpload.FileName%2A> property, the <xref:System.Web.UI.WebControls.FileUpload.FileContent%2A> property, and the <xref:System.Web.UI.WebControls.FileUpload.SaveAs%2A> method."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control. When the user clicks the **Upload file** button, the contents of the file are displayed as bytes in a text box on the page. This example uses the PostedFile property to access the <xref:System.Web.HttpPostedFile.ContentLength%2A?displayProperty=fullName> property. The <xref:System.Web.HttpPostedFile.ContentLength%2A> property is used to determine the length of the file before copying the file contents to a byte array.  \n  \n [!code-cs[FileUpload.FileContent#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_462_1.aspx)]\n [!code-vb[FileUpload.FileContent#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_462_1.aspx)]"
+  syntax:
+    content: public System.Web.HttpPostedFile PostedFile { get; }
+    return:
+      type: System.Web.HttpPostedFile
+      description: "An <see cref=&quot;T:System.Web.HttpPostedFile&quot;></see> for a file uploaded by using the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see>."
+  overload: System.Web.UI.WebControls.FileUpload.PostedFile*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.PostedFiles
+  id: PostedFiles
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: PostedFiles
+  nameWithType: FileUpload.PostedFiles
+  fullName: System.Web.UI.WebControls.FileUpload.PostedFiles
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets the collection of uploaded files."
+  syntax:
+    content: public System.Collections.Generic.IList<System.Web.HttpPostedFile> PostedFiles { get; }
+    return:
+      type: System.Collections.Generic.IList{System.Web.HttpPostedFile}
+      description: "The collection of uploaded files."
+  overload: System.Web.UI.WebControls.FileUpload.PostedFiles*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.Render(System.Web.UI.HtmlTextWriter)
+  id: Render(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: Render(HtmlTextWriter)
+  nameWithType: FileUpload.Render(HtmlTextWriter)
+  fullName: System.Web.UI.WebControls.FileUpload.Render(HtmlTextWriter)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Sends the <see cref=&quot;T:System.Web.UI.WebControls.FileUpload&quot;></see> control content to the specified <see cref=&quot;T:System.Web.UI.HtmlTextWriter&quot;></see> object, which writes the content to render on the client."
+  remarks: "The Render method sends the <xref:System.Web.UI.WebControls.FileUpload> control content to the specified <xref:System.Web.UI.HtmlTextWriter?displayProperty=fullName> object, which writes the content to render on the client."
+  syntax:
+    content: protected override void Render (System.Web.UI.HtmlTextWriter writer);
+    parameters:
+    - id: writer
+      type: System.Web.UI.HtmlTextWriter
+      description: "The  object that receives the  control content."
+  overload: System.Web.UI.WebControls.FileUpload.Render*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.FileUpload.SaveAs(System.String)
+  id: SaveAs(System.String)
+  parent: System.Web.UI.WebControls.FileUpload
+  langs:
+  - csharp
+  name: SaveAs(String)
+  nameWithType: FileUpload.SaveAs(String)
+  fullName: System.Web.UI.WebControls.FileUpload.SaveAs(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Saves the contents of an uploaded file to a specified path on the Web server."
+  remarks: "The SaveAs method saves the contents of an uploaded file to a specified path on the Web server.       The <xref:System.Web.UI.WebControls.FileUpload> control does not automatically save a file to the server after the user selects the file to upload. You must explicitly provide a control or mechanism to allow the user to submit the specified file. For example, you can provide a button that the user clicks to upload the file. The code that you write to save the specified file should call the SaveAs method, which saves the contents of a file to a specified path on the server. Typically, the SaveAs method is called in an event-handling method for an event that raises a post back to the server. For example, if you provide a button to submit a file, the code to save the file to the server could then be included inside the event-handling method for the click event.       When you call the SaveAs method, you must specify the full path of the directory on the server in which to save the uploaded file. If you do not explicitly specify a path in your application code, an <xref:System.Web.HttpException> exception is thrown when a user attempts to upload a file. This behavior helps keep the files on the server secure, by not allowing users to specify a path in which to save the files that they upload.       Before calling the SaveAs method, you should use the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> property to verify that the <xref:System.Web.UI.WebControls.FileUpload> control contains a file to upload. If the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> returns `true`, call the SaveAs method. If it returns `false`, display a message to the user indicating that the control does not contain a file. If you do not provide error-handling code to verify that a file exists, an attempt to save a nonexistent file throws an <xref:System.Web.HttpException> exception.       For a call to the SaveAs to work, the ASP.NET application must have write access to the directory on the server. There are two ways that the application can get write access. You can explicitly grant write access to the account under which the application is running, in the directory in which the uploaded files will be saved. Alternatively, you can increase the level of trust that is granted to the ASP.NET application. To get write access to the executing directory for the application, the application must be granted the <xref:System.Web.AspNetHostingPermission> object with the trust level set to the <xref:System.Web.AspNetHostingPermissionLevel?displayProperty=fullName> value. Increasing the level of trust increases the application&quot;s access to resources on the server. Note that this is not a secure approach, because a malicious user who gains control of your application will also be able to run under this higher level of trust. It is a best practice to run an ASP.NET application in the context of a user who has the minimum privileges that are required for the application to run. For more information about security in ASP.NET applications, see [Basic Security Practices for Web Applications](../Topic/Basic%20Security%20Practices%20for%20Web%20Applications.md) and [ASP.NET Trust Levels and Policy Files](../Topic/ASP.NET%20Trust%20Levels%20and%20Policy%20Files.md)."
+  example:
+  - "The following example demonstrates how to create a <xref:System.Web.UI.WebControls.FileUpload> control that performs error checking. Before the file is saved, the <xref:System.Web.UI.WebControls.FileUpload.HasFile%2A> method is called to verify that a file to upload exists. In addition, the <xref:System.IO.File.Exists%2A?displayProperty=fullName> method is called to check whether a file that has the same name already exists in the path. If it does, the name of the file to upload is prefixed with a number before the SaveAs method is called. This prevents the existing file from being overwritten.  \n  \n [!code-vb[FileUpload.SaveAs#1](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_81_1.aspx)]\n [!code-cs[FileUpload.SaveAs#1](~/add/codesnippet/CSharp/m-system.web.ui.webcontr_81_1.aspx)]"
+  syntax:
+    content: public void SaveAs (string filename);
+    parameters:
+    - id: filename
+      type: System.String
+      description: "A string that specifies the full path of the location of the server on which to save the uploaded file."
+  overload: System.Web.UI.WebControls.FileUpload.SaveAs*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "\n    filename is not a full path."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Web.UI.WebControls.WebControl
+  isExternal: false
+  name: System.Web.UI.WebControls.WebControl
+- uid: System.Web.UI.WebControls.FileUpload.#ctor
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileUpload()
+  nameWithType: FileUpload.FileUpload()
+  fullName: System.Web.UI.WebControls.FileUpload.FileUpload()
+- uid: System.Web.UI.WebControls.FileUpload.AddAttributesToRender(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: AddAttributesToRender(HtmlTextWriter)
+  nameWithType: FileUpload.AddAttributesToRender(HtmlTextWriter)
+  fullName: System.Web.UI.WebControls.FileUpload.AddAttributesToRender(HtmlTextWriter)
+- uid: System.Web.UI.HtmlTextWriter
+  parent: System.Web.UI
+  isExternal: false
+  name: HtmlTextWriter
+  nameWithType: HtmlTextWriter
+  fullName: System.Web.UI.HtmlTextWriter
+- uid: System.Web.UI.WebControls.FileUpload.AllowMultiple
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: AllowMultiple
+  nameWithType: FileUpload.AllowMultiple
+  fullName: System.Web.UI.WebControls.FileUpload.AllowMultiple
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.UI.WebControls.FileUpload.FileBytes
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileBytes
+  nameWithType: FileUpload.FileBytes
+  fullName: System.Web.UI.WebControls.FileUpload.FileBytes
+- uid: System.Byte[]
+  parent: System
+  isExternal: true
+  name: Byte
+  nameWithType: Byte
+  fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Web.UI.WebControls.FileUpload.FileContent
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileContent
+  nameWithType: FileUpload.FileContent
+  fullName: System.Web.UI.WebControls.FileUpload.FileContent
+- uid: System.IO.Stream
+  parent: System.IO
+  isExternal: true
+  name: Stream
+  nameWithType: Stream
+  fullName: System.IO.Stream
+- uid: System.Web.UI.WebControls.FileUpload.FileName
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileName
+  nameWithType: FileUpload.FileName
+  fullName: System.Web.UI.WebControls.FileUpload.FileName
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.UI.WebControls.FileUpload.HasFile
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: HasFile
+  nameWithType: FileUpload.HasFile
+  fullName: System.Web.UI.WebControls.FileUpload.HasFile
+- uid: System.Web.UI.WebControls.FileUpload.HasFiles
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: HasFiles
+  nameWithType: FileUpload.HasFiles
+  fullName: System.Web.UI.WebControls.FileUpload.HasFiles
+- uid: System.Web.UI.WebControls.FileUpload.OnPreRender(System.EventArgs)
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: OnPreRender(EventArgs)
+  nameWithType: FileUpload.OnPreRender(EventArgs)
+  fullName: System.Web.UI.WebControls.FileUpload.OnPreRender(EventArgs)
+- uid: System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.Web.UI.WebControls.FileUpload.PostedFile
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: PostedFile
+  nameWithType: FileUpload.PostedFile
+  fullName: System.Web.UI.WebControls.FileUpload.PostedFile
+- uid: System.Web.HttpPostedFile
+  parent: System.Web
+  isExternal: false
+  name: HttpPostedFile
+  nameWithType: HttpPostedFile
+  fullName: System.Web.HttpPostedFile
+- uid: System.Web.UI.WebControls.FileUpload.PostedFiles
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: PostedFiles
+  nameWithType: FileUpload.PostedFiles
+  fullName: System.Web.UI.WebControls.FileUpload.PostedFiles
+- uid: System.Collections.Generic.IList{System.Web.HttpPostedFile}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IList<HttpPostedFile>
+  nameWithType: IList<HttpPostedFile>
+  fullName: System.Collections.Generic.IList<System.Web.HttpPostedFile>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Web.HttpPostedFile>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.HttpPostedFile
+    name: HttpPostedFile
+    nameWithType: HttpPostedFile
+    fullName: HttpPostedFile
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Web.UI.WebControls.FileUpload.Render(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: Render(HtmlTextWriter)
+  nameWithType: FileUpload.Render(HtmlTextWriter)
+  fullName: System.Web.UI.WebControls.FileUpload.Render(HtmlTextWriter)
+- uid: System.Web.UI.WebControls.FileUpload.SaveAs(System.String)
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: SaveAs(String)
+  nameWithType: FileUpload.SaveAs(String)
+  fullName: System.Web.UI.WebControls.FileUpload.SaveAs(String)
+- uid: System.Web.UI.WebControls.FileUpload.#ctor*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileUpload
+  nameWithType: FileUpload.FileUpload
+- uid: System.Web.UI.WebControls.FileUpload.AddAttributesToRender*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: AddAttributesToRender
+  nameWithType: FileUpload.AddAttributesToRender
+- uid: System.Web.UI.WebControls.FileUpload.AllowMultiple*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: AllowMultiple
+  nameWithType: FileUpload.AllowMultiple
+- uid: System.Web.UI.WebControls.FileUpload.FileBytes*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileBytes
+  nameWithType: FileUpload.FileBytes
+- uid: System.Web.UI.WebControls.FileUpload.FileContent*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileContent
+  nameWithType: FileUpload.FileContent
+- uid: System.Web.UI.WebControls.FileUpload.FileName*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: FileName
+  nameWithType: FileUpload.FileName
+- uid: System.Web.UI.WebControls.FileUpload.HasFile*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: HasFile
+  nameWithType: FileUpload.HasFile
+- uid: System.Web.UI.WebControls.FileUpload.HasFiles*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: HasFiles
+  nameWithType: FileUpload.HasFiles
+- uid: System.Web.UI.WebControls.FileUpload.OnPreRender*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: OnPreRender
+  nameWithType: FileUpload.OnPreRender
+- uid: System.Web.UI.WebControls.FileUpload.PostedFile*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: PostedFile
+  nameWithType: FileUpload.PostedFile
+- uid: System.Web.UI.WebControls.FileUpload.PostedFiles*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: PostedFiles
+  nameWithType: FileUpload.PostedFiles
+- uid: System.Web.UI.WebControls.FileUpload.Render*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: Render
+  nameWithType: FileUpload.Render
+- uid: System.Web.UI.WebControls.FileUpload.SaveAs*
+  parent: System.Web.UI.WebControls.FileUpload
+  isExternal: false
+  name: SaveAs
+  nameWithType: FileUpload.SaveAs

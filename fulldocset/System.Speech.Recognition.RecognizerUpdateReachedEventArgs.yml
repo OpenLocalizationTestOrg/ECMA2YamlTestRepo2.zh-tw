@@ -1,0 +1,117 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  id: RecognizerUpdateReachedEventArgs
+  children:
+  - System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition
+  - System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken
+  langs:
+  - csharp
+  name: RecognizerUpdateReachedEventArgs
+  nameWithType: RecognizerUpdateReachedEventArgs
+  fullName: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  type: Class
+  summary: "Returns data from a <see cref=&quot;E:System.Speech.Recognition.SpeechRecognitionEngine.RecognizerUpdateReached&quot;></see> or a <see cref=&quot;E:System.Speech.Recognition.SpeechRecognizer.RecognizerUpdateReached&quot;></see> event."
+  remarks: "`RecognizerUpdateReached` events provide a mechanism for pausing a speech recognition engine to apply atomic and synchronous modifications, such as loading and unloading grammars.       If your application is using a <xref:System.Speech.Recognition.SpeechRecognitionEngine> instance to manage recognition, it can use one of the <xref:System.Speech.Recognition.SpeechRecognitionEngine.RequestRecognizerUpdate%2A?displayProperty=fullName> methods to request that the engine pauses to receive an update. The <xref:System.Speech.Recognition.SpeechRecognitionEngine> instance raises a <xref:System.Speech.Recognition.SpeechRecognitionEngine.RecognizerUpdateReached?displayProperty=fullName> event when it is ready for the update.       While a <xref:System.Speech.Recognition.SpeechRecognitionEngine> instance is paused, you can load, unload, enable, and disable <xref:System.Speech.Recognition.Grammar> objects, and modify values for the <xref:System.Speech.Recognition.SpeechRecognitionEngine.BabbleTimeout%2A>, <xref:System.Speech.Recognition.SpeechRecognitionEngine.InitialSilenceTimeout%2A>, and <xref:System.Speech.Recognition.SpeechRecognitionEngine.EndSilenceTimeout%2A> properties.       If your application is using a <xref:System.Speech.Recognition.SpeechRecognizer> instance to manage recognition, it can use one of the <xref:System.Speech.Recognition.SpeechRecognizer.RequestRecognizerUpdate%2A?displayProperty=fullName> methods to request that the engine pauses to receive an update. The <xref:System.Speech.Recognition.SpeechRecognizer> instance raises a <xref:System.Speech.Recognition.SpeechRecognizer.RecognizerUpdateReached?displayProperty=fullName> event when it is ready for the update.       While a <xref:System.Speech.Recognition.SpeechRecognizer> instance is paused, you can load, unload, enable, and disable <xref:System.Speech.Recognition.Grammar> objects.       When handling <xref:System.Speech.Recognition.SpeechRecognitionEngine.RecognizerUpdateReached?displayProperty=fullName> and  <xref:System.Speech.Recognition.SpeechRecognizer.RecognizerUpdateReached?displayProperty=fullName> events, a recognition engine pauses until the event handler returns.       RecognizerUpdateReachedEventArgs derives from <xref:System.EventArgs>."
+  example:
+  - "The following example shows a console application that loads and unloads <xref:System.Speech.Recognition.Grammar> objects. The application uses the <xref:System.Speech.Recognition.SpeechRecognitionEngine.RequestRecognizerUpdate%2A> method to request the speech recognition engine to pause so it can receive an update. The application then loads or unloads a <xref:System.Speech.Recognition.Grammar> object.  \n  \n At each update, a handler for <xref:System.Speech.Recognition.SpeechRecognitionEngine.RecognizerUpdateReached?displayProperty=fullName> event writes the name and status of the currently loaded <xref:System.Speech.Recognition.Grammar> objects to the console. As grammars are loaded and unloaded, the application first recognizes the names of farm animals, then the names of farm animals and the names of fruits, then only the names of fruits.  \n  \n```c#  \nusing System;  \nusing System.Speech.Recognition;  \nusing System.Collections.Generic;  \nusing System.Threading;  \n  \nnamespace SampleRecognition  \n{  \n  class Program  \n  {  \n    private static SpeechRecognitionEngine recognizer;  \n    public static void Main(string[] args)  \n    {  \n  \n      // Initialize an in-process speech recognition engine and configure its input.  \n      using (recognizer = new SpeechRecognitionEngine(new System.Globalization.CultureInfo(\"en-US\")))  \n      {  \n        recognizer.SetInputToDefaultAudioDevice();  \n  \n        // Create the first grammar - Farm.  \n        Choices animals = new Choices(new string[] { \"cow\", \"pig\", \"goat\" });  \n        GrammarBuilder farm = new GrammarBuilder(animals);  \n        Grammar farmAnimals = new Grammar(farm);  \n        farmAnimals.Name = \"Farm\";  \n  \n        // Create the second grammar - Fruit.  \n        Choices fruit = new Choices(new string[] { \"apples\", \"peaches\", \"oranges\" });  \n        GrammarBuilder favorite = new GrammarBuilder(fruit);  \n        Grammar favoriteFruit = new Grammar(favorite);  \n        favoriteFruit.Name = \"Fruit\";  \n  \n        // Attach event handlers.  \n        recognizer.SpeechRecognized +=  \n          new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);  \n        recognizer.RecognizerUpdateReached +=  \n          new EventHandler<RecognizerUpdateReachedEventArgs>(recognizer_RecognizerUpdateReached);  \n        recognizer.SpeechRecognitionRejected +=  \n          new EventHandler<SpeechRecognitionRejectedEventArgs>(recognizer_SpeechRecognitionRejected);  \n  \n        // Load the Farm grammar.  \n        recognizer.LoadGrammar(farmAnimals);  \n  \n        // Start asynchronous, continuous recognition.  \n        recognizer.RecognizeAsync(RecognizeMode.Multiple);  \n        Console.WriteLine(\"Starting asynchronous, continuous recognition\");  \n        Console.WriteLine(\"  Farm grammar is loaded and enabled.\");  \n  \n        // Pause to recognize farm animals.  \n        Thread.Sleep(7000);  \n        Console.WriteLine();  \n  \n        // Request an update and load the Fruit grammar.  \n        recognizer.RequestRecognizerUpdate();  \n        recognizer.LoadGrammarAsync(favoriteFruit);  \n        Thread.Sleep(7000);  \n  \n        // Request an update and unload the Farm grammar.  \n        recognizer.RequestRecognizerUpdate();  \n        recognizer.UnloadGrammar(farmAnimals);  \n        Thread.Sleep(7000);  \n      }  \n  \n      // Keep the console window open.  \n      Console.WriteLine();  \n      Console.WriteLine(\"Press any key to exit...\");  \n      Console.ReadKey();  \n    }  \n  \n    // At the update, get the names and enabled status of the currently loaded grammars.  \n    public static void recognizer_RecognizerUpdateReached(  \n      object sender, RecognizerUpdateReachedEventArgs e)  \n    {  \n      Console.WriteLine();  \n      Console.WriteLine(\"Update reached:\");  \n      Thread.Sleep(1000);  \n  \n      string qualifier;  \n      List<Grammar> grammars = new List<Grammar>(recognizer.Grammars);  \n      foreach (Grammar g in grammars)  \n      {  \n        qualifier = (g.Enabled) ? \"enabled\" : \"disabled\";  \n        Console.WriteLine(\"  {0} grammar is loaded and {1}.\",  \n        g.Name, qualifier);  \n      }  \n    }  \n  \n    // Write the text of the recognized phrase to the console.  \n    static void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)  \n    {  \n      Console.WriteLine(\"    Speech recognized: \" + e.Result.Text);  \n    }  \n  \n    // Write a message to the console when recognition fails.  \n    static void recognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)  \n    {  \n      Console.WriteLine(\"    Recognition attempt failed\");  \n    }  \n  }  \n}  \n  \n```"
+  syntax:
+    content: 'public class RecognizerUpdateReachedEventArgs : EventArgs'
+  inheritance:
+  - System.EventArgs
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition
+  id: AudioPosition
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  langs:
+  - csharp
+  name: AudioPosition
+  nameWithType: RecognizerUpdateReachedEventArgs.AudioPosition
+  fullName: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets the audio position associated with the event."
+  remarks: "Applications can use the location indicated by AudioPosition to access audio input that occurred while the recognition engine was paused."
+  syntax:
+    content: public TimeSpan AudioPosition { get; }
+    return:
+      type: System.TimeSpan
+      description: "Returns the location within the speech buffer of a <see cref=&quot;T:System.Speech.Recognition.SpeechRecognizer&quot;></see> or a <see cref=&quot;T:System.Speech.Recognition.SpeechRecognitionEngine&quot;></see> when it pauses and raises a `RecognizerUpdateReached` event."
+  overload: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken
+  id: UserToken
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  langs:
+  - csharp
+  name: UserToken
+  nameWithType: RecognizerUpdateReachedEventArgs.UserToken
+  fullName: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets the `UserToken` passed to the system when an application calls &lt;xref:System.Speech.Recognition.SpeechRecognitionEngine.RequestRecognizerUpdate%2A&gt; or &lt;xref:System.Speech.Recognition.SpeechRecognizer.RequestRecognizerUpdate%2A&gt;."
+  remarks: "An application specifies a `UserToken` when it requests the generation of a `RecognizerUpdateReached` event by calling one of the <xref:System.Speech.Recognition.SpeechRecognitionEngine.RequestRecognizerUpdate%2A?displayProperty=fullName> or <xref:System.Speech.Recognition.SpeechRecognizer.RequestRecognizerUpdate%2A?displayProperty=fullName> methods that take a `userToken` parameter."
+  example:
+  - "The following example shows a console application that loads and unloads <xref:System.Speech.Recognition.Grammar> objects. The application uses the <xref:System.Speech.Recognition.SpeechRecognitionEngine.RequestRecognizerUpdate%2A> method to request the speech recognition engine to pause so it can receive an update. The method passes in a <xref:System.String> object for the `userToken` parameter that describes what the application will recognize after the update. The application then loads or unloads a <xref:System.Speech.Recognition.Grammar> object.  \n  \n At each update, a handler for <xref:System.Speech.Recognition.SpeechRecognitionEngine.RecognizerUpdateReached?displayProperty=fullName> event writes the contents of `userToken` to the console. As grammars are loaded and unloaded, the application first recognizes the names of farm animals, then the names of farm animals and the names of fruits, then only the names of fruits.  \n  \n```  \nusing System;  \nusing System.Speech.Recognition;  \nusing System.Collections.Generic;  \nusing System.Threading;  \n  \nnamespace SampleRecognition  \n{  \n  class Program  \n  {  \n    private static SpeechRecognitionEngine recognizer;  \n    public static void Main(string[] args)  \n    {  \n  \n      // Initialize an in-process speech recognition engine and configure its input.  \n      using (recognizer = new SpeechRecognitionEngine(  \n        new System.Globalization.CultureInfo(\"en-US\")))  \n      {  \n        recognizer.SetInputToDefaultAudioDevice();  \n  \n        // Create the first grammar - Farm.  \n        Choices animals = new Choices(new string[] { \"cow\", \"pig\", \"goat\" });  \n        GrammarBuilder farm = new GrammarBuilder(animals);  \n        Grammar farmAnimals = new Grammar(farm);  \n        farmAnimals.Name = \"Farm\";  \n  \n        // Create the second grammar - Fruit.  \n        Choices fruit = new Choices(new string[] { \"apples\", \"peaches\", \"oranges\" });  \n        GrammarBuilder favorite = new GrammarBuilder(fruit);  \n        Grammar favoriteFruit = new Grammar(favorite);  \n        favoriteFruit.Name = \"Fruit\";  \n  \n        // Attach event handlers.  \n        recognizer.SpeechRecognized +=  \n          new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);  \n        recognizer.RecognizerUpdateReached +=  \n          new EventHandler<RecognizerUpdateReachedEventArgs>(recognizer_RecognizerUpdateReached);  \n        recognizer.SpeechRecognitionRejected +=  \n          new EventHandler<SpeechRecognitionRejectedEventArgs>(recognizer_SpeechRecognitionRejected);  \n  \n        // Load the farmAnimals grammar  \n        recognizer.LoadGrammar(farmAnimals);  \n  \n        // Start continuous, asynchronous recognition.  \n        recognizer.RecognizeAsync(RecognizeMode.Multiple);  \n        Console.WriteLine(\"Starting asynchronous recognition...\");  \n        Console.WriteLine(\"  Farm animals will now be recognized.\");  \n        Thread.Sleep(7000);  \n        Console.WriteLine();  \n  \n        // Load the Fruit grammar.  \n        string activeGrammars = \"Farm animals and fruits will now be recognized.\";  \n        recognizer.RequestRecognizerUpdate(activeGrammars);  \n        recognizer.LoadGrammarAsync(favoriteFruit);  \n        Console.WriteLine();  \n        Thread.Sleep(7000);  \n        Console.WriteLine();  \n  \n        // Unload the Farm grammar.  \n        string onlyFruit = \"Only fruits will now be recognized.\";  \n        recognizer.RequestRecognizerUpdate(onlyFruit);  \n        recognizer.UnloadGrammar(farmAnimals);  \n        Thread.Sleep(7000);  \n      }  \n  \n      // Keep the console window open.  \n      Console.WriteLine();  \n      Console.WriteLine(\"Press any key to exit...\");  \n      Console.ReadKey();  \n    }  \n  \n    // At the update, describe what the application will recognize next.  \n    public static void recognizer_RecognizerUpdateReached(object sender, RecognizerUpdateReachedEventArgs e)  \n    {  \n      Console.WriteLine(\"  Update reached: \" + e.UserToken);  \n    }  \n  \n    // Write the text of the recognized phrase to the console.  \n    static void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)  \n    {  \n      Console.WriteLine(\"    Speech recognized: \" + e.Result.Text);  \n    }  \n  \n    // Write a message to the console when recognition fails.  \n    static void recognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)  \n    {  \n      Console.WriteLine(\"    Recognition attempt failed\");  \n    }  \n  }  \n}  \n  \n```"
+  syntax:
+    content: public object UserToken { get; }
+    return:
+      type: System.Object
+      description: "Returns an object that contains the `UserToken`."
+  overload: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.EventArgs
+  isExternal: false
+  name: System.EventArgs
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  isExternal: false
+  name: AudioPosition
+  nameWithType: RecognizerUpdateReachedEventArgs.AudioPosition
+  fullName: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition
+- uid: System.TimeSpan
+  parent: System
+  isExternal: true
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  isExternal: false
+  name: UserToken
+  nameWithType: RecognizerUpdateReachedEventArgs.UserToken
+  fullName: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.AudioPosition*
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  isExternal: false
+  name: AudioPosition
+  nameWithType: RecognizerUpdateReachedEventArgs.AudioPosition
+- uid: System.Speech.Recognition.RecognizerUpdateReachedEventArgs.UserToken*
+  parent: System.Speech.Recognition.RecognizerUpdateReachedEventArgs
+  isExternal: false
+  name: UserToken
+  nameWithType: RecognizerUpdateReachedEventArgs.UserToken

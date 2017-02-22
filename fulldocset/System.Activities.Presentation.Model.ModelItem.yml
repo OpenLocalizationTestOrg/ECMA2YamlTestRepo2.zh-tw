@@ -1,0 +1,818 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Activities.Presentation.Model.ModelItem
+  id: ModelItem
+  children:
+  - System.Activities.Presentation.Model.ModelItem.#ctor
+  - System.Activities.Presentation.Model.ModelItem.Attributes
+  - System.Activities.Presentation.Model.ModelItem.BeginEdit
+  - System.Activities.Presentation.Model.ModelItem.BeginEdit(System.Boolean)
+  - System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String)
+  - System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String,System.Boolean)
+  - System.Activities.Presentation.Model.ModelItem.Content
+  - System.Activities.Presentation.Model.ModelItem.GetCurrentValue
+  - System.Activities.Presentation.Model.ModelItem.ItemType
+  - System.Activities.Presentation.Model.ModelItem.Name
+  - System.Activities.Presentation.Model.ModelItem.Parent
+  - System.Activities.Presentation.Model.ModelItem.Parents
+  - System.Activities.Presentation.Model.ModelItem.Properties
+  - System.Activities.Presentation.Model.ModelItem.PropertyChanged
+  - System.Activities.Presentation.Model.ModelItem.Root
+  - System.Activities.Presentation.Model.ModelItem.Source
+  - System.Activities.Presentation.Model.ModelItem.Sources
+  - System.Activities.Presentation.Model.ModelItem.ToString
+  - System.Activities.Presentation.Model.ModelItem.View
+  langs:
+  - csharp
+  name: ModelItem
+  nameWithType: ModelItem
+  fullName: System.Activities.Presentation.Model.ModelItem
+  type: Class
+  summary: "Represents a single item in the editing model. An item can be anything from a complex data structure down to a color or integer."
+  remarks: "You can access the item’s properties through its <xref:System.Activities.Presentation.Model.ModelItem.Properties%2A> collection and make changes to the values of the properties.       A ModelItem is a wrapper around the underlying data model of the designer. You can access the underlying model through the <xref:System.Activities.Presentation.Model.ModelItem.GetCurrentValue%2A> method.      > [!NOTE] >  Any changes you make to an object returned from the <xref:System.Activities.Presentation.Model.ModelItem.GetCurrentValue%2A> method will not be reflected by the serialization and undo systems of the designer."
+  example:
+  - "The ModelItem can be thought of as a thin proxy for an object at which it points. First define a simple `Animal` object.  \n  \n```  \n  \npublic class Animal  \n{  \n    // simple property  \n    public string Name { get; set; }  \n    // complex property   \n    public Location Residence { get; set; }   \n    // list   \n    public List<Animal> CloseRelatives { get; set; }  \n    // dictionary  \n    public Dictionary<string, object> Features { get; set; }   \n}  \n  \npublic class Location  \n{  \n    public string StreetAddress { get; set; }  \n    public string City { get; set; }  \n    public string State { get; set; }   \n}  \n  \n```  \n  \n Secondly, create an instance of that `Animal` and a ModelItem that is a proxy for it. The object can then be retrieved by calling <xref:System.Activities.Presentation.Model.ModelItem.GetCurrentValue%2A>. The following code also shows how to use other properties defined by ModelItem.  \n  \n```  \n  \nEditingContext ec = new EditingContext();  \nvar companion1 = new Animal { Name = \"Houdini the parakeet\" };  \nvar companion2 = new Animal { Name = \"Groucho the fish\" };  \nvar animal = new Animal   \n   {  \n      Name = \"Sasha the pug\",  \n      Residence = new Location   \n      {  \n         StreetAddress = \"123 Main Street\",  \n         City = \"AnyTown\",  \n         State = \"Washington\"  \n      },  \n      Features = new Dictionary<string, object> {   \n         {\"noise\", \"snort\" },  \n         {\"MeanTimeUntilNaps\", TimeSpan.FromMinutes(15) }  \n      },  \n      CloseRelatives = new List<Animal> { companion1, companion2 }   \n   };  \nModelTreeManager mtm = new ModelTreeManager(ec);  mtm.Load(animal);  \nModelItem mi = mtm.Root;  \n  \n//Testing other properties of the class  \nModelItem root = mtm.Root;  \nAssert.IsTrue(root.GetCurrentValue() == animal, \"GetCurrentValue() returns same object\");  \nAssert.IsTrue(root.ItemType == typeof(Animal),\"ItemType describes the item\");  \nAssert.IsTrue(root.Parent == null,\"root parent is null\");  \nAssert.IsTrue(root.Source == null, \"root source is null\");  \nAssert.IsTrue(((List<Animal>)root.Properties[\"CloseRelatives\"].ComputedValue)[0] == companion1,   \n   \"ComputedValue of prop == actual object\");  \nAssert.IsFalse(((List<Animal>)root.Properties[\"CloseRelatives\"].ComputedValue)[0] == companion2,   \n   \"ComputedValue of prop == actual object\");  \nAssert.AreEqual(root.Properties[\"Residence\"].  \n   Value.  \n   Properties[\"StreetAddress\"].  \n   Value.GetCurrentValue(), \"123 Main Street\", \"get actual value back out\");  \nAssert.AreEqual(root, root.Properties[\"Residence\"].Parent, \"property points to owner\");  \nModelItem location = root.Properties[\"Residence\"].Value;  \nAssert.AreEqual(root.Properties[\"Residence\"], location.Source, \"sources point to the right place\");  \n  \n```"
+  syntax:
+    content: 'public abstract class ModelItem : System.ComponentModel.INotifyPropertyChanged'
+  inheritance:
+  - System.Object
+  implements:
+  - System.ComponentModel.INotifyPropertyChanged
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.#ctor
+  id: '#ctor'
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: ModelItem()
+  nameWithType: ModelItem.ModelItem()
+  fullName: System.Activities.Presentation.Model.ModelItem.ModelItem()
+  type: Constructor
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Creates a new instance of the <see cref=&quot;T:System.Activities.Presentation.Model.ModelItem&quot;></see> class."
+  syntax:
+    content: protected ModelItem ();
+    parameters: []
+  overload: System.Activities.Presentation.Model.ModelItem.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Attributes
+  id: Attributes
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Attributes
+  nameWithType: ModelItem.Attributes
+  fullName: System.Activities.Presentation.Model.ModelItem.Attributes
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the attributes declared on this item."
+  syntax:
+    content: public abstract System.ComponentModel.AttributeCollection Attributes { get; }
+    return:
+      type: System.ComponentModel.AttributeCollection
+      description: "A collection that contains the attributes of the item."
+  overload: System.Activities.Presentation.Model.ModelItem.Attributes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit
+  id: BeginEdit
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: BeginEdit()
+  nameWithType: ModelItem.BeginEdit()
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit()
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Opens an editing scope for the designer. After an editing scope is open, all changes across all objects will be saved into the scope until the transaction is completed or reverted. Editing scopes can be nested, but must be committed in order."
+  remarks: "An editing scope allows multiple changes to the model to be applied as a single transaction. All of the changes made within the editing scope can be reverted at any time before the transaction is completed.       Editing scopes are global to the designer. An editing scope can be created for any item in the designer; you do not need to create an editing scope for the specific item you are changing."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelEditingScope BeginEdit ();
+    parameters: []
+    return:
+      type: System.Activities.Presentation.Model.ModelEditingScope
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.BeginEdit*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.Boolean)
+  id: BeginEdit(System.Boolean)
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: BeginEdit(Boolean)
+  nameWithType: ModelItem.BeginEdit(Boolean)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(Boolean)
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Opens an editing scope for the designer."
+  syntax:
+    content: public virtual System.Activities.Presentation.Model.ModelEditingScope BeginEdit (bool shouldApplyChangesImmediately);
+    parameters:
+    - id: shouldApplyChangesImmediately
+      type: System.Boolean
+      description: "\n     to indicate that the changes should be applied immediately; otherwise, ."
+    return:
+      type: System.Activities.Presentation.Model.ModelEditingScope
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.BeginEdit*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String)
+  id: BeginEdit(System.String)
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: BeginEdit(String)
+  nameWithType: ModelItem.BeginEdit(String)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(String)
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Opens an editing scope for the designer. After an editing scope is open, all changes across all objects will be saved into the scope until the transaction is completed or reverted. Editing scopes can be nested, but must be committed in order."
+  remarks: "An editing scope allows multiple changes to the model to be applied as a single transaction. All of the changes made within the editing scope can be reverted at any time before the transaction is completed.       Editing scopes are global to the designer. An editing scope can be created for any item in the designer; you do not need to create an editing scope for the specific item you are changing."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelEditingScope BeginEdit (string description);
+    parameters:
+    - id: description
+      type: System.String
+      description: "An optional description of the change. This will be set into the <xref:System.Activities.Presentation.Model.ModelEditingScope.Description%2A> property of the editing scope."
+    return:
+      type: System.Activities.Presentation.Model.ModelEditingScope
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.BeginEdit*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String,System.Boolean)
+  id: BeginEdit(System.String,System.Boolean)
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: BeginEdit(String,Boolean)
+  nameWithType: ModelItem.BeginEdit(String,Boolean)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(String,Boolean)
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Opens an editing scope for the designer."
+  syntax:
+    content: public virtual System.Activities.Presentation.Model.ModelEditingScope BeginEdit (string description, bool shouldApplyChangesImmediately);
+    parameters:
+    - id: description
+      type: System.String
+      description: "An optional description of the change. This will be set into the <xref:System.Activities.Presentation.Model.ModelEditingScope.Description%2A> property of the editing scope."
+    - id: shouldApplyChangesImmediately
+      type: System.Boolean
+      description: "\n     to indicate that the changes should be applied immediately; otherwise, ."
+    return:
+      type: System.Activities.Presentation.Model.ModelEditingScope
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.BeginEdit*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Content
+  id: Content
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Content
+  nameWithType: ModelItem.Content
+  fullName: System.Activities.Presentation.Model.ModelItem.Content
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the <xref uid=&quot;langword_csharp_ContentPropertyAttribute&quot; name=&quot;ContentPropertyAttribute&quot; href=&quot;&quot;></xref> of the item, or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelProperty Content { get; }
+    return:
+      type: System.Activities.Presentation.Model.ModelProperty
+      description: "The <xref uid=&quot;langword_csharp_ContentPropertyAttribute&quot; name=&quot;ContentPropertyAttribute&quot; href=&quot;&quot;></xref> of the item as a <see cref=&quot;T:System.Activities.Presentation.Model.ModelProperty&quot;></see>. If the <xref uid=&quot;langword_csharp_ContentPropertyAttribute&quot; name=&quot;ContentPropertyAttribute&quot; href=&quot;&quot;></xref> is not declared by the &lt;xref:System.Activities.Presentation.Model.ModelItem.ItemType%2A&gt; of this item, Content returns <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  overload: System.Activities.Presentation.Model.ModelItem.Content*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.GetCurrentValue
+  id: GetCurrentValue
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: GetCurrentValue()
+  nameWithType: ModelItem.GetCurrentValue()
+  fullName: System.Activities.Presentation.Model.ModelItem.GetCurrentValue()
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Returns the current value of the underlying model object that the <see cref=&quot;T:System.Activities.Presentation.Model.ModelItem&quot;></see> is wrapping."
+  remarks: "You can inspect this object, but you should not make any changes to it. Changes made to the object returned will not be incorporated into the designer. The GetCurrentValue method can return either an existing or new cloned instance of the object."
+  syntax:
+    content: public abstract object GetCurrentValue ();
+    parameters: []
+    return:
+      type: System.Object
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.GetCurrentValue*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.ItemType
+  id: ItemType
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: ItemType
+  nameWithType: ModelItem.ItemType
+  fullName: System.Activities.Presentation.Model.ModelItem.ItemType
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the type of object that the item represents."
+  syntax:
+    content: public abstract Type ItemType { get; }
+    return:
+      type: System.Type
+      description: "The type of object that the item represents."
+  overload: System.Activities.Presentation.Model.ModelItem.ItemType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Name
+  id: Name
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Name
+  nameWithType: ModelItem.Name
+  fullName: System.Activities.Presentation.Model.ModelItem.Name
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets or sets the name or ID of the item."
+  remarks: "Not all items need to have names, so this might return `null`. Depending on the type of item and where it sits in the hierarchy, it might not always be legal to set the Name on an item. If the <xref:System.Activities.Presentation.Model.ModelItem.ItemType%2A> of this item declares a `RuntimeNamePropertyAttribute`, the  Name property is a direct mapping to the property dictated by that attribute."
+  syntax:
+    content: public abstract string Name { get; set; }
+    return:
+      type: System.String
+      description: "The name or ID of the item as a &lt;xref:System.String&gt;."
+  overload: System.Activities.Presentation.Model.ModelItem.Name*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Parent
+  id: Parent
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Parent
+  nameWithType: ModelItem.Parent
+  fullName: System.Activities.Presentation.Model.ModelItem.Parent
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the item that is the parent of this item."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelItem Parent { get; }
+    return:
+      type: System.Activities.Presentation.Model.ModelItem
+      description: "A <see cref=&quot;T:System.Activities.Presentation.Model.ModelItem&quot;></see> that is the parent of this item. If an item is contained in a collection or dictionary, the object that owns the collection or dictionary is returned instead."
+  overload: System.Activities.Presentation.Model.ModelItem.Parent*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Parents
+  id: Parents
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Parents
+  nameWithType: ModelItem.Parents
+  fullName: System.Activities.Presentation.Model.ModelItem.Parents
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets all parents of this item."
+  syntax:
+    content: public abstract System.Collections.Generic.IEnumerable<System.Activities.Presentation.Model.ModelItem> Parents { get; }
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Activities.Presentation.Model.ModelItem}
+      description: "The parents of this item."
+  overload: System.Activities.Presentation.Model.ModelItem.Parents*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Properties
+  id: Properties
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Properties
+  nameWithType: ModelItem.Properties
+  fullName: System.Activities.Presentation.Model.ModelItem.Properties
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the public properties on this item."
+  remarks: "The set of properties returned might change based on attached properties or changes to the editing scope."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelPropertyCollection Properties { get; }
+    return:
+      type: System.Activities.Presentation.Model.ModelPropertyCollection
+      description: "A <see cref=&quot;T:System.Activities.Presentation.Model.ModelItemCollection&quot;></see> that contains the public properties of this item."
+  overload: System.Activities.Presentation.Model.ModelItem.Properties*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.PropertyChanged
+  id: PropertyChanged
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: PropertyChanged
+  nameWithType: ModelItem.PropertyChanged
+  fullName: System.Activities.Presentation.Model.ModelItem.PropertyChanged
+  type: Event
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Implements <xref uid=&quot;langword_csharp_INotifyPropertyChanged&quot; name=&quot;INotifyPropertyChanged&quot; href=&quot;&quot;></xref>. Use this event to listen for changes to the model. This is also used by the data binding features of WPF."
+  remarks: "Disconnect events from items when you are finished with them. Otherwise, you might prevent the garbage collector from disposing of an item that is no longer in use."
+  syntax:
+    content: public abstract event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+    return:
+      type: System.ComponentModel.PropertyChangedEventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Root
+  id: Root
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Root
+  nameWithType: ModelItem.Root
+  fullName: System.Activities.Presentation.Model.ModelItem.Root
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the item that is the root of this tree."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelItem Root { get; }
+    return:
+      type: System.Activities.Presentation.Model.ModelItem
+      description: "A <see cref=&quot;T:System.Activities.Presentation.Model.ModelItem&quot;></see> that is the root of this tree, or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if this item is not part of a tree."
+  overload: System.Activities.Presentation.Model.ModelItem.Root*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Source
+  id: Source
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Source
+  nameWithType: ModelItem.Source
+  fullName: System.Activities.Presentation.Model.ModelItem.Source
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets the property that provided this value."
+  remarks: "If the item represents the root of the object graph, this will return `null`. If an item is a member of a collection or dictionary, the property returned from Source will be a pseudo-property provided by the collection or dictionary. For other values, the Source property returns the property where the value was actually set. Therefore, if a value is being inherited, Source allows you to find out who originally provided the value."
+  syntax:
+    content: public abstract System.Activities.Presentation.Model.ModelProperty Source { get; }
+    return:
+      type: System.Activities.Presentation.Model.ModelProperty
+      description: "A <see cref=&quot;T:System.Activities.Presentation.Model.ModelProperty&quot;></see> that indicates the source of this value."
+  overload: System.Activities.Presentation.Model.ModelItem.Source*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.Sources
+  id: Sources
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: Sources
+  nameWithType: ModelItem.Sources
+  fullName: System.Activities.Presentation.Model.ModelItem.Sources
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets all the properties that hold this value."
+  syntax:
+    content: public abstract System.Collections.Generic.IEnumerable<System.Activities.Presentation.Model.ModelProperty> Sources { get; }
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Activities.Presentation.Model.ModelProperty}
+      description: "The sources of this value."
+  overload: System.Activities.Presentation.Model.ModelItem.Sources*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.ToString
+  id: ToString
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: ToString()
+  nameWithType: ModelItem.ToString()
+  fullName: System.Activities.Presentation.Model.ModelItem.ToString()
+  type: Method
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Returns a string representation of the underlying model object contained in this model item."
+  syntax:
+    content: public override string ToString ();
+    parameters: []
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Activities.Presentation.Model.ModelItem.ToString*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Presentation.Model.ModelItem.View
+  id: View
+  parent: System.Activities.Presentation.Model.ModelItem
+  langs:
+  - csharp
+  name: View
+  nameWithType: ModelItem.View
+  fullName: System.Activities.Presentation.Model.ModelItem.View
+  type: Property
+  assemblies:
+  - System.Activities.Presentation
+  namespace: System.Activities.Presentation.Model
+  summary: "Gets a <see cref=&quot;T:System.Windows.DependencyObject&quot;></see> that graphically represents this item."
+  syntax:
+    content: public abstract System.Windows.DependencyObject View { get; }
+    return:
+      type: System.Windows.DependencyObject
+      description: "A <see cref=&quot;T:System.Windows.DependencyObject&quot;></see> that graphically represents this item, or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if there is no such representation."
+  overload: System.Activities.Presentation.Model.ModelItem.View*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Activities.Presentation.Model.ModelItem.#ctor
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ModelItem()
+  nameWithType: ModelItem.ModelItem()
+  fullName: System.Activities.Presentation.Model.ModelItem.ModelItem()
+- uid: System.Activities.Presentation.Model.ModelItem.Attributes
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Attributes
+  nameWithType: ModelItem.Attributes
+  fullName: System.Activities.Presentation.Model.ModelItem.Attributes
+- uid: System.ComponentModel.AttributeCollection
+  parent: System.ComponentModel
+  isExternal: false
+  name: AttributeCollection
+  nameWithType: AttributeCollection
+  fullName: System.ComponentModel.AttributeCollection
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: BeginEdit()
+  nameWithType: ModelItem.BeginEdit()
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit()
+- uid: System.Activities.Presentation.Model.ModelEditingScope
+  parent: System.Activities.Presentation.Model
+  isExternal: false
+  name: ModelEditingScope
+  nameWithType: ModelEditingScope
+  fullName: System.Activities.Presentation.Model.ModelEditingScope
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.Boolean)
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: BeginEdit(Boolean)
+  nameWithType: ModelItem.BeginEdit(Boolean)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(Boolean)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String)
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: BeginEdit(String)
+  nameWithType: ModelItem.BeginEdit(String)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(String)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit(System.String,System.Boolean)
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: BeginEdit(String,Boolean)
+  nameWithType: ModelItem.BeginEdit(String,Boolean)
+  fullName: System.Activities.Presentation.Model.ModelItem.BeginEdit(String,Boolean)
+- uid: System.Activities.Presentation.Model.ModelItem.Content
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Content
+  nameWithType: ModelItem.Content
+  fullName: System.Activities.Presentation.Model.ModelItem.Content
+- uid: System.Activities.Presentation.Model.ModelProperty
+  parent: System.Activities.Presentation.Model
+  isExternal: false
+  name: ModelProperty
+  nameWithType: ModelProperty
+  fullName: System.Activities.Presentation.Model.ModelProperty
+- uid: System.Activities.Presentation.Model.ModelItem.GetCurrentValue
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: GetCurrentValue()
+  nameWithType: ModelItem.GetCurrentValue()
+  fullName: System.Activities.Presentation.Model.ModelItem.GetCurrentValue()
+- uid: System.Activities.Presentation.Model.ModelItem.ItemType
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ItemType
+  nameWithType: ModelItem.ItemType
+  fullName: System.Activities.Presentation.Model.ModelItem.ItemType
+- uid: System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.Activities.Presentation.Model.ModelItem.Name
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Name
+  nameWithType: ModelItem.Name
+  fullName: System.Activities.Presentation.Model.ModelItem.Name
+- uid: System.Activities.Presentation.Model.ModelItem.Parent
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Parent
+  nameWithType: ModelItem.Parent
+  fullName: System.Activities.Presentation.Model.ModelItem.Parent
+- uid: System.Activities.Presentation.Model.ModelItem
+  parent: System.Activities.Presentation.Model
+  isExternal: false
+  name: ModelItem
+  nameWithType: ModelItem
+  fullName: System.Activities.Presentation.Model.ModelItem
+- uid: System.Activities.Presentation.Model.ModelItem.Parents
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Parents
+  nameWithType: ModelItem.Parents
+  fullName: System.Activities.Presentation.Model.ModelItem.Parents
+- uid: System.Collections.Generic.IEnumerable{System.Activities.Presentation.Model.ModelItem}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IEnumerable<ModelItem>
+  nameWithType: IEnumerable<ModelItem>
+  fullName: System.Collections.Generic.IEnumerable<System.Activities.Presentation.Model.ModelItem>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Activities.Presentation.Model.ModelItem>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Activities.Presentation.Model.ModelItem
+    name: ModelItem
+    nameWithType: ModelItem
+    fullName: ModelItem
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Activities.Presentation.Model.ModelItem.Properties
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Properties
+  nameWithType: ModelItem.Properties
+  fullName: System.Activities.Presentation.Model.ModelItem.Properties
+- uid: System.Activities.Presentation.Model.ModelPropertyCollection
+  parent: System.Activities.Presentation.Model
+  isExternal: false
+  name: ModelPropertyCollection
+  nameWithType: ModelPropertyCollection
+  fullName: System.Activities.Presentation.Model.ModelPropertyCollection
+- uid: System.Activities.Presentation.Model.ModelItem.PropertyChanged
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: PropertyChanged
+  nameWithType: ModelItem.PropertyChanged
+  fullName: System.Activities.Presentation.Model.ModelItem.PropertyChanged
+- uid: System.ComponentModel.PropertyChangedEventHandler
+  parent: System.ComponentModel
+  isExternal: true
+  name: PropertyChangedEventHandler
+  nameWithType: PropertyChangedEventHandler
+  fullName: System.ComponentModel.PropertyChangedEventHandler
+- uid: System.Activities.Presentation.Model.ModelItem.Root
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Root
+  nameWithType: ModelItem.Root
+  fullName: System.Activities.Presentation.Model.ModelItem.Root
+- uid: System.Activities.Presentation.Model.ModelItem.Source
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Source
+  nameWithType: ModelItem.Source
+  fullName: System.Activities.Presentation.Model.ModelItem.Source
+- uid: System.Activities.Presentation.Model.ModelItem.Sources
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Sources
+  nameWithType: ModelItem.Sources
+  fullName: System.Activities.Presentation.Model.ModelItem.Sources
+- uid: System.Collections.Generic.IEnumerable{System.Activities.Presentation.Model.ModelProperty}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IEnumerable<ModelProperty>
+  nameWithType: IEnumerable<ModelProperty>
+  fullName: System.Collections.Generic.IEnumerable<System.Activities.Presentation.Model.ModelProperty>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Activities.Presentation.Model.ModelProperty>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Activities.Presentation.Model.ModelProperty
+    name: ModelProperty
+    nameWithType: ModelProperty
+    fullName: ModelProperty
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Activities.Presentation.Model.ModelItem.ToString
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ToString()
+  nameWithType: ModelItem.ToString()
+  fullName: System.Activities.Presentation.Model.ModelItem.ToString()
+- uid: System.Activities.Presentation.Model.ModelItem.View
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: View
+  nameWithType: ModelItem.View
+  fullName: System.Activities.Presentation.Model.ModelItem.View
+- uid: System.Windows.DependencyObject
+  parent: System.Windows
+  isExternal: false
+  name: DependencyObject
+  nameWithType: DependencyObject
+  fullName: System.Windows.DependencyObject
+- uid: System.Activities.Presentation.Model.ModelItem.#ctor*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ModelItem
+  nameWithType: ModelItem.ModelItem
+- uid: System.Activities.Presentation.Model.ModelItem.Attributes*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Attributes
+  nameWithType: ModelItem.Attributes
+- uid: System.Activities.Presentation.Model.ModelItem.BeginEdit*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: BeginEdit
+  nameWithType: ModelItem.BeginEdit
+- uid: System.Activities.Presentation.Model.ModelItem.Content*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Content
+  nameWithType: ModelItem.Content
+- uid: System.Activities.Presentation.Model.ModelItem.GetCurrentValue*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: GetCurrentValue
+  nameWithType: ModelItem.GetCurrentValue
+- uid: System.Activities.Presentation.Model.ModelItem.ItemType*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ItemType
+  nameWithType: ModelItem.ItemType
+- uid: System.Activities.Presentation.Model.ModelItem.Name*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Name
+  nameWithType: ModelItem.Name
+- uid: System.Activities.Presentation.Model.ModelItem.Parent*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Parent
+  nameWithType: ModelItem.Parent
+- uid: System.Activities.Presentation.Model.ModelItem.Parents*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Parents
+  nameWithType: ModelItem.Parents
+- uid: System.Activities.Presentation.Model.ModelItem.Properties*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Properties
+  nameWithType: ModelItem.Properties
+- uid: System.Activities.Presentation.Model.ModelItem.Root*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Root
+  nameWithType: ModelItem.Root
+- uid: System.Activities.Presentation.Model.ModelItem.Source*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Source
+  nameWithType: ModelItem.Source
+- uid: System.Activities.Presentation.Model.ModelItem.Sources*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: Sources
+  nameWithType: ModelItem.Sources
+- uid: System.Activities.Presentation.Model.ModelItem.ToString*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: ToString
+  nameWithType: ModelItem.ToString
+- uid: System.Activities.Presentation.Model.ModelItem.View*
+  parent: System.Activities.Presentation.Model.ModelItem
+  isExternal: false
+  name: View
+  nameWithType: ModelItem.View

@@ -1,0 +1,281 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.Util.RequestValidationSource
+  id: RequestValidationSource
+  children:
+  - System.Web.Util.RequestValidationSource.Cookies
+  - System.Web.Util.RequestValidationSource.Files
+  - System.Web.Util.RequestValidationSource.Form
+  - System.Web.Util.RequestValidationSource.Headers
+  - System.Web.Util.RequestValidationSource.Path
+  - System.Web.Util.RequestValidationSource.PathInfo
+  - System.Web.Util.RequestValidationSource.QueryString
+  - System.Web.Util.RequestValidationSource.RawUrl
+  langs:
+  - csharp
+  name: RequestValidationSource
+  nameWithType: RequestValidationSource
+  fullName: System.Web.Util.RequestValidationSource
+  type: Enum
+  summary: "Specifies what kind of HTTP request data to validate."
+  remarks: "You can create a custom request validation type by implementing the <xref:System.Web.Util.RequestValidator> type. When ASP.NET calls the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method to validate a request, ASP.NET passes a `requestValidationSource` parameter to specify the source of the data being validated. The RequestValidationSource enumeration is used to specify the source or kind of request data that is being validated. The enumeration indicates the type of HTTP input that is passed in the `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method. You can use the enumeration as a way to fall back to the base request validation implementation for HTTP inputs if you do not want to validate using custom logic."
+  example:
+  - "The following example shows how to create a custom request validator class that allows only a specific string for query-string values.  \n  \n [Visual Basic]  \n  \n```  \nImports System  \nImports System.Web  \nImports System.Web.Util  \n  \nPublic Class CustomRequestValidation  \n    Inherits RequestValidator  \n  \nPublic Sub New()  \nEnd Sub  \n  \nProtected Overloads Overrides Function IsValidRequestString( _  \n        ByVal context As HttpContext, _  \n        ByVal value As String, _  \n        ByVal requestValidationSource__1 As RequestValidationSource, _  \n        ByVal collectionKey As String, _  \n        ByRef validationFailureIndex As Integer) As Boolean  \n    validationFailureIndex = -1  \n    ' Set a default value for the out parameter.  \n    ' This application does not use RawUrl directly, so you can   \n    ' ignore the check for RequestValidationSource.RawUrl.  \n    If requestValidationSource = RequestValidationSource.RawUrl Then  \n        Return True  \n    End If  \n  \n    ' Allow the query-string key \"data\" to have an XML-like value.  \n    If (requestValidationSource = _  \n            (RequestValidationSource.QueryString) AndAlso _  \n            (collectionKey = \"data\") Then  \n        ' The querystring value \"<example>1234</example>\" is allowed.  \n        If value = \"<example>1234</example>\" Then  \n            validationFailureIndex = -1  \n            Return True  \n        Else  \n            ' Leave any further checks to ASP.NET.  \n            Return MyBase.IsValidRequestString(context, value, _  \n                requestValidationSource__1, collectionKey, _  \n                validationFailureIndex)  \n        End If  \n    Else  \n        ' All other HTTP input checks fall back to   \n        ' the base ASP.NET implementation.  \n        Return MyBase.IsValidRequestString(context, value, _  \n            requestValidationSource__1, collectionKey, _  \n            validationFailureIndex)  \n    End If  \nEnd Function  \nEnd Class  \n```  \n  \n [C#]  \n  \n```  \nusing System;  \nusing System.Web;  \nusing System.Web.Util;  \n  \npublic class CustomRequestValidation : RequestValidator  \n{  \n    public CustomRequestValidation() {}  \n  \n    protected override bool IsValidRequestString(  \n        HttpContext context, string value,   \n        RequestValidationSource requestValidationSource, string collectionKey,   \n        out int validationFailureIndex)  \n    {  \n        //Set a default value for the out parameter.  \n        validationFailureIndex = -1;  \n  \n        // This application does not use RawUrl directly,   \n        // so you can ignore the check for RequestValidationSource.RawUrl.  \n        if (requestValidationSource == RequestValidationSource.RawUrl)  \n            return true;  \n  \n        // Allow the query-string key \"data\" to have an XML-like value.  \n        if (  \n            (requestValidationSource == RequestValidationSource.QueryString) &&  \n            (collectionKey == \"data\")  \n           )  \n        {  \n            // The querystring value \"<example>1234</example>\" is allowed.  \n            if (value == \"<example>1234</example>\")  \n            {  \n                validationFailureIndex = -1;  \n                return true;  \n            }  \n            else  \n           // Leave any further checks to ASP.NET.  \n                return base.IsValidRequestString(context, value,   \n                requestValidationSource, collectionKey, out   \n                validationFailureIndex);  \n        }  \n        // All other HTTP input checks fall back to   \n        // the base ASP.NET implementation.  \n        else  \n        {  \n            return base.IsValidRequestString(context, value,   \n                requestValidationSource, collectionKey,   \n                out validationFailureIndex);  \n        }  \n    }  \n}  \n```  \n  \n The following example shows how to configure ASP.NET to use the custom validator.  \n  \n```  \n<httpRuntime requestValidationType=\"CustomRequestValidation\" />  \n```"
+  syntax:
+    content: public enum RequestValidationSource
+  inheritance:
+  - System.Enum
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.Cookies
+  id: Cookies
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: Cookies
+  nameWithType: RequestValidationSource.Cookies
+  fullName: System.Web.Util.RequestValidationSource.Cookies
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The request cookies."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the name of the cookie in the collection.       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value in the collection."
+  syntax:
+    content: Cookies
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.Files
+  id: Files
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: Files
+  nameWithType: RequestValidationSource.Files
+  fullName: System.Web.Util.RequestValidationSource.Files
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The uploaded file."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the name of the uploaded file in the collection.       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the uploaded file in the collection."
+  syntax:
+    content: Files
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.Form
+  id: Form
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: Form
+  nameWithType: RequestValidationSource.Form
+  fullName: System.Web.Util.RequestValidationSource.Form
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The form values."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the name of the form parameter in the collection.       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the form parameter in the collection."
+  syntax:
+    content: Form
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.Headers
+  id: Headers
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: Headers
+  nameWithType: RequestValidationSource.Headers
+  fullName: System.Web.Util.RequestValidationSource.Headers
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The request headers."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the name of an HTTP header in the collection.       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the HTTP header in the collection."
+  syntax:
+    content: Headers
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.Path
+  id: Path
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: Path
+  nameWithType: RequestValidationSource.Path
+  fullName: System.Web.Util.RequestValidationSource.Path
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The virtual path."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to `null` (`Path` is not a collection of values).       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the Path field."
+  syntax:
+    content: Path
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.PathInfo
+  id: PathInfo
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: PathInfo
+  nameWithType: RequestValidationSource.PathInfo
+  fullName: System.Web.Util.RequestValidationSource.PathInfo
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "An HTTP &lt;xref:System.Web.HttpRequest.PathInfo%2A&gt; string, which is an extension to a URL path."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to `null` (`PathInfo` is not a collection of values).       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the PathInfo field."
+  syntax:
+    content: PathInfo
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.QueryString
+  id: QueryString
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: QueryString
+  nameWithType: RequestValidationSource.QueryString
+  fullName: System.Web.Util.RequestValidationSource.QueryString
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The query string."
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the name of the query string parameter in the collection.       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the query-string parameter in the collection."
+  syntax:
+    content: QueryString
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.Util.RequestValidationSource.RawUrl
+  id: RawUrl
+  parent: System.Web.Util.RequestValidationSource
+  langs:
+  - csharp
+  name: RawUrl
+  nameWithType: RequestValidationSource.RawUrl
+  fullName: System.Web.Util.RequestValidationSource.RawUrl
+  type: Field
+  assemblies:
+  - System.Web
+  namespace: System.Web.Util
+  summary: "The raw URL. (The part of a URL after the domain.)"
+  remarks: "The `collectionKey` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to `null`. (`RawUrl` is not a collection of values.)       The `value` parameter of the <xref:System.Web.Util.RequestValidator.IsValidRequestString%2A> method is set to the value of the RawUrl field."
+  syntax:
+    content: RawUrl
+    return:
+      type: System.Web.Util.RequestValidationSource
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Enum
+  isExternal: false
+  name: System.Enum
+- uid: System.Web.Util.RequestValidationSource.Cookies
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: Cookies
+  nameWithType: RequestValidationSource.Cookies
+  fullName: System.Web.Util.RequestValidationSource.Cookies
+- uid: System.Web.Util.RequestValidationSource
+  parent: System.Web.Util
+  isExternal: false
+  name: RequestValidationSource
+  nameWithType: RequestValidationSource
+  fullName: System.Web.Util.RequestValidationSource
+- uid: System.Web.Util.RequestValidationSource.Files
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: Files
+  nameWithType: RequestValidationSource.Files
+  fullName: System.Web.Util.RequestValidationSource.Files
+- uid: System.Web.Util.RequestValidationSource.Form
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: Form
+  nameWithType: RequestValidationSource.Form
+  fullName: System.Web.Util.RequestValidationSource.Form
+- uid: System.Web.Util.RequestValidationSource.Headers
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: Headers
+  nameWithType: RequestValidationSource.Headers
+  fullName: System.Web.Util.RequestValidationSource.Headers
+- uid: System.Web.Util.RequestValidationSource.Path
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: Path
+  nameWithType: RequestValidationSource.Path
+  fullName: System.Web.Util.RequestValidationSource.Path
+- uid: System.Web.Util.RequestValidationSource.PathInfo
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: PathInfo
+  nameWithType: RequestValidationSource.PathInfo
+  fullName: System.Web.Util.RequestValidationSource.PathInfo
+- uid: System.Web.Util.RequestValidationSource.QueryString
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: QueryString
+  nameWithType: RequestValidationSource.QueryString
+  fullName: System.Web.Util.RequestValidationSource.QueryString
+- uid: System.Web.Util.RequestValidationSource.RawUrl
+  parent: System.Web.Util.RequestValidationSource
+  isExternal: false
+  name: RawUrl
+  nameWithType: RequestValidationSource.RawUrl
+  fullName: System.Web.Util.RequestValidationSource.RawUrl

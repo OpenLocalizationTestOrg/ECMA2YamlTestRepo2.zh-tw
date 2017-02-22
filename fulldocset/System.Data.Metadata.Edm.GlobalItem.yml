@@ -1,0 +1,35 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Data.Metadata.Edm.GlobalItem
+  id: GlobalItem
+  children: []
+  langs:
+  - csharp
+  name: GlobalItem
+  nameWithType: GlobalItem
+  fullName: System.Data.Metadata.Edm.GlobalItem
+  type: Class
+  summary: "Represents the base item class for all the  conceptual model types and entity containers."
+  remarks: "For more information, see [Metadata Type Hierarchy Overview](http://msdn.microsoft.com/en-us/d2b18fe0-60a5-4a5c-940d-21d07e5165d4)."
+  example:
+  - "The following code sample demonstrates how to get a metadata workspace from the connection and then use that metadata workspace to browse the metadata type hierarchy. Note that the metadata workspace is a runtime service component that provides support for retrieving metadata.  \n  \n The code sample uses a <xref:System.Data.Metadata.Edm.DataSpace> to specify the model. The <xref:System.Data.Metadata.Edm.DataSpace> represents the default name for the conceptual model. The code sample uses the connection string that is provided in the application config file. For an example of the application config file, see [Adventure Works Object Model in Applications (EDM)](http://msdn.microsoft.com/en-us/84c01270-90ba-467b-ad24-df10c1ca8f45).  \n  \n```c#  \nusing System;  \nusing System.Data;  \nusing System.Data.EntityClient;  \nusing System.Data.Metadata.Edm;  \nusing System.Collections.ObjectModel;  \n  \nclass BrowseTypes  \n{  \n  static void Main()  \n  {  \n    try  \n    {  \n      // Establish a connection to the underlying data provider by  \n      // using the connection string specified in the config file.  \n      using (EntityConnection connection =  \n             new EntityConnection(\"Name=AdventureworksContext\"))  \n      {  \n         // Access the metadata workspace.  \n         MetadataWorkspace workspace =   \n              connection.GetMetadataWorkspace();  \n         // Browse the metadata type hierarchy.  \n         BrowseTypesExample(workspace);  \n      }  \n    }  \n    catch (MetadataException exceptionMetadata)  \n    {  \n       Console.WriteLine(\"MetadataException: {0}\",  \n                         exceptionMetadata.Message);  \n     }  \n     catch (System.Data.MappingException exceptionMapping)  \n     {  \n        Console.WriteLine(\"MappingException: {0}\",  \n                          exceptionMapping.Message);  \n     }  \n  }  \n  \n  private static void BrowseTypesExample(MetadataWorkspace workspace)  \n  {  \n    // Get a collection of the GlobalItems.   \n    // An GlobalItem class is the base class for   \n    // the conceptual model types and entity containers.  \n    ReadOnlyCollection<GlobalItem> items =   \n         workspace.GetItems<GlobalItem>(DataSpace.CSpace);  \n  \n    // Iterate through the collection to get each item.  \n    foreach (GlobalItem item in items)  \n    {  \n       Console.WriteLine(  \n           \"Item BuiltInTypeKind: {0}, Type: {1} \",   \n           item.BuiltInTypeKind, item.GetType().FullName);  \n  \n       EntityContainer entityContainer = item as EntityContainer;  \n       if (entityContainer != null)  \n       {  \n          Console.WriteLine(  \n               \"EntityContainer Name: {0}\",  \n               entityContainer.Name);  \n          continue;  \n       }  \n  \n       EntityType entityType = item as EntityType;  \n       if (entityType != null)  \n       {  \n         Console.WriteLine(  \n             \"EntityType Name: {0}, Namespace: {1}\",  \n             entityType.Name, entityType.NamespaceName);  \n        continue;  \n       }  \n  \n       AssociationType associationType = item as AssociationType;  \n       if (associationType != null)  \n       {  \n          Console.WriteLine(  \n             \"AssociationType Name: {0}, Namespace: {1}\",  \n             associationType.Name, associationType.NamespaceName);  \n          continue;  \n       }  \n  \n       PrimitiveType primType = item as PrimitiveType;  \n       if (primType != null)  \n       {  \n         Console.WriteLine(  \n             \"PrimitiveType Name: {0}, Namespace: {1}\",   \n             primType.Name, primType.NamespaceName);  \n         continue;  \n       }  \n  \n       EdmFunction function = item as EdmFunction;  \n       if (function != null)  \n       {  \n         Console.WriteLine(  \n           \"EdmFunction Name: {0}, Namespace: {1}\",  \n           function.Name, function.NamespaceName);  \n         continue;  \n       }  \n    }  \n  }  \n}  \n```"
+  syntax:
+    content: 'public abstract class GlobalItem : System.Data.Metadata.Edm.MetadataItem'
+  inheritance:
+  - System.Object
+  - System.Data.Metadata.Edm.MetadataItem
+  implements: []
+  inheritedMembers:
+  - System.Data.Metadata.Edm.MetadataItem.BuiltInTypeKind
+  - System.Data.Metadata.Edm.MetadataItem.Documentation
+  - System.Data.Metadata.Edm.MetadataItem.GetBuiltInType(System.Data.Metadata.Edm.BuiltInTypeKind)
+  - System.Data.Metadata.Edm.MetadataItem.GetGeneralFacetDescriptions
+  - System.Data.Metadata.Edm.MetadataItem.MetadataProperties
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Data.Metadata.Edm.MetadataItem
+  isExternal: false
+  name: System.Data.Metadata.Edm.MetadataItem

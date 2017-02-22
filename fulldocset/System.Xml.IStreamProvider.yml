@@ -1,0 +1,102 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Xml.IStreamProvider
+  id: IStreamProvider
+  children:
+  - System.Xml.IStreamProvider.GetStream
+  - System.Xml.IStreamProvider.ReleaseStream(System.IO.Stream)
+  langs:
+  - csharp
+  name: IStreamProvider
+  nameWithType: IStreamProvider
+  fullName: System.Xml.IStreamProvider
+  type: Interface
+  summary: "Represents an interface that can be implemented by classes providing streams."
+  remarks: "When writing an outgoing message containing a streamed body to an XML writer, the <xref:System.ServiceModel.Channels.Message> will use a sequence of calls similar to the following in its <xref:System.ServiceModel.Channels.Message.OnWriteBodyContents%28System.Xml.XmlDictionaryWriter%29> implementation:      -   Write any necessary information preceding the stream (For example, the opening XML tag).      -   Write the stream.      -   Write any information following the stream (For example, the closing XML tag).       This works well with encodings that are similar to the textual XML encoding. However, there are some encodings that do not place XML infoset information (For example, tags for starting and ending XML elements) together with the data contained within elements. For example, in the MTOM encoding, the message is split into multiple parts. One part contains the XML infoset, which may contain references to other parts for actual element contents. Since the XML infoset will normally be small compared to the streamed contents, it makes sense to buffer the infoset, write it out, and then write the contents in a streamed way. This means that by the time the closing element tag is written, we should not have written out the stream yet.       For this purpose, the IStreamProvider interface is used. The interface has a <xref:System.Xml.IStreamProvider.GetStream> method that returns the stream to be written. The correct way to write out a streamed message body in <xref:System.ServiceModel.Channels.Message.OnWriteBodyContents%28System.Xml.XmlDictionaryWriter%29> is as follows:      -   Write any necessary information preceding the stream (For example, the opening XML tag)      -   Call the `WriteValue` overload on the <xref:System.Xml.XmlDictionaryWriter> that takes an IStreamProvider, with an `IStreamProvider` implementation that returns the stream to be written.      -   Write any information following the stream (For example, the closing XML tag)       With this approach, the XML writer has a choice of when to call <xref:System.Xml.IStreamProvider.GetStream> and write out the streamed data. For example, the textual and binary XML writers will call it immediately and write out the streamed contents in between the start and end tags. The MTOM writer may decide to call <xref:System.Xml.IStreamProvider.GetStream> later, when it is ready to write the appropriate part of the message."
+  syntax:
+    content: public interface IStreamProvider
+  implements: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Xml.IStreamProvider.GetStream
+  id: GetStream
+  parent: System.Xml.IStreamProvider
+  langs:
+  - csharp
+  name: GetStream()
+  nameWithType: IStreamProvider.GetStream()
+  fullName: System.Xml.IStreamProvider.GetStream()
+  type: Method
+  assemblies:
+  - System.Runtime.Serialization
+  namespace: System.Xml
+  summary: "Gets a stream."
+  remarks: "This method can be used to return the stream to be written."
+  syntax:
+    content: public System.IO.Stream GetStream ();
+    parameters: []
+    return:
+      type: System.IO.Stream
+      description: "To be added."
+  overload: System.Xml.IStreamProvider.GetStream*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Xml.IStreamProvider.ReleaseStream(System.IO.Stream)
+  id: ReleaseStream(System.IO.Stream)
+  parent: System.Xml.IStreamProvider
+  langs:
+  - csharp
+  name: ReleaseStream(Stream)
+  nameWithType: IStreamProvider.ReleaseStream(Stream)
+  fullName: System.Xml.IStreamProvider.ReleaseStream(Stream)
+  type: Method
+  assemblies:
+  - System.Runtime.Serialization
+  namespace: System.Xml
+  summary: "Releases a stream to output."
+  syntax:
+    content: public void ReleaseStream (System.IO.Stream stream);
+    parameters:
+    - id: stream
+      type: System.IO.Stream
+      description: "The stream being released."
+  overload: System.Xml.IStreamProvider.ReleaseStream*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Xml.IStreamProvider.GetStream
+  parent: System.Xml.IStreamProvider
+  isExternal: false
+  name: GetStream()
+  nameWithType: IStreamProvider.GetStream()
+  fullName: System.Xml.IStreamProvider.GetStream()
+- uid: System.IO.Stream
+  parent: System.IO
+  isExternal: true
+  name: Stream
+  nameWithType: Stream
+  fullName: System.IO.Stream
+- uid: System.Xml.IStreamProvider.ReleaseStream(System.IO.Stream)
+  parent: System.Xml.IStreamProvider
+  isExternal: false
+  name: ReleaseStream(Stream)
+  nameWithType: IStreamProvider.ReleaseStream(Stream)
+  fullName: System.Xml.IStreamProvider.ReleaseStream(Stream)
+- uid: System.Xml.IStreamProvider.GetStream*
+  parent: System.Xml.IStreamProvider
+  isExternal: false
+  name: GetStream
+  nameWithType: IStreamProvider.GetStream
+- uid: System.Xml.IStreamProvider.ReleaseStream*
+  parent: System.Xml.IStreamProvider
+  isExternal: false
+  name: ReleaseStream
+  nameWithType: IStreamProvider.ReleaseStream

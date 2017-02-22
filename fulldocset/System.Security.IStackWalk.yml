@@ -1,0 +1,170 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Security.IStackWalk
+  id: IStackWalk
+  children:
+  - System.Security.IStackWalk.Assert
+  - System.Security.IStackWalk.Demand
+  - System.Security.IStackWalk.Deny
+  - System.Security.IStackWalk.PermitOnly
+  langs:
+  - csharp
+  name: IStackWalk
+  nameWithType: IStackWalk
+  fullName: System.Security.IStackWalk
+  type: Interface
+  summary: "Manages the stack walk that determines whether all callers in the call stack have the required permissions to access a protected resource."
+  remarks: "Partially trusted code always presents a security risk. It can sometimes be manipulated to perform actions on behalf of malicious code that does not have permission to access a resource. In this way, malicious code can achieve higher security access than it should be allowed.       The common language runtime helps protect managed code from these attacks by running a stack walk on all calls. The stack walk requires that all code in the call stack has permission to access a protected resource. Because the code attempting the attack will always be somewhere in the call stack, it will be unable to exceed its own security permissions."
+  syntax:
+    content: >-
+      [System.Runtime.InteropServices.ComVisible(true)]
+
+      public interface IStackWalk
+  implements: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.IStackWalk.Assert
+  id: Assert
+  parent: System.Security.IStackWalk
+  langs:
+  - csharp
+  name: Assert()
+  nameWithType: IStackWalk.Assert()
+  fullName: System.Security.IStackWalk.Assert()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Asserts that the calling code can access the resource identified by the current permission object, even if callers higher in the stack have not been granted permission to access the resource."
+  remarks: "Calling Assert stops the permission check on callers higher in the call stack. Therefore, even if these callers do not have the requisite permissions, they can still access resources. An assertion is effective only if the code that calls Assert passes the security check for the permission that it is asserting.       A call to Assert is effective until the calling code returns to its caller or until a subsequent call to Assert renders the previous assertion ineffective. Also, <xref:System.Security.CodeAccessPermission.RevertAssert%2A> or <xref:System.Security.CodeAccessPermission.RevertAll%2A> removes a pending Assert.       Assert is ignored for a permission not granted because a demand for that permission will not succeed. However, if code lower on the call stack calls <xref:System.Security.IStackWalk.Demand%2A> for that permission, a <xref:System.Security.SecurityException> is thrown when the stack walk reaches the code that tried to call Assert. This happens because the code that called Assert has not been granted the permission, even though it tried to Assert it.      > [!CAUTION] >  Because calling Assert removes the requirement that all code in the call chain must be granted permission to access the specified resource, it can open up security vulnerabilities if used incorrectly or inappropriately. Therefore, it should be used with great caution."
+  syntax:
+    content: public void Assert ();
+    parameters: []
+  overload: System.Security.IStackWalk.Assert*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The calling code does not have ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.IStackWalk.Demand
+  id: Demand
+  parent: System.Security.IStackWalk
+  langs:
+  - csharp
+  name: Demand()
+  nameWithType: IStackWalk.Demand()
+  fullName: System.Security.IStackWalk.Demand()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Determines at run time whether all callers in the call stack have been granted the permission specified by the current permission object."
+  remarks: "This method is typically used by secure libraries to ensure that callers have permission to access a resource. For example, a file class in a secure class library calls Demand for the necessary <xref:System.Security.Permissions.FileIOPermission> before performing a file operation requested by the caller.       The permissions of the code that calls this method are not examined; the check begins from the immediate caller of that code and proceeds up the stack. Demand succeeds only if no <xref:System.Security.SecurityException> is raised."
+  syntax:
+    content: public void Demand ();
+    parameters: []
+  overload: System.Security.IStackWalk.Demand*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "A caller higher in the call stack does not have the permission specified by the current permission object.       -or-       A caller in the call stack has called <xref:System.Security.IStackWalk.Deny%2A> on the current permission object."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.IStackWalk.Deny
+  id: Deny
+  parent: System.Security.IStackWalk
+  langs:
+  - csharp
+  name: Deny()
+  nameWithType: IStackWalk.Deny()
+  fullName: System.Security.IStackWalk.Deny()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Causes every &lt;xref:System.Security.IStackWalk.Demand%2A&gt; for the current object that passes through the calling code to fail."
+  remarks: "This method prevents callers higher in the call stack from accessing the protected resource through the code that calls this method, even if those callers have been granted permission to access it. The call stack is typically represented as growing down, so that methods higher in the call stack call methods lower in the call stack.       Deny can limit the liability of the programmer or help prevent accidental security vulnerabilities because it helps prevent the method that calls Deny from being used to access the resource protected by the denied permission. If a method calls Deny on a permission, and if a <xref:System.Security.IStackWalk.Demand%2A> for that permission is invoked by a caller lower in the call stack, that security check will fail when it reaches the Deny.       Deny is ignored for a permission not granted because a demand for that permission will not succeed."
+  syntax:
+    content: public void Deny ();
+    parameters: []
+  overload: System.Security.IStackWalk.Deny*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.IStackWalk.PermitOnly
+  id: PermitOnly
+  parent: System.Security.IStackWalk
+  langs:
+  - csharp
+  name: PermitOnly()
+  nameWithType: IStackWalk.PermitOnly()
+  fullName: System.Security.IStackWalk.PermitOnly()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Causes every &lt;xref:System.Security.IStackWalk.Demand%2A&gt; for all objects except the current one that passes through the calling code to fail, even if code higher in the call stack has been granted permission to access other resources."
+  remarks: "PermitOnly is similar to <xref:System.Security.IStackWalk.Deny%2A>, in that both cause stack walks to fail when they would otherwise succeed. The difference is that <xref:System.Security.IStackWalk.Deny%2A> specifies permissions that will cause the stack walk to fail, but PermitOnly specifies the only permissions that do not cause the stack walk to fail. Call this method to ensure that your code can be used to access only the specified resources.       PermitOnly is ignored for a permission not granted because a demand for that permission will not succeed. However, if code lower on the call stack later calls <xref:System.Security.IStackWalk.Demand%2A> for that permission, a <xref:System.Security.SecurityException> is thrown when the stack walk reaches the code that tried to call PermitOnly. This is because the code that called PermitOnly has not been granted the permission, even though it called PermitOnly for that permission. The call stack is typically represented as growing down, so that methods higher in the call stack call methods lower in the call stack."
+  syntax:
+    content: public void PermitOnly ();
+    parameters: []
+  overload: System.Security.IStackWalk.PermitOnly*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Security.IStackWalk.Assert
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Assert()
+  nameWithType: IStackWalk.Assert()
+  fullName: System.Security.IStackWalk.Assert()
+- uid: System.Security.IStackWalk.Demand
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Demand()
+  nameWithType: IStackWalk.Demand()
+  fullName: System.Security.IStackWalk.Demand()
+- uid: System.Security.IStackWalk.Deny
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Deny()
+  nameWithType: IStackWalk.Deny()
+  fullName: System.Security.IStackWalk.Deny()
+- uid: System.Security.IStackWalk.PermitOnly
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: PermitOnly()
+  nameWithType: IStackWalk.PermitOnly()
+  fullName: System.Security.IStackWalk.PermitOnly()
+- uid: System.Security.IStackWalk.Assert*
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Assert
+  nameWithType: IStackWalk.Assert
+- uid: System.Security.IStackWalk.Demand*
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Demand
+  nameWithType: IStackWalk.Demand
+- uid: System.Security.IStackWalk.Deny*
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: Deny
+  nameWithType: IStackWalk.Deny
+- uid: System.Security.IStackWalk.PermitOnly*
+  parent: System.Security.IStackWalk
+  isExternal: false
+  name: PermitOnly
+  nameWithType: IStackWalk.PermitOnly

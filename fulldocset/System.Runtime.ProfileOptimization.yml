@@ -1,0 +1,109 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Runtime.ProfileOptimization
+  id: ProfileOptimization
+  children:
+  - System.Runtime.ProfileOptimization.SetProfileRoot(System.String)
+  - System.Runtime.ProfileOptimization.StartProfile(System.String)
+  langs:
+  - csharp
+  name: ProfileOptimization
+  nameWithType: ProfileOptimization
+  fullName: System.Runtime.ProfileOptimization
+  type: Class
+  summary: "Improves the startup performance of application domains in applications that require the just-in-time (JIT) compiler by performing background compilation of methods that are likely to be executed, based on profiles created during previous compilations."
+  remarks: "> [!IMPORTANT] >  Profile optimization requires a multicore computer. The methods are ignored on other computers.       Each time you initiate profile optimization in an application domain, the profile that was created during the previous use is read. The information in the profile is used to guide background compilation by identifying the methods that are most likely to be executed during startup. On multicore computers, this increases the chances that a method is already compiled by the time it is needed so that the main application thread does not have to call the JIT compiler.       The profile file is overwritten on each use, so it always contains the most recent information about which methods are used during startup.       Optimization profiles are not restricted to application domain startup. They can be used for any activity that will require heavy use of the JIT compiler. You can maintain multiple profiles for an application domain so that each such activity has its own profile.       To use optimization profiles in an application domain, you must call the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method and specify the folder where profiles are stored. The folder must already exist. To begin using a profile, call the <xref:System.Runtime.ProfileOptimization.StartProfile%2A> method and specify the file name of the profile. If the file was not recorded previously, it is created on first use. There is no performance benefit the first time a profile is created.       Profile optimization does not change the order in which methods are executed. Methods are not executed on the background thread; if a method is compiled but never called, it is simply not used. If a profile file is corrupt or cannot be written to the specified folder (for example, because the folder does not exist), program execution continues without optimization profiling."
+  syntax:
+    content: public static class ProfileOptimization
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.ProfileOptimization.SetProfileRoot(System.String)
+  id: SetProfileRoot(System.String)
+  parent: System.Runtime.ProfileOptimization
+  langs:
+  - csharp
+  name: SetProfileRoot(String)
+  nameWithType: ProfileOptimization.SetProfileRoot(String)
+  fullName: System.Runtime.ProfileOptimization.SetProfileRoot(String)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Runtime
+  summary: "Enables optimization profiling for the current application domain, and sets the folder where the optimization profile files are stored. On a single-core computer, the method is ignored."
+  remarks: "You must call this method before you call the <xref:System.Runtime.ProfileOptimization.StartProfile%2A> method for the first time in the current application domain. If you call SetProfileRoot more than once in the same application domain, all calls after the first are ignored.       The specified folder must already exist. If it does not exist, calling this method does not create it, and no profiling occurs.       On computers that do not have multiple cores, this method is ignored."
+  syntax:
+    content: public static void SetProfileRoot (string directoryPath);
+    parameters:
+    - id: directoryPath
+      type: System.String
+      description: "The full path to the folder where profile files are stored for the current application domain."
+  overload: System.Runtime.ProfileOptimization.SetProfileRoot*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.ProfileOptimization.StartProfile(System.String)
+  id: StartProfile(System.String)
+  parent: System.Runtime.ProfileOptimization
+  langs:
+  - csharp
+  name: StartProfile(String)
+  nameWithType: ProfileOptimization.StartProfile(String)
+  fullName: System.Runtime.ProfileOptimization.StartProfile(String)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Runtime
+  summary: "Starts just-in-time (JIT) compilation of the methods that were previously recorded in the specified profile file, on a background thread. Starts the process of recording current method use, which later overwrites the specified profile file."
+  remarks: "If the specified profile exists in the folder specified by the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method, the information it contains is used to determine the order in which methods are compiled on the background thread. The StartProfile method creates the profile if it does not already exist, and initiates the recording of method use.       Only methods that are actually called are recorded, regardless of whether they were compiled on the background thread or on the main application thread. A method is compiled on the main application thread if the application needs to call it before the background thread has compiled it.       The code that performs the recording tracks the rate at which methods are compiled, including methods that are compiled on both the background thread and on the main thread. When the rate falls below a predetermined level, recording stops. Recording also stops if the rate of JIT compilation exceeds a predetermined upper limit.       If the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method has not been called for the current application domain, or if the computer does not have multiple cores, the StartProfile method has no effect."
+  syntax:
+    content: public static void StartProfile (string profile);
+    parameters:
+    - id: profile
+      type: System.String
+      description: "The file name of the profile to use."
+  overload: System.Runtime.ProfileOptimization.StartProfile*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Runtime.ProfileOptimization.SetProfileRoot(System.String)
+  parent: System.Runtime.ProfileOptimization
+  isExternal: false
+  name: SetProfileRoot(String)
+  nameWithType: ProfileOptimization.SetProfileRoot(String)
+  fullName: System.Runtime.ProfileOptimization.SetProfileRoot(String)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Runtime.ProfileOptimization.StartProfile(System.String)
+  parent: System.Runtime.ProfileOptimization
+  isExternal: false
+  name: StartProfile(String)
+  nameWithType: ProfileOptimization.StartProfile(String)
+  fullName: System.Runtime.ProfileOptimization.StartProfile(String)
+- uid: System.Runtime.ProfileOptimization.SetProfileRoot*
+  parent: System.Runtime.ProfileOptimization
+  isExternal: false
+  name: SetProfileRoot
+  nameWithType: ProfileOptimization.SetProfileRoot
+- uid: System.Runtime.ProfileOptimization.StartProfile*
+  parent: System.Runtime.ProfileOptimization
+  isExternal: false
+  name: StartProfile
+  nameWithType: ProfileOptimization.StartProfile

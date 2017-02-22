@@ -1,0 +1,2086 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Data.SqlClient.SqlConnection
+  id: SqlConnection
+  children:
+  - System.Data.SqlClient.SqlConnection.#ctor
+  - System.Data.SqlClient.SqlConnection.#ctor(System.String)
+  - System.Data.SqlClient.SqlConnection.#ctor(System.String,System.Data.SqlClient.SqlCredential)
+  - System.Data.SqlClient.SqlConnection.AccessToken
+  - System.Data.SqlClient.SqlConnection.BeginDbTransaction(System.Data.IsolationLevel)
+  - System.Data.SqlClient.SqlConnection.BeginTransaction
+  - System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel)
+  - System.Data.SqlClient.SqlConnection.BeginTransaction(System.String)
+  - System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel,System.String)
+  - System.Data.SqlClient.SqlConnection.ChangeDatabase(System.String)
+  - System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.String)
+  - System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.Data.SqlClient.SqlCredential,System.Security.SecureString)
+  - System.Data.SqlClient.SqlConnection.ClearAllPools
+  - System.Data.SqlClient.SqlConnection.ClearPool(System.Data.SqlClient.SqlConnection)
+  - System.Data.SqlClient.SqlConnection.ClientConnectionId
+  - System.Data.SqlClient.SqlConnection.Close
+  - System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl
+  - System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  - System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  - System.Data.SqlClient.SqlConnection.ConnectionString
+  - System.Data.SqlClient.SqlConnection.ConnectionTimeout
+  - System.Data.SqlClient.SqlConnection.CreateCommand
+  - System.Data.SqlClient.SqlConnection.CreateDbCommand
+  - System.Data.SqlClient.SqlConnection.Credential
+  - System.Data.SqlClient.SqlConnection.Database
+  - System.Data.SqlClient.SqlConnection.DataSource
+  - System.Data.SqlClient.SqlConnection.DbProviderFactory
+  - System.Data.SqlClient.SqlConnection.Dispose(System.Boolean)
+  - System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction(System.EnterpriseServices.ITransaction)
+  - System.Data.SqlClient.SqlConnection.EnlistTransaction(System.Transactions.Transaction)
+  - System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors
+  - System.Data.SqlClient.SqlConnection.GetSchema
+  - System.Data.SqlClient.SqlConnection.GetSchema(System.String)
+  - System.Data.SqlClient.SqlConnection.GetSchema(System.String,System.String[])
+  - System.Data.SqlClient.SqlConnection.InfoMessage
+  - System.Data.SqlClient.SqlConnection.Open
+  - System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)
+  - System.Data.SqlClient.SqlConnection.PacketSize
+  - System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders(System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider})
+  - System.Data.SqlClient.SqlConnection.ResetStatistics
+  - System.Data.SqlClient.SqlConnection.RetrieveStatistics
+  - System.Data.SqlClient.SqlConnection.ServerVersion
+  - System.Data.SqlClient.SqlConnection.State
+  - System.Data.SqlClient.SqlConnection.StatisticsEnabled
+  - System.Data.SqlClient.SqlConnection.System#ICloneable#Clone
+  - System.Data.SqlClient.SqlConnection.WorkstationId
+  langs:
+  - csharp
+  name: SqlConnection
+  nameWithType: SqlConnection
+  fullName: System.Data.SqlClient.SqlConnection
+  type: Class
+  summary: "Represents an open connection to a [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] database. This class cannot be inherited."
+  remarks: "A SqlConnection object represents a unique session to a [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] data source. With a client/server database system, it is equivalent to a network connection to the server. SqlConnection is used together with <xref:System.Data.SqlClient.SqlDataAdapter> and <xref:System.Data.SqlClient.SqlCommand> to increase performance when connecting to a Microsoft [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] database. For all third-party [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] products, and other OLE DB-supported data sources, use <xref:System.Data.OleDb.OleDbConnection>.  \n  \n When you create an instance of SqlConnection, all properties are set to their initial values. For a list of these values, see the SqlConnection constructor.  \n  \n See <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> for a list of the keywords in a connection string.  \n  \n If the SqlConnection goes out of scope, it won't be closed. Therefore, you must explicitly close the connection by calling `Close` or `Dispose`. `Close` and `Dispose` are functionally equivalent. If the connection pooling value `Pooling` is set to `true` or `yes`, the underlying connection is returned back to the connection pool. On the other hand, if `Pooling` is set to `false` or `no`, the underlying connection to the server is actually closed.  \n  \n> [!NOTE]\n>  Login and logout events will not be raised on the server when a connection is fetched from or returned to the connection pool, because the connection is not actually closed when it is returned to the connection pool. For more information, see [SQL Server Connection Pooling (ADO.NET)](../Topic/SQL%20Server%20Connection%20Pooling%20\\(ADO.NET\\).md).  \n  \n To ensure that connections are always closed, open the connection inside of a `using` block, as shown in the following code fragment. Doing so ensures that the connection is automatically closed when the code exits the block.  \n  \n```vb#  \nUsing connection As New SqlConnection(connectionString)  \n    connection.Open()  \n    ' Do work here; connection closed on following line.  \nEnd Using  \n  \n```  \n  \n```c#  \nusing (SqlConnection connection = new SqlConnection(connectionString))  \n    {  \n        connection.Open();  \n        // Do work here; connection closed on following line.  \n    }  \n```  \n  \n> [!NOTE]\n>  To deploy high-performance applications, you must use connection pooling. When you use the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)], you do not have to enable connection pooling because the provider manages this automatically, although you can modify some settings. For more information, see [SQL Server Connection Pooling (ADO.NET)](../Topic/SQL%20Server%20Connection%20Pooling%20\\(ADO.NET\\).md).  \n  \n If a <xref:System.Data.SqlClient.SqlException> is generated by the method executing a <xref:System.Data.SqlClient.SqlCommand>, the SqlConnection remains open when the severity level is 19 or less. When the severity level is 20 or greater, the server ordinarily closes the SqlConnection. However, the user can reopen the connection and continue.  \n  \n An application that creates an instance of the SqlConnection object can require all direct and indirect callers to have sufficient permission to the code by setting declarative or imperative security demands. SqlConnection makes security demands using the <xref:System.Data.SqlClient.SqlClientPermission> object. Users can verify that their code has sufficient permissions by using the <xref:System.Data.SqlClient.SqlClientPermissionAttribute> object. Users and administrators can also use the [Caspol.exe (Code Access Security Policy Tool)](../Topic/Caspol.exe%20\\(Code%20Access%20Security%20Policy%20Tool\\).md) to modify security policy at the machine, user, and enterprise levels. For more information, see [Security](../Topic/Security%20in%20the%20.NET%20Framework.md). For an example demonstrating how to use security demands, see [Code Access Security and ADO.NET](../Topic/Code%20Access%20Security%20and%20ADO.NET.md).  \n  \n For more information about handling warning and informational messages from the server, see [Connection Events](../Topic/Connection%20Events.md). [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] engine errors and error messages are documented in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.  \n  \n> [!CAUTION]\n>  You can force TCP instead of shared memory. You can do that by prefixing tcp: to the server name in the connection string or you can use localhost."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlCommand> and a SqlConnection. The SqlConnection is opened and set as the <xref:System.Data.SqlClient.SqlCommand.Connection%2A> for the <xref:System.Data.SqlClient.SqlCommand>. The example then calls <xref:System.Data.SqlClient.SqlCommand.ExecuteNonQuery%2A>. To accomplish this, the <xref:System.Data.SqlClient.SqlCommand.ExecuteNonQuery%2A> is passed a connection string and a query string that is a [!INCLUDE[tsql](~/add/includes/tsql-md.md)] INSERT statement. The connection is closed automatically when the code exits the using block.  \n  \n [!code-cs[Classic WebData SqlCommand.ExecuteNonQuery Example#1](~/add/codesnippet/CSharp/t-system.data.sqlclient._4_1.cs)]\n [!code-vb[Classic WebData SqlCommand.ExecuteNonQuery Example#1](~/add/codesnippet/VisualBasic/t-system.data.sqlclient._4_1.vb)]"
+  syntax:
+    content: >-
+      [System.ComponentModel.DefaultEvent("InfoMessage")]
+
+      public sealed class SqlConnection : System.Data.Common.DbConnection, ICloneable
+  inheritance:
+  - System.Object
+  - System.MarshalByRefObject
+  - System.ComponentModel.Component
+  - System.Data.Common.DbConnection
+  implements:
+  - System.ICloneable
+  inheritedMembers:
+  - System.ComponentModel.Component.CanRaiseEvents
+  - System.ComponentModel.Component.Container
+  - System.ComponentModel.Component.DesignMode
+  - System.ComponentModel.Component.Dispose
+  - System.ComponentModel.Component.Disposed
+  - System.ComponentModel.Component.Events
+  - System.ComponentModel.Component.GetService(System.Type)
+  - System.ComponentModel.Component.Site
+  - System.ComponentModel.Component.ToString
+  - System.Data.Common.DbConnection.OnStateChange(System.Data.StateChangeEventArgs)
+  - System.Data.Common.DbConnection.OpenAsync
+  - System.Data.Common.DbConnection.StateChange
+  - System.Data.Common.DbConnection.System#Data#IDbConnection#BeginTransaction
+  - System.Data.Common.DbConnection.System#Data#IDbConnection#BeginTransaction(System.Data.IsolationLevel)
+  - System.Data.Common.DbConnection.System#Data#IDbConnection#CreateCommand
+  - System.MarshalByRefObject.CreateObjRef(System.Type)
+  - System.MarshalByRefObject.GetLifetimeService
+  - System.MarshalByRefObject.InitializeLifetimeService
+  - System.MarshalByRefObject.MemberwiseClone(System.Boolean)
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.#ctor
+  id: '#ctor'
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: SqlConnection()
+  nameWithType: SqlConnection.SqlConnection()
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection()
+  type: Constructor
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> class."
+  remarks: "When a new instance of <xref:System.Data.SqlClient.SqlConnection> is created, the read/write properties are set to the following initial values unless they are specifically set using their associated keywords in the <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> property.      |Properties|Initial value|   |----------------|-------------------|   |<xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A>|empty string (&quot;&quot;)|   |<xref:System.Data.SqlClient.SqlConnection.ConnectionTimeout%2A>|15|   |<xref:System.Data.SqlClient.SqlConnection.Database%2A>|empty string (&quot;&quot;)|   |<xref:System.Data.SqlClient.SqlConnection.DataSource%2A>|empty string (&quot;&quot;)|       You can change the value for these properties only by using the <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> property. The <xref:System.Data.SqlClient.SqlConnectionStringBuilder> class provides functionality for creating and managing the contents of connection strings."
+  example:
+  - "The following example creates and opens a <xref:System.Data.SqlClient.SqlConnection>.  \n  \n [!code-vb[Classic WebData SqlConnection.SqlConnection Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._17_1.vb)]\n [!code-cs[Classic WebData SqlConnection.SqlConnection Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._17_1.cs)]"
+  syntax:
+    content: public SqlConnection ();
+    parameters: []
+  overload: System.Data.SqlClient.SqlConnection.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.#ctor(System.String)
+  id: '#ctor(System.String)'
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: SqlConnection(String)
+  nameWithType: SqlConnection.SqlConnection(String)
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection(String)
+  type: Constructor
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> class when given a string that contains the connection string."
+  remarks: "When a new instance of <xref:System.Data.SqlClient.SqlConnection> is created, the read/write properties are set to the following initial values unless they are specifically set using their associated keywords in the <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> property.      |Properties|Initial value|   |----------------|-------------------|   |<xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A>|`connectionString`|   |<xref:System.Data.SqlClient.SqlConnection.ConnectionTimeout%2A>|15|   |<xref:System.Data.SqlClient.SqlConnection.Database%2A>|empty string (&quot;&quot;)|   |<xref:System.Data.SqlClient.SqlConnection.DataSource%2A>|empty string (&quot;&quot;)|       You can change the value for these properties only by using the <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> property. The <xref:System.Data.SqlClient.SqlConnection> class provides functionality for creating and managing the contents of connection strings."
+  example:
+  - "The following example creates and opens a <xref:System.Data.SqlClient.SqlConnection>.  \n  \n [!code-vb[Classic WebData SqlConnection.SqlConnection1 Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._38_1.vb)]\n [!code-cs[Classic WebData SqlConnection.SqlConnection1 Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._38_1.cs)]"
+  syntax:
+    content: public SqlConnection (string connectionString);
+    parameters:
+    - id: connectionString
+      type: System.String
+      description: "The connection used to open the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] database."
+  overload: System.Data.SqlClient.SqlConnection.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.#ctor(System.String,System.Data.SqlClient.SqlCredential)
+  id: '#ctor(System.String,System.Data.SqlClient.SqlCredential)'
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: SqlConnection(String,SqlCredential)
+  nameWithType: SqlConnection.SqlConnection(String,SqlCredential)
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection(String,SqlCredential)
+  type: Constructor
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> class given a connection string, that does not use <xref uid=&quot;langword_csharp_Integrated Security = true&quot; name=&quot;Integrated Security = true&quot; href=&quot;&quot;></xref> and a <see cref=&quot;T:System.Data.SqlClient.SqlCredential&quot;></see> object that contains the user ID and password."
+  syntax:
+    content: public SqlConnection (string connectionString, System.Data.SqlClient.SqlCredential credential);
+    parameters:
+    - id: connectionString
+      type: System.String
+      description: 'A connection string that does not use any of the following connection string keywords: , , or ; or that does not use .'
+    - id: credential
+      type: System.Data.SqlClient.SqlCredential
+      description: "A  object. If `credential` is null, SqlConnection is functionally equivalent to <xref:System.Data.SqlClient.SqlConnection.%23ctor%2A>."
+  overload: System.Data.SqlClient.SqlConnection.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.AccessToken
+  id: AccessToken
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: AccessToken
+  nameWithType: SqlConnection.AccessToken
+  fullName: System.Data.SqlClient.SqlConnection.AccessToken
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets the access token for the connection."
+  syntax:
+    content: public string AccessToken { get; set; }
+    return:
+      type: System.String
+      description: "The access token for the connection."
+  overload: System.Data.SqlClient.SqlConnection.AccessToken*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.BeginDbTransaction(System.Data.IsolationLevel)
+  id: BeginDbTransaction(System.Data.IsolationLevel)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: BeginDbTransaction(IsolationLevel)
+  nameWithType: SqlConnection.BeginDbTransaction(IsolationLevel)
+  fullName: System.Data.SqlClient.SqlConnection.BeginDbTransaction(IsolationLevel)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  syntax:
+    content: protected override System.Data.Common.DbTransaction BeginDbTransaction (System.Data.IsolationLevel isolationLevel);
+    parameters:
+    - id: isolationLevel
+      type: System.Data.IsolationLevel
+      description: "To be added."
+    return:
+      type: System.Data.Common.DbTransaction
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.BeginDbTransaction*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction
+  id: BeginTransaction
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: BeginTransaction()
+  nameWithType: SqlConnection.BeginTransaction()
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Starts a database transaction."
+  remarks: "This command maps to the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] implementation of BEGIN TRANSACTION.       You must explicitly commit or roll back the transaction using the <xref:System.Data.SqlClient.SqlTransaction.Commit%2A> or <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> method. To make sure that the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transaction management model performs correctly, avoid using other transaction management models, such as the one provided by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].      > [!NOTE] >  If you do not specify an isolation level, the default isolation level is used. To specify an isolation level with the <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A> method, use the overload that takes the `iso` parameter (<xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>). The isolation level set for a transaction persists after the transaction is completed and until the connection is closed or disposed. Setting the isolation level to **Snapshot** in a database where the snapshot isolation level is not enabled does not throw an exception. The transaction will complete using the default isolation level.      > [!CAUTION] >  If a transaction is started and a level 16 or higher error occurs on the server, the transaction will not be rolled back until the <xref:System.Data.SqlClient.SqlDataReader.Read%2A> method is invoked. No exception is thrown on **ExecuteReader**.      > [!CAUTION] >  When your query returns a large amount of data and calls `BeginTransaction`, a <xref:System.Data.SqlClient.SqlException> is thrown because [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] does not allow parallel transactions when using MARS. To avoid this problem, always associate a transaction with the command, the connection, or both before any readers are open.       For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transactions, see &quot;Explicit Transactions&quot; and &quot;Coding Efficient Transactions&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and a <xref:System.Data.SqlClient.SqlTransaction>. It also demonstrates how to use the BeginTransaction, a <xref:System.Data.SqlClient.SqlTransaction.Commit%2A>, and <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData SqlConnection.BeginTransaction Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._1_1.cs)]\n [!code-vb[Classic WebData SqlConnection.BeginTransaction Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._1_1.vb)]"
+  syntax:
+    content: public System.Data.SqlClient.SqlTransaction BeginTransaction ();
+    parameters: []
+    return:
+      type: System.Data.SqlClient.SqlTransaction
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.BeginTransaction*
+  exceptions:
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Parallel transactions are not allowed when using Multiple Active Result Sets (MARS)."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Parallel transactions are not supported."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel)
+  id: BeginTransaction(System.Data.IsolationLevel)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: BeginTransaction(IsolationLevel)
+  nameWithType: SqlConnection.BeginTransaction(IsolationLevel)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(IsolationLevel)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Starts a database transaction with the specified isolation level."
+  remarks: "This command maps to the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] implementation of BEGIN TRANSACTION.       You must explicitly commit or roll back the transaction using the <xref:System.Data.SqlClient.SqlTransaction.Commit%2A> or <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> method. To make sure that the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transaction management model performs correctly, avoid using other transaction management models, such as the one provided by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].      > [!NOTE] >  After a transaction is committed or rolled back, the isolation level of the transaction persists for all subsequent commands that are in autocommit mode (the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] default). This can produce unexpected results, such as an isolation level of REPEATABLE READ persisting and locking other users out of a row. To reset the isolation level to the default (READ COMMITTED), execute the [!INCLUDE[tsql](~/add/includes/tsql-md.md)] SET TRANSACTION ISOLATION LEVEL READ COMMITTED statement, or call <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A?displayProperty=fullName> followed immediately by <xref:System.Data.SqlClient.SqlTransaction.Commit%2A?displayProperty=fullName>. For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] isolation levels, see &quot;Isolation Levels in the Database Engine&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.       For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transactions, see &quot;Explicit Transactions&quot; and &quot;Coding Efficient Transactions&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.      > [!CAUTION] >  When your query returns a large amount of data and calls `BeginTransaction`, a <xref:System.Data.SqlClient.SqlException> is thrown because [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] does not allow parallel transactions when using MARS. To avoid this problem, always associate a transaction with the command, the connection, or both before any readers are open."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and a <xref:System.Data.SqlClient.SqlTransaction>. It also demonstrates how to use the <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>, a <xref:System.Data.SqlClient.SqlTransaction.Commit%2A>, and <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> methods.  \n  \n [!code-vb[Classic WebData SqlConnection.BeginTransaction1 Example#1](~/add/codesnippet/VisualBasic/b09ea924-5f89-4203-b010-_1.vb)]\n [!code-cs[Classic WebData SqlConnection.BeginTransaction1 Example#1](~/add/codesnippet/CSharp/b09ea924-5f89-4203-b010-_1.cs)]"
+  syntax:
+    content: public System.Data.SqlClient.SqlTransaction BeginTransaction (System.Data.IsolationLevel iso);
+    parameters:
+    - id: iso
+      type: System.Data.IsolationLevel
+      description: "The isolation level under which the transaction should run."
+    return:
+      type: System.Data.SqlClient.SqlTransaction
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.BeginTransaction*
+  exceptions:
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Parallel transactions are not allowed when using Multiple Active Result Sets (MARS)."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Parallel transactions are not supported."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.String)
+  id: BeginTransaction(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: BeginTransaction(String)
+  nameWithType: SqlConnection.BeginTransaction(String)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(String)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Starts a database transaction with the specified transaction name."
+  remarks: "This command maps to the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] implementation of BEGIN TRANSACTION.       The length of the `transactionName` parameter must not exceed 32 characters; otherwise an exception will be thrown.       The value in the `transactionName` parameter can be used in later calls to <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> and in the `savePoint` parameter of the <xref:System.Data.SqlClient.SqlTransaction.Save%2A> method.       You must explicitly commit or roll back the transaction using the <xref:System.Data.SqlClient.SqlTransaction.Commit%2A> or <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> method. To make sure that the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transaction management model performs correctly, avoid using other transaction management models, such as the one provided by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].       For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transactions, see &quot;Explicit Transactions&quot; and &quot;Coding Efficient Transactions&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.      > [!CAUTION] >  When your query returns a large amount of data and calls `BeginTransaction`, a <xref:System.Data.SqlClient.SqlException> is thrown because [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] does not allow parallel transactions when using MARS. To avoid this problem, always associate a transaction with the command, the connection, or both before any readers are open."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and a <xref:System.Data.SqlClient.SqlTransaction>. It also demonstrates how to use the <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>, a <xref:System.Data.SqlClient.SqlTransaction.Commit%2A>, and <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData SqlConnection.BeginTransaction2 Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._36_1.cs)]\n [!code-vb[Classic WebData SqlConnection.BeginTransaction2 Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._36_1.vb)]"
+  syntax:
+    content: public System.Data.SqlClient.SqlTransaction BeginTransaction (string transactionName);
+    parameters:
+    - id: transactionName
+      type: System.String
+      description: "The name of the transaction."
+    return:
+      type: System.Data.SqlClient.SqlTransaction
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.BeginTransaction*
+  exceptions:
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Parallel transactions are not allowed when using Multiple Active Result Sets (MARS)."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Parallel transactions are not supported."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel,System.String)
+  id: BeginTransaction(System.Data.IsolationLevel,System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: BeginTransaction(IsolationLevel,String)
+  nameWithType: SqlConnection.BeginTransaction(IsolationLevel,String)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(IsolationLevel,String)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Starts a database transaction with the specified isolation level and transaction name."
+  remarks: "This command maps to the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] implementation of BEGIN TRANSACTION.       The value in the `transactionName` parameter can be used in later calls to <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> and in the `savePoint` parameter of the <xref:System.Data.SqlClient.SqlTransaction.Save%2A> method.       You must explicitly commit or roll back the transaction using the <xref:System.Data.SqlClient.SqlTransaction.Commit%2A> or <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> method. To make sure that the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transaction management model performs correctly, avoid using other transaction management models, such as the one provided by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].      > [!NOTE] >  After a transaction is committed or rolled back, the isolation level of the transaction persists for all subsequent commands that are in autocommit mode (the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] default). This can produce unexpected results, such as an isolation level of REPEATABLE READ persisting and locking other users out of a row. To reset the isolation level to the default (READ COMMITTED), execute the [!INCLUDE[tsql](~/add/includes/tsql-md.md)] SET TRANSACTION ISOLATION LEVEL READ COMMITTED statement, or call <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A?displayProperty=fullName> followed immediately by <xref:System.Data.SqlClient.SqlTransaction.Commit%2A?displayProperty=fullName>. For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] isolation levels, see &quot;Isolation Levels in the Database Engine&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.       For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] transactions, see &quot;Explicit Transactions&quot; and &quot;Coding Efficient Transactions&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.      > [!CAUTION] >  When your query returns a large amount of data and calls `BeginTransaction`, a <xref:System.Data.SqlClient.SqlException> is thrown because [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] does not allow parallel transactions when using MARS. To avoid this problem, always associate a transaction with the command, the connection, or both before any readers are open."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and a <xref:System.Data.SqlClient.SqlTransaction>. It also demonstrates how to use the <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>, a <xref:System.Data.SqlClient.SqlTransaction.Commit%2A>, and <xref:System.Data.SqlClient.SqlTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData SqlConnection.BeginTransaction3 Example#1](~/add/codesnippet/CSharp/1f00ab5d-aff7-46ea-8f1d-_1.cs)]\n [!code-vb[Classic WebData SqlConnection.BeginTransaction3 Example#1](~/add/codesnippet/VisualBasic/1f00ab5d-aff7-46ea-8f1d-_1.vb)]"
+  syntax:
+    content: public System.Data.SqlClient.SqlTransaction BeginTransaction (System.Data.IsolationLevel iso, string transactionName);
+    parameters:
+    - id: iso
+      type: System.Data.IsolationLevel
+      description: "The isolation level under which the transaction should run."
+    - id: transactionName
+      type: System.String
+      description: "The name of the transaction."
+    return:
+      type: System.Data.SqlClient.SqlTransaction
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.BeginTransaction*
+  exceptions:
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Parallel transactions are not allowed when using Multiple Active Result Sets (MARS)."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Parallel transactions are not supported."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ChangeDatabase(System.String)
+  id: ChangeDatabase(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ChangeDatabase(String)
+  nameWithType: SqlConnection.ChangeDatabase(String)
+  fullName: System.Data.SqlClient.SqlConnection.ChangeDatabase(String)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Changes the current database for an open <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see>."
+  remarks: "The value supplied in the `database` parameter must be a valid database name. The `database` parameter cannot contain a null value, an empty string, or a string with only blank characters."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and displays some of its read-only properties.  \n  \n [!code-cs[Classic WebData SqlConnection.Database Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._10_1.cs)]\n [!code-vb[Classic WebData SqlConnection.Database Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._10_1.vb)]"
+  syntax:
+    content: public override void ChangeDatabase (string database);
+    parameters:
+    - id: database
+      type: System.String
+      description: "The name of the database to use instead of the current database."
+  overload: System.Data.SqlClient.SqlConnection.ChangeDatabase*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The database name is not valid."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The connection is not open."
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Cannot change the database."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.String)
+  id: ChangePassword(System.String,System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ChangePassword(String,String)
+  nameWithType: SqlConnection.ChangePassword(String,String)
+  fullName: System.Data.SqlClient.SqlConnection.ChangePassword(String,String)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Changes the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] password for the user indicated in the connection string to the supplied new password."
+  remarks: "When you are using [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] on Windows Server, developers can take advantage of functionality that lets the client application supply both the current and a new password in order to change the existing password. Applications can implement functionality such as prompting the user for a new password during initial login if the old one has expired, and this operation can be completed without administrator intervention.       The ChangePassword method changes the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] password for the user indicated in the supplied `connectionString` parameter to the value supplied in the `newPassword` parameter. If the connection string includes the option for integrated security (that is, &quot;Integrated Security=True&quot; or the equivalent), an exception is thrown.       To determine that the password has expired, calling the <xref:System.Data.SqlClient.SqlConnection.Open%2A> method raises a <xref:System.Data.SqlClient.SqlException>. In order to indicate that the password that is contained within the connection string must be reset, the <xref:System.Data.SqlClient.SqlException.Number%2A> property for the exception contains the status value 18487 or 18488. The first value (18487) indicates that the password has expired and the second (18488) indicates that the password must be reset before logging in.       This method opens its own connection to the server, requests the password change, and closes the connection as soon as it has completed. This connection is not retrieved from, nor returned to, the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] connection pool."
+  example:
+  - "The following is a simple example of changing a password:  \n  \n```  \nclass Program {  \n   static void Main(string[] args) {  \n      System.Data.SqlClient.SqlConnection.ChangePassword(  \n        \"Data Source=a_server;Initial Catalog=a_database;UID=user;PWD=old_password\",   \n       \"new_password\");  \n   }  \n}  \n  \n```  \n  \n```  \nModule Module1  \n    Sub Main()  \nSystem.Data.SqlClient.SqlConnection.ChangePassword(  \n        \"Data Source=a_server;Initial Catalog=a_database;UID=user;PWD=old_password\",   \n       \"new_password\")  \n    End Sub  \nEnd Module  \n  \n```  \n  \n The following console application demonstrates the issues involved in changing a user's password because the current password has expired.  \n  \n [!code-cs[DataWorks SqlConnection.ChangePassword#1](~/add/codesnippet/CSharp/7b66f468-c7fc-4a76-bd4e-_1.cs)]\n [!code-vb[DataWorks SqlConnection.ChangePassword#1](~/add/codesnippet/VisualBasic/7b66f468-c7fc-4a76-bd4e-_1.vb)]"
+  syntax:
+    content: public static void ChangePassword (string connectionString, string newPassword);
+    parameters:
+    - id: connectionString
+      type: System.String
+      description: "The connection string that contains enough information to connect to the server that you want. The connection string must contain the user ID and the current password."
+    - id: newPassword
+      type: System.String
+      description: "The new password to set. This password must comply with any password security policy set on the server, including minimum length, requirements for specific characters, and so on."
+  overload: System.Data.SqlClient.SqlConnection.ChangePassword*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The connection string includes the option to use integrated security.       Or       The newPassword exceeds 128 characters."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "Either the connectionString or the newPassword parameter is null."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.Data.SqlClient.SqlCredential,System.Security.SecureString)
+  id: ChangePassword(System.String,System.Data.SqlClient.SqlCredential,System.Security.SecureString)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ChangePassword(String,SqlCredential,SecureString)
+  nameWithType: SqlConnection.ChangePassword(String,SqlCredential,SecureString)
+  fullName: System.Data.SqlClient.SqlConnection.ChangePassword(String,SqlCredential,SecureString)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Changes the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] password for the user indicated in the <see cref=&quot;T:System.Data.SqlClient.SqlCredential&quot;></see> object."
+  syntax:
+    content: public static void ChangePassword (string connectionString, System.Data.SqlClient.SqlCredential credential, System.Security.SecureString newSecurePassword);
+    parameters:
+    - id: connectionString
+      type: System.String
+      description: 'The connection string that contains enough information to connect to a server. The connection string should not use any of the following connection string keywords: , , or ; or .'
+    - id: credential
+      type: System.Data.SqlClient.SqlCredential
+      description: "A  object."
+    - id: newSecurePassword
+      type: System.Security.SecureString
+      description: "The new password. `newSecurePassword` must be read only. The password must also comply with any password security policy set on the server (for example, minimum length and requirements for specific characters)."
+  overload: System.Data.SqlClient.SqlConnection.ChangePassword*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "1.  The connection string contains any combination of , , or .      2.  The connection string contains .      3.  newSecurePassword is greater than 128 characters.      4.  newSecurePassword is not read only.      5.  newSecurePassword is an empty string."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "One of the parameters (connectionString, credential, or newSecurePassword) is null."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ClearAllPools
+  id: ClearAllPools
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ClearAllPools()
+  nameWithType: SqlConnection.ClearAllPools()
+  fullName: System.Data.SqlClient.SqlConnection.ClearAllPools()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Empties the connection pool."
+  remarks: "ClearAllPools resets (or empties) the connection pool. If there are connections in use at the time of the call, they are marked appropriately and will be discarded (instead of being returned to the pool) when <xref:System.Data.SqlClient.SqlConnection.Close%2A> is called on them."
+  syntax:
+    content: public static void ClearAllPools ();
+    parameters: []
+  overload: System.Data.SqlClient.SqlConnection.ClearAllPools*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ClearPool(System.Data.SqlClient.SqlConnection)
+  id: ClearPool(System.Data.SqlClient.SqlConnection)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ClearPool(SqlConnection)
+  nameWithType: SqlConnection.ClearPool(SqlConnection)
+  fullName: System.Data.SqlClient.SqlConnection.ClearPool(SqlConnection)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Empties the connection pool associated with the specified connection."
+  remarks: "ClearPool clears the connection pool that is associated with the `connection`. If additional connections associated with `connection` are in use at the time of the call, they are marked appropriately and are discarded (instead of being returned to the pool) when <xref:System.Data.SqlClient.SqlConnection.Close%2A> is called on them."
+  syntax:
+    content: public static void ClearPool (System.Data.SqlClient.SqlConnection connection);
+    parameters:
+    - id: connection
+      type: System.Data.SqlClient.SqlConnection
+      description: "The  to be cleared from the pool."
+  overload: System.Data.SqlClient.SqlConnection.ClearPool*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ClientConnectionId
+  id: ClientConnectionId
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ClientConnectionId
+  nameWithType: SqlConnection.ClientConnectionId
+  fullName: System.Data.SqlClient.SqlConnection.ClientConnectionId
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "The connection ID of the most recent connection attempt, regardless of whether the attempt succeeded or failed."
+  remarks: "ClientConnectionId works regardless of which version of the server you connect to, but extended events logs and entry on connectivity ring buffer errors will not be present in [!INCLUDE[sskatmai_r2](~/add/includes/sskatmai-r2-md.md)] and earlier.       You can locate the connection ID in the extended events log to see if the failure was on the server if the extended event for logging connection ID is enabled. You can also locate the connection ID in the connection ring buffer ([Connectivity troubleshooting in SQL Server 2008 with the Connectivity Ring Buffer](http://go.microsoft.com/fwlink/?LinkId=207752)) for certain connection errors. If the connection ID is not in the connection ring buffer, you can assume a network error."
+  syntax:
+    content: public Guid ClientConnectionId { get; }
+    return:
+      type: System.Guid
+      description: "The connection ID of the most recent connection attempt."
+  overload: System.Data.SqlClient.SqlConnection.ClientConnectionId*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.Close
+  id: Close
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: Close()
+  nameWithType: SqlConnection.Close()
+  fullName: System.Data.SqlClient.SqlConnection.Close()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Closes the connection to the database. This is the preferred method of closing any open connection."
+  remarks: "The Close method rolls back any pending transactions. It then releases the connection to the connection pool, or closes the connection if connection pooling is disabled.  \n  \n> [!NOTE]\n>  Pending transactions started using [!INCLUDE[tsql](~/add/includes/tsql-md.md)] or <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A> are automatically rolled back when the connection is reset if connection pooling is enabled. If connection pooling is off, the transaction is rolled back after `SqlConnection.Close` is called. Transactions started through <xref:System.Transactions> are controlled through the `System.Transactions` infrastructure, and are not affected by `SqlConnection.Close`.  \n  \n An application can call Close more than one time. No exception is generated.  \n  \n If the <xref:System.Data.SqlClient.SqlConnection> goes out of scope, it won't be closed. Therefore, you must explicitly close the connection by calling `Close` or `Dispose`. `Close` and `Dispose` are functionally equivalent. If the connection pooling value `Pooling` is set to `true` or `yes`, the underlying connection is returned back to the connection pool. On the other hand, if `Pooling` is set to `false` or `no`, the underlying connection to the server is closed.  \n  \n> [!NOTE]\n>  Login and logout events will not be raised on the server when a connection is fetched from or returned to the connection pool, because the connection is not actually closed when it is returned to the connection pool. For more information, see [SQL Server Connection Pooling (ADO.NET)](../Topic/SQL%20Server%20Connection%20Pooling%20\\(ADO.NET\\).md).  \n  \n> [!CAUTION]\n>  Do not call `Close` or `Dispose` on a Connection, a DataReader, or any other managed object in the `Finalize` method of your class. In a finalizer, you should only release unmanaged resources that your class owns directly. If your class does not own any unmanaged resources, do not include a `Finalize` method in your class definition. For more information, see [Garbage Collection](../Topic/Garbage%20Collection.md)."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection>, opens it, displays some of its properties. The connection is automatically closed at the end of the `using` block.  \n  \n [!code-vb[Classic WebData SqlConnection.Open Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._20_1.vb)]\n [!code-cs[Classic WebData SqlConnection.Open Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._20_1.cs)]"
+  syntax:
+    content: public override void Close ();
+    parameters: []
+  overload: System.Data.SqlClient.SqlConnection.Close*
+  exceptions:
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "The connection-level error that occurred while opening the connection."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl
+  id: ColumnEncryptionKeyCacheTtl
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ColumnEncryptionKeyCacheTtl
+  nameWithType: SqlConnection.ColumnEncryptionKeyCacheTtl
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets the time-to-live for column encryption key entries in the column encryption key cache for the [Always Encrypted](https://msdn.microsoft.com/library/mt163865.aspx) feature. The default value is 2 hours. 0 means no caching at all."
+  syntax:
+    content: public static TimeSpan ColumnEncryptionKeyCacheTtl { get; set; }
+    return:
+      type: System.TimeSpan
+      description: "The time interval."
+  overload: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  id: ColumnEncryptionQueryMetadataCacheEnabled
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ColumnEncryptionQueryMetadataCacheEnabled
+  nameWithType: SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets a value that indicates whether query metadata caching is enabled (true) or not (false) for parameterized queries running against [Always Encrypted](https://msdn.microsoft.com/library/mt163865.aspx) enabled databases. The default value is true."
+  remarks: "For parameterized queries, SqlClient makes a roundtrip to SQL Server for parameter metadata, to see which parameter it needs to encrypt and how (which keys and algorithms should be used). If the application calls the same query multiple times, an extra roundtrip is made to the server each time, which degrades application performance.       With **ColumnEncryptionQueryMetadataCacheEnabled** set to true, if the same query is called multiple times, the roundtrip to the server will be made only once. The cache has a non-configurable Max size parameter that is set to 2000 queries."
+  syntax:
+    content: public static bool ColumnEncryptionQueryMetadataCacheEnabled { get; set; }
+    return:
+      type: System.Boolean
+      description: "Returns true if query metadata caching is enabled; otherwise false. true is the default."
+  overload: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  id: ColumnEncryptionTrustedMasterKeyPaths
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ColumnEncryptionTrustedMasterKeyPaths
+  nameWithType: SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Allows you to set a list of trusted key paths for a database server. If while processing an application query the driver receives a key path that is not on the list, the query will fail. This property provides additional protection against security attacks that involve a compromised SQL Server providing fake key paths, which may lead to leaking key store credentials."
+  syntax:
+    content: public static System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<string>> ColumnEncryptionTrustedMasterKeyPaths { get; }
+    return:
+      type: System.Collections.Generic.IDictionary{System.String,System.Collections.Generic.IList{System.String}}
+      description: "The list of trusted master key paths for the column encryption."
+  overload: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ConnectionString
+  id: ConnectionString
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ConnectionString
+  nameWithType: SqlConnection.ConnectionString
+  fullName: System.Data.SqlClient.SqlConnection.ConnectionString
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets the string used to open a [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] database."
+  remarks: "The ConnectionString is similar to an OLE DB connection string, but is not identical. Unlike OLE DB or ADO, the connection string that is returned is the same as the user-set ConnectionString, minus security information if the Persist Security Info value is set to `false` (default). The [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] does not persist or return the password in a connection string unless you set Persist Security Info to `true`.  \n  \n You can use the ConnectionString property to connect to a database. The following example illustrates a typical connection string.  \n  \n```  \n\"Persist Security Info=False;Integrated Security=true;Initial Catalog=Northwind;server=(local)\"  \n```  \n  \n Use the new <xref:System.Data.SqlClient.SqlConnectionStringBuilder> to construct valid connection strings at run time. For more information, see [Connection String Builders](../Topic/Connection%20String%20Builders.md).  \n  \n The ConnectionString property can be set only when the connection is closed. Many of the connection string values have corresponding read-only properties. When the connection string is set, these properties are updated, except when an error is detected. In this case, none of the properties are updated. <xref:System.Data.SqlClient.SqlConnection> properties return only those settings that are contained in the ConnectionString.  \n  \n To connect to a local computer, specify \"(local)\" for the server. If a server name is not specified, a connection will be attempted to the default instance on the local computer.  \n  \n Resetting the ConnectionString on a closed connection resets all connection string values (and related properties) including the password. For example, if you set a connection string that includes \"Database= AdventureWorks\", and then reset the connection string to \"Data Source=myserver;Integrated Security=true\", the <xref:System.Data.SqlClient.SqlConnection.Database%2A> property is no longer set to \"AdventureWorks\".  \n  \n The connection string is parsed immediately after being set. If errors in syntax are found when parsing, a runtime exception, such as <xref:System.ArgumentException>, is generated. Other errors can be found only when an attempt is made to open the connection.  \n  \n The basic format of a connection string includes a series of keyword/value pairs separated by semicolons. The equal sign (=) connects each keyword and its value. To include values that contain a semicolon, single-quote character, or double-quote character, the value must be enclosed in double quotation marks. If the value contains both a semicolon and a double-quote character, the value can be enclosed in single quotation marks. The single quotation mark is also useful if the value starts with a double-quote character. Conversely, the double quotation mark can be used if the value starts with a single quotation mark. If the value contains both single-quote and double-quote characters, the quotation mark character used to enclose the value must be doubled every time it occurs within the value.  \n  \n To include preceding or trailing spaces in the string value, the value must be enclosed in either single quotation marks or double quotation marks. Any leading or trailing spaces around integer, Boolean, or enumerated values are ignored, even if enclosed in quotation marks. However, spaces within a string literal keyword or value are preserved. Single or double quotation marks may be used within a connection string without using delimiters (for example, Data Source= my'Server or Data Source= my\"Server), unless a quotation mark character is the first or last character in the value.  \n  \n Keywords are not case sensitive.  \n  \n The following table lists the valid names for keyword values within the ConnectionString.  \n  \n  The following list contains the valid names for connection pooling values within the ConnectionString. For more information, see [SQL Server Connection Pooling (ADO.NET)](../Topic/SQL%20Server%20Connection%20Pooling%20\\(ADO.NET\\).md).  \n  \n-   Connection Lifetime (or Load Balance Timeout)  \n  \n-   Enlist  \n  \n-   Max Pool Size  \n  \n-   Min Pool Size  \n  \n-   Pooling  \n  \n When you are setting keyword or connection pooling values that require a Boolean value, you can use 'yes' instead of 'true', and 'no' instead of 'false'. Integer values are represented as strings.  \n  \n> [!NOTE]\n>  The [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] uses its own protocol to communicate with [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)]. Therefore, it does not support the use of an ODBC data source name (DSN) when connecting to [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] because it does not add an ODBC layer.  \n  \n> [!NOTE]\n>  Universal data link (UDL) files are not supported for the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].  \n  \n> [!CAUTION]\n>  In this release, the application should use caution when constructing a connection string based on user input (for example when retrieving user ID and password information from a dialog box, and appending it to the connection string). The application should make sure that a user cannot embed additional connection string parameters in these values (for example, entering a password as \"validpassword;database=somedb\" in an attempt to attach to a different database). If you need to construct connection strings based on user input, use the new <xref:System.Data.SqlClient.SqlConnectionStringBuilder>, which validates the connection string and helps to eliminate this problem. See [Connection String Builders](../Topic/Connection%20String%20Builders.md) for more information."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and sets the ConnectionString property before opening the connection.  \n  \n [!code-vb[Classic WebData SqlConnection.ConnectionString Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._24_1.vb)]\n [!code-cs[Classic WebData SqlConnection.ConnectionString Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._24_1.cs)]"
+  syntax:
+    content: public override string ConnectionString { get; set; }
+    return:
+      type: System.String
+      description: "The connection string that includes the source database name, and other parameters needed to establish the initial connection. The default value is an empty string."
+  overload: System.Data.SqlClient.SqlConnection.ConnectionString*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "An invalid connection string argument has been supplied, or a required connection string argument has not been supplied."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ConnectionTimeout
+  id: ConnectionTimeout
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ConnectionTimeout
+  nameWithType: SqlConnection.ConnectionTimeout
+  fullName: System.Data.SqlClient.SqlConnection.ConnectionTimeout
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets the time to wait while trying to establish a connection before terminating the attempt and generating an error."
+  remarks: "You can set the amount of time a connection waits to time out by using the `Connect``Timeout` or `Connection Timeout` keywords in the connection string. A value of 0 indicates no limit, and should be avoided in a <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A> because an attempt to connect waits indefinitely."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and sets the `Connection Timeout` to 30 seconds in the connection string. The code opens the connection and displays the ConnectionTimeout property in the console window.  \n  \n [!code-vb[Classic WebData SqlConnection.ConnectionTimeout Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._28_1.vb)]\n [!code-cs[Classic WebData SqlConnection.ConnectionTimeout Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._28_1.cs)]"
+  syntax:
+    content: public override int ConnectionTimeout { get; }
+    return:
+      type: System.Int32
+      description: "The time (in seconds) to wait for a connection to open. The default value is 15 seconds."
+  overload: System.Data.SqlClient.SqlConnection.ConnectionTimeout*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The value set is less than 0."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.CreateCommand
+  id: CreateCommand
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: CreateCommand()
+  nameWithType: SqlConnection.CreateCommand()
+  fullName: System.Data.SqlClient.SqlConnection.CreateCommand()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Creates and returns a <see cref=&quot;T:System.Data.SqlClient.SqlCommand&quot;></see> object associated with the <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see>."
+  remarks: ''
+  example:
+  - >-
+    [!code-vb[SqlConnection_CreateCommand#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._32_1.vb)]
+     [!code-cs[SqlConnection_CreateCommand#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._32_1.cs)]
+  syntax:
+    content: public System.Data.SqlClient.SqlCommand CreateCommand ();
+    parameters: []
+    return:
+      type: System.Data.SqlClient.SqlCommand
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.CreateCommand*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.CreateDbCommand
+  id: CreateDbCommand
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: CreateDbCommand()
+  nameWithType: SqlConnection.CreateDbCommand()
+  fullName: System.Data.SqlClient.SqlConnection.CreateDbCommand()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  syntax:
+    content: protected override System.Data.Common.DbCommand CreateDbCommand ();
+    parameters: []
+    return:
+      type: System.Data.Common.DbCommand
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.CreateDbCommand*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.Credential
+  id: Credential
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: Credential
+  nameWithType: SqlConnection.Credential
+  fullName: System.Data.SqlClient.SqlConnection.Credential
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets the <see cref=&quot;T:System.Data.SqlClient.SqlCredential&quot;></see> object for this connection."
+  remarks: "`Persist Security Info = true` is required to get the value of the <xref:System.Data.SqlClient.SqlCredential> object with Credential.       The default value of Credential is null.       An <xref:System.InvalidOperationException> exception will be raised:      -   If Credential is set on an open connection.      -   If Credential is set when `Context Connection=true`.      -   If Credential is set when `Integrated Security = true`.      -   If Credential is set when the connection string uses `Password`.      -   If Credential is set when the connection string uses `UserID`."
+  syntax:
+    content: public System.Data.SqlClient.SqlCredential Credential { get; set; }
+    return:
+      type: System.Data.SqlClient.SqlCredential
+      description: "The <see cref=&quot;T:System.Data.SqlClient.SqlCredential&quot;></see> object for this connection."
+  overload: System.Data.SqlClient.SqlConnection.Credential*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.Database
+  id: Database
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: Database
+  nameWithType: SqlConnection.Database
+  fullName: System.Data.SqlClient.SqlConnection.Database
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets the name of the current database or the database to be used after a connection is opened."
+  remarks: "The Database property updates dynamically. If you change the current database using a [!INCLUDE[tsql](~/add/includes/tsql-md.md)] statement or the <xref:System.Data.SqlClient.SqlConnection.ChangeDatabase%2A> method, an informational message is sent and the property is updated automatically."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and displays some of its read-only properties.  \n  \n [!code-cs[Classic WebData SqlConnection.Database Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._26_1.cs)]\n [!code-vb[Classic WebData SqlConnection.Database Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._26_1.vb)]"
+  syntax:
+    content: public override string Database { get; }
+    return:
+      type: System.String
+      description: "The name of the current database or the name of the database to be used after a connection is opened. The default value is an empty string."
+  overload: System.Data.SqlClient.SqlConnection.Database*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.DataSource
+  id: DataSource
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: DataSource
+  nameWithType: SqlConnection.DataSource
+  fullName: System.Data.SqlClient.SqlConnection.DataSource
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets the name of the instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] to which to connect."
+  remarks: >-
+    > [!NOTE]
+
+    >  The DataSource property returns `null` if the connection string for the <xref:System.Data.SqlClient.SqlConnection> is "context connection=true".
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and displays some of its read-only properties.  \n  \n [!code-vb[Classic WebData SqlConnection.DataSource Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._62_1.vb)]\n [!code-cs[Classic WebData SqlConnection.DataSource Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._62_1.cs)]"
+  syntax:
+    content: public override string DataSource { get; }
+    return:
+      type: System.String
+      description: "The name of the instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] to which to connect. The default value is an empty string."
+  overload: System.Data.SqlClient.SqlConnection.DataSource*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.DbProviderFactory
+  id: DbProviderFactory
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: DbProviderFactory
+  nameWithType: SqlConnection.DbProviderFactory
+  fullName: System.Data.SqlClient.SqlConnection.DbProviderFactory
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  syntax:
+    content: protected override System.Data.Common.DbProviderFactory DbProviderFactory { get; }
+    return:
+      type: System.Data.Common.DbProviderFactory
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.DbProviderFactory*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.Dispose(System.Boolean)
+  id: Dispose(System.Boolean)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: Dispose(Boolean)
+  nameWithType: SqlConnection.Dispose(Boolean)
+  fullName: System.Data.SqlClient.SqlConnection.Dispose(Boolean)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  syntax:
+    content: protected override void Dispose (bool disposing);
+    parameters:
+    - id: disposing
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.Dispose*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction(System.EnterpriseServices.ITransaction)
+  id: EnlistDistributedTransaction(System.EnterpriseServices.ITransaction)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: EnlistDistributedTransaction(ITransaction)
+  nameWithType: SqlConnection.EnlistDistributedTransaction(ITransaction)
+  fullName: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction(ITransaction)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Enlists in the specified transaction as a distributed transaction."
+  remarks: "You can use the <xref:System.Data.SqlClient.SqlConnection.EnlistTransaction%2A> method to enlist in a distributed transaction. Because it enlists a connection in a <xref:System.Transactions.Transaction> instance, **EnlistTransaction** takes advantage of functionality available in the <xref:System.Transactions> namespace for managing distributed transactions, making it preferable to **EnlistDistributedTransaction** for this purpose. For more information, see [Distributed Transactions](../Topic/Distributed%20Transactions.md).       You can continue to enlist in an existing distributed transaction using the **EnlistDistributedTransaction** method if auto-enlistment is disabled. Enlisting in an existing distributed transaction makes sure that, if the transaction is committed or rolled back, modifications made by the code at the data source are also committed or rolled back.       `EnlistDistributedTransaction` returns an exception if the <xref:System.Data.SqlClient.SqlConnection> has already started a transaction using <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>. However, if the transaction is a local transaction started at the data source (for example, by explicitly executing the BEGIN TRANSACTION statement using an <xref:System.Data.SqlClient.SqlCommand> object), **EnlistDistributedTransaction** rolls back the local transaction and enlists in the existing distributed transaction as requested. You do not receive notice that the local transaction was rolled back, and are responsible for managing any local transactions not started using <xref:System.Data.SqlClient.SqlConnection.BeginTransaction%2A>."
+  syntax:
+    content: public void EnlistDistributedTransaction (System.EnterpriseServices.ITransaction transaction);
+    parameters:
+    - id: transaction
+      type: System.EnterpriseServices.ITransaction
+      description: "A reference to an existing  in which to enlist."
+  overload: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.EnlistTransaction(System.Transactions.Transaction)
+  id: EnlistTransaction(System.Transactions.Transaction)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: EnlistTransaction(Transaction)
+  nameWithType: SqlConnection.EnlistTransaction(Transaction)
+  fullName: System.Data.SqlClient.SqlConnection.EnlistTransaction(Transaction)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Enlists in the specified transaction as a distributed transaction."
+  remarks: 'You can use the EnlistTransaction method to enlist in a distributed transaction. Because it enlists a connection in a <xref:System.Transactions.Transaction> instance, **EnlistTransaction** takes advantage of functionality available in the <xref:System.Transactions> namespace for managing distributed transactions, making it preferable to **EnlistDistributedTransaction**, which uses a **System.EnterpriseServices.ITransaction** object. It also has slightly different semantics: once a connection is explicitly enlisted on a transaction, it cannot be unenlisted or enlisted in another transaction until the first transaction finishes. For more information about distributed transactions, see [Distributed Transactions](../Topic/Distributed%20Transactions.md).'
+  syntax:
+    content: public override void EnlistTransaction (System.Transactions.Transaction transaction);
+    parameters:
+    - id: transaction
+      type: System.Transactions.Transaction
+      description: "A reference to an existing  in which to enlist."
+  overload: System.Data.SqlClient.SqlConnection.EnlistTransaction*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors
+  id: FireInfoMessageEventOnUserErrors
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: FireInfoMessageEventOnUserErrors
+  nameWithType: SqlConnection.FireInfoMessageEventOnUserErrors
+  fullName: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets or sets the FireInfoMessageEventOnUserErrors property."
+  remarks: "When you set FireInfoMessageEventOnUserErrors to `true`, errors that were previously treated as exceptions are now handled as <xref:System.Data.SqlClient.SqlConnection.InfoMessage> events. All events fire immediately and are handled by the event handler. If is FireInfoMessageEventOnUserErrors is set to `false`, then <xref:System.Data.SqlClient.SqlConnection.InfoMessage> events are handled at the end of the procedure.      > [!NOTE] >  An error with a severity level of 17 or above that causes the server to stop processing the command needs to be handled as an exception. In this case, an exception is thrown regardless of how the error is handled in the <xref:System.Data.SqlClient.SqlConnection.InfoMessage> event.       For more information on working with events, see [Connection Events](../Topic/Connection%20Events.md). For more information on errors generated by the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] engine, see [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online."
+  syntax:
+    content: public bool FireInfoMessageEventOnUserErrors { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the FireInfoMessageEventOnUserErrors property has been set; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.GetSchema
+  id: GetSchema
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: GetSchema()
+  nameWithType: SqlConnection.GetSchema()
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Returns schema information for the data source of this <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see>. For more information about scheme, see [SQL Server Schema Collections](http://msdn.microsoft.com/library/ms254969.aspx)."
+  syntax:
+    content: public override System.Data.DataTable GetSchema ();
+    parameters: []
+    return:
+      type: System.Data.DataTable
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.GetSchema*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.GetSchema(System.String)
+  id: GetSchema(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: GetSchema(String)
+  nameWithType: SqlConnection.GetSchema(String)
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema(String)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Returns schema information for the data source of this <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> using the specified string for the schema name."
+  remarks: "You may need the schema information of the database, tables or columns. This sample:      -   Uses GetSchema to get schema information.      -   Use schema restrictions to get the specified information.      -   Gets schema information of the database, tables, and some columns.       Before you run the sample, you need to create the sample database, using the following [!INCLUDE[tsql](~/add/includes/tsql-md.md)]:      ```   USE [master]   GO      CREATE DATABASE [MySchool]       GO      USE [MySchool]   GO      SET ANSI_NULLS ON   GO   SET QUOTED_IDENTIFIER ON   GO   CREATE TABLE [dbo].[Course]([CourseID] [nvarchar](10) NOT NULL,   [Year] [smallint] NOT NULL,   [Title] [nvarchar](100) NOT NULL,   [Credits] [int] NOT NULL,   [DepartmentID] [int] NOT NULL,    CONSTRAINT [PK_Course] PRIMARY KEY CLUSTERED    (   [CourseID] ASC,   [Year] ASC   )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]      GO      SET ANSI_NULLS ON   GO   SET QUOTED_IDENTIFIER ON   GO   CREATE TABLE [dbo].[Department]([DepartmentID] [int] IDENTITY(1,1) NOT NULL,   [Name] [nvarchar](50) NOT NULL,   [Budget] [money] NOT NULL,   [StartDate] [datetime] NOT NULL,   [Administrator] [int] NULL,    CONSTRAINT [PK_Department] PRIMARY KEY CLUSTERED    (   [DepartmentID] ASC   )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]      GO      INSERT [dbo].[Course] ([CourseID], [Year], [Title], [Credits], [DepartmentID]) VALUES (N&quot;C1045&quot;, 2012, N&quot;Calculus&quot;, 4, 7)   INSERT [dbo].[Course] ([CourseID], [Year], [Title], [Credits], [DepartmentID]) VALUES (N&quot;C1061&quot;, 2012, N&quot;Physics&quot;, 4, 1)   INSERT [dbo].[Course] ([CourseID], [Year], [Title], [Credits], [DepartmentID]) VALUES (N&quot;C2021&quot;, 2012, N&quot;Composition&quot;, 3, 2)   INSERT [dbo].[Course] ([CourseID], [Year], [Title], [Credits], [DepartmentID]) VALUES (N&quot;C2042&quot;, 2012, N&quot;Literature&quot;, 4, 2)      SET IDENTITY_INSERT [dbo].[Department] ON       INSERT [dbo].[Department] ([DepartmentID], [Name], [Budget], [StartDate], [Administrator]) VALUES (1, N&quot;Engineering&quot;, 350000.0000, CAST(0x0000999C00000000 AS DateTime), 2)   INSERT [dbo].[Department] ([DepartmentID], [Name], [Budget], [StartDate], [Administrator]) VALUES (2, N&quot;English&quot;, 120000.0000, CAST(0x0000999C00000000 AS DateTime), 6)   INSERT [dbo].[Department] ([DepartmentID], [Name], [Budget], [StartDate], [Administrator]) VALUES (4, N&quot;Economics&quot;, 200000.0000, CAST(0x0000999C00000000 AS DateTime), 4)   INSERT [dbo].[Department] ([DepartmentID], [Name], [Budget], [StartDate], [Administrator]) VALUES (7, N&quot;Mathematics&quot;, 250024.0000, CAST(0x0000999C00000000 AS DateTime), 3)   SET IDENTITY_INSERT [dbo].[Department] OFF      ALTER TABLE [dbo].[Course]  WITH CHECK ADD  CONSTRAINT [FK_Course_Department] FOREIGN KEY([DepartmentID])   REFERENCES [dbo].[Department] ([DepartmentID])   GO   ALTER TABLE [dbo].[Course] CHECK CONSTRAINT [FK_Course_Department]   GO   ```       [How to Get Schema Information from Database](http://code.msdn.microsoft.com/How-to-Get-Schema-b66d62e2) has C# and Visual Basic versions of this code sample in a Visual Studio project.      ```   using System;   using System.Data;   using System.Data.SqlClient;      class Program {      static void Main(string[] args) {            using (SqlConnection conn = new SqlConnection(&quot;Data Source=(local);Initial Catalog=MySchool;Integrated Security=True;Asynchronous Processing=true;&quot;)) {            conn.Open();               // Get the Meta Data for Supported Schema Collections            DataTable metaDataTable = conn.GetSchema(&quot;MetaDataCollections&quot;);               Console.WriteLine(&quot;Meta Data for Supported Schema Collections:&quot;);            ShowDataTable(metaDataTable, 25);            Console.WriteLine();               // Get the schema information of Databases in your instance            DataTable databasesSchemaTable = conn.GetSchema(&quot;Databases&quot;);               Console.WriteLine(&quot;Schema Information of Databases:&quot;);            ShowDataTable(databasesSchemaTable, 25);            Console.WriteLine();               // First, get schema information of all the tables in current database;            DataTable allTablesSchemaTable = conn.GetSchema(&quot;Tables&quot;);               Console.WriteLine(&quot;Schema Information of All Tables:&quot;);            ShowDataTable(allTablesSchemaTable, 20);            Console.WriteLine();               // You can specify the Catalog, Schema, Table Name, Table Type to get             // the specified table(s).            // You can use four restrictions for Table, so you should create a 4 members array.            String[] tableRestrictions = new String[4];               // For the array, 0-member represents Catalog; 1-member represents Schema;             // 2-member represents Table Name; 3-member represents Table Type.             // Now we specify the Table Name of the table what we want to get schema information.            tableRestrictions[2] = &quot;Course&quot;;               DataTable courseTableSchemaTable = conn.GetSchema(&quot;Tables&quot;, tableRestrictions);               Console.WriteLine(&quot;Schema Information of Course Tables:&quot;);            ShowDataTable(courseTableSchemaTable, 20);            Console.WriteLine();               // First, get schema information of all the columns in current database.            DataTable allColumnsSchemaTable = conn.GetSchema(&quot;Columns&quot;);               Console.WriteLine(&quot;Schema Information of All Columns:&quot;);            ShowColumns(allColumnsSchemaTable);            Console.WriteLine();               // You can specify the Catalog, Schema, Table Name, Column Name to get the specified column(s).            // You can use four restrictions for Column, so you should create a 4 members array.            String[] columnRestrictions = new String[4];               // For the array, 0-member represents Catalog; 1-member represents Schema;             // 2-member represents Table Name; 3-member represents Column Name.             // Now we specify the Table_Name and Column_Name of the columns what we want to get schema information.            columnRestrictions[2] = &quot;Course&quot;;            columnRestrictions[3] = &quot;DepartmentID&quot;;               DataTable departmentIDSchemaTable = conn.GetSchema(&quot;Columns&quot;, columnRestrictions);               Console.WriteLine(&quot;Schema Information of DepartmentID Column in Course Table:&quot;);            ShowColumns(departmentIDSchemaTable);            Console.WriteLine();               // First, get schema information of all the IndexColumns in current database            DataTable allIndexColumnsSchemaTable = conn.GetSchema(&quot;IndexColumns&quot;);               Console.WriteLine(&quot;Schema Information of All IndexColumns:&quot;);            ShowIndexColumns(allIndexColumnsSchemaTable);            Console.WriteLine();               // You can specify the Catalog, Schema, Table Name, Constraint Name, Column Name to             // get the specified column(s).            // You can use five restrictions for Column, so you should create a 5 members array.            String[] indexColumnsRestrictions = new String[5];               // For the array, 0-member represents Catalog; 1-member represents Schema;             // 2-member represents Table Name; 3-member represents Constraint Name;4-member represents Column Name.             // Now we specify the Table_Name and Column_Name of the columns what we want to get schema information.            indexColumnsRestrictions[2] = &quot;Course&quot;;            indexColumnsRestrictions[4] = &quot;CourseID&quot;;               DataTable courseIdIndexSchemaTable = conn.GetSchema(&quot;IndexColumns&quot;, indexColumnsRestrictions);               Console.WriteLine(&quot;Index Schema Information of CourseID Column in Course Table:&quot;);            ShowIndexColumns(courseIdIndexSchemaTable);            Console.WriteLine();         }            Console.WriteLine(&quot;Please press any key to exit...&quot;);         Console.ReadKey();      }         private static void ShowDataTable(DataTable table, Int32 length) {         foreach (DataColumn col in table.Columns) {            Console.Write(&quot;{0,-&quot; + length + &quot;}&quot;, col.ColumnName);         }         Console.WriteLine();            foreach (DataRow row in table.Rows) {            foreach (DataColumn col in table.Columns) {               if (col.DataType.Equals(typeof(DateTime)))                  Console.Write(&quot;{0,-&quot; + length + &quot;:d}&quot;, row[col]);               else if (col.DataType.Equals(typeof(Decimal)))                  Console.Write(&quot;{0,-&quot; + length + &quot;:C}&quot;, row[col]);               else                  Console.Write(&quot;{0,-&quot; + length + &quot;}&quot;, row[col]);            }            Console.WriteLine();         }      }         private static void ShowDataTable(DataTable table) {         ShowDataTable(table, 14);      }         private static void ShowColumns(DataTable columnsTable) {         var selectedRows = from info in columnsTable.AsEnumerable()                            select new {                               TableCatalog = info[&quot;TABLE_CATALOG&quot;],                               TableSchema = info[&quot;TABLE_SCHEMA&quot;],                               TableName = info[&quot;TABLE_NAME&quot;],                               ColumnName = info[&quot;COLUMN_NAME&quot;],                               DataType = info[&quot;DATA_TYPE&quot;]                            };            Console.WriteLine(&quot;{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}&quot;, &quot;TableCatalog&quot;, &quot;TABLE_SCHEMA&quot;,             &quot;TABLE_NAME&quot;, &quot;COLUMN_NAME&quot;, &quot;DATA_TYPE&quot;);         foreach (var row in selectedRows) {            Console.WriteLine(&quot;{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}&quot;, row.TableCatalog,                row.TableSchema, row.TableName, row.ColumnName, row.DataType);         }      }         private static void ShowIndexColumns(DataTable indexColumnsTable) {         var selectedRows = from info in indexColumnsTable.AsEnumerable()                            select new {                               TableSchema = info[&quot;table_schema&quot;],                               TableName = info[&quot;table_name&quot;],                               ColumnName = info[&quot;column_name&quot;],                               ConstraintSchema = info[&quot;constraint_schema&quot;],                               ConstraintName = info[&quot;constraint_name&quot;],                               KeyType = info[&quot;KeyType&quot;]                            };            Console.WriteLine(&quot;{0,-14}{1,-11}{2,-14}{3,-18}{4,-16}{5,-8}&quot;, &quot;table_schema&quot;, &quot;table_name&quot;, &quot;column_name&quot;, &quot;constraint_schema&quot;, &quot;constraint_name&quot;, &quot;KeyType&quot;);         foreach (var row in selectedRows) {            Console.WriteLine(&quot;{0,-14}{1,-11}{2,-14}{3,-18}{4,-16}{5,-8}&quot;, row.TableSchema,                row.TableName, row.ColumnName, row.ConstraintSchema, row.ConstraintName, row.KeyType);         }      }   }   ```"
+  syntax:
+    content: public override System.Data.DataTable GetSchema (string collectionName);
+    parameters:
+    - id: collectionName
+      type: System.String
+      description: "Specifies the name of the schema to return."
+    return:
+      type: System.Data.DataTable
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.GetSchema*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    collectionName is specified as null."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.GetSchema(System.String,System.String[])
+  id: GetSchema(System.String,System.String[])
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: GetSchema(String,String[])
+  nameWithType: SqlConnection.GetSchema(String,String[])
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema(String,String[])
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Returns schema information for the data source of this <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> using the specified string for the schema name and the specified string array for the restriction values."
+  remarks: "The `restrictionValues` parameter can supply *n* depth of values, which are specified by the restrictions collection for a specific collection. In order to set values on a given restriction, and not set the values of other restrictions, you need to set the preceding restrictions to `null` and then put the appropriate value in for the restriction that you would like to specify a value for.       An example of this is the &quot;Tables&quot; collection. If the &quot;Tables&quot; collection has three restrictions--database, owner, and table name--and you want to get back only the tables associated with the owner &quot;Carl&quot;, you need to pass in the following values: null, &quot;Carl&quot;. If a restriction value is not passed in, the default values are used for that restriction. This is the same mapping as passing in `null`, which is different from passing in an empty string for the parameter value. In that case, the empty string (&quot;&quot;) is considered to be the value for the specified parameter.       For a code sample demonstrating GetSchema, see <xref:System.Data.SqlClient.SqlConnection.GetSchema%2A>."
+  syntax:
+    content: public override System.Data.DataTable GetSchema (string collectionName, string[] restrictionValues);
+    parameters:
+    - id: collectionName
+      type: System.String
+      description: "Specifies the name of the schema to return."
+    - id: restrictionValues
+      type: System.String[]
+      description: "A set of restriction values for the requested schema."
+    return:
+      type: System.Data.DataTable
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.GetSchema*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    collectionName is specified as null."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.InfoMessage
+  id: InfoMessage
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: InfoMessage
+  nameWithType: SqlConnection.InfoMessage
+  fullName: System.Data.SqlClient.SqlConnection.InfoMessage
+  type: Event
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Occurs when [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] returns a warning or informational message."
+  remarks: "Clients that want to process warnings or informational messages sent by the server should create an <xref:System.Data.SqlClient.SqlInfoMessageEventHandler> delegate to listen to this event.       The InfoMessage event occurs when a message with a severity of 10 or less is returned by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)]. Messages that have a severity between 11 and 20 raise an error and messages that have a severity over 20 causes the connection to close. For more information on [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] error levels, see &quot;Database Engine Error Severities&quot; in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online.       For more information and an example, see [Connection Events](../Topic/Connection%20Events.md)."
+  syntax:
+    content: public event System.Data.SqlClient.SqlInfoMessageEventHandler InfoMessage;
+    return:
+      type: System.Data.SqlClient.SqlInfoMessageEventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.Open
+  id: Open
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: Open()
+  nameWithType: SqlConnection.Open()
+  fullName: System.Data.SqlClient.SqlConnection.Open()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Opens a database connection with the property settings specified by the &lt;xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A&gt;."
+  remarks: "The <xref:System.Data.SqlClient.SqlConnection> draws an open connection from the connection pool if one is available. Otherwise, it establishes a new connection to an instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)].      > [!NOTE] >  If the <xref:System.Data.SqlClient.SqlConnection> goes out of scope, it is not closed. Therefore, you must explicitly close the connection by calling <xref:System.Data.SqlClient.SqlConnection.Close%2A>.      > [!NOTE] >  If you specify a port number other than 1433 when you are trying to connect to an instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] and using a protocol other than TCP/IP, the Open method fails. To specify a port number other than 1433, include &quot;server=machinename,port number&quot; in the connection string, and use the TCP/IP protocol.      > [!NOTE] >  The [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] requires the Security permission with &quot;Allows calls to unmanaged assemblies&quot; enabled (<xref:System.Security.Permissions.SecurityPermission> with <xref:System.Security.Permissions.SecurityPermissionFlag> set to `UnmanagedCode`) to open a <xref:System.Data.SqlClient.SqlConnection> with SQL Debugging enabled."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection>, opens it, and displays some of its properties. The connection is automatically closed at the end of the `using` block.  \n  \n [!code-vb[Classic WebData SqlConnection.Open Example#1](~/add/codesnippet/VisualBasic/m-system.data.sqlclient._18_1.vb)]\n [!code-cs[Classic WebData SqlConnection.Open Example#1](~/add/codesnippet/CSharp/m-system.data.sqlclient._18_1.cs)]"
+  syntax:
+    content: public override void Open ();
+    parameters: []
+  overload: System.Data.SqlClient.SqlConnection.Open*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Cannot open a connection without specifying a data source or server.       or       The connection is already open."
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "A connection-level error occurred while opening the connection. If the <xref:System.Data.SqlClient.SqlException.Number%2A> property contains the value 18487 or 18488, this indicates that the specified password has expired or must be reset. See the <xref:System.Data.SqlClient.SqlConnection.ChangePassword%2A> method for more information.       The  tag in the app.config file has invalid or unknown elements."
+  - type: System.Configuration.ConfigurationErrorsException
+    commentId: T:System.Configuration.ConfigurationErrorsException
+    description: "There are two entries with the same name in the  section."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)
+  id: OpenAsync(System.Threading.CancellationToken)
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: OpenAsync(CancellationToken)
+  nameWithType: SqlConnection.OpenAsync(CancellationToken)
+  fullName: System.Data.SqlClient.SqlConnection.OpenAsync(CancellationToken)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "An asynchronous version of &lt;xref:System.Data.SqlClient.SqlConnection.Open%2A&gt;, which opens a database connection with the property settings specified by the &lt;xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A&gt;. The cancellation token can be used to request that the operation be abandoned before the connection timeout elapses.  Exceptions will be propagated via the returned Task. If the connection timeout time elapses without successfully connecting, the returned Task will be marked as faulted with an Exception. The implementation returns a Task without blocking the calling thread for both pooled and non-pooled connections."
+  remarks: "After calling OpenAsync, <xref:System.Data.SqlClient.SqlConnection.State%2A> must return <xref:System.Data.ConnectionState> until the returned <xref:System.Threading.Tasks.Task> is completed. Then, if the connection was successful, <xref:System.Data.SqlClient.SqlConnection.State%2A> must return <xref:System.Data.ConnectionState>. If the connection fails, <xref:System.Data.SqlClient.SqlConnection.State%2A> must return <xref:System.Data.ConnectionState>.       A call to <xref:System.Data.SqlClient.SqlConnection.Close%2A> will attempt to cancel or close the corresponding OpenAsync call.       For more information about asynchronous programming in the [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] Data Provider for [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)], see [Asynchronous Programming](../Topic/Asynchronous%20Programming.md)."
+  syntax:
+    content: public override System.Threading.Tasks.Task OpenAsync (System.Threading.CancellationToken cancellationToken);
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: "The cancellation instruction."
+    return:
+      type: System.Threading.Tasks.Task
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.OpenAsync*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Calling OpenAsync more than once for the same instance before task completion.        is specified in the connection string.       A connection was not available from the connection pool before the connection time out elapsed."
+  - type: System.Data.SqlClient.SqlException
+    commentId: T:System.Data.SqlClient.SqlException
+    description: "Any error returned by [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] that occurred while opening the connection."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.PacketSize
+  id: PacketSize
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: PacketSize
+  nameWithType: SqlConnection.PacketSize
+  fullName: System.Data.SqlClient.SqlConnection.PacketSize
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets the size (in bytes) of network packets used to communicate with an instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)]."
+  remarks: "If an application performs bulk copy operations, or sends or receives lots of text or image data, a packet size larger than the default may improve efficiency because it causes fewer network read and write operations. If an application sends and receives small amounts of information, you can set the packet size to 512 bytes (using the Packet Size value in the <xref:System.Data.SqlClient.SqlConnection.ConnectionString%2A>), which is sufficient for most data transfer operations. For most applications, the default packet size is best.       PacketSize may be a value in the range of 512 and 32767 bytes. An exception is generated if the value is outside this range.       Setting the default value to a number greater than 8000 will cause the packets to use the MultiPage allocator on the instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] instead of the much more efficient SinglePage allocator, reducing the overall scalability of the [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)]. For more information on how [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] uses memory, see [Memory Architecture](http://go.microsoft.com/fwlink/?LinkId=143705) in [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] Books Online."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection>, including setting the `Packet Size` to 512 in the connection string. It displays the PacketSize and <xref:System.Data.SqlClient.SqlConnection.ServerVersion%2A> properties in the console window.  \n  \n [!code-vb[Classic WebData SqlConnection.PacketSize Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._63_1.vb)]\n [!code-cs[Classic WebData SqlConnection.PacketSize Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._63_1.cs)]"
+  syntax:
+    content: public int PacketSize { get; }
+    return:
+      type: System.Int32
+      description: "The size (in bytes) of network packets. The default value is 8000."
+  overload: System.Data.SqlClient.SqlConnection.PacketSize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders(System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider})
+  id: RegisterColumnEncryptionKeyStoreProviders(System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider})
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+  nameWithType: SqlConnection.RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+  fullName: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Registers the column encryption key store providers."
+  syntax:
+    content: public static void RegisterColumnEncryptionKeyStoreProviders (System.Collections.Generic.IDictionary<string,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider> customProviders);
+    parameters:
+    - id: customProviders
+      type: System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider}
+      description: "The custom providers"
+  overload: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ResetStatistics
+  id: ResetStatistics
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ResetStatistics()
+  nameWithType: SqlConnection.ResetStatistics()
+  fullName: System.Data.SqlClient.SqlConnection.ResetStatistics()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "If statistics gathering is enabled, all values are reset to zero."
+  remarks: "If statistics gathering is not enabled and this method is called, no error is thrown."
+  syntax:
+    content: public void ResetStatistics ();
+    parameters: []
+  overload: System.Data.SqlClient.SqlConnection.ResetStatistics*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.RetrieveStatistics
+  id: RetrieveStatistics
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: RetrieveStatistics()
+  nameWithType: SqlConnection.RetrieveStatistics()
+  fullName: System.Data.SqlClient.SqlConnection.RetrieveStatistics()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Returns a name value pair collection of statistics at the point in time the method is called."
+  remarks: "When this method is called, the values retrieved are those at the current point in time. If you continue using the connection, the values are incorrect. You need to re-execute the method to obtain the most current values."
+  syntax:
+    content: public System.Collections.IDictionary RetrieveStatistics ();
+    parameters: []
+    return:
+      type: System.Collections.IDictionary
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.RetrieveStatistics*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.ServerVersion
+  id: ServerVersion
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: ServerVersion
+  nameWithType: SqlConnection.ServerVersion
+  fullName: System.Data.SqlClient.SqlConnection.ServerVersion
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets a string that contains the version of the instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)] to which the client is connected."
+  remarks: "The version is of the form *##.##.####*, where the first two digits are the major version, the next two digits are the minor version, and the last four digits are the release version. The string is of the form *major.minor.build*, where major and minor are exactly two digits and build is exactly four digits.       ServerVersion was called while the returned Task was not completed and the connection was not opened after a call to <xref:System.Data.SqlClient.SqlConnection.OpenAsync%2A>."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and displays the ServerVersion property.  \n  \n [!code-vb[Classic WebData ISqlConnection.ServerVersion Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._30_1.vb)]\n [!code-cs[Classic WebData ISqlConnection.ServerVersion Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._30_1.cs)]"
+  syntax:
+    content: public override string ServerVersion { get; }
+    return:
+      type: System.String
+      description: "The version of the instance of [!INCLUDE[ssNoVersion](~/add/includes/ssnoversion-md.md)]."
+  overload: System.Data.SqlClient.SqlConnection.ServerVersion*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The connection is closed.       ServerVersion was called while the returned Task was not completed and the connection was not opened after a call to <xref:System.Data.SqlClient.SqlConnection.OpenAsync%2A>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.State
+  id: State
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: State
+  nameWithType: SqlConnection.State
+  fullName: System.Data.SqlClient.SqlConnection.State
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Indicates the state of the <see cref=&quot;T:System.Data.SqlClient.SqlConnection&quot;></see> during the most recent network operation performed on the connection."
+  remarks: "Returns an <xref:System.Data.ConnectionState> enumeration indicating the state of the <xref:System.Data.SqlClient.SqlConnection>. Closing and reopening the connection will refresh the value of State."
+  syntax:
+    content: public override System.Data.ConnectionState State { get; }
+    return:
+      type: System.Data.ConnectionState
+      description: "An <see cref=&quot;T:System.Data.ConnectionState&quot;></see> enumeration."
+  overload: System.Data.SqlClient.SqlConnection.State*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.StatisticsEnabled
+  id: StatisticsEnabled
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: StatisticsEnabled
+  nameWithType: SqlConnection.StatisticsEnabled
+  fullName: System.Data.SqlClient.SqlConnection.StatisticsEnabled
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "When set to <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>, enables statistics gathering for the current connection."
+  remarks: "Enabling statistics gathering has a minor, but measurable effect on performance and therefore should be enabled only when it is required."
+  syntax:
+    content: public bool StatisticsEnabled { get; set; }
+    return:
+      type: System.Boolean
+      description: "Returns <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if statistics gathering is enabled; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> is the default."
+  overload: System.Data.SqlClient.SqlConnection.StatisticsEnabled*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.System#ICloneable#Clone
+  id: System#ICloneable#Clone
+  isEii: true
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: System.ICloneable.Clone()
+  nameWithType: SqlConnection.System.ICloneable.Clone()
+  fullName: System.Data.SqlClient.SqlConnection.System.ICloneable.Clone()
+  type: Method
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Creates a new object that is a copy of the current instance."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Data.SqlClient.SqlConnection> instance is cast to an <xref:System.ICloneable> interface.       This member is only supported by the .NET Compact Framework."
+  syntax:
+    content: object ICloneable.Clone ();
+    parameters: []
+    return:
+      type: System.Object
+      description: "To be added."
+  overload: System.Data.SqlClient.SqlConnection.System#ICloneable#Clone*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.SqlClient.SqlConnection.WorkstationId
+  id: WorkstationId
+  parent: System.Data.SqlClient.SqlConnection
+  langs:
+  - csharp
+  name: WorkstationId
+  nameWithType: SqlConnection.WorkstationId
+  fullName: System.Data.SqlClient.SqlConnection.WorkstationId
+  type: Property
+  assemblies:
+  - System.Data
+  namespace: System.Data.SqlClient
+  summary: "Gets a string that identifies the database client."
+  remarks: "The string typically contains the network name of the client. The WorkstationId property corresponds to the `Workstation ID` connection string property."
+  example:
+  - "The following example creates a <xref:System.Data.SqlClient.SqlConnection> and displays the WorkstationId property.  \n  \n [!code-vb[Classic WebData SqlConnection.WorkstationId Example#1](~/add/codesnippet/VisualBasic/p-system.data.sqlclient._7_1.vb)]\n [!code-cs[Classic WebData SqlConnection.WorkstationId Example#1](~/add/codesnippet/CSharp/p-system.data.sqlclient._7_1.cs)]"
+  syntax:
+    content: public string WorkstationId { get; }
+    return:
+      type: System.String
+      description: "A string that identifies the database client. If not specified, the name of the client computer. If neither is specified, the value is an empty string."
+  overload: System.Data.SqlClient.SqlConnection.WorkstationId*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Data.Common.DbConnection
+  isExternal: false
+  name: System.Data.Common.DbConnection
+- uid: System.Data.SqlClient.SqlConnection.#ctor
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: SqlConnection()
+  nameWithType: SqlConnection.SqlConnection()
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection()
+- uid: System.Data.SqlClient.SqlConnection.#ctor(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: SqlConnection(String)
+  nameWithType: SqlConnection.SqlConnection(String)
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection(String)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Data.SqlClient.SqlConnection.#ctor(System.String,System.Data.SqlClient.SqlCredential)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: SqlConnection(String,SqlCredential)
+  nameWithType: SqlConnection.SqlConnection(String,SqlCredential)
+  fullName: System.Data.SqlClient.SqlConnection.SqlConnection(String,SqlCredential)
+- uid: System.Data.SqlClient.SqlCredential
+  parent: System.Data.SqlClient
+  isExternal: false
+  name: SqlCredential
+  nameWithType: SqlCredential
+  fullName: System.Data.SqlClient.SqlCredential
+- uid: System.Data.SqlClient.SqlConnection.AccessToken
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: AccessToken
+  nameWithType: SqlConnection.AccessToken
+  fullName: System.Data.SqlClient.SqlConnection.AccessToken
+- uid: System.Data.SqlClient.SqlConnection.BeginDbTransaction(System.Data.IsolationLevel)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginDbTransaction(IsolationLevel)
+  nameWithType: SqlConnection.BeginDbTransaction(IsolationLevel)
+  fullName: System.Data.SqlClient.SqlConnection.BeginDbTransaction(IsolationLevel)
+- uid: System.Data.Common.DbTransaction
+  parent: System.Data.Common
+  isExternal: false
+  name: DbTransaction
+  nameWithType: DbTransaction
+  fullName: System.Data.Common.DbTransaction
+- uid: System.Data.IsolationLevel
+  parent: System.Data
+  isExternal: false
+  name: IsolationLevel
+  nameWithType: IsolationLevel
+  fullName: System.Data.IsolationLevel
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginTransaction()
+  nameWithType: SqlConnection.BeginTransaction()
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction()
+- uid: System.Data.SqlClient.SqlTransaction
+  parent: System.Data.SqlClient
+  isExternal: false
+  name: SqlTransaction
+  nameWithType: SqlTransaction
+  fullName: System.Data.SqlClient.SqlTransaction
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginTransaction(IsolationLevel)
+  nameWithType: SqlConnection.BeginTransaction(IsolationLevel)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(IsolationLevel)
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginTransaction(String)
+  nameWithType: SqlConnection.BeginTransaction(String)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(String)
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction(System.Data.IsolationLevel,System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginTransaction(IsolationLevel,String)
+  nameWithType: SqlConnection.BeginTransaction(IsolationLevel,String)
+  fullName: System.Data.SqlClient.SqlConnection.BeginTransaction(IsolationLevel,String)
+- uid: System.Data.SqlClient.SqlConnection.ChangeDatabase(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ChangeDatabase(String)
+  nameWithType: SqlConnection.ChangeDatabase(String)
+  fullName: System.Data.SqlClient.SqlConnection.ChangeDatabase(String)
+- uid: System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ChangePassword(String,String)
+  nameWithType: SqlConnection.ChangePassword(String,String)
+  fullName: System.Data.SqlClient.SqlConnection.ChangePassword(String,String)
+- uid: System.Data.SqlClient.SqlConnection.ChangePassword(System.String,System.Data.SqlClient.SqlCredential,System.Security.SecureString)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ChangePassword(String,SqlCredential,SecureString)
+  nameWithType: SqlConnection.ChangePassword(String,SqlCredential,SecureString)
+  fullName: System.Data.SqlClient.SqlConnection.ChangePassword(String,SqlCredential,SecureString)
+- uid: System.Security.SecureString
+  parent: System.Security
+  isExternal: false
+  name: SecureString
+  nameWithType: SecureString
+  fullName: System.Security.SecureString
+- uid: System.Data.SqlClient.SqlConnection.ClearAllPools
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClearAllPools()
+  nameWithType: SqlConnection.ClearAllPools()
+  fullName: System.Data.SqlClient.SqlConnection.ClearAllPools()
+- uid: System.Data.SqlClient.SqlConnection.ClearPool(System.Data.SqlClient.SqlConnection)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClearPool(SqlConnection)
+  nameWithType: SqlConnection.ClearPool(SqlConnection)
+  fullName: System.Data.SqlClient.SqlConnection.ClearPool(SqlConnection)
+- uid: System.Data.SqlClient.SqlConnection
+  parent: System.Data.SqlClient
+  isExternal: false
+  name: SqlConnection
+  nameWithType: SqlConnection
+  fullName: System.Data.SqlClient.SqlConnection
+- uid: System.Data.SqlClient.SqlConnection.ClientConnectionId
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClientConnectionId
+  nameWithType: SqlConnection.ClientConnectionId
+  fullName: System.Data.SqlClient.SqlConnection.ClientConnectionId
+- uid: System.Guid
+  parent: System
+  isExternal: true
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: System.Data.SqlClient.SqlConnection.Close
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Close()
+  nameWithType: SqlConnection.Close()
+  fullName: System.Data.SqlClient.SqlConnection.Close()
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionKeyCacheTtl
+  nameWithType: SqlConnection.ColumnEncryptionKeyCacheTtl
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl
+- uid: System.TimeSpan
+  parent: System
+  isExternal: true
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionQueryMetadataCacheEnabled
+  nameWithType: SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionTrustedMasterKeyPaths
+  nameWithType: SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+  fullName: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+- uid: System.Collections.Generic.IDictionary{System.String,System.Collections.Generic.IList{System.String}}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IDictionary<String,IList<String>>
+  nameWithType: IDictionary<String,IList<String>>
+  fullName: System.Collections.Generic.IDictionary<System.String,System.Collections.Generic.IList<System.String>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.Collections.Generic.IList<System.String>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Data.SqlClient.SqlConnection.ConnectionString
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ConnectionString
+  nameWithType: SqlConnection.ConnectionString
+  fullName: System.Data.SqlClient.SqlConnection.ConnectionString
+- uid: System.Data.SqlClient.SqlConnection.ConnectionTimeout
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ConnectionTimeout
+  nameWithType: SqlConnection.ConnectionTimeout
+  fullName: System.Data.SqlClient.SqlConnection.ConnectionTimeout
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Data.SqlClient.SqlConnection.CreateCommand
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: CreateCommand()
+  nameWithType: SqlConnection.CreateCommand()
+  fullName: System.Data.SqlClient.SqlConnection.CreateCommand()
+- uid: System.Data.SqlClient.SqlCommand
+  parent: System.Data.SqlClient
+  isExternal: false
+  name: SqlCommand
+  nameWithType: SqlCommand
+  fullName: System.Data.SqlClient.SqlCommand
+- uid: System.Data.SqlClient.SqlConnection.CreateDbCommand
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: CreateDbCommand()
+  nameWithType: SqlConnection.CreateDbCommand()
+  fullName: System.Data.SqlClient.SqlConnection.CreateDbCommand()
+- uid: System.Data.Common.DbCommand
+  parent: System.Data.Common
+  isExternal: false
+  name: DbCommand
+  nameWithType: DbCommand
+  fullName: System.Data.Common.DbCommand
+- uid: System.Data.SqlClient.SqlConnection.Credential
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Credential
+  nameWithType: SqlConnection.Credential
+  fullName: System.Data.SqlClient.SqlConnection.Credential
+- uid: System.Data.SqlClient.SqlConnection.Database
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Database
+  nameWithType: SqlConnection.Database
+  fullName: System.Data.SqlClient.SqlConnection.Database
+- uid: System.Data.SqlClient.SqlConnection.DataSource
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: DataSource
+  nameWithType: SqlConnection.DataSource
+  fullName: System.Data.SqlClient.SqlConnection.DataSource
+- uid: System.Data.SqlClient.SqlConnection.DbProviderFactory
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: DbProviderFactory
+  nameWithType: SqlConnection.DbProviderFactory
+  fullName: System.Data.SqlClient.SqlConnection.DbProviderFactory
+- uid: System.Data.Common.DbProviderFactory
+  parent: System.Data.Common
+  isExternal: false
+  name: DbProviderFactory
+  nameWithType: DbProviderFactory
+  fullName: System.Data.Common.DbProviderFactory
+- uid: System.Data.SqlClient.SqlConnection.Dispose(System.Boolean)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Dispose(Boolean)
+  nameWithType: SqlConnection.Dispose(Boolean)
+  fullName: System.Data.SqlClient.SqlConnection.Dispose(Boolean)
+- uid: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction(System.EnterpriseServices.ITransaction)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: EnlistDistributedTransaction(ITransaction)
+  nameWithType: SqlConnection.EnlistDistributedTransaction(ITransaction)
+  fullName: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction(ITransaction)
+- uid: System.EnterpriseServices.ITransaction
+  parent: System.EnterpriseServices
+  isExternal: false
+  name: ITransaction
+  nameWithType: ITransaction
+  fullName: System.EnterpriseServices.ITransaction
+- uid: System.Data.SqlClient.SqlConnection.EnlistTransaction(System.Transactions.Transaction)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: EnlistTransaction(Transaction)
+  nameWithType: SqlConnection.EnlistTransaction(Transaction)
+  fullName: System.Data.SqlClient.SqlConnection.EnlistTransaction(Transaction)
+- uid: System.Transactions.Transaction
+  parent: System.Transactions
+  isExternal: false
+  name: Transaction
+  nameWithType: Transaction
+  fullName: System.Transactions.Transaction
+- uid: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: FireInfoMessageEventOnUserErrors
+  nameWithType: SqlConnection.FireInfoMessageEventOnUserErrors
+  fullName: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors
+- uid: System.Data.SqlClient.SqlConnection.GetSchema
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: GetSchema()
+  nameWithType: SqlConnection.GetSchema()
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema()
+- uid: System.Data.DataTable
+  parent: System.Data
+  isExternal: false
+  name: DataTable
+  nameWithType: DataTable
+  fullName: System.Data.DataTable
+- uid: System.Data.SqlClient.SqlConnection.GetSchema(System.String)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: GetSchema(String)
+  nameWithType: SqlConnection.GetSchema(String)
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema(String)
+- uid: System.Data.SqlClient.SqlConnection.GetSchema(System.String,System.String[])
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: GetSchema(String,String[])
+  nameWithType: SqlConnection.GetSchema(String,String[])
+  fullName: System.Data.SqlClient.SqlConnection.GetSchema(String,String[])
+- uid: System.String[]
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Data.SqlClient.SqlConnection.InfoMessage
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: InfoMessage
+  nameWithType: SqlConnection.InfoMessage
+  fullName: System.Data.SqlClient.SqlConnection.InfoMessage
+- uid: System.Data.SqlClient.SqlInfoMessageEventHandler
+  parent: System.Data.SqlClient
+  isExternal: false
+  name: SqlInfoMessageEventHandler
+  nameWithType: SqlInfoMessageEventHandler
+  fullName: System.Data.SqlClient.SqlInfoMessageEventHandler
+- uid: System.Data.SqlClient.SqlConnection.Open
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Open()
+  nameWithType: SqlConnection.Open()
+  fullName: System.Data.SqlClient.SqlConnection.Open()
+- uid: System.Data.SqlClient.SqlConnection.OpenAsync(System.Threading.CancellationToken)
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: OpenAsync(CancellationToken)
+  nameWithType: SqlConnection.OpenAsync(CancellationToken)
+  fullName: System.Data.SqlClient.SqlConnection.OpenAsync(CancellationToken)
+- uid: System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Data.SqlClient.SqlConnection.PacketSize
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: PacketSize
+  nameWithType: SqlConnection.PacketSize
+  fullName: System.Data.SqlClient.SqlConnection.PacketSize
+- uid: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders(System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider})
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+  nameWithType: SqlConnection.RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+  fullName: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders(IDictionary<String,SqlColumnEncryptionKeyStoreProvider>)
+- uid: System.Collections.Generic.IDictionary{System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IDictionary<String,SqlColumnEncryptionKeyStoreProvider>
+  nameWithType: IDictionary<String,SqlColumnEncryptionKeyStoreProvider>
+  fullName: System.Collections.Generic.IDictionary<System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Data.SqlClient.SqlColumnEncryptionKeyStoreProvider
+    name: SqlColumnEncryptionKeyStoreProvider
+    nameWithType: SqlColumnEncryptionKeyStoreProvider
+    fullName: SqlColumnEncryptionKeyStoreProvider
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Data.SqlClient.SqlConnection.ResetStatistics
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ResetStatistics()
+  nameWithType: SqlConnection.ResetStatistics()
+  fullName: System.Data.SqlClient.SqlConnection.ResetStatistics()
+- uid: System.Data.SqlClient.SqlConnection.RetrieveStatistics
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: RetrieveStatistics()
+  nameWithType: SqlConnection.RetrieveStatistics()
+  fullName: System.Data.SqlClient.SqlConnection.RetrieveStatistics()
+- uid: System.Collections.IDictionary
+  parent: System.Collections
+  isExternal: true
+  name: IDictionary
+  nameWithType: IDictionary
+  fullName: System.Collections.IDictionary
+- uid: System.Data.SqlClient.SqlConnection.ServerVersion
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ServerVersion
+  nameWithType: SqlConnection.ServerVersion
+  fullName: System.Data.SqlClient.SqlConnection.ServerVersion
+- uid: System.Data.SqlClient.SqlConnection.State
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: State
+  nameWithType: SqlConnection.State
+  fullName: System.Data.SqlClient.SqlConnection.State
+- uid: System.Data.ConnectionState
+  parent: System.Data
+  isExternal: false
+  name: ConnectionState
+  nameWithType: ConnectionState
+  fullName: System.Data.ConnectionState
+- uid: System.Data.SqlClient.SqlConnection.StatisticsEnabled
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: StatisticsEnabled
+  nameWithType: SqlConnection.StatisticsEnabled
+  fullName: System.Data.SqlClient.SqlConnection.StatisticsEnabled
+- uid: System.Data.SqlClient.SqlConnection.System#ICloneable#Clone
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: System.ICloneable.Clone()
+  nameWithType: SqlConnection.System.ICloneable.Clone()
+  fullName: System.Data.SqlClient.SqlConnection.System.ICloneable.Clone()
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Data.SqlClient.SqlConnection.WorkstationId
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: WorkstationId
+  nameWithType: SqlConnection.WorkstationId
+  fullName: System.Data.SqlClient.SqlConnection.WorkstationId
+- uid: System.Data.SqlClient.SqlConnection.#ctor*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: SqlConnection
+  nameWithType: SqlConnection.SqlConnection
+- uid: System.Data.SqlClient.SqlConnection.AccessToken*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: AccessToken
+  nameWithType: SqlConnection.AccessToken
+- uid: System.Data.SqlClient.SqlConnection.BeginDbTransaction*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginDbTransaction
+  nameWithType: SqlConnection.BeginDbTransaction
+- uid: System.Data.SqlClient.SqlConnection.BeginTransaction*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: BeginTransaction
+  nameWithType: SqlConnection.BeginTransaction
+- uid: System.Data.SqlClient.SqlConnection.ChangeDatabase*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ChangeDatabase
+  nameWithType: SqlConnection.ChangeDatabase
+- uid: System.Data.SqlClient.SqlConnection.ChangePassword*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ChangePassword
+  nameWithType: SqlConnection.ChangePassword
+- uid: System.Data.SqlClient.SqlConnection.ClearAllPools*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClearAllPools
+  nameWithType: SqlConnection.ClearAllPools
+- uid: System.Data.SqlClient.SqlConnection.ClearPool*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClearPool
+  nameWithType: SqlConnection.ClearPool
+- uid: System.Data.SqlClient.SqlConnection.ClientConnectionId*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ClientConnectionId
+  nameWithType: SqlConnection.ClientConnectionId
+- uid: System.Data.SqlClient.SqlConnection.Close*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Close
+  nameWithType: SqlConnection.Close
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionKeyCacheTtl*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionKeyCacheTtl
+  nameWithType: SqlConnection.ColumnEncryptionKeyCacheTtl
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionQueryMetadataCacheEnabled
+  nameWithType: SqlConnection.ColumnEncryptionQueryMetadataCacheEnabled
+- uid: System.Data.SqlClient.SqlConnection.ColumnEncryptionTrustedMasterKeyPaths*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ColumnEncryptionTrustedMasterKeyPaths
+  nameWithType: SqlConnection.ColumnEncryptionTrustedMasterKeyPaths
+- uid: System.Data.SqlClient.SqlConnection.ConnectionString*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ConnectionString
+  nameWithType: SqlConnection.ConnectionString
+- uid: System.Data.SqlClient.SqlConnection.ConnectionTimeout*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ConnectionTimeout
+  nameWithType: SqlConnection.ConnectionTimeout
+- uid: System.Data.SqlClient.SqlConnection.CreateCommand*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: CreateCommand
+  nameWithType: SqlConnection.CreateCommand
+- uid: System.Data.SqlClient.SqlConnection.CreateDbCommand*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: CreateDbCommand
+  nameWithType: SqlConnection.CreateDbCommand
+- uid: System.Data.SqlClient.SqlConnection.Credential*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Credential
+  nameWithType: SqlConnection.Credential
+- uid: System.Data.SqlClient.SqlConnection.Database*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Database
+  nameWithType: SqlConnection.Database
+- uid: System.Data.SqlClient.SqlConnection.DataSource*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: DataSource
+  nameWithType: SqlConnection.DataSource
+- uid: System.Data.SqlClient.SqlConnection.DbProviderFactory*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: DbProviderFactory
+  nameWithType: SqlConnection.DbProviderFactory
+- uid: System.Data.SqlClient.SqlConnection.Dispose*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Dispose
+  nameWithType: SqlConnection.Dispose
+- uid: System.Data.SqlClient.SqlConnection.EnlistDistributedTransaction*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: EnlistDistributedTransaction
+  nameWithType: SqlConnection.EnlistDistributedTransaction
+- uid: System.Data.SqlClient.SqlConnection.EnlistTransaction*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: EnlistTransaction
+  nameWithType: SqlConnection.EnlistTransaction
+- uid: System.Data.SqlClient.SqlConnection.FireInfoMessageEventOnUserErrors*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: FireInfoMessageEventOnUserErrors
+  nameWithType: SqlConnection.FireInfoMessageEventOnUserErrors
+- uid: System.Data.SqlClient.SqlConnection.GetSchema*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: GetSchema
+  nameWithType: SqlConnection.GetSchema
+- uid: System.Data.SqlClient.SqlConnection.Open*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: Open
+  nameWithType: SqlConnection.Open
+- uid: System.Data.SqlClient.SqlConnection.OpenAsync*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: OpenAsync
+  nameWithType: SqlConnection.OpenAsync
+- uid: System.Data.SqlClient.SqlConnection.PacketSize*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: PacketSize
+  nameWithType: SqlConnection.PacketSize
+- uid: System.Data.SqlClient.SqlConnection.RegisterColumnEncryptionKeyStoreProviders*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: RegisterColumnEncryptionKeyStoreProviders
+  nameWithType: SqlConnection.RegisterColumnEncryptionKeyStoreProviders
+- uid: System.Data.SqlClient.SqlConnection.ResetStatistics*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ResetStatistics
+  nameWithType: SqlConnection.ResetStatistics
+- uid: System.Data.SqlClient.SqlConnection.RetrieveStatistics*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: RetrieveStatistics
+  nameWithType: SqlConnection.RetrieveStatistics
+- uid: System.Data.SqlClient.SqlConnection.ServerVersion*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: ServerVersion
+  nameWithType: SqlConnection.ServerVersion
+- uid: System.Data.SqlClient.SqlConnection.State*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: State
+  nameWithType: SqlConnection.State
+- uid: System.Data.SqlClient.SqlConnection.StatisticsEnabled*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: StatisticsEnabled
+  nameWithType: SqlConnection.StatisticsEnabled
+- uid: System.Data.SqlClient.SqlConnection.System#ICloneable#Clone*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: System.ICloneable.Clone
+  nameWithType: SqlConnection.System.ICloneable.Clone
+- uid: System.Data.SqlClient.SqlConnection.WorkstationId*
+  parent: System.Data.SqlClient.SqlConnection
+  isExternal: false
+  name: WorkstationId
+  nameWithType: SqlConnection.WorkstationId

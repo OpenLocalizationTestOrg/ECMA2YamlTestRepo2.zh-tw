@@ -1,0 +1,875 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.UI.UpdateProgress
+  id: UpdateProgress
+  children:
+  - System.Web.UI.UpdateProgress.#ctor
+  - System.Web.UI.UpdateProgress.AssociatedUpdatePanelID
+  - System.Web.UI.UpdateProgress.Attributes
+  - System.Web.UI.UpdateProgress.Controls
+  - System.Web.UI.UpdateProgress.CreateChildControls
+  - System.Web.UI.UpdateProgress.DataBind
+  - System.Web.UI.UpdateProgress.DisplayAfter
+  - System.Web.UI.UpdateProgress.DynamicLayout
+  - System.Web.UI.UpdateProgress.GetScriptDescriptors
+  - System.Web.UI.UpdateProgress.GetScriptReferences
+  - System.Web.UI.UpdateProgress.OnPreRender(System.EventArgs)
+  - System.Web.UI.UpdateProgress.ProgressTemplate
+  - System.Web.UI.UpdateProgress.Render(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#GetAttribute(System.String)
+  - System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#SetAttribute(System.String,System.String)
+  - System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptDescriptors
+  - System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptReferences
+  langs:
+  - csharp
+  name: UpdateProgress
+  nameWithType: UpdateProgress
+  fullName: System.Web.UI.UpdateProgress
+  type: Class
+  summary: "Provides visual feedback in the browser when the contents of one or more <see cref=&quot;T:System.Web.UI.UpdatePanel&quot;></see> controls are updated."
+  remarks: "In this topic:      -   [Introduction](#introduction)      -   [Associating an UpdateProgress with an UpdatePanel Control](#associating_an_updateprogress_with_an_updatepanel_control)      -   [Specifying the Content of the UpdateProgress Control](#specifying_the_content_of_the_updateprogress_control)      -   [Putting UpdateProgress Controls on the Page](#putting_updateprogress_controls_on_the_page)      -   [Customizing When UpdateProgress Controls Are Displayed](#customizing_when_updateprogress_controls_are_displayed)      -   [Applying CSS Styles](#applying_styles)      -   [Declarative Syntax](#declarative_syntax)      <a name=&quot;introduction&quot;></a>    ## Introduction    The UpdateProgress control enables you to provide feedback about the progress of partial-page rendering. For postbacks or initial page rendering, UpdateProgress control content is not displayed.       The page can contain multiple UpdateProgress controls. Each one can be associated with a different <xref:System.Web.UI.UpdatePanel> control. Alternatively, you can use one UpdateProgress control and associate it with all the <xref:System.Web.UI.UpdatePanel> controls on the page.       The UpdateProgress control renders a `div` element that is displayed or hidden depending on where a postback originates and whether the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property of the UpdateProgress control is set.      <a name=&quot;associating_an_updateprogress_with_an_updatepanel_control&quot;></a>    ## Associating an UpdateProgress with an UpdatePanel Control    You associate UpdateProgress controls with an <xref:System.Web.UI.UpdatePanel> control by setting the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property of the UpdateProgress control. When a postback event originates from inside an <xref:System.Web.UI.UpdatePanel> control, any associated UpdateProgress controls are displayed. If you do not set the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property, the UpdateProgress control displays progress for any asynchronous postback that originates from inside any <xref:System.Web.UI.UpdatePanel> control. It is also displayed for any controls that are triggers for panels.       The <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property has the following effect on UpdateProgress control behavior:      -   When the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property is not set, the UpdateProgress control is displayed for the following postbacks:          -   Postbacks that originate from inside any <xref:System.Web.UI.UpdatePanel> control.          -   Postbacks that originate from controls that are asynchronous triggers for any <xref:System.Web.UI.UpdatePanel> control.      -   When the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property is set to an <xref:System.Web.UI.UpdatePanel> control ID, the UpdateProgress control is displayed for postbacks that originate from inside the associated <xref:System.Web.UI.UpdatePanel> control.       If the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property is set to a control that does not exist, the UpdateProgress control will never be shown.       If the <xref:System.Web.UI.UpdatePanel.ChildrenAsTriggers%2A> property of the <xref:System.Web.UI.UpdatePanel> controls is set to `false` and a postback originates from inside an <xref:System.Web.UI.UpdatePanel> control, any associated UpdateProgress controls will still be displayed.      <a name=&quot;specifying_the_content_of_the_updateprogress_control&quot;></a>    ## Specifying the Content of the UpdateProgress Control    Use the <xref:System.Web.UI.UpdateProgress.ProgressTemplate%2A> property to specify the message that is displayed by an UpdateProgress control. If the <xref:System.Web.UI.UpdateProgress.ProgressTemplate%2A> property is empty, nothing is shown when the UpdateProgress control is displayed.       The template can contain HTML and markup. For example, you can display an animated image that notifies the user that the postback is processing. You can also display a button that the user can click to stop the partial-page update. Additionally, you might want to prevent all other postbacks while one is in progress. The following example shows client script that you can use to accomplish these tasks.       [!code-cs[System.Web.UI.UpdateProgress4#1](~/add/codesnippet/CSharp/t-system.web.ui.updatepr_1.aspx)]  [!code-vb[System.Web.UI.UpdateProgress4#1](~/add/codesnippet/VisualBasic/t-system.web.ui.updatepr_1.aspx)]       You can use the example code by setting the `onClick` attribute of an `HtmlButton` control to &quot;AbortPostBack()&quot;. For more information, see the  method and the  property of the  class.      <a name=&quot;putting_updateprogress_controls_on_the_page&quot;></a>    ## Putting UpdateProgress Controls on the Page    UpdateProgress controls can be inside or outside other <xref:System.Web.UI.UpdatePanel> controls. The display of the UpdateProgress control&quot;s template does not depend on where the UpdateProgress control is located. In a nested <xref:System.Web.UI.UpdatePanel> control, a child panel is inside a parent panel. In that case, a postback that originates from inside the child panel causes all UpdateProgress controls associated with the child panel and the parent panel to be displayed. If a postback originates from an immediate child control of the parent panel, only the UpdateProgress controls that are associated with the parent panel are displayed.      <a name=&quot;customizing_when_updateprogress_controls_are_displayed&quot;></a>    ## Customizing When UpdateProgress Controls Are Displayed    By default, the UpdateProgress control waits .5 seconds (500 milliseconds) before it displays its contents. This helps prevent the control from flashing if an asynchronous postback is very quick. You can specify the delay by setting the <xref:System.Web.UI.UpdateProgress.DisplayAfter%2A> property.       If you need finer control over when an UpdateProgress control is displayed, you can provide client script for the  and  events of the  class. In the `beginRequest` event handler, you can display the DOM element that represents the UpdateProgress control. In the `endRequest` event handler, you can hide it.       You must provide client script to display an UpdateProgress control when a target <xref:System.Web.UI.UpdatePanel> control is updated in the following circumstances:      -   When a postback from a control is registered as an asynchronous postback trigger for the panel, and there is an UpdateProgress control on the page. However, the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A> property is not set to the panel&quot;s ID.      -   When postbacks from controls are registered as asynchronous postback controls by using the <xref:System.Web.UI.ScriptManager.RegisterAsyncPostBackControl%2A> method of the <xref:System.Web.UI.ScriptManager> control.      <a name=&quot;applying_styles&quot;></a>    ## Applying CSS Styles    The UpdateProgress control accepts expando attributes. This makes it possible to set a CSS class on the HTMLelements that the controls render. For example, you might create the markup shown in the following example:      ```   <asp:UpdateProgress runat=&quot;server&quot; class=&quot;myStyle&quot;>   </asp: UpdateProgress>    ```       The markup in the previous example renders HTML similar to the following when the page runs:      ```   <div id=&quot;ctl00_MainContent_UpdateProgress1&quot; class=&quot;myStyle&quot;>   </div>   ```      <a name=&quot;declarative_syntax&quot;></a>    ## Declarative Syntax      ```   <asp:UpdateProgress       AssociatedUpdatePanelID=&quot;string&quot;       DisplayAfter=&quot;integer&quot;       DynamicLayout=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Visible=&quot;True|False&quot;   >           <ProgressTemplate>               <!-- child controls -->           </ProgressTemplate>   </asp:UpdateProgress>   ```"
+  example:
+  - "The following examples show different ways to use the UpdateProgress control to show progress during asynchronous postbacks.  \n  \n The following example shows one UpdateProgress control that displays progress status for two <xref:System.Web.UI.UpdatePanel> controls.  \n  \n [!code-vb[System.Web.UI.UpdateProgress1#1](~/add/codesnippet/VisualBasic/t-system.web.ui.updatepr_2.aspx)]\n [!code-cs[System.Web.UI.UpdateProgress1#1](~/add/codesnippet/CSharp/t-system.web.ui.updatepr_2.aspx)]  \n  \n This following example shows two UpdateProgress controls. Each control displays progress status for an associated <xref:System.Web.UI.UpdatePanel> control.  \n  \n [!code-vb[System.Web.UI.UpdateProgress2#1](~/add/codesnippet/VisualBasic/t-system.web.ui.updatepr_3.aspx)]\n [!code-cs[System.Web.UI.UpdateProgress2#1](~/add/codesnippet/CSharp/t-system.web.ui.updatepr_3.aspx)]"
+  syntax:
+    content: >-
+      [System.ComponentModel.DefaultProperty("AssociatedUpdatePanelID")]
+
+      [System.ComponentModel.Designer("System.Web.UI.Design.UpdateProgressDesigner, System.Web.Extensions.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35")]
+
+      [System.Drawing.ToolboxBitmap(typeof(EmbeddedResourceFinder), "System.Web.Resources.UpdateProgress.bmp")]
+
+      [System.Web.UI.ParseChildren(true)]
+
+      [System.Web.UI.PersistChildren(false)]
+
+      public class UpdateProgress : System.Web.UI.Control, System.Web.UI.IAttributeAccessor, System.Web.UI.IScriptControl
+  inheritance:
+  - System.Object
+  - System.Web.UI.Control
+  implements:
+  - System.Web.UI.IAttributeAccessor
+  - System.Web.UI.IScriptControl
+  inheritedMembers:
+  - System.Web.UI.Control.Adapter
+  - System.Web.UI.Control.AddedControl(System.Web.UI.Control,System.Int32)
+  - System.Web.UI.Control.AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.ApplyStyleSheetSkin(System.Web.UI.Page)
+  - System.Web.UI.Control.AppRelativeTemplateSourceDirectory
+  - System.Web.UI.Control.BeginRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.BindingContainer
+  - System.Web.UI.Control.BuildProfileTree(System.String,System.Boolean)
+  - System.Web.UI.Control.ChildControlsCreated
+  - System.Web.UI.Control.ClearCachedClientID
+  - System.Web.UI.Control.ClearChildControlState
+  - System.Web.UI.Control.ClearChildState
+  - System.Web.UI.Control.ClearChildViewState
+  - System.Web.UI.Control.ClearEffectiveClientIDMode
+  - System.Web.UI.Control.ClientID
+  - System.Web.UI.Control.ClientIDMode
+  - System.Web.UI.Control.ClientIDSeparator
+  - System.Web.UI.Control.Context
+  - System.Web.UI.Control.CreateControlCollection
+  - System.Web.UI.Control.DataBind(System.Boolean)
+  - System.Web.UI.Control.DataBindChildren
+  - System.Web.UI.Control.DataBinding
+  - System.Web.UI.Control.DataItemContainer
+  - System.Web.UI.Control.DataKeysContainer
+  - System.Web.UI.Control.DesignMode
+  - System.Web.UI.Control.Dispose
+  - System.Web.UI.Control.Disposed
+  - System.Web.UI.Control.EnableTheming
+  - System.Web.UI.Control.EnableViewState
+  - System.Web.UI.Control.EndRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.EnsureChildControls
+  - System.Web.UI.Control.EnsureID
+  - System.Web.UI.Control.Events
+  - System.Web.UI.Control.FindControl(System.String)
+  - System.Web.UI.Control.FindControl(System.String,System.Int32)
+  - System.Web.UI.Control.Focus
+  - System.Web.UI.Control.GetDesignModeState
+  - System.Web.UI.Control.GetRouteUrl(System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetRouteUrl(System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetUniqueIDRelativeTo(System.Web.UI.Control)
+  - System.Web.UI.Control.HasChildViewState
+  - System.Web.UI.Control.HasControls
+  - System.Web.UI.Control.HasEvents
+  - System.Web.UI.Control.ID
+  - System.Web.UI.Control.IdSeparator
+  - System.Web.UI.Control.Init
+  - System.Web.UI.Control.IsChildControlStateCleared
+  - System.Web.UI.Control.IsLiteralContent
+  - System.Web.UI.Control.IsTrackingViewState
+  - System.Web.UI.Control.IsViewStateEnabled
+  - System.Web.UI.Control.Load
+  - System.Web.UI.Control.LoadControlState(System.Object)
+  - System.Web.UI.Control.LoadViewState(System.Object)
+  - System.Web.UI.Control.LoadViewStateByID
+  - System.Web.UI.Control.MapPathSecure(System.String)
+  - System.Web.UI.Control.NamingContainer
+  - System.Web.UI.Control.OnBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.OnDataBinding(System.EventArgs)
+  - System.Web.UI.Control.OnInit(System.EventArgs)
+  - System.Web.UI.Control.OnLoad(System.EventArgs)
+  - System.Web.UI.Control.OnUnload(System.EventArgs)
+  - System.Web.UI.Control.OpenFile(System.String)
+  - System.Web.UI.Control.Page
+  - System.Web.UI.Control.Parent
+  - System.Web.UI.Control.PreRender
+  - System.Web.UI.Control.RaiseBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.RemovedControl(System.Web.UI.Control)
+  - System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter,System.Web.UI.Adapters.ControlAdapter)
+  - System.Web.UI.Control.RenderingCompatibility
+  - System.Web.UI.Control.ResolveAdapter
+  - System.Web.UI.Control.ResolveClientUrl(System.String)
+  - System.Web.UI.Control.ResolveUrl(System.String)
+  - System.Web.UI.Control.SaveControlState
+  - System.Web.UI.Control.SaveViewState
+  - System.Web.UI.Control.SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.SetRenderMethodDelegate(System.Web.UI.RenderMethod)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object,System.Object)
+  - System.Web.UI.Control.Site
+  - System.Web.UI.Control.SkinID
+  - System.Web.UI.Control.System#Web#UI#IControlBuilderAccessor#ControlBuilder
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#GetDesignModeState
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetOwnerControl(System.Web.UI.Control)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#UserData
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#DataBindings
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#HasDataBindings
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#Expressions
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#HasExpressions
+  - System.Web.UI.Control.System#Web#UI#IParserAccessor#AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.TemplateControl
+  - System.Web.UI.Control.TemplateSourceDirectory
+  - System.Web.UI.Control.TrackViewState
+  - System.Web.UI.Control.UniqueID
+  - System.Web.UI.Control.Unload
+  - System.Web.UI.Control.ValidateRequestMode
+  - System.Web.UI.Control.ViewState
+  - System.Web.UI.Control.ViewStateIgnoresCase
+  - System.Web.UI.Control.ViewStateMode
+  - System.Web.UI.Control.Visible
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.#ctor
+  id: '#ctor'
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: UpdateProgress()
+  nameWithType: UpdateProgress.UpdateProgress()
+  fullName: System.Web.UI.UpdateProgress.UpdateProgress()
+  type: Constructor
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> class."
+  remarks: "When you create an <xref:System.Web.UI.UpdateProgress> control dynamically, you create a custom template that inherits from the <xref:System.Web.UI.ITemplate> control. You specify markup in the <xref:System.Web.UI.ITemplate.InstantiateIn%2A> method, and then set the <xref:System.Web.UI.UpdateProgress.ProgressTemplate%2A> property of the dynamically created <xref:System.Web.UI.UpdateProgress> control to a new instance of the custom template. When you create <xref:System.Web.UI.UpdateProgress> controls dynamically, you must do so during or before the <xref:System.Web.UI.Control.PreRender> event of the page. If you create the <xref:System.Web.UI.UpdateProgress> control later in the page life cycle, progress is not displayed."
+  syntax:
+    content: public UpdateProgress ();
+    parameters: []
+  overload: System.Web.UI.UpdateProgress.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID
+  id: AssociatedUpdatePanelID
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: AssociatedUpdatePanelID
+  nameWithType: UpdateProgress.AssociatedUpdatePanelID
+  fullName: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets or sets the ID of the <see cref=&quot;T:System.Web.UI.UpdatePanel&quot;></see> control that the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control displays status for."
+  remarks: "The default value is an empty string, which means that the <xref:System.Web.UI.UpdateProgress> control is not associated with a specific <xref:System.Web.UI.UpdatePanel> control. Therefore, asynchronous postbacks that originate from inside any <xref:System.Web.UI.UpdatePanel> control or postbacks from controls that are triggers for the panel cause the <xref:System.Web.UI.UpdateProgress> control to display its <xref:System.Web.UI.UpdateProgress.ProgressTemplate%2A> content.       You can set the AssociatedUpdatePanelID property to controls in the same naming container, in a parent naming container, or in the page."
+  syntax:
+    content: public string AssociatedUpdatePanelID { get; set; }
+    return:
+      type: System.String
+      description: "The ID of the associated <see cref=&quot;T:System.Web.UI.UpdatePanel&quot;></see> control. The default value is an empty string."
+  overload: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.Attributes
+  id: Attributes
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: Attributes
+  nameWithType: UpdateProgress.Attributes
+  fullName: System.Web.UI.UpdateProgress.Attributes
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets or sets the cascading style sheet (CSS) attributes of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control."
+  syntax:
+    content: public System.Web.UI.AttributeCollection Attributes { get; }
+    return:
+      type: System.Web.UI.AttributeCollection
+      description: "The names of the CSS attribute."
+  overload: System.Web.UI.UpdateProgress.Attributes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.Controls
+  id: Controls
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: Controls
+  nameWithType: UpdateProgress.Controls
+  fullName: System.Web.UI.UpdateProgress.Controls
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets a <see cref=&quot;T:System.Web.UI.ControlCollection&quot;></see> object that represents the child controls of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control."
+  syntax:
+    content: public override System.Web.UI.ControlCollection Controls { get; }
+    return:
+      type: System.Web.UI.ControlCollection
+      description: "The collection of child controls for the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control."
+  overload: System.Web.UI.UpdateProgress.Controls*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.CreateChildControls
+  id: CreateChildControls
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: CreateChildControls()
+  nameWithType: UpdateProgress.CreateChildControls()
+  fullName: System.Web.UI.UpdateProgress.CreateChildControls()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Called to create any child controls that the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control contains in preparation for posting back or rendering."
+  syntax:
+    content: protected override void CreateChildControls ();
+    parameters: []
+  overload: System.Web.UI.UpdateProgress.CreateChildControls*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.DataBind
+  id: DataBind
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: DataBind()
+  nameWithType: UpdateProgress.DataBind()
+  fullName: System.Web.UI.UpdateProgress.DataBind()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Binds a data source to the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control and all its child controls."
+  syntax:
+    content: public override void DataBind ();
+    parameters: []
+  overload: System.Web.UI.UpdateProgress.DataBind*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.DisplayAfter
+  id: DisplayAfter
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: DisplayAfter
+  nameWithType: UpdateProgress.DisplayAfter
+  fullName: System.Web.UI.UpdateProgress.DisplayAfter
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets or sets the value in milliseconds before the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control is displayed."
+  syntax:
+    content: public int DisplayAfter { get; set; }
+    return:
+      type: System.Int32
+      description: "An integer that represents the number of milliseconds before the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control&quot;s progress template is displayed. The default is 500 milliseconds (.5 seconds)."
+  overload: System.Web.UI.UpdateProgress.DisplayAfter*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The DisplayAfter property is less than zero."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.DynamicLayout
+  id: DynamicLayout
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: DynamicLayout
+  nameWithType: UpdateProgress.DynamicLayout
+  fullName: System.Web.UI.UpdateProgress.DynamicLayout
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets or sets a value that determines whether the progress template is rendered dynamically."
+  remarks: "The DynamicLayout property determines whether space for the progress template&quot;s contents is allocated on the page only when it is needed.       When the DynamicLayout property is `true`, space for the progress template&quot;s contents is not allocated when the page is first rendered. Instead, the page changes dynamically to display the contents when it is required. In the `style` property of the `div` element that contains the progress template in the rendered markup, the `display` attribute is set to `none`.       When the DynamicLayout property is `false`, space for the progress template&quot;s contents is allocated when the page is first rendered, and the <xref:System.Web.UI.UpdateProgress> control content is physically part of the page layout. In the `style` property of the `div` element that contains the progress template in the rendered markup, the `display` attribute is set to `block`, and the `visibility` attribute is initially set to `hidden`."
+  syntax:
+    content: public bool DynamicLayout { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the progress template is rendered dynamically; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.UpdateProgress.DynamicLayout*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.GetScriptDescriptors
+  id: GetScriptDescriptors
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: GetScriptDescriptors()
+  nameWithType: UpdateProgress.GetScriptDescriptors()
+  fullName: System.Web.UI.UpdateProgress.GetScriptDescriptors()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Returns a list of components, behaviors, and client controls that are required for the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control&quot;s client functionality."
+  remarks: "The <xref:System.Web.UI.UpdateProgress> control requires the [!INCLUDE[atlaslib_current_ext](~/add/includes/atlaslib-current-ext-md.md)] client library. This client class is registered in the GetScriptDescriptors method and the <xref:System.Web.UI.UpdateProgress.AssociatedUpdatePanelID%2A>, <xref:System.Web.UI.UpdateProgress.DisplayAfter%2A>, and <xref:System.Web.UI.UpdateProgress.DynamicLayout%2A> property values."
+  syntax:
+    content: protected virtual System.Collections.Generic.IEnumerable<System.Web.UI.ScriptDescriptor> GetScriptDescriptors ();
+    parameters: []
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptDescriptor}
+      description: "To be added."
+  overload: System.Web.UI.UpdateProgress.GetScriptDescriptors*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.GetScriptReferences
+  id: GetScriptReferences
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: GetScriptReferences()
+  nameWithType: UpdateProgress.GetScriptReferences()
+  fullName: System.Web.UI.UpdateProgress.GetScriptReferences()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Returns a list of client script library dependencies for the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control."
+  remarks: "The <xref:System.Web.UI.UpdateProgress> control does not have any server scriptdependencies."
+  syntax:
+    content: protected virtual System.Collections.Generic.IEnumerable<System.Web.UI.ScriptReference> GetScriptReferences ();
+    parameters: []
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptReference}
+      description: "To be added."
+  overload: System.Web.UI.UpdateProgress.GetScriptReferences*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.OnPreRender(System.EventArgs)
+  id: OnPreRender(System.EventArgs)
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: OnPreRender(EventArgs)
+  nameWithType: UpdateProgress.OnPreRender(EventArgs)
+  fullName: System.Web.UI.UpdateProgress.OnPreRender(EventArgs)
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Raises the <see cref=&quot;E:System.Web.UI.Control.PreRender&quot;></see> event."
+  syntax:
+    content: protected override void OnPreRender (EventArgs e);
+    parameters:
+    - id: e
+      type: System.EventArgs
+      description: "The event data."
+  overload: System.Web.UI.UpdateProgress.OnPreRender*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.ProgressTemplate
+  id: ProgressTemplate
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: ProgressTemplate
+  nameWithType: UpdateProgress.ProgressTemplate
+  fullName: System.Web.UI.UpdateProgress.ProgressTemplate
+  type: Property
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Gets or sets the template that defines the content of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control."
+  remarks: "The template must be defined. Otherwise, an exception is thrown during the <xref:System.Web.UI.UpdateProgress> control&quot;s `Init` event. You can specify the ProgressTemplate property declaratively by adding markup to the `ProgressTemplate` element. If there is no markup in the `ProgressTemplate` element, nothing is displayed for the <xref:System.Web.UI.UpdateProgress> control.       If you are creating <xref:System.Web.UI.UpdateProgress> controls dynamically, you can create a custom template that inherits from the <xref:System.Web.UI.ITemplate> control. You specify markup in the <xref:System.Web.UI.ITemplate.InstantiateIn%2A> method, and then set the ProgressTemplate property of the dynamically created <xref:System.Web.UI.UpdateProgress> control to a new instance of the custom template. If you create <xref:System.Web.UI.UpdateProgress> controls dynamically, do so during or before the <xref:System.Web.UI.Control.PreRender> event of the page. If you create the <xref:System.Web.UI.UpdateProgress> control later in the page life cycle, progress is not displayed."
+  syntax:
+    content: public System.Web.UI.ITemplate ProgressTemplate { get; set; }
+    return:
+      type: System.Web.UI.ITemplate
+      description: "An <see cref=&quot;T:System.Web.UI.ITemplate&quot;></see> instance that defines the content of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control. The default is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.UpdateProgress.ProgressTemplate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.Render(System.Web.UI.HtmlTextWriter)
+  id: Render(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: Render(HtmlTextWriter)
+  nameWithType: UpdateProgress.Render(HtmlTextWriter)
+  fullName: System.Web.UI.UpdateProgress.Render(HtmlTextWriter)
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Writes the rendered content of the <see cref=&quot;T:System.Web.UI.UpdateProgress&quot;></see> control to the browser by using the supplied <see cref=&quot;T:System.Web.UI.HtmlTextWriter&quot;></see> object."
+  remarks: "The Render method is used by control developers to extend the functionality of the <xref:System.Web.UI.UpdateProgress> control.       The Render method writes the rendered content of the <xref:System.Web.UI.UpdateProgress> control to the browser by using the supplied <xref:System.Web.UI.HtmlTextWriter> object. When you override the Render method in a derived class, call the base class&quot;s Render method so that the child controls of the <xref:System.Web.UI.UpdateProgress> control are rendered."
+  syntax:
+    content: protected override void Render (System.Web.UI.HtmlTextWriter writer);
+    parameters:
+    - id: writer
+      type: System.Web.UI.HtmlTextWriter
+      description: "An object that represents the output stream for rendering HTML content."
+  overload: System.Web.UI.UpdateProgress.Render*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#GetAttribute(System.String)
+  id: System#Web#UI#IAttributeAccessor#GetAttribute(System.String)
+  isEii: true
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: System.Web.UI.IAttributeAccessor.GetAttribute(String)
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.GetAttribute(String)
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IAttributeAccessor.GetAttribute(String)
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Returns an attribute of a Web control by using the specified name."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.UpdateProgress> instance is cast to an <xref:System.Web.UI.IAttributeAccessor> interface."
+  syntax:
+    content: string IAttributeAccessor.GetAttribute (string key);
+    parameters:
+    - id: key
+      type: System.String
+      description: "The name of the attribute to return."
+    return:
+      type: System.String
+      description: "To be added."
+  overload: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#GetAttribute*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#SetAttribute(System.String,System.String)
+  id: System#Web#UI#IAttributeAccessor#SetAttribute(System.String,System.String)
+  isEii: true
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "Sets the value of the specified user-control attribute."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.UpdateProgress> instance is cast to an <xref:System.Web.UI.IAttributeAccessor> interface."
+  syntax:
+    content: void IAttributeAccessor.SetAttribute (string key, string value);
+    parameters:
+    - id: key
+      type: System.String
+      description: "The name of the attribute to set."
+    - id: value
+      type: System.String
+      description: "The value of the attribute to set."
+  overload: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#SetAttribute*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptDescriptors
+  id: System#Web#UI#IScriptControl#GetScriptDescriptors
+  isEii: true
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: System.Web.UI.IScriptControl.GetScriptDescriptors()
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptDescriptors()
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IScriptControl.GetScriptDescriptors()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "For a description of this member, see &lt;xref:System.Web.UI.IScriptControl.GetScriptDescriptors%2A?displayProperty=fullName&gt;."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.UpdateProgress> instance is cast to an <xref:System.Web.UI.IScriptControl> interface."
+  syntax:
+    content: System.Collections.Generic.IEnumerable<System.Web.UI.ScriptDescriptor> IScriptControl.GetScriptDescriptors ();
+    parameters: []
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptDescriptor}
+      description: "To be added."
+  overload: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptDescriptors*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptReferences
+  id: System#Web#UI#IScriptControl#GetScriptReferences
+  isEii: true
+  parent: System.Web.UI.UpdateProgress
+  langs:
+  - csharp
+  name: System.Web.UI.IScriptControl.GetScriptReferences()
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptReferences()
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IScriptControl.GetScriptReferences()
+  type: Method
+  assemblies:
+  - System.Web.Extensions
+  namespace: System.Web.UI
+  summary: "For a description of this member, see &lt;xref:System.Web.UI.IScriptControl.GetScriptReferences%2A?displayProperty=fullName&gt;."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.UpdateProgress> instance is cast to an <xref:System.Web.UI.IScriptControl> interface."
+  syntax:
+    content: System.Collections.Generic.IEnumerable<System.Web.UI.ScriptReference> IScriptControl.GetScriptReferences ();
+    parameters: []
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptReference}
+      description: "To be added."
+  overload: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptReferences*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Web.UI.Control
+  isExternal: false
+  name: System.Web.UI.Control
+- uid: System.Web.UI.UpdateProgress.#ctor
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: UpdateProgress()
+  nameWithType: UpdateProgress.UpdateProgress()
+  fullName: System.Web.UI.UpdateProgress.UpdateProgress()
+- uid: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: AssociatedUpdatePanelID
+  nameWithType: UpdateProgress.AssociatedUpdatePanelID
+  fullName: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.UI.UpdateProgress.Attributes
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Attributes
+  nameWithType: UpdateProgress.Attributes
+  fullName: System.Web.UI.UpdateProgress.Attributes
+- uid: System.Web.UI.AttributeCollection
+  parent: System.Web.UI
+  isExternal: false
+  name: AttributeCollection
+  nameWithType: AttributeCollection
+  fullName: System.Web.UI.AttributeCollection
+- uid: System.Web.UI.UpdateProgress.Controls
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Controls
+  nameWithType: UpdateProgress.Controls
+  fullName: System.Web.UI.UpdateProgress.Controls
+- uid: System.Web.UI.ControlCollection
+  parent: System.Web.UI
+  isExternal: false
+  name: ControlCollection
+  nameWithType: ControlCollection
+  fullName: System.Web.UI.ControlCollection
+- uid: System.Web.UI.UpdateProgress.CreateChildControls
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: CreateChildControls()
+  nameWithType: UpdateProgress.CreateChildControls()
+  fullName: System.Web.UI.UpdateProgress.CreateChildControls()
+- uid: System.Web.UI.UpdateProgress.DataBind
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DataBind()
+  nameWithType: UpdateProgress.DataBind()
+  fullName: System.Web.UI.UpdateProgress.DataBind()
+- uid: System.Web.UI.UpdateProgress.DisplayAfter
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DisplayAfter
+  nameWithType: UpdateProgress.DisplayAfter
+  fullName: System.Web.UI.UpdateProgress.DisplayAfter
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Web.UI.UpdateProgress.DynamicLayout
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DynamicLayout
+  nameWithType: UpdateProgress.DynamicLayout
+  fullName: System.Web.UI.UpdateProgress.DynamicLayout
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.UI.UpdateProgress.GetScriptDescriptors
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: GetScriptDescriptors()
+  nameWithType: UpdateProgress.GetScriptDescriptors()
+  fullName: System.Web.UI.UpdateProgress.GetScriptDescriptors()
+- uid: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptDescriptor}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IEnumerable<ScriptDescriptor>
+  nameWithType: IEnumerable<ScriptDescriptor>
+  fullName: System.Collections.Generic.IEnumerable<System.Web.UI.ScriptDescriptor>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Web.UI.ScriptDescriptor>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.ScriptDescriptor
+    name: ScriptDescriptor
+    nameWithType: ScriptDescriptor
+    fullName: ScriptDescriptor
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Web.UI.UpdateProgress.GetScriptReferences
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: GetScriptReferences()
+  nameWithType: UpdateProgress.GetScriptReferences()
+  fullName: System.Web.UI.UpdateProgress.GetScriptReferences()
+- uid: System.Collections.Generic.IEnumerable{System.Web.UI.ScriptReference}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IEnumerable<ScriptReference>
+  nameWithType: IEnumerable<ScriptReference>
+  fullName: System.Collections.Generic.IEnumerable<System.Web.UI.ScriptReference>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Web.UI.ScriptReference>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.ScriptReference
+    name: ScriptReference
+    nameWithType: ScriptReference
+    fullName: ScriptReference
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Web.UI.UpdateProgress.OnPreRender(System.EventArgs)
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: OnPreRender(EventArgs)
+  nameWithType: UpdateProgress.OnPreRender(EventArgs)
+  fullName: System.Web.UI.UpdateProgress.OnPreRender(EventArgs)
+- uid: System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.Web.UI.UpdateProgress.ProgressTemplate
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: ProgressTemplate
+  nameWithType: UpdateProgress.ProgressTemplate
+  fullName: System.Web.UI.UpdateProgress.ProgressTemplate
+- uid: System.Web.UI.ITemplate
+  parent: System.Web.UI
+  isExternal: false
+  name: ITemplate
+  nameWithType: ITemplate
+  fullName: System.Web.UI.ITemplate
+- uid: System.Web.UI.UpdateProgress.Render(System.Web.UI.HtmlTextWriter)
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Render(HtmlTextWriter)
+  nameWithType: UpdateProgress.Render(HtmlTextWriter)
+  fullName: System.Web.UI.UpdateProgress.Render(HtmlTextWriter)
+- uid: System.Web.UI.HtmlTextWriter
+  parent: System.Web.UI
+  isExternal: false
+  name: HtmlTextWriter
+  nameWithType: HtmlTextWriter
+  fullName: System.Web.UI.HtmlTextWriter
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#GetAttribute(System.String)
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IAttributeAccessor.GetAttribute(String)
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.GetAttribute(String)
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IAttributeAccessor.GetAttribute(String)
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#SetAttribute(System.String,System.String)
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IAttributeAccessor.SetAttribute(String,String)
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptDescriptors
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IScriptControl.GetScriptDescriptors()
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptDescriptors()
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IScriptControl.GetScriptDescriptors()
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptReferences
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IScriptControl.GetScriptReferences()
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptReferences()
+  fullName: System.Web.UI.UpdateProgress.System.Web.UI.IScriptControl.GetScriptReferences()
+- uid: System.Web.UI.UpdateProgress.#ctor*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: UpdateProgress
+  nameWithType: UpdateProgress.UpdateProgress
+- uid: System.Web.UI.UpdateProgress.AssociatedUpdatePanelID*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: AssociatedUpdatePanelID
+  nameWithType: UpdateProgress.AssociatedUpdatePanelID
+- uid: System.Web.UI.UpdateProgress.Attributes*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Attributes
+  nameWithType: UpdateProgress.Attributes
+- uid: System.Web.UI.UpdateProgress.Controls*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Controls
+  nameWithType: UpdateProgress.Controls
+- uid: System.Web.UI.UpdateProgress.CreateChildControls*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: CreateChildControls
+  nameWithType: UpdateProgress.CreateChildControls
+- uid: System.Web.UI.UpdateProgress.DataBind*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DataBind
+  nameWithType: UpdateProgress.DataBind
+- uid: System.Web.UI.UpdateProgress.DisplayAfter*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DisplayAfter
+  nameWithType: UpdateProgress.DisplayAfter
+- uid: System.Web.UI.UpdateProgress.DynamicLayout*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: DynamicLayout
+  nameWithType: UpdateProgress.DynamicLayout
+- uid: System.Web.UI.UpdateProgress.GetScriptDescriptors*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: GetScriptDescriptors
+  nameWithType: UpdateProgress.GetScriptDescriptors
+- uid: System.Web.UI.UpdateProgress.GetScriptReferences*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: GetScriptReferences
+  nameWithType: UpdateProgress.GetScriptReferences
+- uid: System.Web.UI.UpdateProgress.OnPreRender*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: OnPreRender
+  nameWithType: UpdateProgress.OnPreRender
+- uid: System.Web.UI.UpdateProgress.ProgressTemplate*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: ProgressTemplate
+  nameWithType: UpdateProgress.ProgressTemplate
+- uid: System.Web.UI.UpdateProgress.Render*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: Render
+  nameWithType: UpdateProgress.Render
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#GetAttribute*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IAttributeAccessor.GetAttribute
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.GetAttribute
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IAttributeAccessor#SetAttribute*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IAttributeAccessor.SetAttribute
+  nameWithType: UpdateProgress.System.Web.UI.IAttributeAccessor.SetAttribute
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptDescriptors*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IScriptControl.GetScriptDescriptors
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptDescriptors
+- uid: System.Web.UI.UpdateProgress.System#Web#UI#IScriptControl#GetScriptReferences*
+  parent: System.Web.UI.UpdateProgress
+  isExternal: false
+  name: System.Web.UI.IScriptControl.GetScriptReferences
+  nameWithType: UpdateProgress.System.Web.UI.IScriptControl.GetScriptReferences

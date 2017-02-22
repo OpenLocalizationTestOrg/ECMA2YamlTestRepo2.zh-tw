@@ -1,0 +1,580 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.AddIn.Hosting.AddInStore
+  id: AddInStore
+  children:
+  - System.AddIn.Hosting.AddInStore.FindAddIn(System.Type,System.String,System.String,System.String)
+  - System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation)
+  - System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation,System.String[])
+  - System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.String,System.String[])
+  - System.AddIn.Hosting.AddInStore.Rebuild(System.AddIn.Hosting.PipelineStoreLocation)
+  - System.AddIn.Hosting.AddInStore.Rebuild(System.String)
+  - System.AddIn.Hosting.AddInStore.RebuildAddIns(System.String)
+  - System.AddIn.Hosting.AddInStore.Update(System.AddIn.Hosting.PipelineStoreLocation)
+  - System.AddIn.Hosting.AddInStore.Update(System.String)
+  - System.AddIn.Hosting.AddInStore.UpdateAddIns(System.String)
+  langs:
+  - csharp
+  name: AddInStore
+  nameWithType: AddInStore
+  fullName: System.AddIn.Hosting.AddInStore
+  type: Class
+  summary: "Provides methods to store and find information about available add-ins and pipeline segments."
+  remarks: "Use this class to build, rebuild, and update two cache files, as described in the following table.      |Cache file|Methods that create the file|   |----------------|----------------------------------|   |PipelineSegments.store<br /><br /> This file is located in the root directory of the pipeline directory structure.|<xref:System.AddIn.Hosting.AddInStore.Update%2A><br /><br /> Updates the file with new pipeline segments. If no new segments are installed, this method just validates the cache.<br /><br /> <xref:System.AddIn.Hosting.AddInStore.Rebuild%2A><br /><br /> Rebuilds the file and includes new pipeline segments.|   |AddIns.store<br /><br /> This file is located in a directory that contains one or more add-in subdirectories. If this directory is in the pipeline directory structure, it must be named AddIns.|<xref:System.AddIn.Hosting.AddInStore.UpdateAddIns%2A><br /><br /> Updates the file with new add-ins at a specified location. Call this method if your add-ins are outside the pipeline directory structure.<br /><br /> If no new add-ins are installed, this method just validates the cache.<br /><br /> <xref:System.AddIn.Hosting.AddInStore.RebuildAddIns%2A><br /><br /> Rebuilds the file and includes add-ins at a specified location. Call this method if your add-ins are outside the pipeline directory structure.<br /><br /> <xref:System.AddIn.Hosting.AddInStore.Update%2A><br /><br /> If the add-ins are in the pipeline directory structure, this method updates the file with new add-ins.<br /><br /> <xref:System.AddIn.Hosting.AddInStore.Rebuild%2A><br /><br /> If the add-ins are in the pipeline directory structure, this method rebuilds the file and includes new add-ins.|       These methods create the cache files if they do not previously exist.       After the cache files are created, use the <xref:System.AddIn.Hosting.AddInStore.FindAddIns%2A> method to examine the files to find all add-ins that match a specified host view of the add-in. You can also use the <xref:System.AddIn.Hosting.AddInStore.FindAddIn%2A> method to find a specific add-in.      > [!IMPORTANT] >  It is unsupported to allow untrusted users or entities to access PipelineSegments.store and Addins.store. Doing so can cause data corruption issues for applications."
+  example:
+  - "The following example shows how to update cache files.  \n  \n [!code-vb[AddInP3Host#2](~/add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#2)]\n [!code-cs[AddInP3Host#2](~/add/codesnippet/CSharp/addinP3Host/P3Host.cs#2)]"
+  syntax:
+    content: public static class AddInStore
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.FindAddIn(System.Type,System.String,System.String,System.String)
+  id: FindAddIn(System.Type,System.String,System.String,System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: FindAddIn(Type,String,String,String)
+  nameWithType: AddInStore.FindAddIn(Type,String,String,String)
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIn(Type,String,String,String)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Finds a specific add-in."
+  remarks: "If a single pipeline for an add-in is found, it will be the only item in the <xref:System.AddIn.Hosting.AddInToken> collection. If multiple pipelines to the specified add-in are found, you can differentiate them by examining the <xref:System.AddIn.Hosting.AddInToken.QualificationData%2A> property."
+  example:
+  - "The following example finds a specific add-in.  \n  \n [!code-vb[AddInP3Host#6](~/add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#6)]\n [!code-cs[AddInP3Host#6](~/add/codesnippet/CSharp/addinP3Host/P3Host.cs#6)]"
+  syntax:
+    content: public static System.Collections.ObjectModel.Collection<System.AddIn.Hosting.AddInToken> FindAddIn (Type hostViewOfAddIn, string pipelineRootFolderPath, string addInFilePath, string addInTypeName);
+    parameters:
+    - id: hostViewOfAddIn
+      type: System.Type
+      description: "The type that defines the host&quot;s view of the add-in."
+    - id: pipelineRootFolderPath
+      type: System.String
+      description: "The path to the root of the pipeline directory structure."
+    - id: addInFilePath
+      type: System.String
+      description: "The path and file name of the add-in to find."
+    - id: addInTypeName
+      type: System.String
+      description: "The type name of the add-in."
+    return:
+      type: System.Collections.ObjectModel.Collection{System.AddIn.Hosting.AddInToken}
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.FindAddIn*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The length of pipelineRootFolderPath or addInFilePath or addInTypeName is 0.  \n  \n \\- or -  \n  \n The add-in file does not exist in addInfilePath."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "One or more parameters are ."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have read access permission to pipelineRootFolderPath."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation)
+  id: FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: FindAddIns(Type,PipelineStoreLocation)
+  nameWithType: AddInStore.FindAddIns(Type,PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,PipelineStoreLocation)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Finds all add-ins for a specified host view of the add-in at a location specified by the <see cref=&quot;T:System.AddIn.Hosting.PipelineStoreLocation&quot;></see> enumeration value."
+  remarks: "The <xref:System.AddIn.Hosting.PipelineStoreLocation> enumeration currently contains only the <xref:System.AddIn.Hosting.PipelineStoreLocation> value, which points to the host&quot;s application base directory."
+  example:
+  - "The following example finds add-ins at the location specified by the <xref:System.AddIn.Hosting.PipelineStoreLocation> enumeration.  \n  \n [!code-vb[AddInP3Host#4](~/add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#4)]\n [!code-cs[AddInP3Host#4](~/add/codesnippet/CSharp/addinP3Host/P3Host.cs#4)]"
+  syntax:
+    content: public static System.Collections.ObjectModel.Collection<System.AddIn.Hosting.AddInToken> FindAddIns (Type hostViewOfAddIn, System.AddIn.Hosting.PipelineStoreLocation location);
+    parameters:
+    - id: hostViewOfAddIn
+      type: System.Type
+      description: "The type that defines the host&quot;s view of the add-in."
+    - id: location
+      type: System.AddIn.Hosting.PipelineStoreLocation
+      description: "The host application&quot;s base directory."
+    return:
+      type: System.Collections.ObjectModel.Collection{System.AddIn.Hosting.AddInToken}
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.FindAddIns*
+  exceptions:
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    location is an invalid  value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation,System.String[])
+  id: FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation,System.String[])
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: FindAddIns(Type,PipelineStoreLocation,String[])
+  nameWithType: AddInStore.FindAddIns(Type,PipelineStoreLocation,String[])
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,PipelineStoreLocation,String[])
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Finds all add-ins for a specified host view of the add-in at the location specified by a <see cref=&quot;T:System.AddIn.Hosting.PipelineStoreLocation&quot;></see> value and an optional add-ins folder."
+  remarks: "Use this method overload to enable a partially trusted host, which may not have path discovery permission to discover its own location, to find add-ins in its own directory."
+  syntax:
+    content: public static System.Collections.ObjectModel.Collection<System.AddIn.Hosting.AddInToken> FindAddIns (Type hostViewOfAddIn, System.AddIn.Hosting.PipelineStoreLocation location, string[] addInFolderPaths);
+    parameters:
+    - id: hostViewOfAddIn
+      type: System.Type
+      description: "The type that defines the host&quot;s view of the add-in."
+    - id: location
+      type: System.AddIn.Hosting.PipelineStoreLocation
+      description: "One of the enumeration values.       Currently the only value in this enumeration is the directory specified by the <xref:System.AppDomainSetup.ApplicationBase%2A?displayProperty=fullName> property that was used to set up the host&quot;s application domain."
+    - id: addInFolderPaths
+      type: System.String[]
+      description: "(Optional). The path of the directory that contains one or more subdirectories of add-ins. Because this parameter takes an array of strings, you can specify more than one path.       This parameter is not required if your add-ins are located in the pipeline directory structure under the AddIns folder."
+    return:
+      type: System.Collections.ObjectModel.Collection{System.AddIn.Hosting.AddInToken}
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.FindAddIns*
+  exceptions:
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    location is an invalid  value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.String,System.String[])
+  id: FindAddIns(System.Type,System.String,System.String[])
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: FindAddIns(Type,String,String[])
+  nameWithType: AddInStore.FindAddIns(Type,String,String[])
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,String,String[])
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Finds all add-ins for a specified host view of the add-in from a specified root directory."
+  remarks: "This method examines the store files of cached add-in and pipeline segment information to find all add-ins that match a specified `hostAddInView` type. You can then use one of the tokens in the returned <xref:System.AddIn.Hosting.AddInToken> collection to activate a specific add-in by calling the <xref:System.AddIn.Hosting.AddInToken.Activate%2A> method of the <xref:System.AddIn.Hosting.AddInToken> class."
+  syntax:
+    content: public static System.Collections.ObjectModel.Collection<System.AddIn.Hosting.AddInToken> FindAddIns (Type hostViewOfAddIn, string pipelineRootFolderPath, string[] addInFolderPaths);
+    parameters:
+    - id: hostViewOfAddIn
+      type: System.Type
+      description: "The type that defines the host&quot;s view of the add-in."
+    - id: pipelineRootFolderPath
+      type: System.String
+      description: "The path of the root of the pipeline directory structure."
+    - id: addInFolderPaths
+      type: System.String[]
+      description: "(Optional). The path of the directory that contains one or more subdirectories of add-ins. Because this parameter takes an array of strings, you can specify more than one path.       This parameter is not required if your add-ins are located in the pipeline directory structure under the AddIns folder."
+    return:
+      type: System.Collections.ObjectModel.Collection{System.AddIn.Hosting.AddInToken}
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.FindAddIns*
+  exceptions:
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.Rebuild(System.AddIn.Hosting.PipelineStoreLocation)
+  id: Rebuild(System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: Rebuild(PipelineStoreLocation)
+  nameWithType: AddInStore.Rebuild(PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.Rebuild(PipelineStoreLocation)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Rebuilds the pipeline segments cache and includes new segments at the location specified by a <see cref=&quot;T:System.AddIn.Hosting.PipelineStoreLocation&quot;></see> value."
+  remarks: "Use this method overload to enable a partially trusted host, which may not have permission to discover its own location, to discover add-ins in its own directory."
+  syntax:
+    content: public static string[] Rebuild (System.AddIn.Hosting.PipelineStoreLocation location);
+    parameters:
+    - id: location
+      type: System.AddIn.Hosting.PipelineStoreLocation
+      description: "One of the enumeration values.       Currently the only value in this enumeration is the directory specified by the <xref:System.AppDomainSetup.ApplicationBase%2A?displayProperty=fullName> property that was used to set up the host&quot;s application domain."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.Rebuild*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    location is an invalid  value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.Rebuild(System.String)
+  id: Rebuild(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: Rebuild(String)
+  nameWithType: AddInStore.Rebuild(String)
+  fullName: System.AddIn.Hosting.AddInStore.Rebuild(String)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Rebuilds the pipeline segments cache and includes new segments from a specified root directory."
+  remarks: "This method also rebuilds the add-ins cache if the add-ins are in the pipeline directory structure.       Use this method only when there may be a problem with the cache and it must be rebuilt. For faster performance, use the <xref:System.AddIn.Hosting.AddInStore.Update%2A> method."
+  syntax:
+    content: public static string[] Rebuild (string pipelineRootFolderPath);
+    parameters:
+    - id: pipelineRootFolderPath
+      type: System.String
+      description: "The path of the root of the pipeline directory structure."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.Rebuild*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.RebuildAddIns(System.String)
+  id: RebuildAddIns(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: RebuildAddIns(String)
+  nameWithType: AddInStore.RebuildAddIns(String)
+  fullName: System.AddIn.Hosting.AddInStore.RebuildAddIns(String)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Rebuilds the add-in cache and includes new add-ins from a specified root directory."
+  remarks: "Call this method if your add-ins are outside the pipeline directory structure.       Use this method only when there may be a problem with the cache and it must be rebuilt. For faster performance, use the <xref:System.AddIn.Hosting.AddInStore.UpdateAddIns%2A> method."
+  syntax:
+    content: public static string[] RebuildAddIns (string addInsFolderPath);
+    parameters:
+    - id: addInsFolderPath
+      type: System.String
+      description: "The path of the directory that contains one or more subdirectories of add-ins."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.RebuildAddIns*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    addInsFolderPath is ."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "Caller does not have both read and write access permissions to the location that is specified by addInsFolderPath."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.Update(System.AddIn.Hosting.PipelineStoreLocation)
+  id: Update(System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: Update(PipelineStoreLocation)
+  nameWithType: AddInStore.Update(PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.Update(PipelineStoreLocation)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Updates the pipeline segments cache with new segments at the location specified by a <see cref=&quot;T:System.AddIn.Hosting.PipelineStoreLocation&quot;></see> value."
+  remarks: "Use this method overload to enable a partially trusted host, which may not have permission to discover its own location, to discover add-ins in its own directory."
+  syntax:
+    content: public static string[] Update (System.AddIn.Hosting.PipelineStoreLocation location);
+    parameters:
+    - id: location
+      type: System.AddIn.Hosting.PipelineStoreLocation
+      description: "One of the enumeration values.       Currently the only value in this enumeration is the directory as specified by the <xref:System.AppDomainSetup.ApplicationBase%2A?displayProperty=fullName> property that was used to set up the host&quot;s application domain."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.Update*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    location is an invalid  value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.Update(System.String)
+  id: Update(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: Update(String)
+  nameWithType: AddInStore.Update(String)
+  fullName: System.AddIn.Hosting.AddInStore.Update(String)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Updates the pipeline segments cache with new segments from a specified root directory."
+  remarks: "This method also updates the add-ins cache if the add-ins are in the pipeline directory structure.       If there are no new pipeline segments or add-ins, this method just validates the cache."
+  example:
+  - "The following example shows how to update the cache files. This code example is part of a larger example provided for the <xref:System.AddIn.Hosting.AddInStore> class.  \n  \n [!code-vb[AddInP3Host#3](~/add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#3)]\n [!code-cs[AddInP3Host#3](~/add/codesnippet/CSharp/addinP3Host/P3Host.cs#3)]"
+  syntax:
+    content: public static string[] Update (string pipelineRootFolderPath);
+    parameters:
+    - id: pipelineRootFolderPath
+      type: System.String
+      description: "The path of the root of the pipeline directory structure."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.Update*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.AddIn.Hosting.AddInStore.UpdateAddIns(System.String)
+  id: UpdateAddIns(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  langs:
+  - csharp
+  name: UpdateAddIns(String)
+  nameWithType: AddInStore.UpdateAddIns(String)
+  fullName: System.AddIn.Hosting.AddInStore.UpdateAddIns(String)
+  type: Method
+  assemblies:
+  - System.AddIn
+  namespace: System.AddIn.Hosting
+  summary: "Updates the add-in cache and includes new add-ins at a specified location."
+  remarks: "Call this method if your add-ins are outside the pipeline directory structure.       If no new add-ins are installed, this method just validates the cache."
+  syntax:
+    content: public static string[] UpdateAddIns (string addInsFolderPath);
+    parameters:
+    - id: addInsFolderPath
+      type: System.String
+      description: "The path of the directory that contains one or more subdirectories of add-ins."
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.AddIn.Hosting.AddInStore.UpdateAddIns*
+  exceptions:
+  - type: System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    commentId: T:System.AddIn.Hosting.AddInSegmentDirectoryNotFoundException
+    description: "A segment directory is missing from the pipeline directory structure."
+  - type: System.AddIn.Hosting.InvalidPipelineStoreException
+    commentId: T:System.AddIn.Hosting.InvalidPipelineStoreException
+    description: "There is an access violation to the pipeline directory structure."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    addInsFolderPath is ."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "Caller does not have both read and write access permissions to the location that is specified by addInsFolderPath."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.AddIn.Hosting.AddInStore.FindAddIn(System.Type,System.String,System.String,System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIn(Type,String,String,String)
+  nameWithType: AddInStore.FindAddIn(Type,String,String,String)
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIn(Type,String,String,String)
+- uid: System.Collections.ObjectModel.Collection{System.AddIn.Hosting.AddInToken}
+  parent: System.Collections.ObjectModel
+  isExternal: true
+  name: Collection<AddInToken>
+  nameWithType: Collection<AddInToken>
+  fullName: System.Collections.ObjectModel.Collection<System.AddIn.Hosting.AddInToken>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.Collection`1
+    name: Collection
+    nameWithType: Collection
+    fullName: Collection<System.AddIn.Hosting.AddInToken>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.AddIn.Hosting.AddInToken
+    name: AddInToken
+    nameWithType: AddInToken
+    fullName: AddInToken
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIns(Type,PipelineStoreLocation)
+  nameWithType: AddInStore.FindAddIns(Type,PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,PipelineStoreLocation)
+- uid: System.AddIn.Hosting.PipelineStoreLocation
+  parent: System.AddIn.Hosting
+  isExternal: false
+  name: PipelineStoreLocation
+  nameWithType: PipelineStoreLocation
+  fullName: System.AddIn.Hosting.PipelineStoreLocation
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.AddIn.Hosting.PipelineStoreLocation,System.String[])
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIns(Type,PipelineStoreLocation,String[])
+  nameWithType: AddInStore.FindAddIns(Type,PipelineStoreLocation,String[])
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,PipelineStoreLocation,String[])
+- uid: System.String[]
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns(System.Type,System.String,System.String[])
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIns(Type,String,String[])
+  nameWithType: AddInStore.FindAddIns(Type,String,String[])
+  fullName: System.AddIn.Hosting.AddInStore.FindAddIns(Type,String,String[])
+- uid: System.AddIn.Hosting.AddInStore.Rebuild(System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Rebuild(PipelineStoreLocation)
+  nameWithType: AddInStore.Rebuild(PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.Rebuild(PipelineStoreLocation)
+- uid: System.AddIn.Hosting.AddInStore.Rebuild(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Rebuild(String)
+  nameWithType: AddInStore.Rebuild(String)
+  fullName: System.AddIn.Hosting.AddInStore.Rebuild(String)
+- uid: System.AddIn.Hosting.AddInStore.RebuildAddIns(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: RebuildAddIns(String)
+  nameWithType: AddInStore.RebuildAddIns(String)
+  fullName: System.AddIn.Hosting.AddInStore.RebuildAddIns(String)
+- uid: System.AddIn.Hosting.AddInStore.Update(System.AddIn.Hosting.PipelineStoreLocation)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Update(PipelineStoreLocation)
+  nameWithType: AddInStore.Update(PipelineStoreLocation)
+  fullName: System.AddIn.Hosting.AddInStore.Update(PipelineStoreLocation)
+- uid: System.AddIn.Hosting.AddInStore.Update(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Update(String)
+  nameWithType: AddInStore.Update(String)
+  fullName: System.AddIn.Hosting.AddInStore.Update(String)
+- uid: System.AddIn.Hosting.AddInStore.UpdateAddIns(System.String)
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: UpdateAddIns(String)
+  nameWithType: AddInStore.UpdateAddIns(String)
+  fullName: System.AddIn.Hosting.AddInStore.UpdateAddIns(String)
+- uid: System.AddIn.Hosting.AddInStore.FindAddIn*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIn
+  nameWithType: AddInStore.FindAddIn
+- uid: System.AddIn.Hosting.AddInStore.FindAddIns*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: FindAddIns
+  nameWithType: AddInStore.FindAddIns
+- uid: System.AddIn.Hosting.AddInStore.Rebuild*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Rebuild
+  nameWithType: AddInStore.Rebuild
+- uid: System.AddIn.Hosting.AddInStore.RebuildAddIns*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: RebuildAddIns
+  nameWithType: AddInStore.RebuildAddIns
+- uid: System.AddIn.Hosting.AddInStore.Update*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: Update
+  nameWithType: AddInStore.Update
+- uid: System.AddIn.Hosting.AddInStore.UpdateAddIns*
+  parent: System.AddIn.Hosting.AddInStore
+  isExternal: false
+  name: UpdateAddIns
+  nameWithType: AddInStore.UpdateAddIns

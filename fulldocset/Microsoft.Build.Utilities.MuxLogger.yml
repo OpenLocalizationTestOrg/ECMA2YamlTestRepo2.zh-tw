@@ -1,0 +1,356 @@
+### YamlMime:ManagedReference
+items:
+- uid: Microsoft.Build.Utilities.MuxLogger
+  id: MuxLogger
+  children:
+  - Microsoft.Build.Utilities.MuxLogger.#ctor
+  - Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource)
+  - Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource,System.Int32)
+  - Microsoft.Build.Utilities.MuxLogger.Parameters
+  - Microsoft.Build.Utilities.MuxLogger.RegisterLogger(System.Int32,Microsoft.Build.Framework.ILogger)
+  - Microsoft.Build.Utilities.MuxLogger.Shutdown
+  - Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers(System.Int32)
+  - Microsoft.Build.Utilities.MuxLogger.Verbosity
+  langs:
+  - csharp
+  name: MuxLogger
+  nameWithType: MuxLogger
+  fullName: Microsoft.Build.Utilities.MuxLogger
+  type: Class
+  summary: "Represents a multiplexing logger. The purpose of this logger is to register and unregister multiple loggers during the build. Supports the [!INCLUDE[vs_current_short](~/add/includes/vs-current-short-md.md)] IDE scenario in which loggers are registered and unregistered for each project system’s build request. One physical build can have multiple logical builds, each with its own set of loggers.       The <xref uid=&quot;langword_csharp_MuxLogger&quot; name=&quot;MuxLogger&quot; href=&quot;&quot;></xref>registers itself with the build manager as a regular central /l style logger. It receives messages from the build manager and routes them to the correct logger, based on the logical build that the message came from."
+  remarks: "The `MuxLogger`generally functions as follows:      -   The `MuxLogger` is registered at the beginning of the build manager’s Begin build.           Any loggers registered before the build manager starts the build get the build-started event at the same time as the `MuxLogger`.           Any loggers registered after the build manager starts the build get a synthesized build-started event. The event cannot be cached because the timestamp of the build-started event is determined when the event is created, and caching the event would give incorrect build times in the loggers registered to the `MuxLogger`.      -   The `MuxLogger` is initialized by the build manager           The `MuxLogger` listens to all events on the event source from the build manager and routes events correctly to the registered loggers.      -   The `MuxLogger` is shutdown when the build is finished in end build. At this time, it unregisters any loggers attached to it.      -   The `MuxLogger` logs the build-finished event when the project-finished event for the first project-started event is seen for each logger.       The `MuxLogger` registers loggers in the following way:      1.  The logger is passed to the `MuxLogger.RegisterLogger` method with a submission ID that is used to route a message to that logger.      2.  The `MuxLogger` registers the logger to the `MuxLogger` event source.      3.  If the build-started event has already been logged, the `MuxLogger` creates a new build-started event and sends it to the logger’s event source.       The `MuxLogger` unregisters loggers in the following way:      1.  When a build submission is completed, the `MuxLogger.UnregisterLogger` method is called with the submission ID for the logger.      2.  The `MuxLogger` looks up the success state of the project-finished event for the submission ID and logs a build-finished event to the logger.      3.  The `MuxLogger`cleans up the event source.           Note that the unregister comes from a thread other than the logging thread and a synchronization issue could occur if unregister is called while events are being logged."
+  syntax:
+    content: 'public class MuxLogger : Microsoft.Build.Framework.INodeLogger'
+  inheritance:
+  - System.Object
+  implements:
+  - Microsoft.Build.Framework.INodeLogger
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.#ctor
+  id: '#ctor'
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: MuxLogger()
+  nameWithType: MuxLogger.MuxLogger()
+  fullName: Microsoft.Build.Utilities.MuxLogger.MuxLogger()
+  type: Constructor
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Creates a new instance of the multiplexing logger."
+  syntax:
+    content: public MuxLogger ();
+    parameters: []
+  overload: Microsoft.Build.Utilities.MuxLogger.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource)
+  id: Initialize(Microsoft.Build.Framework.IEventSource)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: Initialize(IEventSource)
+  nameWithType: MuxLogger.Initialize(IEventSource)
+  fullName: Microsoft.Build.Utilities.MuxLogger.Initialize(IEventSource)
+  type: Method
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Initialize the <xref uid=&quot;langword_csharp_MuxLogger&quot; name=&quot;MuxLogger&quot; href=&quot;&quot;></xref> instance with the specified event source."
+  syntax:
+    content: public void Initialize (Microsoft.Build.Framework.IEventSource eventSource);
+    parameters:
+    - id: eventSource
+      type: Microsoft.Build.Framework.IEventSource
+      description: "The event source."
+  overload: Microsoft.Build.Utilities.MuxLogger.Initialize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource,System.Int32)
+  id: Initialize(Microsoft.Build.Framework.IEventSource,System.Int32)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: Initialize(IEventSource,Int32)
+  nameWithType: MuxLogger.Initialize(IEventSource,Int32)
+  fullName: Microsoft.Build.Utilities.MuxLogger.Initialize(IEventSource,Int32)
+  type: Method
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Initialize the <xref uid=&quot;langword_csharp_MuxLogger&quot; name=&quot;MuxLogger&quot; href=&quot;&quot;></xref> instance with the specified event source and specified maximum number of nodes."
+  syntax:
+    content: public void Initialize (Microsoft.Build.Framework.IEventSource eventSource, int maxNodeCount);
+    parameters:
+    - id: eventSource
+      type: Microsoft.Build.Framework.IEventSource
+      description: "The event source."
+    - id: maxNodeCount
+      type: System.Int32
+      description: "The maximum number of nodes."
+  overload: Microsoft.Build.Utilities.MuxLogger.Initialize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.Parameters
+  id: Parameters
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: Parameters
+  nameWithType: MuxLogger.Parameters
+  fullName: Microsoft.Build.Utilities.MuxLogger.Parameters
+  type: Property
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Gets and sets the Parameters attribute, required by the <xref uid=&quot;langword_csharp_ILogger&quot; name=&quot;ILogger&quot; href=&quot;&quot;></xref> interface."
+  syntax:
+    content: public string Parameters { get; set; }
+    return:
+      type: System.String
+      description: "Returns the Parameters attribute."
+  overload: Microsoft.Build.Utilities.MuxLogger.Parameters*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.RegisterLogger(System.Int32,Microsoft.Build.Framework.ILogger)
+  id: RegisterLogger(System.Int32,Microsoft.Build.Framework.ILogger)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: RegisterLogger(Int32,ILogger)
+  nameWithType: MuxLogger.RegisterLogger(Int32,ILogger)
+  fullName: Microsoft.Build.Utilities.MuxLogger.RegisterLogger(Int32,ILogger)
+  type: Method
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Registers a logger on the <xref uid=&quot;langword_csharp_MuxLogger&quot; name=&quot;MuxLogger&quot; href=&quot;&quot;></xref> and raises a build-started event if the build-started event has already been logged."
+  syntax:
+    content: public void RegisterLogger (int submissionId, Microsoft.Build.Framework.ILogger logger);
+    parameters:
+    - id: submissionId
+      type: System.Int32
+      description: "The submission ID of the logger being registered."
+    - id: logger
+      type: Microsoft.Build.Framework.ILogger
+      description: "The logger to register."
+  overload: Microsoft.Build.Utilities.MuxLogger.RegisterLogger*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.Shutdown
+  id: Shutdown
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: Shutdown()
+  nameWithType: MuxLogger.Shutdown()
+  fullName: Microsoft.Build.Utilities.MuxLogger.Shutdown()
+  type: Method
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Shuts down the <xref uid=&quot;langword_csharp_MuxLogger&quot; name=&quot;MuxLogger&quot; href=&quot;&quot;></xref> and clears out any state."
+  syntax:
+    content: public void Shutdown ();
+    parameters: []
+  overload: Microsoft.Build.Utilities.MuxLogger.Shutdown*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers(System.Int32)
+  id: UnregisterLoggers(System.Int32)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: UnregisterLoggers(Int32)
+  nameWithType: MuxLogger.UnregisterLoggers(Int32)
+  fullName: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers(Int32)
+  type: Method
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Removes the specified logger from the MuxLogger."
+  syntax:
+    content: public bool UnregisterLoggers (int submissionId);
+    parameters:
+    - id: submissionId
+      type: System.Int32
+      description: "The submission ID of the logger to be removed."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: Microsoft.Build.Utilities.MuxLogger.Verbosity
+  id: Verbosity
+  parent: Microsoft.Build.Utilities.MuxLogger
+  langs:
+  - csharp
+  name: Verbosity
+  nameWithType: MuxLogger.Verbosity
+  fullName: Microsoft.Build.Utilities.MuxLogger.Verbosity
+  type: Property
+  assemblies:
+  - Microsoft.Build.Utilities.v4.0
+  namespace: Microsoft.Build.Utilities
+  summary: "Gets and sets the Verbosity attribute, required by the <xref uid=&quot;langword_csharp_ILogger&quot; name=&quot;ILogger&quot; href=&quot;&quot;></xref> interface."
+  syntax:
+    content: public Microsoft.Build.Framework.LoggerVerbosity Verbosity { get; set; }
+    return:
+      type: Microsoft.Build.Framework.LoggerVerbosity
+      description: "Returns the Verbosity attribute."
+  overload: Microsoft.Build.Utilities.MuxLogger.Verbosity*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: Microsoft.Build.Utilities.MuxLogger.#ctor
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: MuxLogger()
+  nameWithType: MuxLogger.MuxLogger()
+  fullName: Microsoft.Build.Utilities.MuxLogger.MuxLogger()
+- uid: Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Initialize(IEventSource)
+  nameWithType: MuxLogger.Initialize(IEventSource)
+  fullName: Microsoft.Build.Utilities.MuxLogger.Initialize(IEventSource)
+- uid: Microsoft.Build.Framework.IEventSource
+  parent: Microsoft.Build.Framework
+  isExternal: false
+  name: IEventSource
+  nameWithType: IEventSource
+  fullName: Microsoft.Build.Framework.IEventSource
+- uid: Microsoft.Build.Utilities.MuxLogger.Initialize(Microsoft.Build.Framework.IEventSource,System.Int32)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Initialize(IEventSource,Int32)
+  nameWithType: MuxLogger.Initialize(IEventSource,Int32)
+  fullName: Microsoft.Build.Utilities.MuxLogger.Initialize(IEventSource,Int32)
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: Microsoft.Build.Utilities.MuxLogger.Parameters
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Parameters
+  nameWithType: MuxLogger.Parameters
+  fullName: Microsoft.Build.Utilities.MuxLogger.Parameters
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: Microsoft.Build.Utilities.MuxLogger.RegisterLogger(System.Int32,Microsoft.Build.Framework.ILogger)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: RegisterLogger(Int32,ILogger)
+  nameWithType: MuxLogger.RegisterLogger(Int32,ILogger)
+  fullName: Microsoft.Build.Utilities.MuxLogger.RegisterLogger(Int32,ILogger)
+- uid: Microsoft.Build.Framework.ILogger
+  parent: Microsoft.Build.Framework
+  isExternal: false
+  name: ILogger
+  nameWithType: ILogger
+  fullName: Microsoft.Build.Framework.ILogger
+- uid: Microsoft.Build.Utilities.MuxLogger.Shutdown
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Shutdown()
+  nameWithType: MuxLogger.Shutdown()
+  fullName: Microsoft.Build.Utilities.MuxLogger.Shutdown()
+- uid: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers(System.Int32)
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: UnregisterLoggers(Int32)
+  nameWithType: MuxLogger.UnregisterLoggers(Int32)
+  fullName: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers(Int32)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: Microsoft.Build.Utilities.MuxLogger.Verbosity
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Verbosity
+  nameWithType: MuxLogger.Verbosity
+  fullName: Microsoft.Build.Utilities.MuxLogger.Verbosity
+- uid: Microsoft.Build.Framework.LoggerVerbosity
+  parent: Microsoft.Build.Framework
+  isExternal: false
+  name: LoggerVerbosity
+  nameWithType: LoggerVerbosity
+  fullName: Microsoft.Build.Framework.LoggerVerbosity
+- uid: Microsoft.Build.Utilities.MuxLogger.#ctor*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: MuxLogger
+  nameWithType: MuxLogger.MuxLogger
+- uid: Microsoft.Build.Utilities.MuxLogger.Initialize*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Initialize
+  nameWithType: MuxLogger.Initialize
+- uid: Microsoft.Build.Utilities.MuxLogger.Parameters*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Parameters
+  nameWithType: MuxLogger.Parameters
+- uid: Microsoft.Build.Utilities.MuxLogger.RegisterLogger*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: RegisterLogger
+  nameWithType: MuxLogger.RegisterLogger
+- uid: Microsoft.Build.Utilities.MuxLogger.Shutdown*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Shutdown
+  nameWithType: MuxLogger.Shutdown
+- uid: Microsoft.Build.Utilities.MuxLogger.UnregisterLoggers*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: UnregisterLoggers
+  nameWithType: MuxLogger.UnregisterLoggers
+- uid: Microsoft.Build.Utilities.MuxLogger.Verbosity*
+  parent: Microsoft.Build.Utilities.MuxLogger
+  isExternal: false
+  name: Verbosity
+  nameWithType: MuxLogger.Verbosity

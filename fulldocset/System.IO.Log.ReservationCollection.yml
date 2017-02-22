@@ -1,0 +1,802 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.IO.Log.ReservationCollection
+  id: ReservationCollection
+  children:
+  - System.IO.Log.ReservationCollection.#ctor
+  - System.IO.Log.ReservationCollection.Add(System.Int64)
+  - System.IO.Log.ReservationCollection.Clear
+  - System.IO.Log.ReservationCollection.Contains(System.Int64)
+  - System.IO.Log.ReservationCollection.CopyTo(System.Int64[],System.Int32)
+  - System.IO.Log.ReservationCollection.Count
+  - System.IO.Log.ReservationCollection.Finalize
+  - System.IO.Log.ReservationCollection.FreeReservation(System.Int64)
+  - System.IO.Log.ReservationCollection.GetBestMatchingReservation(System.Int64)
+  - System.IO.Log.ReservationCollection.GetEnumerator
+  - System.IO.Log.ReservationCollection.IsReadOnly
+  - System.IO.Log.ReservationCollection.MakeReservation(System.Int64)
+  - System.IO.Log.ReservationCollection.Remove(System.Int64)
+  - System.IO.Log.ReservationCollection.ReservationFreed(System.Int64)
+  - System.IO.Log.ReservationCollection.ReservationMade(System.Int64)
+  - System.IO.Log.ReservationCollection.System#Collections#IEnumerable#GetEnumerator
+  langs:
+  - csharp
+  name: ReservationCollection
+  nameWithType: ReservationCollection
+  fullName: System.IO.Log.ReservationCollection
+  type: Class
+  summary: "Manages the collection of space reservations made in a record sequence."
+  remarks: "This class represents a set of reservation areas that are made in a record sequence. Adding items to the collection allocates new reservations. Removing items from the collection frees those reservations.       An application reserves space in the log when it has data that is to be written to the log in the future, but cannot write it immediately. Reservations provide a guarantee that the data can be written to the log when the data is available to be written. When using logs, applications often reserve one or more log records in a marshalling area. You must reserve records prior to appending them.       Reservations can be used to guarantee that an operation can be completed before the data is committed; otherwise, the changes are rolled back. It can also be used to record an &quot;undo action&quot; in the log. During a rollback operation, a transactional resource manager (RM) must be able to recover its state if the RM is interrupted during the rollback operation. By using a reservation area, an RM can reserve space in a log before it is used.       The <xref:System.IO.Log.IRecordSequence.ReserveAndAppend%2A> method can either reserve space or append data, or both, depending on the parameters that are specified when making the call. As work progresses in a transaction, an application can append the undo information and reserve space for compensation records. During a rollback operation, compensation records that are created indicate what has been undone on the disk. The records are appended using space that has been previously reserved. This guarantees that an RM does not run out of log space, which is a fatal condition, while performing a rollback operation. If a log fills up during a transaction, an application can safely roll back a transaction without corrupting durable data.       CLFS is an ARIES-compliant logging system, meant for write-ahead logging. In write-ahead logging, an application writes an undo record before it performs the operation, reserving the amount of space it takes in the log to write a compensating record, which may be used during rollback. Later, the reserved space is used when the compensation record is actually written.       Applications can either reserve or access long space at any given time (they are mutually exclusive operations). After a commit record is written to the log, an application can free up the reservations for the compensation records. This action can be done by calling either the <xref:System.IO.Log.ReservationCollection.FreeReservation%2A> or <xref:System.IO.Log.IRecordSequence.ReserveAndAppend%2A> method. Calling the <xref:System.IO.Log.IRecordSequence.ReserveAndAppend%2A> method guarantees that the operation is atomic, while calling the <xref:System.IO.Log.ReservationCollection.FreeReservation%2A> method does not.       When you free records, you must free the same records that you reserved together in a previous call to the <xref:System.IO.Log.IRecordSequence.ReserveAndAppend%2A> method.      > [!NOTE] >  Your implementation of <xref:System.IO.Log.IRecordSequence> must implement the <xref:System.IO.Log.ReservationCollection.MakeReservation%2A> and <xref:System.IO.Log.ReservationCollection.FreeReservation%2A> methods to perform the actual reservation allocation and deallocation. In addition, your implementation must also call <xref:System.IO.Log.ReservationCollection.ReservationFreed%2A> when a record is written into a reserved space."
+  example:
+  - "Reservations can be performed in two ways as shown in the following examples. You can adopt the practices in the samples for robust processing. Notice that this task can only be performed when using the CLFS-based <xref:System.IO.Log.LogRecordSequence> class.  \n  \n```  \n//Using the ReserveAndAppend Method  \nReservationCollection reservations = recordSequence.CreateReservationCollection();  \nlong[] lengthOfUndoRecords = new long[] { 1000 };  \nrecordSequence.ReserveAndAppend(recordData,  \n                                                     userSqn,  \n                                                     previousSqn,  \n                                                     RecordSequenceAppendOptions.None,  \n                                                     reservations,  \n                                                     lengthOfUndoRecords);  \nrecordSequence.Append(undoRecordData,    // If necessary …  \n                                    userSqn,  \n                                    previousSqn,  \n                                    RecordSequenceAppendOptions.ForceFlush,  \n                                    reservations);  \n  \n// Using the Manual Approach  \nReservationCollection reservations = recordSequence.CreateReservationCollection();  \nreservations.Add(lengthOfUndoRecord);  \ntry  \n{  \n   recordSequence.Append(recordData, userSqn, previousSqn, RecordAppendOptions.None);  \n}  \ncatch (Exception)  \n{  \n   reservations.Remove(lengthOfUndoRecord);  \n   throw;  \n}  \n  \nrecordSequence.Append(undoRecordData, userSqn, previousSqn, RecordAppendOptions.ForceFlush, reservations);  \n```"
+  syntax:
+    content: 'public abstract class ReservationCollection : System.Collections.Generic.ICollection<long>, System.Collections.Generic.IEnumerable<long>'
+  inheritance:
+  - System.Object
+  implements:
+  - System.Collections.Generic.ICollection<System.Int64>
+  - System.Collections.Generic.IEnumerable<System.Int64>
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.#ctor
+  id: '#ctor'
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: ReservationCollection()
+  nameWithType: ReservationCollection.ReservationCollection()
+  fullName: System.IO.Log.ReservationCollection.ReservationCollection()
+  type: Constructor
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.IO.Log.ReservationCollection&quot;></see> class."
+  syntax:
+    content: protected ReservationCollection ();
+    parameters: []
+  overload: System.IO.Log.ReservationCollection.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Add(System.Int64)
+  id: Add(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Add(Int64)
+  nameWithType: ReservationCollection.Add(Int64)
+  fullName: System.IO.Log.ReservationCollection.Add(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Allocates a reservation and adds it to the collection. This method cannot be inherited."
+  remarks: ''
+  example:
+  - "The following example shows how to manually make a reservation. Notice that this task can only be performed when using the CLFS-based <xref:System.IO.Log.LogRecordSequence> class.  \n  \n```  \nReservationCollection reservations = recordSequence.CreateReservationCollection();  \nreservations.Add(lengthOfUndoRecord);  \ntry  \n{  \n   recordSequence.Append(recordData, userSqn, previousSqn, RecordAppendOptions.None);  \n}  \ncatch (Exception)  \n{  \n   reservations.Remove(lengthOfUndoRecord);  \n   throw;  \n}  \n  \nrecordSequence.Append(undoRecordData, userSqn, previousSqn, RecordAppendOptions.ForceFlush, reservations);  \n```"
+  syntax:
+    content: public void Add (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the requested reservation, in bytes."
+  overload: System.IO.Log.ReservationCollection.Add*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    archiveTail is not between the base and last sequence numbers of this sequence."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    size is invalid or exceeds maximum reservation size."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "An I/O error occurs when creating the archive snapshot."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: "The record sequence is full."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Clear
+  id: Clear
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Clear()
+  nameWithType: ReservationCollection.Clear()
+  fullName: System.IO.Log.ReservationCollection.Clear()
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Releases all of the reservations in the collection. This method cannot be inherited."
+  syntax:
+    content: public void Clear ();
+    parameters: []
+  overload: System.IO.Log.ReservationCollection.Clear*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    size is invalid or exceeds maximum reservation size."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "An I/O error occurs when creating the archive snapshot."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: "The record sequence is full."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Contains(System.Int64)
+  id: Contains(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Contains(Int64)
+  nameWithType: ReservationCollection.Contains(Int64)
+  fullName: System.IO.Log.ReservationCollection.Contains(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Determines whether a reservation of the specified size has been made. This method cannot be inherited."
+  syntax:
+    content: public bool Contains (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size to locate in the collection."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.IO.Log.ReservationCollection.Contains*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.CopyTo(System.Int64[],System.Int32)
+  id: CopyTo(System.Int64[],System.Int32)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: CopyTo(Int64[],Int32)
+  nameWithType: ReservationCollection.CopyTo(Int64[],Int32)
+  fullName: System.IO.Log.ReservationCollection.CopyTo(Int64[],Int32)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Copies the entire collection to a one-dimensional array, starting at the specified index of the target array. This method cannot be inherited."
+  syntax:
+    content: public void CopyTo (long[] array, int arrayIndex);
+    parameters:
+    - id: array
+      type: System.Int64[]
+      description: "The array that is the destination of the copy."
+    - id: arrayIndex
+      type: System.Int32
+      description: "The zero-based index in the array at which copying begins."
+  overload: System.IO.Log.ReservationCollection.CopyTo*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    array or arrayIndex is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    arrayIndex is less than zero, or greater than or equal to the length of array."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "There is not enough space in the specified array to copy the data.       -or-       array is not a single dimensional array, which is the only type supported for the requested action."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Count
+  id: Count
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Count
+  nameWithType: ReservationCollection.Count
+  fullName: System.IO.Log.ReservationCollection.Count
+  type: Property
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Gets the number of reservations in the collection."
+  syntax:
+    content: public int Count { get; }
+    return:
+      type: System.Int32
+      description: "The number of reservations in the collection."
+  overload: System.IO.Log.ReservationCollection.Count*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Finalize
+  id: Finalize
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Finalize()
+  nameWithType: ReservationCollection.Finalize()
+  fullName: System.IO.Log.ReservationCollection.Finalize()
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Allows the <see cref=&quot;T:System.IO.Log.ReservationCollection&quot;></see> to free resources before it is destroyed by the garbage collector."
+  syntax:
+    content: ~ReservationCollection ();
+    parameters: []
+  overload: System.IO.Log.ReservationCollection.Finalize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.FreeReservation(System.Int64)
+  id: FreeReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: FreeReservation(Int64)
+  nameWithType: ReservationCollection.FreeReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.FreeReservation(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "When overridden in a derived class, releases a reservation of the specified size."
+  syntax:
+    content: protected abstract void FreeReservation (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the reservation to release."
+  overload: System.IO.Log.ReservationCollection.FreeReservation*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.GetBestMatchingReservation(System.Int64)
+  id: GetBestMatchingReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: GetBestMatchingReservation(Int64)
+  nameWithType: ReservationCollection.GetBestMatchingReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.GetBestMatchingReservation(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "When overridden in a derived class, gets the best matching reservation for a given size."
+  remarks: "This method is typically called when appending a record from reserved space to a record sequence. When it returns, a reservation of the returned size has been removed from the collection. If, for some reason, the reserved space is not actually accessed, the <xref:System.IO.Log.ReservationCollection.ReservationMade%2A> method should be called to ensure that the <xref:System.IO.Log.ReservationCollection> accurately represents the amount of reserved space in the record sequence."
+  syntax:
+    content: protected long GetBestMatchingReservation (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the reservation that must be fit."
+    return:
+      type: System.Int64
+      description: "To be added."
+  overload: System.IO.Log.ReservationCollection.GetBestMatchingReservation*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.GetEnumerator
+  id: GetEnumerator
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: GetEnumerator()
+  nameWithType: ReservationCollection.GetEnumerator()
+  fullName: System.IO.Log.ReservationCollection.GetEnumerator()
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Returns an enumerator that can iterate through the <see cref=&quot;T:System.IO.Log.ReservationCollection&quot;></see>. This method cannot be inherited."
+  syntax:
+    content: public System.Collections.Generic.IEnumerator<long> GetEnumerator ();
+    parameters: []
+    return:
+      type: System.Collections.Generic.IEnumerator{System.Int64}
+      description: "To be added."
+  overload: System.IO.Log.ReservationCollection.GetEnumerator*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The operation is invalid for one of the following reasons:      -   The enumeration has ended.      -   The collection has been modified.      -   The enumeration has not been started. A call to <xref:System.Collections.IEnumerator.MoveNext%2A> must be made."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.IsReadOnly
+  id: IsReadOnly
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: IsReadOnly
+  nameWithType: ReservationCollection.IsReadOnly
+  fullName: System.IO.Log.ReservationCollection.IsReadOnly
+  type: Property
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Gets a value that indicates whether the collection is read-only."
+  remarks: "A <xref:System.IO.Log.ReservationCollection> is never read-only."
+  syntax:
+    content: public bool IsReadOnly { get; }
+    return:
+      type: System.Boolean
+      description: "This property always returns <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.IO.Log.ReservationCollection.IsReadOnly*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.MakeReservation(System.Int64)
+  id: MakeReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: MakeReservation(Int64)
+  nameWithType: ReservationCollection.MakeReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.MakeReservation(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "When overridden in a derived class, allocates a reservation of the specified size."
+  syntax:
+    content: protected abstract void MakeReservation (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the reservation to allocate."
+  overload: System.IO.Log.ReservationCollection.MakeReservation*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.Remove(System.Int64)
+  id: Remove(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: Remove(Int64)
+  nameWithType: ReservationCollection.Remove(Int64)
+  fullName: System.IO.Log.ReservationCollection.Remove(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Releases a reservation of the specified size, if one has been made. This method cannot be inherited."
+  remarks: ''
+  example:
+  - "The following example shows how to manually make a reservation. Notice that this task can only be performed when using the CLFS-based <xref:System.IO.Log.LogRecordSequence> class.  \n  \n```  \nReservationCollection reservations = recordSequence.CreateReservationCollection();  \nreservations.Add(lengthOfUndoRecord);  \ntry  \n{  \n   recordSequence.Append(recordData, userSqn, previousSqn, RecordAppendOptions.None);  \n}  \ncatch (Exception)  \n{  \n   reservations.Remove(lengthOfUndoRecord);  \n   throw;  \n}  \n  \nrecordSequence.Append(undoRecordData, userSqn, previousSqn, RecordAppendOptions.ForceFlush, reservations);  \n```"
+  syntax:
+    content: public bool Remove (long item);
+    parameters:
+    - id: item
+      type: System.Int64
+      description: "The size of the reservation to release."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.IO.Log.ReservationCollection.Remove*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "No reservation large enough to fit the provided record can be found in the specified reservation collection."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "An I/O error occurs when creating the archive snapshot."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: "The record sequence is full."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.ReservationFreed(System.Int64)
+  id: ReservationFreed(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: ReservationFreed(Int64)
+  nameWithType: ReservationCollection.ReservationFreed(Int64)
+  fullName: System.IO.Log.ReservationCollection.ReservationFreed(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "When overridden in a derived class, indicates that a reservation has been released."
+  remarks: "When you inherit from <xref:System.IO.Log.ReservationCollection>, you must call this method when a reservation is released for a reason other than removing it from the collection."
+  syntax:
+    content: protected void ReservationFreed (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the reservation that has been released."
+  overload: System.IO.Log.ReservationCollection.ReservationFreed*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.ReservationMade(System.Int64)
+  id: ReservationMade(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: ReservationMade(Int64)
+  nameWithType: ReservationCollection.ReservationMade(Int64)
+  fullName: System.IO.Log.ReservationCollection.ReservationMade(Int64)
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "When overridden in a derived class, indicates that a reservation has been made."
+  remarks: "When you inherit from <xref:System.IO.Log.ReservationCollection>, you must call this method when a reservation is made outside of a call to <xref:System.IO.Log.ReservationCollection.Add%2A>."
+  syntax:
+    content: protected void ReservationMade (long size);
+    parameters:
+    - id: size
+      type: System.Int64
+      description: "The size of the reservation that has been made."
+  overload: System.IO.Log.ReservationCollection.ReservationMade*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.IO.Log.ReservationCollection.System#Collections#IEnumerable#GetEnumerator
+  id: System#Collections#IEnumerable#GetEnumerator
+  isEii: true
+  parent: System.IO.Log.ReservationCollection
+  langs:
+  - csharp
+  name: System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: ReservationCollection.System.Collections.IEnumerable.GetEnumerator()
+  fullName: System.IO.Log.ReservationCollection.System.Collections.IEnumerable.GetEnumerator()
+  type: Method
+  assemblies:
+  - System.IO.Log
+  namespace: System.IO.Log
+  summary: "Returns an enumerator that can iterate through the <see cref=&quot;T:System.IO.Log.ReservationCollection&quot;></see>. This method cannot be inherited."
+  syntax:
+    content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
+    parameters: []
+    return:
+      type: System.Collections.IEnumerator
+      description: "To be added."
+  overload: System.IO.Log.ReservationCollection.System#Collections#IEnumerable#GetEnumerator*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The operation is invalid for one of the following reasons:      -   The enumeration has ended.      -   The collection has been modified.      -   The enumeration has not been started. A call to <xref:System.Collections.IEnumerator.MoveNext%2A> must be made."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: "The method was called after the sequence has been disposed of."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "There is not enough memory to continue the execution of the program."
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: "Access for the specified log store is denied by the operating system."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.IO.Log.ReservationCollection.#ctor
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationCollection()
+  nameWithType: ReservationCollection.ReservationCollection()
+  fullName: System.IO.Log.ReservationCollection.ReservationCollection()
+- uid: System.IO.Log.ReservationCollection.Add(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Add(Int64)
+  nameWithType: ReservationCollection.Add(Int64)
+  fullName: System.IO.Log.ReservationCollection.Add(Int64)
+- uid: System.Int64
+  parent: System
+  isExternal: true
+  name: Int64
+  nameWithType: Int64
+  fullName: System.Int64
+- uid: System.IO.Log.ReservationCollection.Clear
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Clear()
+  nameWithType: ReservationCollection.Clear()
+  fullName: System.IO.Log.ReservationCollection.Clear()
+- uid: System.IO.Log.ReservationCollection.Contains(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Contains(Int64)
+  nameWithType: ReservationCollection.Contains(Int64)
+  fullName: System.IO.Log.ReservationCollection.Contains(Int64)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.IO.Log.ReservationCollection.CopyTo(System.Int64[],System.Int32)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: CopyTo(Int64[],Int32)
+  nameWithType: ReservationCollection.CopyTo(Int64[],Int32)
+  fullName: System.IO.Log.ReservationCollection.CopyTo(Int64[],Int32)
+- uid: System.Int64[]
+  parent: System
+  isExternal: true
+  name: Int64
+  nameWithType: Int64
+  fullName: System.Int64[]
+  spec.csharp:
+  - uid: System.Int64
+    name: Int64
+    nameWithType: Int64
+    fullName: Int64[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.IO.Log.ReservationCollection.Count
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Count
+  nameWithType: ReservationCollection.Count
+  fullName: System.IO.Log.ReservationCollection.Count
+- uid: System.IO.Log.ReservationCollection.Finalize
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Finalize()
+  nameWithType: ReservationCollection.Finalize()
+  fullName: System.IO.Log.ReservationCollection.Finalize()
+- uid: System.IO.Log.ReservationCollection.FreeReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: FreeReservation(Int64)
+  nameWithType: ReservationCollection.FreeReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.FreeReservation(Int64)
+- uid: System.IO.Log.ReservationCollection.GetBestMatchingReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: GetBestMatchingReservation(Int64)
+  nameWithType: ReservationCollection.GetBestMatchingReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.GetBestMatchingReservation(Int64)
+- uid: System.IO.Log.ReservationCollection.GetEnumerator
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: GetEnumerator()
+  nameWithType: ReservationCollection.GetEnumerator()
+  fullName: System.IO.Log.ReservationCollection.GetEnumerator()
+- uid: System.Collections.Generic.IEnumerator{System.Int64}
+  parent: System.Collections.Generic
+  isExternal: true
+  name: IEnumerator<Int64>
+  nameWithType: IEnumerator<Int64>
+  fullName: System.Collections.Generic.IEnumerator<System.Int64>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerator`1
+    name: IEnumerator
+    nameWithType: IEnumerator
+    fullName: IEnumerator<System.Int64>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Int64
+    name: Int64
+    nameWithType: Int64
+    fullName: Int64
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.IO.Log.ReservationCollection.IsReadOnly
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: IsReadOnly
+  nameWithType: ReservationCollection.IsReadOnly
+  fullName: System.IO.Log.ReservationCollection.IsReadOnly
+- uid: System.IO.Log.ReservationCollection.MakeReservation(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: MakeReservation(Int64)
+  nameWithType: ReservationCollection.MakeReservation(Int64)
+  fullName: System.IO.Log.ReservationCollection.MakeReservation(Int64)
+- uid: System.IO.Log.ReservationCollection.Remove(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Remove(Int64)
+  nameWithType: ReservationCollection.Remove(Int64)
+  fullName: System.IO.Log.ReservationCollection.Remove(Int64)
+- uid: System.IO.Log.ReservationCollection.ReservationFreed(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationFreed(Int64)
+  nameWithType: ReservationCollection.ReservationFreed(Int64)
+  fullName: System.IO.Log.ReservationCollection.ReservationFreed(Int64)
+- uid: System.IO.Log.ReservationCollection.ReservationMade(System.Int64)
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationMade(Int64)
+  nameWithType: ReservationCollection.ReservationMade(Int64)
+  fullName: System.IO.Log.ReservationCollection.ReservationMade(Int64)
+- uid: System.IO.Log.ReservationCollection.System#Collections#IEnumerable#GetEnumerator
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: ReservationCollection.System.Collections.IEnumerable.GetEnumerator()
+  fullName: System.IO.Log.ReservationCollection.System.Collections.IEnumerable.GetEnumerator()
+- uid: System.Collections.IEnumerator
+  parent: System.Collections
+  isExternal: true
+  name: IEnumerator
+  nameWithType: IEnumerator
+  fullName: System.Collections.IEnumerator
+- uid: System.IO.Log.ReservationCollection.#ctor*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationCollection
+  nameWithType: ReservationCollection.ReservationCollection
+- uid: System.IO.Log.ReservationCollection.Add*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Add
+  nameWithType: ReservationCollection.Add
+- uid: System.IO.Log.ReservationCollection.Clear*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Clear
+  nameWithType: ReservationCollection.Clear
+- uid: System.IO.Log.ReservationCollection.Contains*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Contains
+  nameWithType: ReservationCollection.Contains
+- uid: System.IO.Log.ReservationCollection.CopyTo*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: CopyTo
+  nameWithType: ReservationCollection.CopyTo
+- uid: System.IO.Log.ReservationCollection.Count*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Count
+  nameWithType: ReservationCollection.Count
+- uid: System.IO.Log.ReservationCollection.Finalize*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Finalize
+  nameWithType: ReservationCollection.Finalize
+- uid: System.IO.Log.ReservationCollection.FreeReservation*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: FreeReservation
+  nameWithType: ReservationCollection.FreeReservation
+- uid: System.IO.Log.ReservationCollection.GetBestMatchingReservation*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: GetBestMatchingReservation
+  nameWithType: ReservationCollection.GetBestMatchingReservation
+- uid: System.IO.Log.ReservationCollection.GetEnumerator*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: GetEnumerator
+  nameWithType: ReservationCollection.GetEnumerator
+- uid: System.IO.Log.ReservationCollection.IsReadOnly*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: IsReadOnly
+  nameWithType: ReservationCollection.IsReadOnly
+- uid: System.IO.Log.ReservationCollection.MakeReservation*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: MakeReservation
+  nameWithType: ReservationCollection.MakeReservation
+- uid: System.IO.Log.ReservationCollection.Remove*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: Remove
+  nameWithType: ReservationCollection.Remove
+- uid: System.IO.Log.ReservationCollection.ReservationFreed*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationFreed
+  nameWithType: ReservationCollection.ReservationFreed
+- uid: System.IO.Log.ReservationCollection.ReservationMade*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: ReservationMade
+  nameWithType: ReservationCollection.ReservationMade
+- uid: System.IO.Log.ReservationCollection.System#Collections#IEnumerable#GetEnumerator*
+  parent: System.IO.Log.ReservationCollection
+  isExternal: false
+  name: System.Collections.IEnumerable.GetEnumerator
+  nameWithType: ReservationCollection.System.Collections.IEnumerable.GetEnumerator

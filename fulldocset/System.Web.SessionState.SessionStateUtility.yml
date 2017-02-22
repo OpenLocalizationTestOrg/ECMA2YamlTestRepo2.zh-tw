@@ -1,0 +1,399 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.SessionState.SessionStateUtility
+  id: SessionStateUtility
+  children:
+  - System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(System.Web.HttpContext,System.Web.SessionState.IHttpSessionState)
+  - System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(System.Web.HttpContext)
+  - System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(System.Web.HttpContext)
+  - System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(System.Web.HttpContext)
+  - System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(System.Web.HttpContext)
+  - System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)
+  - System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(System.Web.HttpContext)
+  - System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector
+  langs:
+  - csharp
+  name: SessionStateUtility
+  nameWithType: SessionStateUtility
+  fullName: System.Web.SessionState.SessionStateUtility
+  type: Class
+  summary: "Provides helper methods used by session-state modules and session-state store providers to manage session information for an ASP.NET application. This class cannot be inherited."
+  remarks: "The SessionStateUtility class provides static helper methods that are used by a session-state module or a session-state store provider. Application developers will not need to call these methods from their code.       The following table describes the ways the session-state module and session-state store provider use the methods.      |Method|Use|   |------------|---------|   |<xref:System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext%2A> method|Can be used by custom session-state modules to either retrieve session information for an existing session or create session information for a new session.|   |<xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A> method|Called by the session-state module to add the session data to the current <xref:System.Web.HttpContext> and make it available to application code through the <xref:System.Web.HttpContext.Session%2A> property.|   |<xref:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext%2A> method|Called by the session-state module during the <xref:System.Web.HttpApplication.ReleaseRequestState> or <xref:System.Web.HttpApplication.EndRequest> events at the end of a request, to clear session data from the current <xref:System.Web.HttpContext>.|   |<xref:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects%2A> method|Called by the session-state module to get a reference to the <xref:System.Web.SessionState.HttpSessionState.StaticObjects%2A> collection based on objects defined in the Global.asax file. The <xref:System.Web.HttpStaticObjectsCollection> collection returned is included with the session data added to the current <xref:System.Web.HttpContext>.|       Session data is passed to and retrieved from the current <xref:System.Web.HttpContext> as an <xref:System.Web.SessionState.HttpSessionStateContainer> object or any valid implementation of the <xref:System.Web.SessionState.IHttpSessionState> interface.       For information about implementing a session-state store provider, see [Implementing a Session-State Store Provider](../Topic/Implementing%20a%20Session-State%20Store%20Provider.md)."
+  example:
+  - "The following code example shows a custom session-state module implementation that stores session information in memory using a <xref:System.Collections.Hashtable>. The module uses the SessionStateUtility class to reference the current <xref:System.Web.HttpContext> and <xref:System.Web.SessionState.SessionIDManager>, retrieve the current <xref:System.Web.HttpStaticObjectsCollection>, and raise the **Session_OnEnd** event defined in the Global.asax file for the ASP.NET application. This application does not prevent simultaneous Web requests from using the same session identifier.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#1](~/add/codesnippet/VisualBasic/t-system.web.sessionstat_6_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#1](~/add/codesnippet/CSharp/t-system.web.sessionstat_6_1.cs)]  \n  \n To use this custom session-state module in an ASP.NET application, you can replace the existing <xref:System.Web.SessionState.SessionStateModule> reference in the Web.config file, as shown in the following example.  \n  \n```  \n<configuration>  \n  <system.web>  \n    <httpModules>  \n      <remove name=\"Session\" />  \n      <add name=\"Session\"  \n      type=\"Samples.AspNet.SessionState.MySessionStateModule\" />  \n    </httpModules>  \n  </system.web>  \n</configuration>  \n```"
+  syntax:
+    content: public static class SessionStateUtility
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(System.Web.HttpContext,System.Web.SessionState.IHttpSessionState)
+  id: AddHttpSessionStateToContext(System.Web.HttpContext,System.Web.SessionState.IHttpSessionState)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+  nameWithType: SessionStateUtility.AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+  fullName: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Applies the session data to the context for the current request."
+  remarks: "The AddHttpSessionStateToContext method is used by a session-state module to apply session data to the current request. This occurs during the <xref:System.Web.HttpApplication.AcquireRequestState> event at the beginning of a request. Session data for the current request is either retrieved for an existing session or created for a new session. The session data is then encapsulated in an <xref:System.Web.SessionState.IHttpSessionState> implementation instance, which is passed to the AddHttpSessionStateToContext method along with the current <xref:System.Web.HttpContext>. The supplied session data is then made available to application code through the <xref:System.Web.HttpContext.Session%2A> property of the current context."
+  example:
+  - "The following code example shows the handler for the <xref:System.Web.HttpApplication.AcquireRequestState> event in a custom session-state module. The custom module retrieves existing session information or creates new session information and uses the AddHttpSessionStateToContext method to add it to the <xref:System.Web.HttpContext> of the current request. This code example is part of a larger example provided for the <xref:System.Web.SessionState.SessionStateUtility> class.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#4](~/add/codesnippet/VisualBasic/5c9b7582-11c3-42e9-975d-_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#4](~/add/codesnippet/CSharp/5c9b7582-11c3-42e9-975d-_1.cs)]"
+  syntax:
+    content: public static void AddHttpSessionStateToContext (System.Web.HttpContext context, System.Web.SessionState.IHttpSessionState container);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "The  object to which to add the  object."
+    - id: container
+      type: System.Web.SessionState.IHttpSessionState
+      description: "The  implementation instance to add to the specified HTTP context."
+  overload: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "An  object for the current session has already been added to the specified context."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(System.Web.HttpContext)
+  id: GetHttpSessionStateFromContext(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: GetHttpSessionStateFromContext(HttpContext)
+  nameWithType: SessionStateUtility.GetHttpSessionStateFromContext(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(HttpContext)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Retrieves session data from the context for the current request."
+  remarks: "The GetHttpSessionStateFromContext method can be used by a session-state module to retrieve session data from the current request. This occurs during the <xref:System.Web.HttpApplication.ReleaseRequestState> event at the end of a request. The returned session data can then be written to the session data store. If the session has been abandoned, the session data can be removed from the data store and <xref:System.Web.HttpContext>, and the **Session_OnEnd** event can be executed."
+  example:
+  - "The following code example shows the handler for the <xref:System.Web.HttpApplication.ReleaseRequestState> event in a custom session-state module. The module retrieves session data from the <xref:System.Web.HttpContext> for the current request using the GetHttpSessionStateFromContext method. This code example is part of a larger example provided for the <xref:System.Web.SessionState.SessionStateUtility> class.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/VisualBasic/9c400b1a-e4b0-47ca-aaa3-_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/CSharp/9c400b1a-e4b0-47ca-aaa3-_1.cs)]"
+  syntax:
+    content: public static System.Web.SessionState.IHttpSessionState GetHttpSessionStateFromContext (System.Web.HttpContext context);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "The  from which to retrieve session data."
+    return:
+      type: System.Web.SessionState.IHttpSessionState
+      description: "To be added."
+  overload: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(System.Web.HttpContext)
+  id: GetSessionStaticObjects(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: GetSessionStaticObjects(HttpContext)
+  nameWithType: SessionStateUtility.GetSessionStaticObjects(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(HttpContext)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Gets a reference to the static objects collection for the specified context."
+  remarks: "The GetSessionStaticObjects method is used to retrieve the collection of static objects defined in the Global.asax file for the ASP.NET application. A session-state module implementation will supply the returned <xref:System.Web.HttpStaticObjectsCollection> collection to the <xref:System.Web.SessionState.IHttpSessionState> implementation instance that is added to the current context using the <xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A> method.       A <xref:System.Web.SessionState.SessionStateStoreProviderBase> can also use the GetSessionStaticObjects method when creating a <xref:System.Web.SessionState.SessionStateStoreData> object."
+  example:
+  - "The following code example shows the handler for the <xref:System.Web.HttpApplication.AcquireRequestState> event in a custom session-state module. The module retrieves existing session information or creates new session information, including the <xref:System.Web.HttpStaticObjectsCollection> collection returned from the GetSessionStaticObjects method, and adds it to the <xref:System.Web.HttpContext> of the current request. This code example is part of a larger example provided for the <xref:System.Web.SessionState.SessionStateUtility> class.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#4](~/add/codesnippet/VisualBasic/ce95f35b-c097-49c6-952e-_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#4](~/add/codesnippet/CSharp/ce95f35b-c097-49c6-952e-_1.cs)]"
+  syntax:
+    content: public static System.Web.HttpStaticObjectsCollection GetSessionStaticObjects (System.Web.HttpContext context);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "The  from which to get the static objects collection."
+    return:
+      type: System.Web.HttpStaticObjectsCollection
+      description: "To be added."
+  overload: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(System.Web.HttpContext)
+  id: IsSessionStateReadOnly(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: IsSessionStateReadOnly(HttpContext)
+  nameWithType: SessionStateUtility.IsSessionStateReadOnly(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(HttpContext)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Gets a value which indicates whether the session state is read-only for the specified <see cref=&quot;T:System.Web.HttpContext&quot;></see>."
+  syntax:
+    content: public static bool IsSessionStateReadOnly (System.Web.HttpContext context);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "Specifies the  to check."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(System.Web.HttpContext)
+  id: IsSessionStateRequired(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: IsSessionStateRequired(HttpContext)
+  nameWithType: SessionStateUtility.IsSessionStateRequired(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(HttpContext)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Gets a value which indicates whether the session state is required for the specified <see cref=&quot;T:System.Web.HttpContext&quot;></see>."
+  syntax:
+    content: public static bool IsSessionStateRequired (System.Web.HttpContext context);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "Specifies the  to check."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)
+  id: RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+  nameWithType: SessionStateUtility.RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+  fullName: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Executes the **Session_OnEnd** event defined in the Global.asax file for the ASP.NET application."
+  remarks: "The RaiseSessionEnd method is used by a session-state module to execute the **Session_OnEnd** event defined in the Global.asax file for an ASP.NET application. A session-state module will call the RaiseSessionEnd method when a session has been abandoned, or if the session expires."
+  example:
+  - "The following code example shows the handler for the <xref:System.Web.HttpApplication.ReleaseRequestState> event in a custom session-state module. If the session has been abandoned, the module executes the **Session_OnEnd** event defined in the Global.asax file for the application using the RaiseSessionEnd method. This code example is part of a larger example provided for the <xref:System.Web.SessionState.SessionStateUtility> class.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/VisualBasic/cd86aefd-3df6-4b8a-826f-_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/CSharp/cd86aefd-3df6-4b8a-826f-_1.cs)]"
+  syntax:
+    content: public static void RaiseSessionEnd (System.Web.SessionState.IHttpSessionState session, object eventSource, EventArgs eventArgs);
+    parameters:
+    - id: session
+      type: System.Web.SessionState.IHttpSessionState
+      description: "The  implementation instance for the session that has ended."
+    - id: eventSource
+      type: System.Object
+      description: "The event source object to supply to the  event."
+    - id: eventArgs
+      type: System.EventArgs
+      description: "The <xref:System.EventArgs> object to supply to the  event."
+  overload: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(System.Web.HttpContext)
+  id: RemoveHttpSessionStateFromContext(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: RemoveHttpSessionStateFromContext(HttpContext)
+  nameWithType: SessionStateUtility.RemoveHttpSessionStateFromContext(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(HttpContext)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Removes session data from the specified context."
+  remarks: "The RemoveHttpSessionStateFromContext method clears session data from the specified <xref:System.Web.HttpContext>. A session-state module will call the RemoveHttpSessionStateFromContext method in the handler for the <xref:System.Web.HttpApplication.ReleaseRequestState> event."
+  example:
+  - "The following code example shows the handler for the <xref:System.Web.HttpApplication.ReleaseRequestState> event in a custom session-state module. The event handler removes session data from the current <xref:System.Web.HttpContext>. This code example is part of a larger example provided for the <xref:System.Web.SessionState.SessionStateUtility> class.  \n  \n [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/VisualBasic/db56662a-8b24-4084-9ec3-_1.vb)]\n [!code-cs[System.Web.SessionState.SessionStateUtility#5](~/add/codesnippet/CSharp/db56662a-8b24-4084-9ec3-_1.cs)]"
+  syntax:
+    content: public static void RemoveHttpSessionStateFromContext (System.Web.HttpContext context);
+    parameters:
+    - id: context
+      type: System.Web.HttpContext
+      description: "The  from which to remove session data."
+  overload: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector
+  id: SerializationSurrogateSelector
+  parent: System.Web.SessionState.SessionStateUtility
+  langs:
+  - csharp
+  name: SerializationSurrogateSelector
+  nameWithType: SessionStateUtility.SerializationSurrogateSelector
+  fullName: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.SessionState
+  summary: "Gets or sets a serialization surrogate selector that is used for session serialization customization."
+  syntax:
+    content: public static System.Runtime.Serialization.ISurrogateSelector SerializationSurrogateSelector { get; set; }
+    return:
+      type: System.Runtime.Serialization.ISurrogateSelector
+      description: "A serialization surrogate selector."
+  overload: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(System.Web.HttpContext,System.Web.SessionState.IHttpSessionState)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+  nameWithType: SessionStateUtility.AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+  fullName: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(HttpContext,IHttpSessionState)
+- uid: System.Web.HttpContext
+  parent: System.Web
+  isExternal: false
+  name: HttpContext
+  nameWithType: HttpContext
+  fullName: System.Web.HttpContext
+- uid: System.Web.SessionState.IHttpSessionState
+  parent: System.Web.SessionState
+  isExternal: false
+  name: IHttpSessionState
+  nameWithType: IHttpSessionState
+  fullName: System.Web.SessionState.IHttpSessionState
+- uid: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: GetHttpSessionStateFromContext(HttpContext)
+  nameWithType: SessionStateUtility.GetHttpSessionStateFromContext(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(HttpContext)
+- uid: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: GetSessionStaticObjects(HttpContext)
+  nameWithType: SessionStateUtility.GetSessionStaticObjects(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(HttpContext)
+- uid: System.Web.HttpStaticObjectsCollection
+  parent: System.Web
+  isExternal: false
+  name: HttpStaticObjectsCollection
+  nameWithType: HttpStaticObjectsCollection
+  fullName: System.Web.HttpStaticObjectsCollection
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: IsSessionStateReadOnly(HttpContext)
+  nameWithType: SessionStateUtility.IsSessionStateReadOnly(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(HttpContext)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: IsSessionStateRequired(HttpContext)
+  nameWithType: SessionStateUtility.IsSessionStateRequired(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(HttpContext)
+- uid: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+  nameWithType: SessionStateUtility.RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+  fullName: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(IHttpSessionState,Object,EventArgs)
+- uid: System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(System.Web.HttpContext)
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: RemoveHttpSessionStateFromContext(HttpContext)
+  nameWithType: SessionStateUtility.RemoveHttpSessionStateFromContext(HttpContext)
+  fullName: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(HttpContext)
+- uid: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: SerializationSurrogateSelector
+  nameWithType: SessionStateUtility.SerializationSurrogateSelector
+  fullName: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector
+- uid: System.Runtime.Serialization.ISurrogateSelector
+  parent: System.Runtime.Serialization
+  isExternal: false
+  name: ISurrogateSelector
+  nameWithType: ISurrogateSelector
+  fullName: System.Runtime.Serialization.ISurrogateSelector
+- uid: System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: AddHttpSessionStateToContext
+  nameWithType: SessionStateUtility.AddHttpSessionStateToContext
+- uid: System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: GetHttpSessionStateFromContext
+  nameWithType: SessionStateUtility.GetHttpSessionStateFromContext
+- uid: System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: GetSessionStaticObjects
+  nameWithType: SessionStateUtility.GetSessionStaticObjects
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: IsSessionStateReadOnly
+  nameWithType: SessionStateUtility.IsSessionStateReadOnly
+- uid: System.Web.SessionState.SessionStateUtility.IsSessionStateRequired*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: IsSessionStateRequired
+  nameWithType: SessionStateUtility.IsSessionStateRequired
+- uid: System.Web.SessionState.SessionStateUtility.RaiseSessionEnd*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: RaiseSessionEnd
+  nameWithType: SessionStateUtility.RaiseSessionEnd
+- uid: System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: RemoveHttpSessionStateFromContext
+  nameWithType: SessionStateUtility.RemoveHttpSessionStateFromContext
+- uid: System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector*
+  parent: System.Web.SessionState.SessionStateUtility
+  isExternal: false
+  name: SerializationSurrogateSelector
+  nameWithType: SessionStateUtility.SerializationSurrogateSelector

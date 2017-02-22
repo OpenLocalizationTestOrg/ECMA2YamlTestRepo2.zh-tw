@@ -1,0 +1,839 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Web.UI.WebControls.SiteMapDataSource
+  id: SiteMapDataSource
+  children:
+  - System.Web.UI.WebControls.SiteMapDataSource.#ctor
+  - System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection
+  - System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView(System.String)
+  - System.Web.UI.WebControls.SiteMapDataSource.GetList
+  - System.Web.UI.WebControls.SiteMapDataSource.GetView(System.String)
+  - System.Web.UI.WebControls.SiteMapDataSource.GetViewNames
+  - System.Web.UI.WebControls.SiteMapDataSource.Provider
+  - System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode
+  - System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider
+  - System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode
+  - System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset
+  - System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl
+  - System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#ContainsListCollection
+  - System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#GetList
+  - System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetView(System.String)
+  - System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetViewNames
+  langs:
+  - csharp
+  name: SiteMapDataSource
+  nameWithType: SiteMapDataSource
+  fullName: System.Web.UI.WebControls.SiteMapDataSource
+  type: Class
+  summary: "Provides a data source control that Web server controls and other controls can use to bind to hierarchical site map data."
+  remarks: "In this topic:      -   [Introduction](#introduction)      -   [Specifying the Starting Node](#specifying_the_starting_node)      -   [Retrieving Site Map Data](#retrieving_site_map_data)      -   [Declarative Syntax](#declarative_syntax)      <a name=&quot;introduction&quot;></a>    ## Introduction    The SiteMapDataSource control is a data source to the site map data that is stored by the site map providers that are configured for your site. The SiteMapDataSource enables Web server controls that are not specifically site navigation controls, such as the <xref:System.Web.UI.WebControls.TreeView>, <xref:System.Web.UI.WebControls.Menu>, and <xref:System.Web.UI.WebControls.DropDownList> controls, to bind to hierarchical site map data. You can use these Web server controls to display a site map as a table of contents or to actively navigate a site.  Alternatively, you can use the <xref:System.Web.UI.WebControls.SiteMapPath> control, which is designed specifically as a site navigation control and therefore does not need an instance of the SiteMapDataSource control.      <a name=&quot;specifying_the_starting_node&quot;></a>    ## Specifying the Starting Node    The SiteMapDataSource binds to site map data and presents its view based on a specified starting node in the site map hierarchy. By default, it is the root node of the hierarchy but it can also be any node within the hierarchy. The starting node is identified by the values of several SiteMapDataSource properties as follows:      |Starting Node|Property Values|   |-------------------|---------------------|   |The root node of the hierarchy (the default setting).|The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> is `false`.<br /><br /> The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is not set.|   |The node that represents the currently viewed page.|The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> is `true`.<br /><br /> The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is not set.|   |A specific node of the hierarchy.|The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> is `false`.<br /><br /> The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is set.|       If the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset%2A> property is set to a value other than 0, it affects the starting node and with it the site map data hierarchy that is exposed by the SiteMapDataSource control. The negative or positive integer value of the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset%2A> identifies the number of levels up or down the site map hierarchy from the starting node that is identified by the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> and <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> properties to offset the starting node of the subtree that is exposed by data source control.       If the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset%2A> property is set to a negative number *-n*, the starting node of the subtree that is exposed by the data source control is the ancestor node *n* hierarchical levels above the identified starting node. If the value *n* is greater than the number of ancestor levels in the hierarchical tree, the starting node of the subtree is the root node of the site map hierarchy.       If the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset%2A> property is set to a positive number +*n*, the starting node of the subtree that is exposed is a child node *n* levels below the identified starting node. Because more than one branch of child nodes might exist in the hierarchy, the SiteMapDataSource attempts to resolve a child node directly on the path between the identified starting node and the node that represents the currently requested page, if possible. If the node that represents the currently requested page is not in the subtree of the identified starting node, the value of the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset%2A> property is ignored. If the node that represents the currently requested page is less than *n* levels below the identified starting node, the currently requested page node is used as the starting node.      <a name=&quot;retrieving_site_map_data&quot;></a>    ## Retrieving Site Map Data    Site map data is retrieved from an <xref:System.Web.SiteMapProvider> object, such as <xref:System.Web.XmlSiteMapProvider>, which is the default site map provider for ASP.NET. You can specify any provider that is configured for your site to provide the site map data to the SiteMapDataSource and can obtain the list of available providers by accessing the <xref:System.Web.SiteMap.Providers%2A?displayProperty=fullName> collection.       Like all data source controls, every instance of a SiteMapDataSource is associated with a single helper object, known as a data source view. The <xref:System.Web.UI.WebControls.SiteMapDataSourceView> is a view on the site map data, according to the properties of the data source, and is retrieved by calling the <xref:System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView%2A> method. The <xref:System.Web.UI.WebControls.SiteMapDataSourceView> maintains the <xref:System.Web.SiteMapNodeCollection> object that the controls bind to.       By default, the starting node is the root node of the hierarchy, but you can set the starting node to any node. The starting point can be a node that is relative to the current position in the site map or to an absolute position. You can specify the starting node by setting the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> property.       The SiteMapDataSource is specialized for navigation data, and does not support common data source operations such as sorting, filtering, paging, caching, or data record operations such as updates, insertions or deletions.      <a name=&quot;declarative_syntax&quot;></a>    ## Declarative Syntax      ```   <asp:SiteMapDataSource       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       runat=&quot;server&quot;       ShowStartingNode=&quot;True|False&quot;       SiteMapProvider=&quot;string&quot;       SkinID=&quot;string&quot;       StartFromCurrentNode=&quot;True|False&quot;       StartingNodeOffset=&quot;integer&quot;       StartingNodeUrl=&quot;uri&quot;       Visible=&quot;True|False&quot;   />   ```"
+  example:
+  - "The following code example demonstrates how to declaratively bind a <xref:System.Web.UI.WebControls.TreeView> control to a site map using a SiteMapDataSource control. The site map data is retrieved beginning at the root node level.  \n  \n [!code-cs[System.Web.UI.WebControls.SiteMapDataSource_decl_1#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_235_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.SiteMapDataSource_decl_1#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_235_1.aspx)]"
+  syntax:
+    content: >-
+      [System.ComponentModel.Designer("System.Web.UI.Design.WebControls.SiteMapDataSourceDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+
+      [System.Drawing.ToolboxBitmap(typeof(System.Web.UI.WebControls.SiteMapDataSource))]
+
+      [System.Web.UI.ParseChildren(true)]
+
+      [System.Web.UI.PersistChildren(false)]
+
+      public class SiteMapDataSource : System.Web.UI.HierarchicalDataSourceControl, System.ComponentModel.IListSource, System.Web.UI.IDataSource
+  inheritance:
+  - System.Object
+  - System.Web.UI.Control
+  - System.Web.UI.HierarchicalDataSourceControl
+  implements:
+  - System.ComponentModel.IListSource
+  - System.Web.UI.IDataSource
+  inheritedMembers:
+  - System.Web.UI.Control.Adapter
+  - System.Web.UI.Control.AddedControl(System.Web.UI.Control,System.Int32)
+  - System.Web.UI.Control.AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.AppRelativeTemplateSourceDirectory
+  - System.Web.UI.Control.BeginRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.BindingContainer
+  - System.Web.UI.Control.BuildProfileTree(System.String,System.Boolean)
+  - System.Web.UI.Control.ChildControlsCreated
+  - System.Web.UI.Control.ClearCachedClientID
+  - System.Web.UI.Control.ClearChildControlState
+  - System.Web.UI.Control.ClearChildState
+  - System.Web.UI.Control.ClearChildViewState
+  - System.Web.UI.Control.ClearEffectiveClientIDMode
+  - System.Web.UI.Control.ClientIDSeparator
+  - System.Web.UI.Control.Context
+  - System.Web.UI.Control.CreateChildControls
+  - System.Web.UI.Control.DataBind
+  - System.Web.UI.Control.DataBind(System.Boolean)
+  - System.Web.UI.Control.DataBindChildren
+  - System.Web.UI.Control.DataBinding
+  - System.Web.UI.Control.DataItemContainer
+  - System.Web.UI.Control.DataKeysContainer
+  - System.Web.UI.Control.DesignMode
+  - System.Web.UI.Control.Dispose
+  - System.Web.UI.Control.Disposed
+  - System.Web.UI.Control.EnableViewState
+  - System.Web.UI.Control.EndRenderTracing(System.IO.TextWriter,System.Object)
+  - System.Web.UI.Control.EnsureChildControls
+  - System.Web.UI.Control.EnsureID
+  - System.Web.UI.Control.Events
+  - System.Web.UI.Control.FindControl(System.String,System.Int32)
+  - System.Web.UI.Control.GetDesignModeState
+  - System.Web.UI.Control.GetRouteUrl(System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Object)
+  - System.Web.UI.Control.GetRouteUrl(System.String,System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetRouteUrl(System.Web.Routing.RouteValueDictionary)
+  - System.Web.UI.Control.GetUniqueIDRelativeTo(System.Web.UI.Control)
+  - System.Web.UI.Control.HasChildViewState
+  - System.Web.UI.Control.HasEvents
+  - System.Web.UI.Control.ID
+  - System.Web.UI.Control.IdSeparator
+  - System.Web.UI.Control.Init
+  - System.Web.UI.Control.IsChildControlStateCleared
+  - System.Web.UI.Control.IsLiteralContent
+  - System.Web.UI.Control.IsTrackingViewState
+  - System.Web.UI.Control.IsViewStateEnabled
+  - System.Web.UI.Control.Load
+  - System.Web.UI.Control.LoadControlState(System.Object)
+  - System.Web.UI.Control.LoadViewState(System.Object)
+  - System.Web.UI.Control.LoadViewStateByID
+  - System.Web.UI.Control.MapPathSecure(System.String)
+  - System.Web.UI.Control.NamingContainer
+  - System.Web.UI.Control.OnBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.OnDataBinding(System.EventArgs)
+  - System.Web.UI.Control.OnInit(System.EventArgs)
+  - System.Web.UI.Control.OnLoad(System.EventArgs)
+  - System.Web.UI.Control.OnPreRender(System.EventArgs)
+  - System.Web.UI.Control.OnUnload(System.EventArgs)
+  - System.Web.UI.Control.OpenFile(System.String)
+  - System.Web.UI.Control.Page
+  - System.Web.UI.Control.Parent
+  - System.Web.UI.Control.PreRender
+  - System.Web.UI.Control.RaiseBubbleEvent(System.Object,System.EventArgs)
+  - System.Web.UI.Control.RemovedControl(System.Web.UI.Control)
+  - System.Web.UI.Control.Render(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderChildren(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.Control.RenderControl(System.Web.UI.HtmlTextWriter,System.Web.UI.Adapters.ControlAdapter)
+  - System.Web.UI.Control.RenderingCompatibility
+  - System.Web.UI.Control.ResolveAdapter
+  - System.Web.UI.Control.ResolveClientUrl(System.String)
+  - System.Web.UI.Control.ResolveUrl(System.String)
+  - System.Web.UI.Control.SaveControlState
+  - System.Web.UI.Control.SaveViewState
+  - System.Web.UI.Control.SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.SetRenderMethodDelegate(System.Web.UI.RenderMethod)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object)
+  - System.Web.UI.Control.SetTraceData(System.Object,System.Object,System.Object)
+  - System.Web.UI.Control.Site
+  - System.Web.UI.Control.System#Web#UI#IControlBuilderAccessor#ControlBuilder
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#GetDesignModeState
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetDesignModeState(System.Collections.IDictionary)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#SetOwnerControl(System.Web.UI.Control)
+  - System.Web.UI.Control.System#Web#UI#IControlDesignerAccessor#UserData
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#DataBindings
+  - System.Web.UI.Control.System#Web#UI#IDataBindingsAccessor#HasDataBindings
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#Expressions
+  - System.Web.UI.Control.System#Web#UI#IExpressionsAccessor#HasExpressions
+  - System.Web.UI.Control.System#Web#UI#IParserAccessor#AddParsedSubObject(System.Object)
+  - System.Web.UI.Control.TemplateControl
+  - System.Web.UI.Control.TemplateSourceDirectory
+  - System.Web.UI.Control.TrackViewState
+  - System.Web.UI.Control.UniqueID
+  - System.Web.UI.Control.Unload
+  - System.Web.UI.Control.ValidateRequestMode
+  - System.Web.UI.Control.ViewState
+  - System.Web.UI.Control.ViewStateIgnoresCase
+  - System.Web.UI.Control.ViewStateMode
+  - System.Web.UI.HierarchicalDataSourceControl.ApplyStyleSheetSkin(System.Web.UI.Page)
+  - System.Web.UI.HierarchicalDataSourceControl.ClientID
+  - System.Web.UI.HierarchicalDataSourceControl.ClientIDMode
+  - System.Web.UI.HierarchicalDataSourceControl.Controls
+  - System.Web.UI.HierarchicalDataSourceControl.CreateControlCollection
+  - System.Web.UI.HierarchicalDataSourceControl.EnableTheming
+  - System.Web.UI.HierarchicalDataSourceControl.FindControl(System.String)
+  - System.Web.UI.HierarchicalDataSourceControl.Focus
+  - System.Web.UI.HierarchicalDataSourceControl.HasControls
+  - System.Web.UI.HierarchicalDataSourceControl.OnDataSourceChanged(System.EventArgs)
+  - System.Web.UI.HierarchicalDataSourceControl.RenderControl(System.Web.UI.HtmlTextWriter)
+  - System.Web.UI.HierarchicalDataSourceControl.SkinID
+  - System.Web.UI.HierarchicalDataSourceControl.System#Web#UI#IHierarchicalDataSource#GetHierarchicalView(System.String)
+  - System.Web.UI.HierarchicalDataSourceControl.Visible
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.#ctor
+  id: '#ctor'
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: SiteMapDataSource()
+  nameWithType: SiteMapDataSource.SiteMapDataSource()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.SiteMapDataSource()
+  type: Constructor
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSource&quot;></see> class."
+  syntax:
+    content: public SiteMapDataSource ();
+    parameters: []
+  overload: System.Web.UI.WebControls.SiteMapDataSource.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection
+  id: ContainsListCollection
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: ContainsListCollection
+  nameWithType: SiteMapDataSource.ContainsListCollection
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets a value indicating whether the data source control contains a collection of data source view objects."
+  remarks: "The ContainsListCollection property calls the static <xref:System.Web.UI.ListSourceHelper.ContainsListCollection%2A> method of the <xref:System.Web.UI.ListSourceHelper> class."
+  syntax:
+    content: public virtual bool ContainsListCollection { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the data source control contains a collection of data source view objects; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView(System.String)
+  id: GetHierarchicalView(System.String)
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: GetHierarchicalView(String)
+  nameWithType: SiteMapDataSource.GetHierarchicalView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Retrieves a single view on the site map data for the <see cref=&quot;T:System.Web.SiteMapProvider&quot;></see> object according to the starting node and other properties of the data source."
+  syntax:
+    content: protected override System.Web.UI.HierarchicalDataSourceView GetHierarchicalView (string viewPath);
+    parameters:
+    - id: viewPath
+      type: System.String
+      description: "The URL of the starting node, specified by the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A>."
+    return:
+      type: System.Web.UI.HierarchicalDataSourceView
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "No  is configured or available for the site."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> is  but the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is set."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is set but the  cannot resolve a node for the specified URL."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetList
+  id: GetList
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: GetList()
+  nameWithType: SiteMapDataSource.GetList()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetList()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Retrieves a list of data source controls that can be used as sources of lists of data."
+  remarks: "Use the GetList method to retrieve a set of objects that can be used as sources for the <xref:System.Web.UI.WebControls.SiteMapDataSource> control. Site map data source controls encapsulate their lists of data as <xref:System.Web.UI.WebControls.SiteMapDataSourceView> objects. Therefore, when associated with one or more <xref:System.Web.UI.WebControls.SiteMapDataSourceView> objects, a <xref:System.Web.UI.WebControls.SiteMapDataSource> control represents a list source object and the GetList method returns a list containing one element — the data source control itself.       The GetList method calls the static <xref:System.Web.UI.ListSourceHelper.GetList%2A?displayProperty=fullName> method to retrieve a list of objects that can be used as sources of data. The <xref:System.Web.UI.ListSourceHelper> checks whether the <xref:System.Web.UI.WebControls.SiteMapDataSource.GetViewNames%2A> method returns a valid collection of view names. If it does, the <xref:System.Web.UI.ListSourceHelper> returns a list containing one element — the <xref:System.Web.UI.WebControls.SiteMapDataSource>."
+  syntax:
+    content: public virtual System.Collections.IList GetList ();
+    parameters: []
+    return:
+      type: System.Collections.IList
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.GetList*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetView(System.String)
+  id: GetView(System.String)
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: GetView(String)
+  nameWithType: SiteMapDataSource.GetView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetView(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Retrieves a named view on the site map data of the site map provider according to the starting node and other properties of the data source."
+  remarks: "The `viewName` parameter is the URL for the root node of the view, not the name of the data source view as it is with other data source controls that support named views."
+  syntax:
+    content: public virtual System.Web.UI.DataSourceView GetView (string viewName);
+    parameters:
+    - id: viewName
+      type: System.String
+      description: "The name of the data source view to retrieve."
+    return:
+      type: System.Web.UI.DataSourceView
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.GetView*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The <xref:System.Web.UI.WebControls.SiteMapDataSource.Provider%2A> is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> is  but the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is set."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> is set but the  cannot resolve a node for the specified URL."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames
+  id: GetViewNames
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: GetViewNames()
+  nameWithType: SiteMapDataSource.GetViewNames()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Retrieves a collection of named views for the data source control."
+  remarks: "The GetViewNames method returns a collection with one element (the default name) instead of `null` so that the <xref:System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection%2A> method returns `true`."
+  syntax:
+    content: public virtual System.Collections.ICollection GetViewNames ();
+    parameters: []
+    return:
+      type: System.Collections.ICollection
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.Provider
+  id: Provider
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: Provider
+  nameWithType: SiteMapDataSource.Provider
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.Provider
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a <see cref=&quot;T:System.Web.SiteMapProvider&quot;></see> object that is associated with the data source control."
+  remarks: "Use the Provider property to specify the site map provider instance to use with the data source control. The instance can be different than the provider that is identified by the <xref:System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider%2A> property, if set."
+  syntax:
+    content: public System.Web.SiteMapProvider Provider { get; set; }
+    return:
+      type: System.Web.SiteMapProvider
+      description: "A <see cref=&quot;T:System.Web.SiteMapProvider&quot;></see> that is associated with the data source control; otherwise, if no provider is explicitly set, the default site map provider."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.Provider*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The provider named by the <xref:System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider%2A> is not available.  \n  \n \\- or -  \n  \n No default provider is configured for the site."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode
+  id: ShowStartingNode
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: ShowStartingNode
+  nameWithType: SiteMapDataSource.ShowStartingNode
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a value indicating whether the starting node is retrieved and displayed."
+  remarks: "The ShowStartingNode property is evaluated during calls to the <xref:System.Web.UI.WebControls.SiteMapDataSource.GetView%2A> and <xref:System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView%2A> methods, when the node tree that is returned by these methods is populated.       The value of the ShowStartingNode property is stored in view state."
+  syntax:
+    content: public virtual bool ShowStartingNode { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the starting node is displayed; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider
+  id: SiteMapProvider
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: SiteMapProvider
+  nameWithType: SiteMapDataSource.SiteMapProvider
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets the name of the site map provider that the data source binds to."
+  remarks: "The value of the SiteMapProvider property is stored in view state."
+  example:
+  - "The following code example demonstrates how to declaratively bind a <xref:System.Web.UI.WebControls.TreeView> control to site map data that is provided by an <xref:System.Web.SiteMapProvider> object other than the default provider. The Web.config file makes a custom <xref:System.Web.SiteMapProvider> object available to the `SiteMapDataSource` control:  \n  \n```  \n<system.web>      \n  <siteMap>  \n    <providers>  \n      <add name=\"AsciiTextProvider\"  \n        description=\"SiteMap provider which reads in .sitemap text files.\"  \n        type=\"Samples.AspNet.CS.SimpleTextSiteMapProvider\"  \n      siteMapFile=\"test.txt\"/>  \n    </providers>  \n  </siteMap>  \n</system.web>  \n```  \n  \n The code for the `SimpleTextSiteMapProvider` class that this Web.config file example references can be found in the <xref:System.Web.SiteMapProvider> class overview. If you use the Visual Basic example, the namespace ends in \"VB\" instead of \"CS\". You can also find sample content for the \"text.txt\" site map file in the <xref:System.Web.SiteMapProvider> class overview.  \n  \n> [!NOTE]\n>  The `AsciiTextProvider` is not the default provider for the site, which (in this case) remains the <xref:System.Web.XmlSiteMapProvider> object. The SiteMapProvider property of the <xref:System.Web.UI.WebControls.SiteMapDataSource> control is set to the name of a custom site map provider, and the <xref:System.Web.UI.WebControls.TreeView> binds to the corresponding site map data.  \n  \n [!code-vb[System.Web.UI.WebControls.SiteMapDataSource_decl_3#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_865_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.SiteMapDataSource_decl_3#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_865_1.aspx)]"
+  syntax:
+    content: public virtual string SiteMapProvider { get; set; }
+    return:
+      type: System.String
+      description: "The name of the site map provider that the <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSource&quot;></see> binds to. By default, the value is &lt;xref:System.String.Empty&gt;, and the default site map provider for the site is used."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode
+  id: StartFromCurrentNode
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: StartFromCurrentNode
+  nameWithType: SiteMapDataSource.StartFromCurrentNode
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a value indicating whether the site map node tree is retrieved using the node that represents the current page."
+  remarks: "The StartFromCurrentNode property is evaluated during calls to the <xref:System.Web.UI.WebControls.SiteMapDataSource.GetView%2A> and the <xref:System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView%2A> methods to help determine which site map node to use as a starting point to build the node tree. The StartFromCurrentNode and <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> properties are mutually exclusive — if you set the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> property, ensure that the StartFromCurrentNode property is `false`.       The value of the StartFromCurrentNode property is stored in view state."
+  syntax:
+    content: public virtual bool StartFromCurrentNode { get; set; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the node tree is retrieved relative to the current page; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset
+  id: StartingNodeOffset
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: StartingNodeOffset
+  nameWithType: SiteMapDataSource.StartingNodeOffset
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a positive or negative integer offset from the starting node that determines the root hierarchy that is exposed by the data source control."
+  remarks: "If the StartingNodeOffset property is set to a value other than 0, it affects the starting node and with it the site map data hierarchy that is exposed by the <xref:System.Web.UI.WebControls.SiteMapDataSource> control. The negative or positive integer value of the StartingNodeOffset identifies the number of levels up or down the site map hierarchy from the starting node that is identified by the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> and <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> properties to offset the starting node of the subtree that is exposed by data source control.       If the identified starting node is the node that represents the currently requested page, the StartingNodeOffset is ignored.       If the StartingNodeOffset property is set to a negative number -*n*, the starting node of the subtree that is exposed by the data source control is the ancestor node *n* hierarchical levels above the identified starting node. If the value *n* is greater than the number of ancestor levels in the hierarchical tree, the starting node of the subtree is the root node of the site map hierarchy.       If the StartingNodeOffset property is set to a positive number +*n*, the starting node of the subtree that is exposed is a child node *n* levels below the identified starting node. Because more than one branch of child nodes might exist in the hierarchy, the <xref:System.Web.UI.WebControls.SiteMapDataSource> attempts to resolve a child node directly on the path between the identified starting node and the node that represents the currently requested page, if possible. If the node that represents the currently requested page is not in the subtree of the identified starting node, the value of the StartingNodeOffset property is ignored. If the node that represents the currently requested page is less than *n* levels below the identified starting node, the currently requested page node is used as the starting node.       The value of the StartingNodeOffset property is stored in view state."
+  example:
+  - "The following code example demonstrates the effect of the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> and StartingNodeOffset properties. The example consists of several ASP.NET pages, a master page, master page section, and a Web.sitemap file. The Web.sitemap file defines the hierarchical structure of the site. For this code example, it defines a number of pages identified by unique URLs, such as 1.aspx, 2.aspx, A.aspx, and B.aspx, as follows:  \n  \n [!CODE [System.Web.UI.WebControls.SiteMapDataSource_2#1](../CodeSnippet/VS_Snippets_WebNet/System.Web.UI.WebControls.SiteMapDataSource_2#1)]  \n  \n The Site.master page contains the <xref:System.Web.UI.WebControls.SiteMapDataSource> and a <xref:System.Web.UI.WebControls.TreeView> controls inside a <xref:System.Web.UI.WebControls.ContentPlaceHolder> control. It identifies the starting node of the exposed hierarchy as Default.aspx, using the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl%2A> property. The Site.master file is used by the Default.aspx page only.  \n  \n [!CODE [System.Web.UI.WebControls.SiteMapDataSource_2#2](../CodeSnippet/VS_Snippets_WebNet/System.Web.UI.WebControls.SiteMapDataSource_2#2)]  \n  \n All other pages, such as 1.aspx, 2.aspx, A.aspx, and so on, use the Section.master master page. This master page is very similar to Site.master, however it contains several <xref:System.Web.UI.WebControls.SiteMapDataSource> controls that you can experiment with. The <xref:System.Web.UI.WebControls.TreeView> control that displays site map data is initially bound to `SiteMapDataSource1`, which specifies a StartingNodeOffset of 1. This indicates that the parent node of the currently requested page is displayed. If you view page 1.aspx, the hierarchy displayed by the <xref:System.Web.UI.WebControls.TreeView> is A, 1, 2. However, if you view page 4.aspx, the hierarchy is B, 3, 4.  \n  \n If you change the <xref:System.Web.UI.WebControls.HierarchicalDataBoundControl.DataSourceID%2A> for the <xref:System.Web.UI.WebControls.TreeView> to `SiteMapDataSource2`, the <xref:System.Web.UI.WebControls.TreeView> control displays site map data differently. When you use `SiteMapDataSource2`, the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> property is set to `true`, which means that the site map data is displayed relative to the currently requested page and the StartingNodeOffset property is set to -1, indicating that one level of child nodes is displayed, when possible.  When you view the A.aspx page, the hierarchy that is displayed is the hierarchy of the current level, including all siblings, such as B and C. When you view 1.aspx, the parent nodes are no longer displayed.  \n  \n [!CODE [System.Web.UI.WebControls.SiteMapDataSource_2#3](../CodeSnippet/VS_Snippets_WebNet/System.Web.UI.WebControls.SiteMapDataSource_2#3)]  \n  \n The following code example demonstrates one of the ASP.NET pages you can use with the other components of this code example.  \n  \n```  \n<%@ Page MasterPageFile=\"~/Section.master\" Title=\"Untitled Page\" %>  \n  \n<asp:Content ID=\"Content1\" ContentPlaceHolderID=MainBody Runat=Server>  \n  <h2>1.aspx</h2>  \n</asp:Content>  \n```"
+  syntax:
+    content: public virtual int StartingNodeOffset { get; set; }
+    return:
+      type: System.Int32
+      description: "The default is 0, which indicates that the root hierarchy exposed by the <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSource&quot;></see> is the same as the starting node."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl
+  id: StartingNodeUrl
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: StartingNodeUrl
+  nameWithType: SiteMapDataSource.StartingNodeUrl
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets or sets a node in the site map that the data source then uses as a reference point to retrieve nodes from a hierarchical site map."
+  remarks: "The <xref:System.Web.UI.WebControls.SiteMapDataSource> property binds to site map data and presents its view based on a specified starting node in the site map hierarchy. By default, the starting node is the root node of the hierarchy, but you can set the starting node to any node with the StartingNodeUrl property or set the <xref:System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode%2A> property to `true`.       The value of the StartingNodeUrl property is stored in view state."
+  example:
+  - "The following code example demonstrates how to declaratively set the StartingNodeUrl property and bind a <xref:System.Web.UI.WebControls.TreeView> control to a <xref:System.Web.UI.WebControls.SiteMapDataSource> control.  \n  \n [!code-vb[System.Web.UI.WebControls.SiteMapDataSource_decl_6#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_342_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.SiteMapDataSource_decl_6#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_342_1.aspx)]"
+  syntax:
+    content: public virtual string StartingNodeUrl { get; set; }
+    return:
+      type: System.String
+      description: "The URL of a node in the site map. The <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSource&quot;></see> retrieves the identified <see cref=&quot;T:System.Web.SiteMapNode&quot;></see> and any child nodes from the site map. The default is an &lt;xref:System.String.Empty&gt;."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#ContainsListCollection
+  id: System#ComponentModel#IListSource#ContainsListCollection
+  isEii: true
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: System.ComponentModel.IListSource.ContainsListCollection
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.ContainsListCollection
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.ComponentModel.IListSource.ContainsListCollection
+  type: Property
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "Gets a value that indicates whether the collection is a collection of &lt;xref:System.Collections.IList&gt; objects."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.WebControls.SiteMapDataSource> instance is cast to an <xref:System.ComponentModel.IListSource> interface."
+  syntax:
+    content: bool System.ComponentModel.IListSource.ContainsListCollection { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSource&quot;></see> is associated with one or more <see cref=&quot;T:System.Web.UI.WebControls.SiteMapDataSourceView&quot;></see> objects; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#ContainsListCollection*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#GetList
+  id: System#ComponentModel#IListSource#GetList
+  isEii: true
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: System.ComponentModel.IListSource.GetList()
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.GetList()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.ComponentModel.IListSource.GetList()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "For a description of this member, see &lt;xref:System.ComponentModel.IListSource.GetList%2A&gt;."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.WebControls.SiteMapDataSource> instance is cast to an <xref:System.ComponentModel.IListSource> interface."
+  syntax:
+    content: System.Collections.IList IListSource.GetList ();
+    parameters: []
+    return:
+      type: System.Collections.IList
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#GetList*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetView(System.String)
+  id: System#Web#UI#IDataSource#GetView(System.String)
+  isEii: true
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: System.Web.UI.IDataSource.GetView(String)
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.Web.UI.IDataSource.GetView(String)
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "For a description of this member, see &lt;xref:System.Web.UI.IDataSource.GetView%2A&gt;."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.WebControls.SiteMapDataSource> instance is cast to an <xref:System.Web.UI.IDataSource> interface."
+  syntax:
+    content: System.Web.UI.DataSourceView IDataSource.GetView (string viewName);
+    parameters:
+    - id: viewName
+      type: System.String
+      description: "The URL of the root node of the view."
+    return:
+      type: System.Web.UI.DataSourceView
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetView*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "No  is configured or available for the site."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetViewNames
+  id: System#Web#UI#IDataSource#GetViewNames
+  isEii: true
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  langs:
+  - csharp
+  name: System.Web.UI.IDataSource.GetViewNames()
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetViewNames()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.Web.UI.IDataSource.GetViewNames()
+  type: Method
+  assemblies:
+  - System.Web
+  namespace: System.Web.UI.WebControls
+  summary: "For a description of this member, see &lt;xref:System.Web.UI.IDataSource.GetViewNames%2A&gt;."
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.WebControls.SiteMapDataSource> instance is cast to an <xref:System.Web.UI.IDataSource> interface."
+  syntax:
+    content: System.Collections.ICollection IDataSource.GetViewNames ();
+    parameters: []
+    return:
+      type: System.Collections.ICollection
+      description: "To be added."
+  overload: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetViewNames*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Web.UI.HierarchicalDataSourceControl
+  isExternal: false
+  name: System.Web.UI.HierarchicalDataSourceControl
+- uid: System.Web.UI.WebControls.SiteMapDataSource.#ctor
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: SiteMapDataSource()
+  nameWithType: SiteMapDataSource.SiteMapDataSource()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.SiteMapDataSource()
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: ContainsListCollection
+  nameWithType: SiteMapDataSource.ContainsListCollection
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView(System.String)
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetHierarchicalView(String)
+  nameWithType: SiteMapDataSource.GetHierarchicalView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView(String)
+- uid: System.Web.UI.HierarchicalDataSourceView
+  parent: System.Web.UI
+  isExternal: false
+  name: HierarchicalDataSourceView
+  nameWithType: HierarchicalDataSourceView
+  fullName: System.Web.UI.HierarchicalDataSourceView
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetList
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetList()
+  nameWithType: SiteMapDataSource.GetList()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetList()
+- uid: System.Collections.IList
+  parent: System.Collections
+  isExternal: true
+  name: IList
+  nameWithType: IList
+  fullName: System.Collections.IList
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetView(System.String)
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetView(String)
+  nameWithType: SiteMapDataSource.GetView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetView(String)
+- uid: System.Web.UI.DataSourceView
+  parent: System.Web.UI
+  isExternal: false
+  name: DataSourceView
+  nameWithType: DataSourceView
+  fullName: System.Web.UI.DataSourceView
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetViewNames()
+  nameWithType: SiteMapDataSource.GetViewNames()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames()
+- uid: System.Collections.ICollection
+  parent: System.Collections
+  isExternal: true
+  name: ICollection
+  nameWithType: ICollection
+  fullName: System.Collections.ICollection
+- uid: System.Web.UI.WebControls.SiteMapDataSource.Provider
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: Provider
+  nameWithType: SiteMapDataSource.Provider
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.Provider
+- uid: System.Web.SiteMapProvider
+  parent: System.Web
+  isExternal: false
+  name: SiteMapProvider
+  nameWithType: SiteMapProvider
+  fullName: System.Web.SiteMapProvider
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: ShowStartingNode
+  nameWithType: SiteMapDataSource.ShowStartingNode
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode
+- uid: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: SiteMapProvider
+  nameWithType: SiteMapDataSource.SiteMapProvider
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartFromCurrentNode
+  nameWithType: SiteMapDataSource.StartFromCurrentNode
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartingNodeOffset
+  nameWithType: SiteMapDataSource.StartingNodeOffset
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartingNodeUrl
+  nameWithType: SiteMapDataSource.StartingNodeUrl
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#ContainsListCollection
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.ComponentModel.IListSource.ContainsListCollection
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.ContainsListCollection
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.ComponentModel.IListSource.ContainsListCollection
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#GetList
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.ComponentModel.IListSource.GetList()
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.GetList()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.ComponentModel.IListSource.GetList()
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetView(System.String)
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.Web.UI.IDataSource.GetView(String)
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetView(String)
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.Web.UI.IDataSource.GetView(String)
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetViewNames
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.Web.UI.IDataSource.GetViewNames()
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetViewNames()
+  fullName: System.Web.UI.WebControls.SiteMapDataSource.System.Web.UI.IDataSource.GetViewNames()
+- uid: System.Web.UI.WebControls.SiteMapDataSource.#ctor*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: SiteMapDataSource
+  nameWithType: SiteMapDataSource.SiteMapDataSource
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ContainsListCollection*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: ContainsListCollection
+  nameWithType: SiteMapDataSource.ContainsListCollection
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetHierarchicalView*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetHierarchicalView
+  nameWithType: SiteMapDataSource.GetHierarchicalView
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetList*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetList
+  nameWithType: SiteMapDataSource.GetList
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetView*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetView
+  nameWithType: SiteMapDataSource.GetView
+- uid: System.Web.UI.WebControls.SiteMapDataSource.GetViewNames*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: GetViewNames
+  nameWithType: SiteMapDataSource.GetViewNames
+- uid: System.Web.UI.WebControls.SiteMapDataSource.Provider*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: Provider
+  nameWithType: SiteMapDataSource.Provider
+- uid: System.Web.UI.WebControls.SiteMapDataSource.ShowStartingNode*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: ShowStartingNode
+  nameWithType: SiteMapDataSource.ShowStartingNode
+- uid: System.Web.UI.WebControls.SiteMapDataSource.SiteMapProvider*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: SiteMapProvider
+  nameWithType: SiteMapDataSource.SiteMapProvider
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartFromCurrentNode*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartFromCurrentNode
+  nameWithType: SiteMapDataSource.StartFromCurrentNode
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeOffset*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartingNodeOffset
+  nameWithType: SiteMapDataSource.StartingNodeOffset
+- uid: System.Web.UI.WebControls.SiteMapDataSource.StartingNodeUrl*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: StartingNodeUrl
+  nameWithType: SiteMapDataSource.StartingNodeUrl
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#ContainsListCollection*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.ComponentModel.IListSource.ContainsListCollection
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.ContainsListCollection
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#ComponentModel#IListSource#GetList*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.ComponentModel.IListSource.GetList
+  nameWithType: SiteMapDataSource.System.ComponentModel.IListSource.GetList
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetView*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.Web.UI.IDataSource.GetView
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetView
+- uid: System.Web.UI.WebControls.SiteMapDataSource.System#Web#UI#IDataSource#GetViewNames*
+  parent: System.Web.UI.WebControls.SiteMapDataSource
+  isExternal: false
+  name: System.Web.UI.IDataSource.GetViewNames
+  nameWithType: SiteMapDataSource.System.Web.UI.IDataSource.GetViewNames

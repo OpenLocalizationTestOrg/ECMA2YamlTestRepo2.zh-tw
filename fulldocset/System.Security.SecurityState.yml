@@ -1,0 +1,145 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Security.SecurityState
+  id: SecurityState
+  children:
+  - System.Security.SecurityState.#ctor
+  - System.Security.SecurityState.EnsureState
+  - System.Security.SecurityState.IsStateAvailable
+  langs:
+  - csharp
+  name: SecurityState
+  nameWithType: SecurityState
+  fullName: System.Security.SecurityState
+  type: Class
+  summary: "Provides a base class for requesting the security status of an action from the <see cref=&quot;T:System.AppDomainManager&quot;></see> object."
+  remarks: "You must inherit from this class to provide a class that includes a property that specifies the security-sensitive action to be performed. The SecurityState object that is instantiated from the derived class is passed to the <xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=fullName> method to determine whether the host allows that action to be performed. The default implementation of the <xref:System.AppDomainManager.CheckSecuritySettings%2A> method always returns `false`.  The method must be overridden to detect the actions that are allowed.       For example, if you want to access a Web camera in your library code, you would create a `WebcamSecurityState` object and call the <xref:System.Security.SecurityState.EnsureState%2A> method to determine whether the host allows Web camera access, as shown in the following example.  (You can find the code for `WebcamSecurityState` in the &quot;Example&quot; section.)      ```   WebcamSecurityState securityState = new WebcamSecurityState(&quot;Safe access to Webcam&quot;, WebcamSecurityOptions.SafeAccess);   try   {      securityState.EnsureState();      // Allocate memory.      }   catch (ApplicationException e)   {       // Handle any exception that is thrown.       System.Diagnostics.Debug.WriteLine(e.Message);   }   ```       To process the call the <xref:System.AppDomainManager> must be made aware of `WebcamSecurityState` through an override of the <xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=fullName> method, as shown in the following example.      ```   [SecurityCritical]   public override bool CheckSecuritySettings(System.Security.SecurityState securityState)   {      switch (securityState.ToString())      {         case &quot;WebcamSecurityState&quot;:         {             if ((securityState as WebcamSecurityState).Options == WebcamSecurityOptions.SafeAccess)                 return PromptUser((securityState as WebcamSecurityState).Description);              return false;         }      }         return false;   }   private bool PromptUser(string text)   {      // Replace the OpenFileDialog with a custom user prompt.      OpenFileDialog o = new OpenFileDialog();      o.Title = text;      if (o.ShowDialog() == DialogResult.OK)         return true;      else         return false;   }      ```"
+  example:
+  - "The following example shows how to override the SecurityState class.  \n  \n```  \n[SecurityCritical]  \npublic enum WebcamSecurityOptions  \n    {  \n        SafeAccess,  \n        FullAccess  \n    }  \n[SecurityCritical]  \npublic class WebcamSecurityState : SecurityState  \n{  \n    public WebcamSecurityState(string description, WebcamSecurityOptions options)  \n    {  \n        Options = options;  \n        Description = description;  \n    }  \n    public WebcamSecurityOptions Options { get; set; }  \n    public string Description { get; set; }  \n    public override void EnsureState()  \n    {  \n       if (!IsStateAvailable())  \n           throw new ApplicationException(\"WebcamSecurityState not available\");  \n    }  \n }  \n  \n```"
+  syntax:
+    content: >-
+      [System.Security.SecurityCritical]
+
+      public abstract class SecurityState
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.SecurityState.#ctor
+  id: '#ctor'
+  parent: System.Security.SecurityState
+  langs:
+  - csharp
+  name: SecurityState()
+  nameWithType: SecurityState.SecurityState()
+  fullName: System.Security.SecurityState.SecurityState()
+  type: Constructor
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Security.SecurityState&quot;></see> class."
+  syntax:
+    content: protected SecurityState ();
+    parameters: []
+  overload: System.Security.SecurityState.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.SecurityState.EnsureState
+  id: EnsureState
+  parent: System.Security.SecurityState
+  langs:
+  - csharp
+  name: EnsureState()
+  nameWithType: SecurityState.EnsureState()
+  fullName: System.Security.SecurityState.EnsureState()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "When overridden in a derived class, ensures that the state that is represented by <see cref=&quot;T:System.Security.SecurityState&quot;></see> is available on the host."
+  remarks: "The implementation of this method should be similar to the following example.      ```   public override void EnsureState()   {       if (!IsStateAvailable())             throw new ApplicationException(&quot;WebcamSecurityState not available&quot;);   }      ```"
+  syntax:
+    content: public abstract void EnsureState ();
+    parameters: []
+  overload: System.Security.SecurityState.EnsureState*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.SecurityState.IsStateAvailable
+  id: IsStateAvailable
+  parent: System.Security.SecurityState
+  langs:
+  - csharp
+  name: IsStateAvailable()
+  nameWithType: SecurityState.IsStateAvailable()
+  fullName: System.Security.SecurityState.IsStateAvailable()
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security
+  summary: "Gets a value that indicates whether the state for this implementation of the <see cref=&quot;T:System.Security.SecurityState&quot;></see> class is available on the current host."
+  remarks: "IsStateAvailable calls the <xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=fullName> method to determine whether the state that is represented by this class is available on the host.       See the <xref:System.Security.SecurityState> class for an example implementation of the <xref:System.AppDomainManager.CheckSecuritySettings%2A> method."
+  syntax:
+    content: public bool IsStateAvailable ();
+    parameters: []
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Security.SecurityState.IsStateAvailable*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Security.SecurityState.#ctor
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: SecurityState()
+  nameWithType: SecurityState.SecurityState()
+  fullName: System.Security.SecurityState.SecurityState()
+- uid: System.Security.SecurityState.EnsureState
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: EnsureState()
+  nameWithType: SecurityState.EnsureState()
+  fullName: System.Security.SecurityState.EnsureState()
+- uid: System.Security.SecurityState.IsStateAvailable
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: IsStateAvailable()
+  nameWithType: SecurityState.IsStateAvailable()
+  fullName: System.Security.SecurityState.IsStateAvailable()
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Security.SecurityState.#ctor*
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: SecurityState
+  nameWithType: SecurityState.SecurityState
+- uid: System.Security.SecurityState.EnsureState*
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: EnsureState
+  nameWithType: SecurityState.EnsureState
+- uid: System.Security.SecurityState.IsStateAvailable*
+  parent: System.Security.SecurityState
+  isExternal: false
+  name: IsStateAvailable
+  nameWithType: SecurityState.IsStateAvailable

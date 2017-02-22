@@ -1,0 +1,380 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Runtime.Caching.ChangeMonitor
+  id: ChangeMonitor
+  children:
+  - System.Runtime.Caching.ChangeMonitor.#ctor
+  - System.Runtime.Caching.ChangeMonitor.Dispose
+  - System.Runtime.Caching.ChangeMonitor.Dispose(System.Boolean)
+  - System.Runtime.Caching.ChangeMonitor.HasChanged
+  - System.Runtime.Caching.ChangeMonitor.InitializationComplete
+  - System.Runtime.Caching.ChangeMonitor.IsDisposed
+  - System.Runtime.Caching.ChangeMonitor.NotifyOnChanged(System.Runtime.Caching.OnChangedCallback)
+  - System.Runtime.Caching.ChangeMonitor.OnChanged(System.Object)
+  - System.Runtime.Caching.ChangeMonitor.UniqueId
+  langs:
+  - csharp
+  name: ChangeMonitor
+  nameWithType: ChangeMonitor
+  fullName: System.Runtime.Caching.ChangeMonitor
+  type: Class
+  summary: "Provides a base class for a derived custom type that monitors changes in the state of the data which a cache item depends on."
+  remarks: "The ChangeMonitor class is used as the base class for derived monitor classes that are specialized for particular cache implementations. A ChangeMonitor instance monitors changes in the state of data which a cache item depends on. For example, the item can be a file or data entity whose contents are cached. If the file or data entity is updated, the associated cache entry must be changed also. Common items that can be monitored include data entities (such as database fields, values, rows, or tables), another cache entry, and files and file attributes.       A dependency change is a change in the state of a dependency. In a typical cache implementation, after a ChangeMonitor instance notifies the cache that a dependency has changed, the cache performs the required action, such as invalidating the inserted cache entry.       Derived ChangeMonitor classes can be customized to monitor dependency changes for specific different data stores. For example, there are cache implementations for a file system, physical memory, or a database. The ChangeMonitor class examines changes that occur outside the cache, and then alerts the cache that changes have occurred.       The [!INCLUDE[dnprdnshort](~/add/includes/dnprdnshort-md.md)] includes the following classes that derive from ChangeMonitor class:      -   <xref:System.Runtime.Caching.CacheEntryChangeMonitor>      -   <xref:System.Runtime.Caching.FileChangeMonitor>      -   <xref:System.Runtime.Caching.HostFileChangeMonitor>      -   <xref:System.Runtime.Caching.SqlChangeMonitor>       Each of these classes works with different types of dependencies. For example, the derived <xref:System.Runtime.Caching.FileChangeMonitor> class monitors changes to a cache for file system data (files and folders) that the cache item depends on."
+  syntax:
+    content: 'public abstract class ChangeMonitor : IDisposable'
+  inheritance:
+  - System.Object
+  implements:
+  - System.IDisposable
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.#ctor
+  id: '#ctor'
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: ChangeMonitor()
+  nameWithType: ChangeMonitor.ChangeMonitor()
+  fullName: System.Runtime.Caching.ChangeMonitor.ChangeMonitor()
+  type: Constructor
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> class. This constructor is called from constructors in derived classes to initialize the base class."
+  remarks: "The <xref:System.Runtime.Caching.ChangeMonitor> class has a default constructor. However, classes that inherit from the base <xref:System.Runtime.Caching.ChangeMonitor> class and define custom change-monitoring behavior must perform initialization in the constructor. For more information, see the Notes for Inheritors section."
+  syntax:
+    content: protected ChangeMonitor ();
+    parameters: []
+  overload: System.Runtime.Caching.ChangeMonitor.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.Dispose
+  id: Dispose
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: Dispose()
+  nameWithType: ChangeMonitor.Dispose()
+  fullName: System.Runtime.Caching.ChangeMonitor.Dispose()
+  type: Method
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Releases all resources that are used by the current instance of the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> class."
+  remarks: "The Dispose method invokes the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method of derived classes only one time, the first time it is called. Subsequent calls to the Dispose method have no effect. After the method has been called, the <xref:System.Runtime.Caching.ChangeMonitor.IsDisposed%2A> property is set to `true`.       The <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> overload must be called to dispose of a <xref:System.Runtime.Caching.ChangeMonitor> instance. The following are the rules for calling the dispose method:      -   Before an item is inserted into the cache, it is the caller&quot;s responsibility to dispose of a <xref:System.Runtime.Caching.ChangeMonitor> instance.      -   Once cache item and the <xref:System.Runtime.Caching.ChangeMonitor> instances that are associated with it are passed to a cache, the cache implementer that must make sure that <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> is called, even if the insert fails.      -   After an item and its associated <xref:System.Runtime.Caching.ChangeMonitor> instances are passed to a cache, the caller must not dispose the dependency because when the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method is called, the call is treated as if the dependency has changed. As a result, the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is automatically invoked.      -   Taking these rules into consideration, the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method must be called in one of the following ways:          -   Users must call the Dispose method overload if they decide not to insert the derived change-monitor instance into a cache.          -   The cache implementation is responsible for calling the Dispose overload if the implementation tries to insert the change-monitor instance into an object cache but the insertion fails. When the insertion attempt causes an exception, the cache implementation must dispose any associated dependencies.          -   If the cache entry is removed, the cache implementation must also dispose the dependency.       The internal implementation of the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method automatically calls the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method after it calls a callback that is registered through the <xref:System.Runtime.Caching.ChangeMonitor.NotifyOnChanged%2A> method.      > [!NOTE] >  This automatic dispose during the event firing only occurs if the initialization of the <xref:System.Runtime.Caching.ChangeMonitor> instance previously completed.       When a derived change monitor&quot;s constructor calls the <xref:System.Runtime.Caching.ChangeMonitor.InitializationComplete%2A> method, if the state of the change monitor has already changed (that is, the state that is monitored has already changed when the constructor was still active) then <xref:System.Runtime.Caching.ChangeMonitor.InitializationComplete%2A> method will automatically dispose the change monitor.      > [!NOTE] >  Users should not call the Dispose method. However, you cannot prevent users from calling the method. Therefore, if they do, the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is invoked. In that case, the cache entry is notified as if the dependency has changed.       To prevent derived classes from overriding Dispose method, the method is not an explicit interface implementation."
+  syntax:
+    content: public void Dispose ();
+    parameters: []
+  overload: System.Runtime.Caching.ChangeMonitor.Dispose*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Initialization is not complete in the derived change-monitor class that called the base Dispose method."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.Dispose(System.Boolean)
+  id: Dispose(System.Boolean)
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: Dispose(Boolean)
+  nameWithType: ChangeMonitor.Dispose(Boolean)
+  fullName: System.Runtime.Caching.ChangeMonitor.Dispose(Boolean)
+  type: Method
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Releases all managed and unmanaged resources and any references to the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> instance. This overload must be implemented by derived change-monitor classes."
+  remarks: "When the value of `disposing` value is `true`, all managed and unmanaged resources are disposed and any references to this object are released so that the derived change-monitor instance can be garbage collected. It is guaranteed that the base <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method will invoke the implemented Dispose method only one time."
+  syntax:
+    content: protected abstract void Dispose (bool disposing);
+    parameters:
+    - id: disposing
+      type: System.Boolean
+      description: "\n     to release managed and unmanaged resources and any references to a  instance;  to release only unmanaged resources. When  is passed, the Dispose method is called by a  thread and any external managed references are likely no longer valid because they have already been garbage collected."
+  overload: System.Runtime.Caching.ChangeMonitor.Dispose*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.HasChanged
+  id: HasChanged
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: HasChanged
+  nameWithType: ChangeMonitor.HasChanged
+  fullName: System.Runtime.Caching.ChangeMonitor.HasChanged
+  type: Property
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Gets a value that indicates that the state that is monitored by the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> class has changed."
+  remarks: "You can check the value of this property in a derived <xref:System.Runtime.Caching.ChangeMonitor> class to see whether a dependency has changed.       The value is set to `true` when a dependency change occurs (that is, when the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is called). After the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is called by the derived class, the value of the HasChanged property will be `true`, regardless of whether a <xref:System.Runtime.Caching.OnChangedCallback> instance has been notified by a call to the <xref:System.Runtime.Caching.ChangeMonitor.NotifyOnChanged%2A> method.      > [!NOTE] >  Callers can check the HasChanged property to see whether a dependency has changed. However, in a multi-threaded environment, a simpler and more maintainable approach is to insert data into a cache implementation without checking the HasChanged property. Cache implementations must check the HasChanged property for you and must not perform an insert or set operation if one or more associated dependencies have already changed."
+  syntax:
+    content: public bool HasChanged { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the state that is monitored by the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> instance has changed; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Runtime.Caching.ChangeMonitor.HasChanged*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.InitializationComplete
+  id: InitializationComplete
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: InitializationComplete()
+  nameWithType: ChangeMonitor.InitializationComplete()
+  fullName: System.Runtime.Caching.ChangeMonitor.InitializationComplete()
+  type: Method
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Called from the constructor of derived classes to indicate that initialization is finished."
+  remarks: "If a dependency changes before initialization is complete in a derived class, the constructor of the derived class must invoke the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method.       When the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is invoked, the <xref:System.Runtime.Caching.ChangeMonitor.HasChanged%2A> property is automatically set to `true` by the change monitor. As a result, when the change monitor&quot;s constructor calls the InitializationComplete method, the base class will automatically call the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method. If initialization is complete, the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method automatically disposes the derived change-monitor instance."
+  syntax:
+    content: protected void InitializationComplete ();
+    parameters: []
+  overload: System.Runtime.Caching.ChangeMonitor.InitializationComplete*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.IsDisposed
+  id: IsDisposed
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: IsDisposed
+  nameWithType: ChangeMonitor.IsDisposed
+  fullName: System.Runtime.Caching.ChangeMonitor.IsDisposed
+  type: Property
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Gets a value that indicates that the derived instance of a <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> class is disposed."
+  remarks: "The property is set to `true` after the base <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method calls the <xref:System.Runtime.Caching.ChangeMonitor.Dispose%2A> method in a derived class to dispose of the instance."
+  syntax:
+    content: public bool IsDisposed { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the instance is disposed; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Runtime.Caching.ChangeMonitor.IsDisposed*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged(System.Runtime.Caching.OnChangedCallback)
+  id: NotifyOnChanged(System.Runtime.Caching.OnChangedCallback)
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: NotifyOnChanged(OnChangedCallback)
+  nameWithType: ChangeMonitor.NotifyOnChanged(OnChangedCallback)
+  fullName: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged(OnChangedCallback)
+  type: Method
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Called by Cache implementers to register a callback and notify an <see cref=&quot;T:System.Runtime.Caching.ObjectCache&quot;></see> instance through the <see cref=&quot;T:System.Runtime.Caching.OnChangedCallback&quot;></see> delegate when a dependency has changed."
+  remarks: "Cache implementers use this method to wire themselves up to a change monitor. If you associate one or more change monitors with the cache item, you pass a <xref:System.Runtime.Caching.CacheItemPolicy> instance with a populated change monitors property to the cache item. A cache implementer that supports change monitors is responsible for iterating over the <xref:System.Runtime.Caching.CacheItemPolicy.ChangeMonitors%2A> property and register the <xref:System.Runtime.Caching.OnChangedCallback> delegates with each change monitor that it finds.       Because the <xref:System.Runtime.Caching.OnChangedCallback> delegate includes an optional state parameter, a concrete change monitor implementation can pass optional state information. The cache implementer determines whether an explicit dependency on the type of state that a custom change monitor passes as part of the callback can be taken.      > [!NOTE] >  The base cache extensibility API has no requirement for explicit dependency on the type of state.       The implementation of the NotifyOnChanged method automatically determines whether the state of the monitor has already changed at the time NotifyOnChanged method is called. If the <xref:System.Runtime.Caching.ChangeMonitor.HasChanged%2A> property is `true`, then the method automatically calls the <xref:System.Runtime.Caching.OnChangedCallback> event handler, that was registered, through the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method. This occurs because it is possible that from the time a cache implementation creates a change monitor, to the time a cache implementation gets the monitor and wires itself up to it, the underlying monitored state has changed. If the state has already changed then the object that is passed to the <xref:System.Runtime.Caching.ChangeMonitor.OnChanged%2A> method is `null`.       The NotifyOnChanged method can be invoked only one time, and will throw an exception on subsequent calls."
+  syntax:
+    content: public void NotifyOnChanged (System.Runtime.Caching.OnChangedCallback onChangedCallback);
+    parameters:
+    - id: onChangedCallback
+      type: System.Runtime.Caching.OnChangedCallback
+      description: "A reference to a method that is invoked when a dependency has changed."
+  overload: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The callback method has already been invoked."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    onChangedCallback is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.OnChanged(System.Object)
+  id: OnChanged(System.Object)
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: OnChanged(Object)
+  nameWithType: ChangeMonitor.OnChanged(Object)
+  fullName: System.Runtime.Caching.ChangeMonitor.OnChanged(Object)
+  type: Method
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Called by derived classes to raise the event when a dependency changes."
+  remarks: "Typically, the OnChanged method is called when dependency changes occur. The OnChanged method is also invoked when a change-monitor instance is disposed but the disposal occurs only if the callback has not already been invoked.       If the OnChanged method is called before the <xref:System.Runtime.Caching.ChangeMonitor.NotifyOnChanged%2A> method is called, the state data from the call to the OnChanged method is saved by the cache implementation. Also, the callback to the <xref:System.Runtime.Caching.OnChangedCallback> method is invoked immediately when the <xref:System.Runtime.Caching.ChangeMonitor.NotifyOnChanged%2A> method is invoked."
+  syntax:
+    content: protected void OnChanged (object state);
+    parameters:
+    - id: state
+      type: System.Object
+      description: "The data for the change event. This value can be ."
+  overload: System.Runtime.Caching.ChangeMonitor.OnChanged*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Runtime.Caching.ChangeMonitor.UniqueId
+  id: UniqueId
+  parent: System.Runtime.Caching.ChangeMonitor
+  langs:
+  - csharp
+  name: UniqueId
+  nameWithType: ChangeMonitor.UniqueId
+  fullName: System.Runtime.Caching.ChangeMonitor.UniqueId
+  type: Property
+  assemblies:
+  - System.Runtime.Caching
+  namespace: System.Runtime.Caching
+  summary: "Gets a value that represents the <see cref=&quot;T:System.Runtime.Caching.ChangeMonitor&quot;></see> class instance."
+  remarks: "The UniqueId property value typically consists of dependency names combined string data that uniquely identifiers the data that is being monitored by a <xref:System.Runtime.Caching.ChangeMonitor> instance. The value of the UniqueId property is a string. The value of the string is used to assign the unique ID of the <xref:System.Runtime.Caching.ChangeMonitor> instance."
+  syntax:
+    content: public abstract string UniqueId { get; }
+    return:
+      type: System.String
+      description: "The identifier for a change-monitor instance."
+  overload: System.Runtime.Caching.ChangeMonitor.UniqueId*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Runtime.Caching.ChangeMonitor.#ctor
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: ChangeMonitor()
+  nameWithType: ChangeMonitor.ChangeMonitor()
+  fullName: System.Runtime.Caching.ChangeMonitor.ChangeMonitor()
+- uid: System.Runtime.Caching.ChangeMonitor.Dispose
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: Dispose()
+  nameWithType: ChangeMonitor.Dispose()
+  fullName: System.Runtime.Caching.ChangeMonitor.Dispose()
+- uid: System.Runtime.Caching.ChangeMonitor.Dispose(System.Boolean)
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: Dispose(Boolean)
+  nameWithType: ChangeMonitor.Dispose(Boolean)
+  fullName: System.Runtime.Caching.ChangeMonitor.Dispose(Boolean)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Runtime.Caching.ChangeMonitor.HasChanged
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: HasChanged
+  nameWithType: ChangeMonitor.HasChanged
+  fullName: System.Runtime.Caching.ChangeMonitor.HasChanged
+- uid: System.Runtime.Caching.ChangeMonitor.InitializationComplete
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: InitializationComplete()
+  nameWithType: ChangeMonitor.InitializationComplete()
+  fullName: System.Runtime.Caching.ChangeMonitor.InitializationComplete()
+- uid: System.Runtime.Caching.ChangeMonitor.IsDisposed
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: IsDisposed
+  nameWithType: ChangeMonitor.IsDisposed
+  fullName: System.Runtime.Caching.ChangeMonitor.IsDisposed
+- uid: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged(System.Runtime.Caching.OnChangedCallback)
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: NotifyOnChanged(OnChangedCallback)
+  nameWithType: ChangeMonitor.NotifyOnChanged(OnChangedCallback)
+  fullName: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged(OnChangedCallback)
+- uid: System.Runtime.Caching.OnChangedCallback
+  parent: System.Runtime.Caching
+  isExternal: false
+  name: OnChangedCallback
+  nameWithType: OnChangedCallback
+  fullName: System.Runtime.Caching.OnChangedCallback
+- uid: System.Runtime.Caching.ChangeMonitor.OnChanged(System.Object)
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: OnChanged(Object)
+  nameWithType: ChangeMonitor.OnChanged(Object)
+  fullName: System.Runtime.Caching.ChangeMonitor.OnChanged(Object)
+- uid: System.Runtime.Caching.ChangeMonitor.UniqueId
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: UniqueId
+  nameWithType: ChangeMonitor.UniqueId
+  fullName: System.Runtime.Caching.ChangeMonitor.UniqueId
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Runtime.Caching.ChangeMonitor.#ctor*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: ChangeMonitor
+  nameWithType: ChangeMonitor.ChangeMonitor
+- uid: System.Runtime.Caching.ChangeMonitor.Dispose*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: Dispose
+  nameWithType: ChangeMonitor.Dispose
+- uid: System.Runtime.Caching.ChangeMonitor.HasChanged*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: HasChanged
+  nameWithType: ChangeMonitor.HasChanged
+- uid: System.Runtime.Caching.ChangeMonitor.InitializationComplete*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: InitializationComplete
+  nameWithType: ChangeMonitor.InitializationComplete
+- uid: System.Runtime.Caching.ChangeMonitor.IsDisposed*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: IsDisposed
+  nameWithType: ChangeMonitor.IsDisposed
+- uid: System.Runtime.Caching.ChangeMonitor.NotifyOnChanged*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: NotifyOnChanged
+  nameWithType: ChangeMonitor.NotifyOnChanged
+- uid: System.Runtime.Caching.ChangeMonitor.OnChanged*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: OnChanged
+  nameWithType: ChangeMonitor.OnChanged
+- uid: System.Runtime.Caching.ChangeMonitor.UniqueId*
+  parent: System.Runtime.Caching.ChangeMonitor
+  isExternal: false
+  name: UniqueId
+  nameWithType: ChangeMonitor.UniqueId

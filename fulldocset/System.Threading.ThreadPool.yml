@@ -1,0 +1,1024 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Threading.ThreadPool
+  id: ThreadPool
+  children:
+  - System.Threading.ThreadPool.BindHandle(System.IntPtr)
+  - System.Threading.ThreadPool.BindHandle(System.Runtime.InteropServices.SafeHandle)
+  - System.Threading.ThreadPool.GetAvailableThreads(System.Int32@,System.Int32@)
+  - System.Threading.ThreadPool.GetMaxThreads(System.Int32@,System.Int32@)
+  - System.Threading.ThreadPool.GetMinThreads(System.Int32@,System.Int32@)
+  - System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback)
+  - System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  - System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  - System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  - System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  - System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  - System.Threading.ThreadPool.SetMaxThreads(System.Int32,System.Int32)
+  - System.Threading.ThreadPool.SetMinThreads(System.Int32,System.Int32)
+  - System.Threading.ThreadPool.UnsafeQueueNativeOverlapped(System.Threading.NativeOverlapped*)
+  - System.Threading.ThreadPool.UnsafeQueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  - System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  - System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  - System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  - System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  langs:
+  - csharp
+  name: ThreadPool
+  nameWithType: ThreadPool
+  fullName: System.Threading.ThreadPool
+  type: Class
+  summary: "Provides a pool of threads that can be used to execute tasks, post work items, process asynchronous I/O, wait on behalf of other threads, and process timers."
+  remarks: "Many applications create threads that spend a great deal of time in the sleeping state, waiting for an event to occur. Other threads might enter a sleeping state only to be awakened periodically to poll for a change or update status information. The thread pool enables you to use threads more efficiently by providing your application with a pool of worker threads that are managed by the system. Examples of operations that use thread pool threads include the following:      -   When you create a <xref:System.Threading.Tasks.Task> or <xref:System.Threading.Tasks.Task%601> object to perform some task asynchronously, by default the task is scheduled to run on a thread pool thread.      -   Asynchronous timers use the thread pool. Thread pool threads execute callbacks from the <xref:System.Threading.Timer?displayProperty=fullName> class and raise events from the <xref:System.Timers.Timer?displayProperty=fullName> class.      -   When you use registered wait handles, a system thread monitors the status of the wait handles. When a wait operation completes, a worker thread from the thread pool executes the corresponding callback function.      -   When you call the <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A> method to queue a method for execution on a thread pool thread. You do this by passing the method a <xref:System.Threading.WaitCallback> delegate.   The delegate has the signature      <CodeContentPlaceHolder>0</CodeContentPlaceHolder>   <CodeContentPlaceHolder>1</CodeContentPlaceHolder>        where `state` is an object that contains data to be used by the delegate. The actual data can be passed to the delegate by calling the <xref:System.Threading.ThreadPool.QueueUserWorkItem%28System.Threading.WaitCallback%2CSystem.Object%29> method.      > [!NOTE] >  The threads in the managed thread pool are background threads. That is, their <xref:System.Threading.Thread.IsBackground%2A> properties are `true`. This means that a ThreadPool thread will not keep an application running after all foreground threads have exited.      > [!IMPORTANT] >  When the thread pool reuses a thread, it does not clear the data in thread local storage or in fields that are marked with the <xref:System.ThreadStaticAttribute> attribute. Therefore, when a method examines thread local storage or fields that are marked with the <xref:System.ThreadStaticAttribute> attribute, the values it finds might be left over from an earlier use of the thread pool thread.       You can also queue work items that are not related to a wait operation to the thread pool. To request that a work item be handled by a thread in the thread pool, call the <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A> method. This method takes as a parameter a reference to the method or delegate that will be called by the thread selected from the thread pool. There is no way to cancel a work item after it has been queued.       Timer-queue timers and registered wait operations also use the thread pool. Their callback functions are queued to the thread pool.       There is one thread pool per process. Beginning with the [!INCLUDE[net_v40_long](~/add/includes/net-v40-long-md.md)], the default size of the thread pool for a process depends on several factors, such as the size of the virtual address space. A process can call the <xref:System.Threading.ThreadPool.GetMaxThreads%2A> method to determine the number of threads. The number of threads in the thread pool can be changed by using the <xref:System.Threading.ThreadPool.SetMaxThreads%2A> method. Each thread uses the default stack size and runs at the default priority.      > [!NOTE] >  Unmanaged code that hosts the .NET Framework can change the size of the thread pool by using the `CorSetMaxThreads` function, defined in the mscoree.h file.       The thread pool provides new worker threads or I/O completion threads on demand until it reaches the minimum for each category. When a minimum is reached, the thread pool can create additional threads in that category or wait until some tasks complete. Beginning with the [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)], the thread pool creates and destroys worker threads in order to optimize throughput, which is defined as the number of tasks that complete per unit of time. Too few threads might not make optimal use of available resources, whereas too many threads could increase resource contention.      > [!NOTE] >  When demand is low, the actual number of thread pool threads can fall below the minimum values.       You can use the <xref:System.Threading.ThreadPool.GetMinThreads%2A> method to obtain these minimum values.      > [!CAUTION] >  You can use the <xref:System.Threading.ThreadPool.SetMinThreads%2A> method to increase the minimum number of threads. However, unnecessarily increasing these values can cause performance problems. If too many tasks start at the same time, all of them might appear to be slow. In most cases the thread pool will perform better with its own algorithm for allocating threads."
+  example:
+  - "In the following example, the main application thread  queues a method named `ThreadProc` to execute on a thread pool thread, sleeps for one second, and then exits. The `ThreadProc` method simply displays a message.  \n  \n [!code-cpp[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/CPP/t-system.threading.threa_5_1.cpp)]\n [!code-vb[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/VisualBasic/t-system.threading.threa_5_1.vb)]\n [!code-cs[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/CSharp/t-system.threading.threa_5_1.cs)]  \n  \n If you comment out the call to the <xref:System.Threading.Thread.Sleep%2A?displayProperty=fullName> method, the main thread exits before         method runs on the thread pool thread.  The thread pool uses background         threads, which do not keep the application running if all foreground threads have terminated.  (This         is a simple example of a race condition.)"
+  syntax:
+    content: public static class ThreadPool
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.BindHandle(System.IntPtr)
+  id: BindHandle(System.IntPtr)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: BindHandle(IntPtr)
+  nameWithType: ThreadPool.BindHandle(IntPtr)
+  fullName: System.Threading.ThreadPool.BindHandle(IntPtr)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Binds an operating system handle to the <see cref=&quot;T:System.Threading.ThreadPool&quot;></see>."
+  syntax:
+    content: public static bool BindHandle (IntPtr osHandle);
+    parameters:
+    - id: osHandle
+      type: System.IntPtr
+      description: "An <xref:System.IntPtr> that holds the handle. The handle must have been opened for overlapped I/O on the unmanaged side."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.BindHandle*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.BindHandle(System.Runtime.InteropServices.SafeHandle)
+  id: BindHandle(System.Runtime.InteropServices.SafeHandle)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: BindHandle(SafeHandle)
+  nameWithType: ThreadPool.BindHandle(SafeHandle)
+  fullName: System.Threading.ThreadPool.BindHandle(SafeHandle)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Binds an operating system handle to the <see cref=&quot;T:System.Threading.ThreadPool&quot;></see>."
+  remarks: "The `osHandle` parameter should be a <xref:Microsoft.Win32.SafeHandles.SafeFileHandle>, which derives from the abstract <xref:System.Runtime.InteropServices.SafeHandle> class."
+  syntax:
+    content: public static bool BindHandle (System.Runtime.InteropServices.SafeHandle osHandle);
+    parameters:
+    - id: osHandle
+      type: System.Runtime.InteropServices.SafeHandle
+      description: "A <xref:System.Runtime.InteropServices.SafeHandle> that holds the operating system handle. The handle must have been opened for overlapped I/O on the unmanaged side."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.BindHandle*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    osHandle is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.GetAvailableThreads(System.Int32@,System.Int32@)
+  id: GetAvailableThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: GetAvailableThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetAvailableThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetAvailableThreads(Int32,Int32)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Retrieves the difference between the maximum number of thread pool threads returned by the &lt;xref:System.Threading.ThreadPool.GetMaxThreads%2A&gt; method, and the number currently active."
+  remarks: "When GetAvailableThreads returns, the variable specified by `workerThreads` contains the number of additional worker threads that can be started, and the variable specified by `completionPortThreads` contains the number of additional asynchronous I/O threads that can be started.       If there are no available threads, additional thread pool requests remain queued until thread pool threads become available."
+  example:
+  - "The following example displays the number of worker threads and I/O threads available when a simple app is started.  \n  \n [!code-cs[System.Threading.ThreadPool.GetAvailableThreads#2](~/add/codesnippet/CSharp/m-system.threading.threa_23_1.cs)]\n [!code-vb[System.Threading.ThreadPool.GetAvailableThreads#2](~/add/codesnippet/VisualBasic/m-system.threading.threa_23_1.vb)]"
+  syntax:
+    content: public static void GetAvailableThreads (out int workerThreads, out int completionPortThreads);
+    parameters:
+    - id: workerThreads
+      type: System.Int32
+      description: "The number of available worker threads."
+    - id: completionPortThreads
+      type: System.Int32
+      description: "The number of available asynchronous I/O threads."
+  overload: System.Threading.ThreadPool.GetAvailableThreads*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.GetMaxThreads(System.Int32@,System.Int32@)
+  id: GetMaxThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: GetMaxThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetMaxThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetMaxThreads(Int32,Int32)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Retrieves the number of requests to the thread pool that can be active concurrently. All requests above that number remain queued until thread pool threads become available."
+  remarks: "When GetMaxThreads returns, the variable specified by `workerThreads` contains the maximum number of worker threads allowed in the thread pool, and the variable specified by `completionPortThreads` contains the maximum number of asynchronous I/O threads allowed in the thread pool.       You can use the <xref:System.Threading.ThreadPool.GetAvailableThreads%2A> method to determine the actual number of threads in the thread pool at any given time.       You can use the <xref:System.Threading.ThreadPool.SetMaxThreads%2A> to set the maximum number of worker threads and asynchronous I/O threads in the thread pool.       You can queue as many thread pool requests as system memory allows. If there are more requests than thread pool threads, the additional requests remain queued until thread pool threads become available."
+  example:
+  - "The following code example shows how to retrieve a count of the maximum and available number of threads in the thread pool. A work item is queued that uses `FileStream` to asynchronously write to two files. The callback methods are timed to overlap. A worker thread handles the work item and, depending on the speed and number of processors on the computer, one or two completion port threads handle the write operations.  \n  \n [!code-cpp[System.Threading.ThreadPool.GetAvailableThreads#1](~/add/codesnippet/CPP/m-system.threading.threa_14_1.cpp)]\n [!code-cs[System.Threading.ThreadPool.GetAvailableThreads#1](~/add/codesnippet/CSharp/m-system.threading.threa_14_1.cs)]\n [!code-vb[System.Threading.ThreadPool.GetAvailableThreads#1](~/add/codesnippet/VisualBasic/m-system.threading.threa_14_1.vb)]"
+  syntax:
+    content: public static void GetMaxThreads (out int workerThreads, out int completionPortThreads);
+    parameters:
+    - id: workerThreads
+      type: System.Int32
+      description: "The maximum number of worker threads in the thread pool."
+    - id: completionPortThreads
+      type: System.Int32
+      description: "The maximum number of asynchronous I/O threads in the thread pool."
+  overload: System.Threading.ThreadPool.GetMaxThreads*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.GetMinThreads(System.Int32@,System.Int32@)
+  id: GetMinThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: GetMinThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetMinThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetMinThreads(Int32,Int32)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Retrieves the minimum number of threads the thread pool creates on demand, as new requests are made, before switching to an algorithm for managing thread creation and destruction."
+  remarks: "The thread pool provides new worker threads or I/O completion threads on demand until it reaches the minimum for each category. By default, the minimum number of threads is set to the number of processors on a system. When the minimum is reached, the thread pool can create additional threads in that category or wait until some tasks complete. Beginning with the [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)], the thread pool creates and destroys threads in order to optimize throughput, which is defined as the number of tasks that complete per unit of time. Too few threads might not make optimal use of available resources, whereas too many threads could increase resource contention.      > [!NOTE] >  When demand is low, the actual number of thread pool threads can fall below the minimum values."
+  example:
+  - "The following example sets the minimum number of worker threads to four, and preserves the original value for the minimum number of asynchronous I/O completion threads.  \n  \n [!code-vb[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/VisualBasic/m-system.threading.threa_20_1.vb)]\n [!code-cs[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/CSharp/m-system.threading.threa_20_1.cs)]\n [!code-cpp[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/CPP/m-system.threading.threa_20_1.cpp)]"
+  syntax:
+    content: public static void GetMinThreads (out int workerThreads, out int completionPortThreads);
+    parameters:
+    - id: workerThreads
+      type: System.Int32
+      description: "When this method returns, contains the minimum number of worker threads that the thread pool creates on demand."
+    - id: completionPortThreads
+      type: System.Int32
+      description: "When this method returns, contains the minimum number of asynchronous I/O threads that the thread pool creates on demand."
+  overload: System.Threading.ThreadPool.GetMinThreads*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback)
+  id: QueueUserWorkItem(System.Threading.WaitCallback)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: QueueUserWorkItem(WaitCallback)
+  nameWithType: ThreadPool.QueueUserWorkItem(WaitCallback)
+  fullName: System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Queues a method for execution. The method executes when a thread pool thread becomes available."
+  remarks: "You can place data required by the queued method in the instance fields of the class in which the method is defined, or you can use the <xref:System.Threading.ThreadPool.QueueUserWorkItem%28System.Threading.WaitCallback%2CSystem.Object%29> overload that accepts an object containing the necessary data.      > [!NOTE] >  Visual Basic users can omit the <xref:System.Threading.WaitCallback> constructor, and simply use the `AddressOf` operator when passing the callback method to <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A>. Visual Basic automatically calls the correct delegate constructor.      ## Version Information    In the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A> method. In earlier versions, the principal information is not propagated."
+  example:
+  - "The following example uses the QueueUserWorkItem method overload to queue a task, which is represented by the `ThreadProc` method, to execute when a thread becomes available. No task information is supplied with this overload. Therefore, the information that is available to the `ThreadProc` method is limited to the object the method belongs to.  \n  \n [!code-cpp[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/CPP/m-system.threading.threa_22_1.cpp)]\n [!code-vb[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/VisualBasic/m-system.threading.threa_22_1.vb)]\n [!code-cs[System.Threading.ThreadPool QueueUserWorkItem0#1](~/add/codesnippet/CSharp/m-system.threading.threa_22_1.cs)]"
+  syntax:
+    content: public static bool QueueUserWorkItem (System.Threading.WaitCallback callBack);
+    parameters:
+    - id: callBack
+      type: System.Threading.WaitCallback
+      description: "A  that represents the method to be executed."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.QueueUserWorkItem*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    callBack is ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The common language runtime (CLR) is hosted, and the host does not support this action."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  id: QueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: QueueUserWorkItem(WaitCallback,Object)
+  nameWithType: ThreadPool.QueueUserWorkItem(WaitCallback,Object)
+  fullName: System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback,Object)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Queues a method for execution, and specifies an object containing data to be used by the method. The method executes when a thread pool thread becomes available."
+  remarks: "If the callback method requires complex data, you can define a class to contain the data.      > [!NOTE] >  Visual Basic users can omit the <xref:System.Threading.WaitCallback> constructor, and simply use the `AddressOf` operator when passing the callback method to QueueUserWorkItem. Visual Basic automatically calls the correct delegate constructor.      ## Version Information    In the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A> method. In earlier versions, the principal information is not propagated."
+  example:
+  - "The following example shows how to create an object that contains task information. It also demonstrates how to pass that object to a task that is queued for execution by the thread pool.  \n  \n [!code-cpp[System.Threading.ThreadPool QueueUserWorkItem1#1](~/add/codesnippet/CPP/9389ae71-aa49-4ceb-9b0a-_1.cpp)]\n [!code-cs[System.Threading.ThreadPool QueueUserWorkItem1#1](~/add/codesnippet/CSharp/9389ae71-aa49-4ceb-9b0a-_1.cs)]\n [!code-vb[System.Threading.ThreadPool QueueUserWorkItem1#1](~/add/codesnippet/VisualBasic/9389ae71-aa49-4ceb-9b0a-_1.vb)]"
+  syntax:
+    content: public static bool QueueUserWorkItem (System.Threading.WaitCallback callBack, object state);
+    parameters:
+    - id: callBack
+      type: System.Threading.WaitCallback
+      description: "A  representing the method to execute."
+    - id: state
+      type: System.Object
+      description: "An object containing data to be used by the method."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.QueueUserWorkItem*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The common language runtime (CLR) is hosted, and the host does not support this action."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    callBack is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  id: RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a 32-bit signed integer for the time-out in milliseconds."
+  remarks: "When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer.       The RegisterWaitForSingleObject method queues the specified delegate to the thread pool. A worker thread will execute the delegate when one of the following occurs:      -   The specified object is in the signaled state.      -   The time-out interval elapses.       The RegisterWaitForSingleObject method checks the current state of the specified object&quot;s <xref:System.Threading.WaitHandle>. If the object&quot;s state is unsignaled, the method registers a wait operation. The wait operation is performed by a thread from the thread pool. The delegate is executed by a worker thread when the object&quot;s state becomes signaled or the time-out interval elapses. If the `timeOutInterval` parameter is not 0 (zero) and the `executeOnlyOnce` parameter is `false`, the timer is reset every time the event is signaled or the time-out interval elapses.      > [!IMPORTANT] >  Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread. Instead of a <xref:System.Threading.Mutex>, use a <xref:System.Threading.Semaphore> with a maximum count of 1.       To cancel the wait operation, call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method.       The wait thread uses the Win32 `WaitForMultipleObjects` function to monitor registered wait operations. Therefore, if you must use the same native operating system handle in multiple calls to RegisterWaitForSingleObject, you must duplicate the handle using the Win32 `DuplicateHandle` function. Note that you should not pulse an event object passed to RegisterWaitForSingleObject, because the wait thread might not detect that the event is signaled before it is reset.       Before returning, the function modifies the state of some types of synchronization objects. Modification occurs only for the object whose signaled state caused the wait condition to be satisfied. For example, the count of a semaphore is decreased by one.      ## Version Information    Starting with the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method. In earlier versions, the principal information is not propagated."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle RegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, int millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The  delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.Int32
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.RegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The millisecondsTimeOutInterval parameter is less than -1."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  id: RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a 64-bit signed integer for the time-out in milliseconds."
+  remarks: "When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer.       The RegisterWaitForSingleObject method queues the specified delegate to the thread pool. A worker thread will execute the delegate when one of the following occurs:      -   The specified object is in the signaled state.      -   The time-out interval elapses.       The RegisterWaitForSingleObject method checks the current state of the specified object&quot;s <xref:System.Threading.WaitHandle>. If the object&quot;s state is unsignaled, the method registers a wait operation. The wait operation is performed by a thread from the thread pool. The delegate is executed by a worker thread when the object&quot;s state becomes signaled or the time-out interval elapses. If the `timeOutInterval` parameter is not 0 (zero) and the `executeOnlyOnce` parameter is `false`, the timer is reset every time the event is signaled or the time-out interval elapses.      > [!IMPORTANT] >  Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread. Instead of a <xref:System.Threading.Mutex>, use a <xref:System.Threading.Semaphore> with a maximum count of 1.       To cancel the wait operation, call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method.       The wait thread uses the Win32 `WaitForMultipleObjects` function to monitor registered wait operations. Therefore, if you must use the same native operating system handle in multiple calls to RegisterWaitForSingleObject, you must duplicate the handle using the Win32 `DuplicateHandle` function. Note that you should not pulse an event object passed to RegisterWaitForSingleObject, because the wait thread might not detect that the event is signaled before it is reset.       Before returning, the function modifies the state of some types of synchronization objects. Modification occurs only for the object whose signaled state caused the wait condition to be satisfied. For example, the count of a semaphore is decreased by one.      ## Version Information    Starting with the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method. In earlier versions, the principal information is not propagated."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle RegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, long millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The  delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.Int64
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.RegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The millisecondsTimeOutInterval parameter is less than -1."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  id: RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a &lt;xref:System.TimeSpan&gt; value for the time-out."
+  remarks: "When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer.       The RegisterWaitForSingleObject method queues the specified delegate to the thread pool. A worker thread will execute the delegate when one of the following occurs:      -   The specified object is in the signaled state.      -   The time-out interval elapses.       The RegisterWaitForSingleObject method checks the current state of the specified object&quot;s <xref:System.Threading.WaitHandle>. If the object&quot;s state is unsignaled, the method registers a wait operation. The wait operation is performed by a thread from the thread pool. The delegate is executed by a worker thread when the object&quot;s state becomes signaled or the time-out interval elapses. If the `timeOutInterval` parameter is not 0 (zero) and the `executeOnlyOnce` parameter is `false`, the timer is reset every time the event is signaled or the time-out interval elapses.      > [!IMPORTANT] >  Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread. Instead of a <xref:System.Threading.Mutex>, use a <xref:System.Threading.Semaphore> with a maximum count of 1.       To cancel the wait operation, call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method.       The wait thread uses the Win32 `WaitForMultipleObjects` function to monitor registered wait operations. Therefore, if you must use the same native operating system handle in multiple calls to RegisterWaitForSingleObject, you must duplicate the handle using the Win32 `DuplicateHandle` function. Note that you should not pulse an event object passed to RegisterWaitForSingleObject, because the wait thread might not detect that the event is signaled before it is reset.       Before returning, the function modifies the state of some types of synchronization objects. Modification occurs only for the object whose signaled state caused the wait condition to be satisfied. For example, the count of a semaphore is decreased by one.      ## Version Information    Starting with the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method. In earlier versions, the principal information is not propagated."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle RegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, TimeSpan timeout, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The  delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object passed to the delegate."
+    - id: timeout
+      type: System.TimeSpan
+      description: "The time-out represented by a <xref:System.TimeSpan>. If `timeout` is 0 (zero), the function tests the object&quot;s state and returns immediately. If `timeout` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.RegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The timeout parameter is less than -1."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The timeout parameter is greater than <xref:System.Int32.MaxValue?displayProperty=fullName>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  id: RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a 32-bit unsigned integer for the time-out in milliseconds."
+  remarks: "When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer.       The <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method queues the specified delegate to the thread pool. A worker thread will execute the delegate when one of the following occurs:      -   The specified object is in the signaled state.      -   The time-out interval elapses.       The <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A>method checks the current state of the specified object&quot;s <xref:System.Threading.WaitHandle>. If the object&quot;s state is unsignaled, the method registers a wait operation. The wait operation is performed by a thread from the thread pool. The delegate is executed by a worker thread when the object&quot;s state becomes signaled or the time-out interval elapses. If the `timeOutInterval` parameter is not 0 (zero) and the `executeOnlyOnce` parameter is `false`, the timer is reset every time the event is signaled or the time-out interval elapses.      > [!IMPORTANT] >  Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread. Instead of a <xref:System.Threading.Mutex>, use a <xref:System.Threading.Semaphore> with a maximum count of 1.       To cancel the wait operation, call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method.       The wait thread uses the Win32 `WaitForMultipleObjects` function to monitor registered wait operations. Therefore, if you must use the same native operating system handle in multiple calls to <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A>, you must duplicate the handle using the Win32 `DuplicateHandle` function. Note that you should not pulse an event object passed to <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A>, because the wait thread might not detect that the event is signaled before it is reset.       Before returning, the function modifies the state of some types of synchronization objects. Modification occurs only for the object whose signaled state caused the wait condition to be satisfied. For example, the count of a semaphore is decreased by one.      ## Version Information    Starting with the .NET Framework version 2.0, the <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName> property value is propagated to worker threads queued using the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method. In earlier versions, the principal information is not propagated."
+  example:
+  - "The following example shows how to use the RegisterWaitForSingleObject method to execute a specified callback method when a specified wait handle is signaled. In this example, the callback method is `WaitProc`, and the wait handle is an <xref:System.Threading.AutoResetEvent>.  \n  \n The example defines a `TaskInfo` class to hold the information that is passed to the callback when it executes. The example creates a `TaskInfo` object and assigns it some string data. The <xref:System.Threading.RegisteredWaitHandle> that is returned by the RegisterWaitForSingleObject method is assigned to the `Handle` field of the `TaskInfo` object so that the callback method has access to the <xref:System.Threading.RegisteredWaitHandle>.  \n  \n In addition to specifying `TaskInfo` as the object to pass to the callback method, the call to the RegisterWaitForSingleObject method specifies the <xref:System.Threading.AutoResetEvent> that the task will wait for, a <xref:System.Threading.WaitOrTimerCallback> delegate that represents the `WaitProc` callback method, a one second time-out interval, and multiple callbacks.  \n  \n When the main thread signals the <xref:System.Threading.AutoResetEvent> by calling its <xref:System.Threading.EventWaitHandle.Set%2A> method, the <xref:System.Threading.WaitOrTimerCallback> delegate is invoked. The `WaitProc` method tests <xref:System.Threading.RegisteredWaitHandle> to determine whether a time-out occurred. If the callback was invoked because the wait handle was signaled, the `WaitProc` method unregisters the <xref:System.Threading.RegisteredWaitHandle>, stopping additional callbacks. In the case of a time-out, the task continues to wait. The `WaitProc` method ends by printing a message to the console.  \n  \n [!code-cs[System.Threading.ThreadPool RegisterWaitForSingleObject0#1](~/add/codesnippet/CSharp/2f901dc9-3ce0-4cdc-bf06-_1.cs)]\n [!code-cpp[System.Threading.ThreadPool RegisterWaitForSingleObject0#1](~/add/codesnippet/CPP/2f901dc9-3ce0-4cdc-bf06-_1.cpp)]\n [!code-vb[System.Threading.ThreadPool RegisterWaitForSingleObject0#1](~/add/codesnippet/VisualBasic/2f901dc9-3ce0-4cdc-bf06-_1.vb)]"
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle RegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, uint millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The  delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.UInt32
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.RegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The millisecondsTimeOutInterval parameter is less than -1."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.SetMaxThreads(System.Int32,System.Int32)
+  id: SetMaxThreads(System.Int32,System.Int32)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: SetMaxThreads(Int32,Int32)
+  nameWithType: ThreadPool.SetMaxThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.SetMaxThreads(Int32,Int32)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Sets the number of requests to the thread pool that can be active concurrently. All requests above that number remain queued until thread pool threads become available."
+  remarks: "You cannot set the maximum number of worker threads or I/O completion threads to a number smaller than the number of processors on the computer. To determine how many processors are present, retrieve the value of the <xref:System.Environment.ProcessorCount%2A?displayProperty=fullName> property. In addition, you cannot set the maximum number of worker threads or I/O completion threads to a number smaller than the corresponding minimum number of worker threads or I/O completion threads. To determine the minimum thread pool size,  call the <xref:System.Threading.ThreadPool.GetMinThreads%2A> method.       If the common language runtime is hosted, for example by Internet Information Services (IIS) or SQL Server, the host can limit or prevent changes to the thread pool size.       Use caution when changing the maximum number of threads in the thread pool. While your code might benefit, the changes might have an adverse effect on code libraries you use.       Setting the thread pool size too large can cause performance problems. If too many threads are executing at the same time, the task switching overhead becomes a significant factor."
+  syntax:
+    content: public static bool SetMaxThreads (int workerThreads, int completionPortThreads);
+    parameters:
+    - id: workerThreads
+      type: System.Int32
+      description: "The maximum number of worker threads in the thread pool."
+    - id: completionPortThreads
+      type: System.Int32
+      description: "The maximum number of asynchronous I/O threads in the thread pool."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.SetMaxThreads*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.SetMinThreads(System.Int32,System.Int32)
+  id: SetMinThreads(System.Int32,System.Int32)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: SetMinThreads(Int32,Int32)
+  nameWithType: ThreadPool.SetMinThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.SetMinThreads(Int32,Int32)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Sets the minimum number of threads the thread pool creates on demand, as new requests are made, before switching to an algorithm for managing thread creation and destruction."
+  remarks: "The thread pool provides new worker threads or I/O completion threads on demand until it reaches the minimum for each category. When the minimum is reached, the thread pool can create additional threads in that category or wait until some tasks complete. Beginning with the [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)], the thread pool creates and destroys threads in order to optimize throughput, which is defined as the number of tasks that complete per unit of time. Too few threads might not make optimal use of available resources, whereas too many threads could increase resource contention.       When demand is low, the actual number of thread pool threads can fall below the minimum values.       If you specify a negative number or a number larger than the maximum number of active thread pool threads (obtained using <xref:System.Threading.ThreadPool.GetMaxThreads%2A>), SetMinThreads returns `false` and does not change either of the minimum values.      > [!CAUTION] >  By default, the minimum number of threads is set to the number of processors on a system. You can use the SetMinThreads method to increase the minimum number ofthreads. However, unnecessarily increasing these values can cause performance problems. If too many tasks start at the same time, all of them might appear to be slow. In most cases, the thread pool will perform better with its own algorithm for allocating threads. Reducing the minimum to less than the number of processors can also hurt performance."
+  example:
+  - "The following example sets the minimum number of worker threads to four, and preserves the original value for the minimum number of asynchronous I/O completion threads.  \n  \n [!code-vb[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/VisualBasic/m-system.threading.threa_10_1.vb)]\n [!code-cs[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/CSharp/m-system.threading.threa_10_1.cs)]\n [!code-cpp[System.Threading.ThreadPool.GetSetMinThreads#1](~/add/codesnippet/CPP/m-system.threading.threa_10_1.cpp)]"
+  syntax:
+    content: public static bool SetMinThreads (int workerThreads, int completionPortThreads);
+    parameters:
+    - id: workerThreads
+      type: System.Int32
+      description: "The minimum number of worker threads that the thread pool creates on demand."
+    - id: completionPortThreads
+      type: System.Int32
+      description: "The minimum number of asynchronous I/O threads that the thread pool creates on demand."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.SetMinThreads*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped(System.Threading.NativeOverlapped*)
+  id: UnsafeQueueNativeOverlapped(System.Threading.NativeOverlapped*)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeQueueNativeOverlapped(NativeOverlapped*)
+  nameWithType: ThreadPool.UnsafeQueueNativeOverlapped(NativeOverlapped*)
+  fullName: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped(NativeOverlapped*)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Queues an overlapped I/O operation for execution."
+  remarks: "For information about using native Win32 overlapped I/O, see the <xref:System.Threading.Overlapped> class, the <xref:System.Threading.NativeOverlapped> structure, and the `OVERLAPPED` structure in the Win32 Platform SDK.      > [!CAUTION] >  Using the UnsafeQueueNativeOverlapped method could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeQueueNativeOverlapped, the stack of the thread pool thread does not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks."
+  syntax:
+    content: public static bool UnsafeQueueNativeOverlapped (System.Threading.NativeOverlapped* overlapped);
+    parameters:
+    - id: overlapped
+      type: System.Threading.NativeOverlapped*
+      description: "The  structure to queue."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeQueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  id: UnsafeQueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeQueueUserWorkItem(WaitCallback,Object)
+  nameWithType: ThreadPool.UnsafeQueueUserWorkItem(WaitCallback,Object)
+  fullName: System.Threading.ThreadPool.UnsafeQueueUserWorkItem(WaitCallback,Object)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Queues the specified delegate to the thread pool, but does not propagate the calling stack to the worker thread."
+  remarks: "Unlike the <xref:System.Threading.ThreadPool.QueueUserWorkItem%2A> method, UnsafeQueueUserWorkItem does not propagate the calling stack to the worker thread. This allows code to lose the calling stack and thereby to elevate its security privileges.      > [!CAUTION] >  Using UnsafeQueueUserWorkItem could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeQueueUserWorkItem, the stack of the thread pool thread will not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks."
+  syntax:
+    content: public static bool UnsafeQueueUserWorkItem (System.Threading.WaitCallback callBack, object state);
+    parameters:
+    - id: callBack
+      type: System.Threading.WaitCallback
+      description: "A  that represents the delegate to invoke when a thread in the thread pool picks up the work item."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate when serviced from the thread pool."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeQueueUserWorkItem*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  - type: System.ApplicationException
+    commentId: T:System.ApplicationException
+    description: "An out-of-memory condition was encountered."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: "The work item could not be queued."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    callBack is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  id: UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, using a 32-bit signed integer for the time-out in milliseconds. This method does not propagate the calling stack to the worker thread."
+  remarks: "Unlike the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method, UnsafeRegisterWaitForSingleObject does not propagate the calling stack to the worker thread. This allows code to lose the calling stack and thereby to elevate its security privileges.      > [!CAUTION] >  Using UnsafeRegisterWaitForSingleObject could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeRegisterWaitForSingleObject, the stack of the thread pool thread will not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks.       Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread.       When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle UnsafeRegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, int millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.Int32
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The millisecondsTimeOutInterval parameter is less than -1."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  id: UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a 64-bit signed integer for the time-out in milliseconds. This method does not propagate the calling stack to the worker thread."
+  remarks: "Unlike the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method, UnsafeRegisterWaitForSingleObject does not propagate the calling stack to the worker thread. This allows code to lose the calling stack and thereby to elevate its security privileges.      > [!CAUTION] >  Using UnsafeRegisterWaitForSingleObject could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeRegisterWaitForSingleObject, the stack of the thread pool thread will not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks.       Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread.       When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle UnsafeRegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, long millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.Int64
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The millisecondsTimeOutInterval parameter is less than -1."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  id: UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a &lt;xref:System.TimeSpan&gt; value for the time-out. This method does not propagate the calling stack to the worker thread."
+  remarks: "Unlike the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method, UnsafeRegisterWaitForSingleObject does not propagate the calling stack to the worker thread. This allows code to lose the calling stack and thereby to elevate its security privileges.      > [!CAUTION] >  Using UnsafeRegisterWaitForSingleObject could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeRegisterWaitForSingleObject, the stack of the thread pool thread will not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks.       Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread.       When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle UnsafeRegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, TimeSpan timeout, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate."
+    - id: timeout
+      type: System.TimeSpan
+      description: "The time-out represented by a <xref:System.TimeSpan>. If `timeout` is 0 (zero), the function tests the object&quot;s state and returns immediately. If `timeout` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The timeout parameter is less than -1."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "The timeout parameter is greater than <xref:System.Int32.MaxValue?displayProperty=fullName>."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  id: UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  langs:
+  - csharp
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Threading
+  summary: "Registers a delegate to wait for a &lt;xref:System.Threading.WaitHandle&gt;, specifying a 32-bit unsigned integer for the time-out in milliseconds. This method does not propagate the calling stack to the worker thread."
+  remarks: "Unlike the <xref:System.Threading.ThreadPool.RegisterWaitForSingleObject%2A> method, UnsafeRegisterWaitForSingleObject does not propagate the calling stack to the worker thread. This allows code to lose the calling stack and thereby to elevate its security privileges.      > [!CAUTION] >  Using UnsafeRegisterWaitForSingleObject could inadvertently open up a security hole. Code access security bases its permission checks on the permissions of all the callers on the stack. When work is queued on a thread pool thread using UnsafeRegisterWaitForSingleObject, the stack of the thread pool thread will not have the context of the actual callers. Malicious code might be able exploit this to avoid permission checks.       Using a <xref:System.Threading.Mutex> for `waitObject` does not provide mutual exclusion for the callbacks because the underlying Win32 API uses the default `WT_EXECUTEDEFAULT` flag, so each callback is dispatched on a separate thread pool thread.       When you are finished using the <xref:System.Threading.RegisteredWaitHandle> that is returned by this method, call its <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method to release references to the wait handle. We recommend that you always call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method, even if you specify `true` for `executeOnlyOnce`. Garbage collection works more efficiently if you call the <xref:System.Threading.RegisteredWaitHandle.Unregister%2A?displayProperty=fullName> method instead of depending on the registered wait handle&quot;s finalizer."
+  syntax:
+    content: public static System.Threading.RegisteredWaitHandle UnsafeRegisterWaitForSingleObject (System.Threading.WaitHandle waitObject, System.Threading.WaitOrTimerCallback callBack, object state, uint millisecondsTimeOutInterval, bool executeOnlyOnce);
+    parameters:
+    - id: waitObject
+      type: System.Threading.WaitHandle
+      description: "The <xref:System.Threading.WaitHandle> to register. Use a <xref:System.Threading.WaitHandle> other than <xref:System.Threading.Mutex>."
+    - id: callBack
+      type: System.Threading.WaitOrTimerCallback
+      description: "The delegate to call when the `waitObject` parameter is signaled."
+    - id: state
+      type: System.Object
+      description: "The object that is passed to the delegate."
+    - id: millisecondsTimeOutInterval
+      type: System.UInt32
+      description: "The time-out in milliseconds. If the `millisecondsTimeOutInterval` parameter is 0 (zero), the function tests the object&quot;s state and returns immediately. If `millisecondsTimeOutInterval` is -1, the function&quot;s time-out interval never elapses."
+    - id: executeOnlyOnce
+      type: System.Boolean
+      description: "\n     to indicate that the thread will no longer wait on the `waitObject` parameter after the delegate has been called;  to indicate that the timer is reset every time the wait operation completes until the wait is unregistered."
+    return:
+      type: System.Threading.RegisteredWaitHandle
+      description: "To be added."
+  overload: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The caller does not have the required permission."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Threading.ThreadPool.BindHandle(System.IntPtr)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: BindHandle(IntPtr)
+  nameWithType: ThreadPool.BindHandle(IntPtr)
+  fullName: System.Threading.ThreadPool.BindHandle(IntPtr)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.IntPtr
+  parent: System
+  isExternal: true
+  name: IntPtr
+  nameWithType: IntPtr
+  fullName: System.IntPtr
+- uid: System.Threading.ThreadPool.BindHandle(System.Runtime.InteropServices.SafeHandle)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: BindHandle(SafeHandle)
+  nameWithType: ThreadPool.BindHandle(SafeHandle)
+  fullName: System.Threading.ThreadPool.BindHandle(SafeHandle)
+- uid: System.Runtime.InteropServices.SafeHandle
+  parent: System.Runtime.InteropServices
+  isExternal: true
+  name: SafeHandle
+  nameWithType: SafeHandle
+  fullName: System.Runtime.InteropServices.SafeHandle
+- uid: System.Threading.ThreadPool.GetAvailableThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetAvailableThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetAvailableThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetAvailableThreads(Int32,Int32)
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Threading.ThreadPool.GetMaxThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetMaxThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetMaxThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetMaxThreads(Int32,Int32)
+- uid: System.Threading.ThreadPool.GetMinThreads(System.Int32@,System.Int32@)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetMinThreads(Int32,Int32)
+  nameWithType: ThreadPool.GetMinThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.GetMinThreads(Int32,Int32)
+- uid: System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: QueueUserWorkItem(WaitCallback)
+  nameWithType: ThreadPool.QueueUserWorkItem(WaitCallback)
+  fullName: System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback)
+- uid: System.Threading.WaitCallback
+  parent: System.Threading
+  isExternal: false
+  name: WaitCallback
+  nameWithType: WaitCallback
+  fullName: System.Threading.WaitCallback
+- uid: System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: QueueUserWorkItem(WaitCallback,Object)
+  nameWithType: ThreadPool.QueueUserWorkItem(WaitCallback,Object)
+  fullName: System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback,Object)
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+- uid: System.Threading.RegisteredWaitHandle
+  parent: System.Threading
+  isExternal: false
+  name: RegisteredWaitHandle
+  nameWithType: RegisteredWaitHandle
+  fullName: System.Threading.RegisteredWaitHandle
+- uid: System.Threading.WaitHandle
+  parent: System.Threading
+  isExternal: true
+  name: WaitHandle
+  nameWithType: WaitHandle
+  fullName: System.Threading.WaitHandle
+- uid: System.Threading.WaitOrTimerCallback
+  parent: System.Threading
+  isExternal: false
+  name: WaitOrTimerCallback
+  nameWithType: WaitOrTimerCallback
+  fullName: System.Threading.WaitOrTimerCallback
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+- uid: System.Int64
+  parent: System
+  isExternal: true
+  name: Int64
+  nameWithType: Int64
+  fullName: System.Int64
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+- uid: System.TimeSpan
+  parent: System
+  isExternal: true
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  nameWithType: ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  fullName: System.Threading.ThreadPool.RegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+- uid: System.UInt32
+  parent: System
+  isExternal: true
+  name: UInt32
+  nameWithType: UInt32
+  fullName: System.UInt32
+- uid: System.Threading.ThreadPool.SetMaxThreads(System.Int32,System.Int32)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: SetMaxThreads(Int32,Int32)
+  nameWithType: ThreadPool.SetMaxThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.SetMaxThreads(Int32,Int32)
+- uid: System.Threading.ThreadPool.SetMinThreads(System.Int32,System.Int32)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: SetMinThreads(Int32,Int32)
+  nameWithType: ThreadPool.SetMinThreads(Int32,Int32)
+  fullName: System.Threading.ThreadPool.SetMinThreads(Int32,Int32)
+- uid: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped(System.Threading.NativeOverlapped*)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeQueueNativeOverlapped(NativeOverlapped*)
+  nameWithType: ThreadPool.UnsafeQueueNativeOverlapped(NativeOverlapped*)
+  fullName: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped(NativeOverlapped*)
+- uid: System.Threading.ThreadPool.UnsafeQueueUserWorkItem(System.Threading.WaitCallback,System.Object)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeQueueUserWorkItem(WaitCallback,Object)
+  nameWithType: ThreadPool.UnsafeQueueUserWorkItem(WaitCallback,Object)
+  fullName: System.Threading.ThreadPool.UnsafeQueueUserWorkItem(WaitCallback,Object)
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int32,Boolean)
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.Int64,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,Int64,Boolean)
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.TimeSpan,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,TimeSpan,Boolean)
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(System.Threading.WaitHandle,System.Threading.WaitOrTimerCallback,System.Object,System.UInt32,System.Boolean)
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+  fullName: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject(WaitHandle,WaitOrTimerCallback,Object,UInt32,Boolean)
+- uid: System.Threading.ThreadPool.BindHandle*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: BindHandle
+  nameWithType: ThreadPool.BindHandle
+- uid: System.Threading.ThreadPool.GetAvailableThreads*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetAvailableThreads
+  nameWithType: ThreadPool.GetAvailableThreads
+- uid: System.Threading.ThreadPool.GetMaxThreads*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetMaxThreads
+  nameWithType: ThreadPool.GetMaxThreads
+- uid: System.Threading.ThreadPool.GetMinThreads*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: GetMinThreads
+  nameWithType: ThreadPool.GetMinThreads
+- uid: System.Threading.ThreadPool.QueueUserWorkItem*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: QueueUserWorkItem
+  nameWithType: ThreadPool.QueueUserWorkItem
+- uid: System.Threading.ThreadPool.RegisterWaitForSingleObject*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: RegisterWaitForSingleObject
+  nameWithType: ThreadPool.RegisterWaitForSingleObject
+- uid: System.Threading.ThreadPool.SetMaxThreads*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: SetMaxThreads
+  nameWithType: ThreadPool.SetMaxThreads
+- uid: System.Threading.ThreadPool.SetMinThreads*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: SetMinThreads
+  nameWithType: ThreadPool.SetMinThreads
+- uid: System.Threading.ThreadPool.UnsafeQueueNativeOverlapped*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeQueueNativeOverlapped
+  nameWithType: ThreadPool.UnsafeQueueNativeOverlapped
+- uid: System.Threading.ThreadPool.UnsafeQueueUserWorkItem*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeQueueUserWorkItem
+  nameWithType: ThreadPool.UnsafeQueueUserWorkItem
+- uid: System.Threading.ThreadPool.UnsafeRegisterWaitForSingleObject*
+  parent: System.Threading.ThreadPool
+  isExternal: false
+  name: UnsafeRegisterWaitForSingleObject
+  nameWithType: ThreadPool.UnsafeRegisterWaitForSingleObject

@@ -1,0 +1,1108 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Diagnostics.EventSchemaTraceListener
+  id: EventSchemaTraceListener
+  children:
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String)
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String)
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32)
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption)
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64)
+  - System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64,System.Int32)
+  - System.Diagnostics.EventSchemaTraceListener.BufferSize
+  - System.Diagnostics.EventSchemaTraceListener.Close
+  - System.Diagnostics.EventSchemaTraceListener.Fail(System.String,System.String)
+  - System.Diagnostics.EventSchemaTraceListener.Flush
+  - System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes
+  - System.Diagnostics.EventSchemaTraceListener.IsThreadSafe
+  - System.Diagnostics.EventSchemaTraceListener.MaximumFileSize
+  - System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles
+  - System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object)
+  - System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object[])
+  - System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)
+  - System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])
+  - System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption
+  - System.Diagnostics.EventSchemaTraceListener.TraceTransfer(System.Diagnostics.TraceEventCache,System.String,System.Int32,System.String,System.Guid)
+  - System.Diagnostics.EventSchemaTraceListener.Write(System.String)
+  - System.Diagnostics.EventSchemaTraceListener.WriteLine(System.String)
+  - System.Diagnostics.EventSchemaTraceListener.Writer
+  langs:
+  - csharp
+  name: EventSchemaTraceListener
+  nameWithType: EventSchemaTraceListener
+  fullName: System.Diagnostics.EventSchemaTraceListener
+  type: Class
+  summary: "Directs tracing or debugging output of end-to-end events to an XML-encoded, schema-compliant log file."
+  remarks: "The EventSchemaTraceListener class provides tracing of end-to-end schema-compliant events. You can use end-to-end tracing for a system that has heterogeneous components that cross thread, <xref:System.AppDomain>, process, and computer boundaries. A standardized event schema (see [Event Representation for Event Consumers](http://go.microsoft.com/fwlink/?LinkId=78955)) has been defined to enable tracing across these boundaries. The schema enables the addition of custom, schema-compliant elements. You can use the [Service Trace Viewer Tool (SvcTraceViewer.exe)](http://go.microsoft.com/fwlink/p/?LinkId=240129) to display the event data.  \n  \n EventSchemaTraceListener is tuned for logging performance with implicit support for lock-free tracing.  \n  \n The EventSchemaTraceListener class converts tracing and debugging information into an XML-encoded text stream. The description of the XML output is shown in the tables later in this section.  \n  \n You can enable or disable an EventSchemaTraceListener object through the application configuration file, and then use the configured EventSchemaTraceListener object in your application. Alternately, you can create an EventSchemaTraceListener object in your code. We recommend that you enable trace listeners through the application configuration file. For information about the use of configuration files for tracing and debugging, see [Trace and Debug Settings Schema](../Topic/Trace%20and%20Debug%20Settings%20Schema.md).  \n  \n To configure an EventSchemaTraceListener object, modify the configuration file that corresponds to the name of your application. In this file, you can add, remove, or set the properties for a listener. The configuration file should be formatted as follows:  \n  \n```  \n<configuration>  \n    <system.diagnostics>  \n        <sources>  \n            <source name=\"TestSource\" >  \n                <listeners>  \n                    <!--Remove the default trace listener for better performance.-->  \n                    <remove name=\"Default\"/>  \n                    <!--Note: Removing the default trace listener prevents the dialog box   \n                    from being displayed for Debug.Fail or Debug.Assert commands that are   \n                    executed in user mode.-->  \n                    <add name=\"eventListener\"   \n                      type=\"System.Diagnostics.EventSchemaTraceListener,  system.core\"  \n                      initializeData=\"TraceOutput.xml\"   \n                      traceOutputOptions=\"ProcessId, DateTime, Timestamp\"   \n                      bufferSize=\"65536\"  \n                      maximumFileSize=\"20480000\"  \n                      logRetentionOption=\"LimitedCircularFiles\"  \n                      maximumNumberOfFiles=\"2\"/>  \n                </listeners>  \n            </source>  \n        </sources>  \n    </system.diagnostics>  \n```  \n  \n The EventSchemaTraceListener class inherits the <xref:System.Diagnostics.TraceListener.Filter%2A> property from the base class <xref:System.Diagnostics.TraceListener>. The <xref:System.Diagnostics.TraceListener.Filter%2A> property allows for an additional level of trace output filtering at the listener. If a filter is present, the `Trace` methods of the trace listener call the <xref:System.Diagnostics.TraceFilter.ShouldTrace%2A> method of the filter to determine whether to emit the trace.  \n  \n If an attempt is made to write to a file that is being used or is unavailable, a GUID suffix is automatically added to the file name.  \n  \n> [!NOTE]\n>  Listener methods are intended to be called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes. Do not call the listener methods directly from application code. The EventSchemaTraceListener listener is primarily intended for use by the <xref:System.Diagnostics.TraceSource> class.  \n  \n The following table describes the elements and attributes of the XML output.  \n  \n|Element|Attributes|Output|Notes|  \n|-------------|----------------|------------|-----------|  \n|`CallStack`|None|Depends on the presence of the <xref:System.Diagnostics.TraceOptions> flag in the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.|Special characters such as > or < are replaced with escape sequences. See the escaped character translation table in the next table.|  \n|`Computer`|None|Always present.|This element represents the value of the <xref:System.Environment.MachineName%2A> property.|  \n|`Correlation`|`ActivityID`|Always present.|If `ActivityID` is not specified, the default is an empty GUID.|  \n||`RelatedActivityID`|Depends on the presence of the `relatedActivityId` parameter in the `Trace` method call.|The `RelatedActivityID` attribute corresponds to the `relatedActivityId` parameter of the <xref:System.Diagnostics.EventSchemaTraceListener.TraceTransfer%2A> method.|  \n|`Data`|None|Always present.|This element represents parameter input (`data`). One element is provided for each data object. In the case of event logs, the `Data` element contains escaped XML data. In the case of data logs, the `Data` element contains unescaped data. The data log output uses the `ToString` method of the passed-in data objects.|  \n|`Event`|None|Always present.|This element contains a trace event.|  \n|`EventData`|None|Present for event logs.|This element represents parameter input (`message`, `args`). It contains `Data` elements with escaped XML data that is created by calling the <xref:System.Diagnostics.EventSchemaTraceListener.TraceEvent%2A> method.|  \n|`EventID`|None|Always present.|This element represents parameter input (`id`).|  \n|`Execution`|`ProcessID`|Depends on the presence of the <xref:System.Diagnostics.TraceOptions> flag in the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.|The `ProcessID` attribute is specified in the <xref:System.Diagnostics.TraceEventCache>. On the Microsoft Windows 98 and Windows Millenium Edition operating systems, if `ProcessID` is larger than 2,147,483,647, it is a positive representation of a negative number and should be converted to obtain the correct process identifier.|  \n||`ThreadID`|Present when `ProcessID` is present.|The `ThreadID` attribute is specified in the <xref:System.Diagnostics.TraceEventCache>.|  \n|`Level`|None|Always present.|This element represents parameter input (the numeric value of `eventType`). Parameter values that are larger than 255 are output as a level 8, which represents <xref:System.Diagnostics.TraceEventType?displayProperty=fullName>. Trace event types <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, and <xref:System.Diagnostics.TraceEventType> are output as levels 1, 2, 4, 8, and 10, respectively.|  \n|`LogicalOperationStack`|None|Depends on the presence of the <xref:System.Diagnostics.TraceOptions> flag in the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.|Only one logical operation can exist. Therefore, the values are written as `LogicalOperation` nodes under the `LogicalOperationStack` element.|  \n|`OpCode`|None|Present when `Level` is greater than 255.|This element represents Trace event types that have numeric values greater than 255. <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, <xref:System.Diagnostics.TraceEventType>, or <xref:System.Diagnostics.TraceEventType> are output as levels 1, 2, 4, 8, and 10, respectively.|  \n|`Provider`|`GUID`|Always present.|Always empty.|  \n|`RenderingInfo`|`Culture`|Always present.|This attribute represents a resource string for the event type. It is always \"en-EN\\\\\".|  \n|`System`|`Name`|Always present.||  \n|`TimeCreated`|`SystemTime`|Depends on the presence of the <xref:System.Diagnostics.TraceOptions> flag in the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.|The time is the value of the <xref:System.Diagnostics.TraceEventCache.DateTime%2A?displayProperty=fullName> property. This property is expressed as Coordinated Universal Time|  \n|`TimeStamp`|None|Depends on the presence of the <xref:System.Diagnostics.TraceOptions> flag in the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.|This element is specified in the <xref:System.Diagnostics.TraceEventCache>.|  \n|`UserData`|None|Present for data logs.|This element contains `Data` elements with unescaped, user-provided data from a <xref:System.Diagnostics.EventSchemaTraceListener.TraceData%2A> method.|  \n  \n The following table shows the characters that are escaped in the XML output. Escaping occurs in all the elements and attributes except for the `UserData` element, which contains user-provided, unescaped data. The `UserData` element is a result of calls to the <xref:System.Diagnostics.EventSchemaTraceListener.TraceData%2A> method.  \n  \n|Escaped character|Value|  \n|-----------------------|-----------|  \n|&|&amp;|  \n|\\<|&lt;|  \n|>|&gt;|  \n|\"|&quot;|  \n|\\|&apos;|  \n|0xD|&\\#xD;|  \n|0xA|&\\#xA;|"
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#1](~/add/codesnippet/CSharp/t-system.diagnostics.eve_1_1.cs)]\n [!code-cpp[System.Diagnostics.EventSchemaTraceListener#1](~/add/codesnippet/CPP/t-system.diagnostics.eve_1_1.cpp)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#1](~/add/codesnippet/VisualBasic/t-system.diagnostics.eve_1_1.vb)]"
+  syntax:
+    content: 'public class EventSchemaTraceListener : System.Diagnostics.TextWriterTraceListener'
+  inheritance:
+  - System.Object
+  - System.MarshalByRefObject
+  - System.Diagnostics.TraceListener
+  - System.Diagnostics.TextWriterTraceListener
+  implements: []
+  inheritedMembers:
+  - System.Diagnostics.TextWriterTraceListener.Dispose(System.Boolean)
+  - System.Diagnostics.TraceListener.Attributes
+  - System.Diagnostics.TraceListener.Dispose
+  - System.Diagnostics.TraceListener.Fail(System.String)
+  - System.Diagnostics.TraceListener.Filter
+  - System.Diagnostics.TraceListener.IndentLevel
+  - System.Diagnostics.TraceListener.IndentSize
+  - System.Diagnostics.TraceListener.Name
+  - System.Diagnostics.TraceListener.NeedIndent
+  - System.Diagnostics.TraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32)
+  - System.Diagnostics.TraceListener.TraceOutputOptions
+  - System.Diagnostics.TraceListener.Write(System.Object)
+  - System.Diagnostics.TraceListener.Write(System.Object,System.String)
+  - System.Diagnostics.TraceListener.Write(System.String,System.String)
+  - System.Diagnostics.TraceListener.WriteIndent
+  - System.Diagnostics.TraceListener.WriteLine(System.Object)
+  - System.Diagnostics.TraceListener.WriteLine(System.Object,System.String)
+  - System.Diagnostics.TraceListener.WriteLine(System.String,System.String)
+  - System.MarshalByRefObject.CreateObjRef(System.Type)
+  - System.MarshalByRefObject.GetLifetimeService
+  - System.MarshalByRefObject.InitializeLifetimeService
+  - System.MarshalByRefObject.MemberwiseClone(System.Boolean)
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String)
+  id: '#ctor(System.String)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class, using the specified file as the recipient of debugging and tracing output."
+  remarks: "By default, one file of unrestricted size is logged."
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener constructor.  \n  \n [!code-vb[System.Diagnostics.EventSchemaTraceListener.Ctors#1](~/add/codesnippet/VisualBasic/m-system.diagnostics.eve_19_1.vb)]\n [!code-cs[System.Diagnostics.EventSchemaTraceListener.Ctors#1](~/add/codesnippet/CSharp/m-system.diagnostics.eve_19_1.cs)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String)
+  id: '#ctor(System.String,System.String)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String,String)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class with the specified name, using the specified file as the recipient of debugging and tracing output."
+  remarks: ''
+  example:
+  - "The following code example demonstrates how to use the <xref:System.Diagnostics.EventSchemaTraceListener.%23ctor%28System.String%2CSystem.String%2CSystem.Int32%29?displayProperty=fullName> constructor.  \n  \n [!code-vb[System.Diagnostics.EventSchemaTraceListener.Ctors#2](~/add/codesnippet/VisualBasic/a9f0d11f-fcb5-4d13-a2ff-_1.vb)]\n [!code-cs[System.Diagnostics.EventSchemaTraceListener.Ctors#2](~/add/codesnippet/CSharp/a9f0d11f-fcb5-4d13-a2ff-_1.cs)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName, string name);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+    - id: name
+      type: System.String
+      description: "The name of the listener."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32)
+  id: '#ctor(System.String,System.String,System.Int32)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String,String,Int32)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class with the specified name and specified buffer size, using the specified file as the recipient of debugging and tracing output."
+  remarks: "For performance considerations, `bufferSize` should be a multiple of 1024 bytes."
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener constructor.  \n  \n [!code-vb[System.Diagnostics.EventSchemaTraceListener.Ctors#3](~/add/codesnippet/VisualBasic/45371b18-279c-4de3-a88e-_1.vb)]\n [!code-cs[System.Diagnostics.EventSchemaTraceListener.Ctors#3](~/add/codesnippet/CSharp/45371b18-279c-4de3-a88e-_1.cs)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName, string name, int bufferSize);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+    - id: name
+      type: System.String
+      description: "The name of the listener."
+    - id: bufferSize
+      type: System.Int32
+      description: "The size of the output buffer, in bytes."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption)
+  id: '#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class with the specified name and specified buffer size, using the specified file with the specified log retention policy as the recipient of the debugging and tracing output."
+  remarks: "For performance considerations, `bufferSize` should be a multiple of 1024 bytes."
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener constructor.  \n  \n [!code-vb[System.Diagnostics.EventSchemaTraceListener.Ctors#4](~/add/codesnippet/VisualBasic/f126a0a2-b62d-45c7-8782-_1.vb)]\n [!code-cs[System.Diagnostics.EventSchemaTraceListener.Ctors#4](~/add/codesnippet/CSharp/f126a0a2-b62d-45c7-8782-_1.cs)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName, string name, int bufferSize, System.Diagnostics.TraceLogRetentionOption logRetentionOption);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+    - id: name
+      type: System.String
+      description: "The name of the listener."
+    - id: bufferSize
+      type: System.Int32
+      description: "The size of the output buffer, in bytes."
+    - id: logRetentionOption
+      type: System.Diagnostics.TraceLogRetentionOption
+      description: "One of the  values."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64)
+  id: '#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class with the specified name and specified buffer size, using the specified file with the specified log retention policy and maximum size as the recipient of the debugging and tracing output."
+  remarks: "For performance considerations, `bufferSize` and `maximumFileSize` should be multiples of 1024 bytes. `maximumFileSize` is not an absolute value, it is a threshold which can be exceeded up to the size of the last message."
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener constructor.  \n  \n [!code-vb[System.Diagnostics.EventSchemaTraceListener.Ctors#5](~/add/codesnippet/VisualBasic/5c1c3fa7-33f6-45a0-b6d2-_1.vb)]\n [!code-cs[System.Diagnostics.EventSchemaTraceListener.Ctors#5](~/add/codesnippet/CSharp/5c1c3fa7-33f6-45a0-b6d2-_1.cs)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName, string name, int bufferSize, System.Diagnostics.TraceLogRetentionOption logRetentionOption, long maximumFileSize);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+    - id: name
+      type: System.String
+      description: "The name of the listener."
+    - id: bufferSize
+      type: System.Int32
+      description: "The size of the output buffer, in bytes."
+    - id: logRetentionOption
+      type: System.Diagnostics.TraceLogRetentionOption
+      description: "One of the  values."
+    - id: maximumFileSize
+      type: System.Int64
+      description: "The maximum file size, in bytes."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    maximumFileSize is a negative number."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64,System.Int32)
+  id: '#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64,System.Int32)'
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+  type: Constructor
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventSchemaTraceListener&quot;></see> class with the specified name and specified buffer size, using the specified file with the specified log retention policy, maximum size, and file count as the recipient of the debugging and tracing output."
+  remarks: "For performance considerations, `bufferSize` and `maximumFileSize` should be multiples of 1024 bytes. `maximumFileSize` is not an absolute value; it is a threshold that can be exceeded up to the size of the last message."
+  example:
+  - "The following code example demonstrates how to use the EventSchemaTraceListener constructor. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#2](~/add/codesnippet/CSharp/3c0ec067-fcc9-4608-a254-_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#2](~/add/codesnippet/VisualBasic/3c0ec067-fcc9-4608-a254-_1.vb)]"
+  syntax:
+    content: public EventSchemaTraceListener (string fileName, string name, int bufferSize, System.Diagnostics.TraceLogRetentionOption logRetentionOption, long maximumFileSize, int maximumNumberOfFiles);
+    parameters:
+    - id: fileName
+      type: System.String
+      description: "The path for the log file."
+    - id: name
+      type: System.String
+      description: "The name of the listener."
+    - id: bufferSize
+      type: System.Int32
+      description: "The size of the output buffer, in bytes."
+    - id: logRetentionOption
+      type: System.Diagnostics.TraceLogRetentionOption
+      description: "One of the  values."
+    - id: maximumFileSize
+      type: System.Int64
+      description: "The maximum file size, in bytes."
+    - id: maximumNumberOfFiles
+      type: System.Int32
+      description: "The maximum number of output log files."
+  overload: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    maximumNumberOfFiles is less than 2, and logRetentionOption is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.BufferSize
+  id: BufferSize
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: BufferSize
+  nameWithType: EventSchemaTraceListener.BufferSize
+  fullName: System.Diagnostics.EventSchemaTraceListener.BufferSize
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets the size of the output buffer."
+  remarks: "The property value is set by the `bufferSize` parameter in the constructor. For performance reasons, the buffer size should be set to a multiple of 1024 bytes. We recommend either the default size of 32*1024 bytes or 64\\*1024 bytes for best performance."
+  example:
+  - "The following code example demonstrates how to display the value of the BufferSize property. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#5](~/add/codesnippet/CSharp/p-system.diagnostics.eve_0_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#5](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_0_1.vb)]"
+  syntax:
+    content: public int BufferSize { get; }
+    return:
+      type: System.Int32
+      description: "The size of the output buffer, in bytes."
+  overload: System.Diagnostics.EventSchemaTraceListener.BufferSize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.Close
+  id: Close
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: Close()
+  nameWithType: EventSchemaTraceListener.Close()
+  fullName: System.Diagnostics.EventSchemaTraceListener.Close()
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Closes the log file for this listener so that it no longer receives tracing or debugging output."
+  syntax:
+    content: public override void Close ();
+    parameters: []
+  overload: System.Diagnostics.EventSchemaTraceListener.Close*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.Fail(System.String,System.String)
+  id: Fail(System.String,System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: Fail(String,String)
+  nameWithType: EventSchemaTraceListener.Fail(String,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.Fail(String,String)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes error information, including a basic error message and a detailed error message, to the log file."
+  syntax:
+    content: public override void Fail (string message, string detailMessage);
+    parameters:
+    - id: message
+      type: System.String
+      description: "The basic error message to write."
+    - id: detailMessage
+      type: System.String
+      description: "The detailed error message to append to the basic error message."
+  overload: System.Diagnostics.EventSchemaTraceListener.Fail*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.Flush
+  id: Flush
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: Flush()
+  nameWithType: EventSchemaTraceListener.Flush()
+  fullName: System.Diagnostics.EventSchemaTraceListener.Flush()
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Causes buffered data to be written to the log for this listener."
+  syntax:
+    content: public override void Flush ();
+    parameters: []
+  overload: System.Diagnostics.EventSchemaTraceListener.Flush*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes
+  id: GetSupportedAttributes
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: GetSupportedAttributes()
+  nameWithType: EventSchemaTraceListener.GetSupportedAttributes()
+  fullName: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes()
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets the custom XML configuration attributes that the trace listener supports."
+  remarks: 'The custom attributes that are returned by this method can be used in the XML configuration file to control the behavior of an instance of the <xref:System.Diagnostics.EventSchemaTraceListener> class. Using any other attribute causes a configuration exception. The GetSupportedAttributes method for the <xref:System.Diagnostics.EventSchemaTraceListener> returns the following string array values: &quot;bufferSize&quot;, &quot;logRetentionOption&quot;, &quot;maximumFileSize&quot;, and &quot;maximumNumberOfFiles&quot;.'
+  syntax:
+    content: protected override string[] GetSupportedAttributes ();
+    parameters: []
+    return:
+      type: System.String[]
+      description: "To be added."
+  overload: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe
+  id: IsThreadSafe
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: IsThreadSafe
+  nameWithType: EventSchemaTraceListener.IsThreadSafe
+  fullName: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets a value indicating whether the trace listener is thread safe."
+  remarks: ''
+  example:
+  - "The following code example demonstrates how to display the value of the IsThreadSafe property. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#4](~/add/codesnippet/CSharp/p-system.diagnostics.eve_5_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#4](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_5_1.vb)]"
+  syntax:
+    content: public override bool IsThreadSafe { get; }
+    return:
+      type: System.Boolean
+      description: "Always returns <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+  overload: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize
+  id: MaximumFileSize
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: MaximumFileSize
+  nameWithType: EventSchemaTraceListener.MaximumFileSize
+  fullName: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets the maximum size of the log file."
+  remarks: "The property value is set by the `maximumFileSize` parameter in the constructor or the `maximumFileSize` attribute in the configuration file. For performance reasons, you should set the maximum file size to a multiple of 1024 bytes. The MaximumFileSize property value is not an absolute; it is a threshold that can be exceeded up to the size of the last message.       The following table shows the possible and default values for file size that are associated with each trace log retention option. The values marked as N/A indicate that the MaximumFileSize property is not checked for that <xref:System.Diagnostics.TraceLogRetentionOption> value.      |TraceLogRetentionOption|Maximum file size|Default file size|   |-----------------------------|-----------------------|-----------------------|   |<xref:System.Diagnostics.TraceLogRetentionOption>|N/A|-1|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>0|4 KB|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>0|4 KB|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>0|4 KB|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>0|4 KB|"
+  example:
+  - "The following code example demonstrates how to display the value of the MaximumFileSize property. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#6](~/add/codesnippet/CSharp/p-system.diagnostics.eve_30_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#6](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_30_1.vb)]"
+  syntax:
+    content: public long MaximumFileSize { get; }
+    return:
+      type: System.Int64
+      description: "The maximum file size, in bytes."
+  overload: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles
+  id: MaximumNumberOfFiles
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: MaximumNumberOfFiles
+  nameWithType: EventSchemaTraceListener.MaximumNumberOfFiles
+  fullName: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets the maximum number of log files."
+  remarks: "The property value is set by the `maximumNumberOfFiles` parameter in the constructor or the `maximumNumberOfFiles` attribute in the configuration file.       The following table shows the possible and default values for file size and file count that are associated with each trace log retention option. The values marked as N/A indicate that the MaximumNumberOfFiles property is not checked for that <xref:System.Diagnostics.TraceLogRetentionOption> value.      |TraceLogRetentionOption|Maximum number of files|Default number of files|   |-----------------------------|-----------------------------|-----------------------------|   |<xref:System.Diagnostics.TraceLogRetentionOption>|N/A|1|   |<xref:System.Diagnostics.TraceLogRetentionOption>|N/A|1|   |<xref:System.Diagnostics.TraceLogRetentionOption>|N/A|-1|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>0|1|   |<xref:System.Diagnostics.TraceLogRetentionOption>|>1|2|"
+  example:
+  - "The following code example demonstrates how to display the value of the MaximumNumberOfFiles property. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#7](~/add/codesnippet/CSharp/p-system.diagnostics.eve_1_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#7](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_1_1.vb)]"
+  syntax:
+    content: public int MaximumNumberOfFiles { get; }
+    return:
+      type: System.Int32
+      description: "The maximum number of log files, determined by the value of the &lt;xref:System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption%2A&gt; property for the file."
+  overload: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object)
+  id: TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+  nameWithType: EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes trace information, a single data object, and event information to the log file."
+  remarks: "The `eventCache`, `source`, `eventType`, and `id` parameters are used in the header and footer of the trace. The `id` parameter is converted to an unsigned integer before it is written. Therefore, a negative `id` value is written as a large positive integer. The `data` parameter is written as a `Data` node in the `UserData` element. The `ToString` method of the data object is used to convert the object to a string.      > [!IMPORTANT] >  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void TraceData (System.Diagnostics.TraceEventCache eventCache, string source, System.Diagnostics.TraceEventType eventType, int id, object data);
+    parameters:
+    - id: eventCache
+      type: System.Diagnostics.TraceEventCache
+      description: "A  that contains the current process ID, thread ID, and stack trace information."
+    - id: source
+      type: System.String
+      description: "The source name."
+    - id: eventType
+      type: System.Diagnostics.TraceEventType
+      description: "One of the  values."
+    - id: id
+      type: System.Int32
+      description: "A numeric identifier for the event."
+    - id: data
+      type: System.Object
+      description: "A data object to emit."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceData*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object[])
+  id: TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object[])
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+  nameWithType: EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes trace information, multiple data objects, and event information to the log file."
+  remarks: "The `eventCache`, `source`, `eventType`, and `id` parameters are used in the header and footer of the trace. The `id` parameter is converted to an unsigned integer before it is written. Therefore, a negative `id` value is written as a large positive integer. The objects in the `data` parameter array are written as `Data` nodes in the `UserData` element. The `ToString` method of each data object is used to convert the object to a string.      > [!IMPORTANT] >  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void TraceData (System.Diagnostics.TraceEventCache eventCache, string source, System.Diagnostics.TraceEventType eventType, int id, object[] data);
+    parameters:
+    - id: eventCache
+      type: System.Diagnostics.TraceEventCache
+      description: "A  that contains the current process ID, thread ID, and stack trace information."
+    - id: source
+      type: System.String
+      description: "The source name."
+    - id: eventType
+      type: System.Diagnostics.TraceEventType
+      description: "One of the  values."
+    - id: id
+      type: System.Int32
+      description: "A numeric identifier for the event."
+    - id: data
+      type: System.Object[]
+      description: "An array of data objects to emit."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceData*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)
+  id: TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+  nameWithType: EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes trace information, a message, and event information to the log file."
+  remarks: "The `eventCache`, `source`, `eventType`, and `id` parameters are used in the header and footer of the trace. The `id` parameter is converted to an unsigned integer before it is written. Therefore, a negative `id` value is written as a large positive integer. The `message` parameter is written as a `Data` node in the `EventData` element.      > [!IMPORTANT] >  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void TraceEvent (System.Diagnostics.TraceEventCache eventCache, string source, System.Diagnostics.TraceEventType eventType, int id, string message);
+    parameters:
+    - id: eventCache
+      type: System.Diagnostics.TraceEventCache
+      description: "A  that contains the current process ID, thread ID, and stack trace information."
+    - id: source
+      type: System.String
+      description: "The source name."
+    - id: eventType
+      type: System.Diagnostics.TraceEventType
+      description: "One of the  values."
+    - id: id
+      type: System.Int32
+      description: "A numeric identifier for the event."
+    - id: message
+      type: System.String
+      description: "The message to write."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceEvent*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])
+  id: TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+  nameWithType: EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes trace information, a formatted message, and event information to the log file."
+  remarks: "The `eventCache`, `source`, `eventType`, and `id` parameters are used in the header and footer of the trace. The `id` parameter is converted to an unsigned integer before it is written. Therefore, a negative `id` value is written as a large positive integer. The [String.Format(String, Object\\[\\])](assetId:///M:System.String.Format(System.String,System.Object[])?qualifyHint=True&autoUpgrade=False) method is called and the `format` string and `args` array are passed in as parameters. This method formats the `args` object array and writes the formatted array as the `Data` node in the `EventData` element.  \n  \n> [!IMPORTANT]\n>  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void TraceEvent (System.Diagnostics.TraceEventCache eventCache, string source, System.Diagnostics.TraceEventType eventType, int id, string format, object[] args);
+    parameters:
+    - id: eventCache
+      type: System.Diagnostics.TraceEventCache
+      description: "A  that contains the current process ID, thread ID, and stack trace information."
+    - id: source
+      type: System.String
+      description: "The source name."
+    - id: eventType
+      type: System.Diagnostics.TraceEventType
+      description: "One of the  values."
+    - id: id
+      type: System.Int32
+      description: "A numeric identifier for the event."
+    - id: format
+      type: System.String
+      description: "A format string that contains zero or more format items that correspond to objects in the `args` array."
+    - id: args
+      type: System.Object[]
+      description: "An object array that contains zero or more objects to format."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceEvent*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption
+  id: TraceLogRetentionOption
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceLogRetentionOption
+  nameWithType: EventSchemaTraceListener.TraceLogRetentionOption
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets the trace log retention option for the file."
+  remarks: ''
+  example:
+  - "The following code example demonstrates how to display the value of the TraceLogRetentionOption property. This code example is part of a larger example that is provided for the <xref:System.Diagnostics.EventSchemaTraceListener> class.  \n  \n [!code-cs[System.Diagnostics.EventSchemaTraceListener#9](~/add/codesnippet/CSharp/p-system.diagnostics.eve_7_1.cs)]\n [!code-vb[System.Diagnostics.EventSchemaTraceListener#9](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_7_1.vb)]"
+  syntax:
+    content: public System.Diagnostics.TraceLogRetentionOption TraceLogRetentionOption { get; }
+    return:
+      type: System.Diagnostics.TraceLogRetentionOption
+      description: "One of the <see cref=&quot;T:System.Diagnostics.TraceLogRetentionOption&quot;></see> values. The default is <see cref=&quot;T:System.Diagnostics.TraceLogRetentionOption&quot;></see>."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceTransfer(System.Diagnostics.TraceEventCache,System.String,System.Int32,System.String,System.Guid)
+  id: TraceTransfer(System.Diagnostics.TraceEventCache,System.String,System.Int32,System.String,System.Guid)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+  nameWithType: EventSchemaTraceListener.TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes trace information, including the identity of a related activity, a message, and event information, to the log file."
+  remarks: "The TraceTransfer method is used to correlate related traces. The `eventCache`, `source`, `id`, and `relatedActivityId` parameters are used in the header and footer of the trace. The `id` parameter is converted to an unsigned integer before it is written. Therefore, a negative `id` value is written as a large positive integer. The `message` parameter is written as the `Data` element. The <xref:System.Guid.ToString%28System.String%29?displayProperty=fullName> method is called to convert the `relatedActivityId` value to a &quot;B&quot; formatted string, which appears in the header. The `Opcode` element in the footer identifies the trace event type as a <xref:System.Diagnostics.TraceEventType>.      > [!IMPORTANT] >  The TraceTransfer method should not be called by application code. It is intended to be used by a <xref:System.Diagnostics.TraceSource> object to emit the trace information for its <xref:System.Diagnostics.TraceSource.TraceTransfer%2A> method."
+  syntax:
+    content: public override void TraceTransfer (System.Diagnostics.TraceEventCache eventCache, string source, int id, string message, Guid relatedActivityId);
+    parameters:
+    - id: eventCache
+      type: System.Diagnostics.TraceEventCache
+      description: "A  that contains the current process ID, thread ID, and stack trace information."
+    - id: source
+      type: System.String
+      description: "The source name."
+    - id: id
+      type: System.Int32
+      description: "A numeric identifier for the event."
+    - id: message
+      type: System.String
+      description: "A trace message to write."
+    - id: relatedActivityId
+      type: System.Guid
+      description: "A <xref:System.Guid> structure that identifies a related activity."
+  overload: System.Diagnostics.EventSchemaTraceListener.TraceTransfer*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.Write(System.String)
+  id: Write(System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: Write(String)
+  nameWithType: EventSchemaTraceListener.Write(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.Write(String)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes a message to the log file without providing any additional context information."
+  remarks: "The <xref:System.Diagnostics.EventSchemaTraceListener.TraceEvent%2A> method is called to log the message as an <xref:System.Diagnostics.TraceEventType> event.      > [!IMPORTANT] >  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void Write (string message);
+    parameters:
+    - id: message
+      type: System.String
+      description: "The message to write."
+  overload: System.Diagnostics.EventSchemaTraceListener.Write*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.WriteLine(System.String)
+  id: WriteLine(System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: WriteLine(String)
+  nameWithType: EventSchemaTraceListener.WriteLine(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.WriteLine(String)
+  type: Method
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Writes a message followed by the current line terminator to the log file without providing any additional context information."
+  remarks: "The <xref:System.Diagnostics.EventSchemaTraceListener.TraceEvent%2A> method is called to log the message as an <xref:System.Diagnostics.TraceEventType> event.      > [!IMPORTANT] >  This method is not intended to be called directly by application code. It is called by methods of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data."
+  syntax:
+    content: public override void WriteLine (string message);
+    parameters:
+    - id: message
+      type: System.String
+      description: "The message to write."
+  overload: System.Diagnostics.EventSchemaTraceListener.WriteLine*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventSchemaTraceListener.Writer
+  id: Writer
+  parent: System.Diagnostics.EventSchemaTraceListener
+  langs:
+  - csharp
+  name: Writer
+  nameWithType: EventSchemaTraceListener.Writer
+  fullName: System.Diagnostics.EventSchemaTraceListener.Writer
+  type: Property
+  assemblies:
+  - System.Core
+  namespace: System.Diagnostics
+  summary: "Gets or sets the underlying text writer that writes to the log file."
+  remarks: "An attempt to use the set accessor for the Writer property raises a <xref:System.NotSupportedException>."
+  syntax:
+    content: public System.IO.TextWriter Writer { get; set; }
+    return:
+      type: System.IO.TextWriter
+      description: "A &lt;xref:System.IO.TextWriter&gt; object."
+  overload: System.Diagnostics.EventSchemaTraceListener.Writer*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "An attempt was made to assign a value to the Writer property."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Diagnostics.TextWriterTraceListener
+  isExternal: false
+  name: System.Diagnostics.TextWriterTraceListener
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String,String)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String)
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String,String,Int32)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32)
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption)
+- uid: System.Diagnostics.TraceLogRetentionOption
+  parent: System.Diagnostics
+  isExternal: false
+  name: TraceLogRetentionOption
+  nameWithType: TraceLogRetentionOption
+  fullName: System.Diagnostics.TraceLogRetentionOption
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64)
+- uid: System.Int64
+  parent: System
+  isExternal: true
+  name: Int64
+  nameWithType: Int64
+  fullName: System.Int64
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor(System.String,System.String,System.Int32,System.Diagnostics.TraceLogRetentionOption,System.Int64,System.Int32)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+  fullName: System.Diagnostics.EventSchemaTraceListener.EventSchemaTraceListener(String,String,Int32,TraceLogRetentionOption,Int64,Int32)
+- uid: System.Diagnostics.EventSchemaTraceListener.BufferSize
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: BufferSize
+  nameWithType: EventSchemaTraceListener.BufferSize
+  fullName: System.Diagnostics.EventSchemaTraceListener.BufferSize
+- uid: System.Diagnostics.EventSchemaTraceListener.Close
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Close()
+  nameWithType: EventSchemaTraceListener.Close()
+  fullName: System.Diagnostics.EventSchemaTraceListener.Close()
+- uid: System.Diagnostics.EventSchemaTraceListener.Fail(System.String,System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Fail(String,String)
+  nameWithType: EventSchemaTraceListener.Fail(String,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.Fail(String,String)
+- uid: System.Diagnostics.EventSchemaTraceListener.Flush
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Flush()
+  nameWithType: EventSchemaTraceListener.Flush()
+  fullName: System.Diagnostics.EventSchemaTraceListener.Flush()
+- uid: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: GetSupportedAttributes()
+  nameWithType: EventSchemaTraceListener.GetSupportedAttributes()
+  fullName: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes()
+- uid: System.String[]
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: IsThreadSafe
+  nameWithType: EventSchemaTraceListener.IsThreadSafe
+  fullName: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: MaximumFileSize
+  nameWithType: EventSchemaTraceListener.MaximumFileSize
+  fullName: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: MaximumNumberOfFiles
+  nameWithType: EventSchemaTraceListener.MaximumNumberOfFiles
+  fullName: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+  nameWithType: EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object)
+- uid: System.Diagnostics.TraceEventCache
+  parent: System.Diagnostics
+  isExternal: false
+  name: TraceEventCache
+  nameWithType: TraceEventCache
+  fullName: System.Diagnostics.TraceEventCache
+- uid: System.Diagnostics.TraceEventType
+  parent: System.Diagnostics
+  isExternal: false
+  name: TraceEventType
+  nameWithType: TraceEventType
+  fullName: System.Diagnostics.TraceEventType
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object[])
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+  nameWithType: EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceData(TraceEventCache,String,TraceEventType,Int32,Object[])
+- uid: System.Object[]
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+  nameWithType: EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String)
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+  nameWithType: EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceEvent(TraceEventCache,String,TraceEventType,Int32,String,Object[])
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceLogRetentionOption
+  nameWithType: EventSchemaTraceListener.TraceLogRetentionOption
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceTransfer(System.Diagnostics.TraceEventCache,System.String,System.Int32,System.String,System.Guid)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+  nameWithType: EventSchemaTraceListener.TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+  fullName: System.Diagnostics.EventSchemaTraceListener.TraceTransfer(TraceEventCache,String,Int32,String,Guid)
+- uid: System.Guid
+  parent: System
+  isExternal: true
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: System.Diagnostics.EventSchemaTraceListener.Write(System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Write(String)
+  nameWithType: EventSchemaTraceListener.Write(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.Write(String)
+- uid: System.Diagnostics.EventSchemaTraceListener.WriteLine(System.String)
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: WriteLine(String)
+  nameWithType: EventSchemaTraceListener.WriteLine(String)
+  fullName: System.Diagnostics.EventSchemaTraceListener.WriteLine(String)
+- uid: System.Diagnostics.EventSchemaTraceListener.Writer
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Writer
+  nameWithType: EventSchemaTraceListener.Writer
+  fullName: System.Diagnostics.EventSchemaTraceListener.Writer
+- uid: System.IO.TextWriter
+  parent: System.IO
+  isExternal: true
+  name: TextWriter
+  nameWithType: TextWriter
+  fullName: System.IO.TextWriter
+- uid: System.Diagnostics.EventSchemaTraceListener.#ctor*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: EventSchemaTraceListener
+  nameWithType: EventSchemaTraceListener.EventSchemaTraceListener
+- uid: System.Diagnostics.EventSchemaTraceListener.BufferSize*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: BufferSize
+  nameWithType: EventSchemaTraceListener.BufferSize
+- uid: System.Diagnostics.EventSchemaTraceListener.Close*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Close
+  nameWithType: EventSchemaTraceListener.Close
+- uid: System.Diagnostics.EventSchemaTraceListener.Fail*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Fail
+  nameWithType: EventSchemaTraceListener.Fail
+- uid: System.Diagnostics.EventSchemaTraceListener.Flush*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Flush
+  nameWithType: EventSchemaTraceListener.Flush
+- uid: System.Diagnostics.EventSchemaTraceListener.GetSupportedAttributes*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: GetSupportedAttributes
+  nameWithType: EventSchemaTraceListener.GetSupportedAttributes
+- uid: System.Diagnostics.EventSchemaTraceListener.IsThreadSafe*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: IsThreadSafe
+  nameWithType: EventSchemaTraceListener.IsThreadSafe
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumFileSize*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: MaximumFileSize
+  nameWithType: EventSchemaTraceListener.MaximumFileSize
+- uid: System.Diagnostics.EventSchemaTraceListener.MaximumNumberOfFiles*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: MaximumNumberOfFiles
+  nameWithType: EventSchemaTraceListener.MaximumNumberOfFiles
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceData*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceData
+  nameWithType: EventSchemaTraceListener.TraceData
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceEvent*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceEvent
+  nameWithType: EventSchemaTraceListener.TraceEvent
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceLogRetentionOption*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceLogRetentionOption
+  nameWithType: EventSchemaTraceListener.TraceLogRetentionOption
+- uid: System.Diagnostics.EventSchemaTraceListener.TraceTransfer*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: TraceTransfer
+  nameWithType: EventSchemaTraceListener.TraceTransfer
+- uid: System.Diagnostics.EventSchemaTraceListener.Write*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Write
+  nameWithType: EventSchemaTraceListener.Write
+- uid: System.Diagnostics.EventSchemaTraceListener.WriteLine*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: WriteLine
+  nameWithType: EventSchemaTraceListener.WriteLine
+- uid: System.Diagnostics.EventSchemaTraceListener.Writer*
+  parent: System.Diagnostics.EventSchemaTraceListener
+  isExternal: false
+  name: Writer
+  nameWithType: EventSchemaTraceListener.Writer

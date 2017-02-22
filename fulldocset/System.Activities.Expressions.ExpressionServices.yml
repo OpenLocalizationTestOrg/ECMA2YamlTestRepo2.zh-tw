@@ -1,0 +1,272 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Activities.Expressions.ExpressionServices
+  id: ExpressionServices
+  children:
+  - System.Activities.Expressions.ExpressionServices.Convert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  - System.Activities.Expressions.ExpressionServices.ConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  - System.Activities.Expressions.ExpressionServices.TryConvert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity`1@)
+  - System.Activities.Expressions.ExpressionServices.TryConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity{System.Activities.Location{``0}}@)
+  langs:
+  - csharp
+  name: ExpressionServices
+  nameWithType: ExpressionServices
+  fullName: System.Activities.Expressions.ExpressionServices
+  type: Class
+  summary: "A transformation API used to convert environment aware expressions to an activity tree."
+  remarks: "The conversion methods in this class transform the specified lambda expressions, which can contain multiple sub-expressions, into activity trees composed of a hierarchy of activities. It is strongly recommended to use these conversion methods instead of instantiating expression activities directly because they provide a higher level of abstraction and enable you to implement your workflow more intuitively. See the examples for more information.       The conversion methods in ExpressionServices are designed to work with variables and constants defined inside the workflow, or passed into the workflow via arguments."
+  example:
+  - "The following code example calls <xref:System.Activities.Expressions.ExpressionServices.Convert%2A> to compute the sum of the array element at index 0 and the array element at index 1. Next, the resulting sum is assigned to a variable and is printed to the console.  \n  \n```  \n  \npublic static void ComputeSumWithConvert()  \n{  \n    var arrayvar = new Variable<int[]>(\"arrayvar\", new int[] { 1, 2 });  \n    var intvar = new Variable<int>(\"intvar\");              \n  \n    // Use ExpressionServices.Convert() to convert the composite lambda expression  \n    // that represents the sum of array elements at index 0 and 1.  \n    Activity<int> activity1 = ExpressionServices.Convert<int>(ctx => arrayvar.Get(ctx)[0] + arrayvar.Get(ctx)[1]);  \n  \n    Activity seq = new Sequence  \n    {  \n        Variables = { arrayvar, intvar },  \n        Activities =  \n        {                      \n            // Get the sum value.  \n            new Assign<int>  \n            {  \n                To = intvar,  \n                Value = activity1,  \n            },  \n            // Print the sum value of 3 to the console.  \n            new WriteLine  \n            {                          \n                Text = new InArgument<string>(ctx => intvar.Get(ctx).ToString()),  \n            },  \n        }  \n    };  \n  \n    WorkflowInvoker.Invoke(seq);  \n  \n}  \n  \n```  \n  \n The following code example is provided for comparison purposes. This second example shows how to compute the sum by instantiating the <xref:System.Activities.Expressions.Add%603> expression activity. The two examples are functionally equivalent but as you can see the second approach involves more coding and is not as straightforward as calling <xref:System.Activities.Expressions.ExpressionServices.Convert%2A>. Therefore the first example is recommended.  \n  \n```  \n  \npublic static void ComputeSumWithExpressionActivity()  \n{  \n    var arrayvar = new Variable<int[]>(\"arrayvar\", new int[] { 1, 2 });  \n    var intvar = new Variable<int>(\"intvar\");  \n  \n    // Create an Add activity to compute the sum of array elements at index 0 and 1.  \n    Activity<int> activity1 = new Add<int, int, int>  \n    {  \n        Left = new ArrayItemValue<int>  \n        {  \n            Array = arrayvar,  \n            Index = 0,  \n        },  \n        Right = new ArrayItemValue<int>  \n        {  \n            Array = arrayvar,  \n            Index = 1,  \n        }  \n    };              \n  \n    Activity seq = new Sequence  \n    {  \n        Variables = { arrayvar, intvar },  \n        Activities =  \n        {  \n            // Get the sum value.  \n            new Assign<int>  \n            {  \n                To = intvar,  \n                Value = activity1,  \n            },  \n            // Print the sum value of 3 to the console.   \n            new WriteLine  \n            {                          \n                Text = new InArgument<string>(ctx => intvar.Get(ctx).ToString()),  \n            },                      \n        }  \n    };  \n  \n    WorkflowInvoker.Invoke(seq);  \n  \n}  \n  \n```"
+  syntax:
+    content: public static class ExpressionServices
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Expressions.ExpressionServices.Convert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  id: Convert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  parent: System.Activities.Expressions.ExpressionServices
+  langs:
+  - csharp
+  name: Convert(Expression<Func<ActivityContext,TResult>>)
+  nameWithType: ExpressionServices.Convert(Expression<Func<ActivityContext,TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.Convert(Expression<Func<ActivityContext,TResult>>)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities.Expressions
+  syntax:
+    content: public static System.Activities.Activity<TResult> Convert<TResult> (System.Linq.Expressions.Expression<Func<System.Activities.ActivityContext,TResult>> expression);
+    parameters:
+    - id: expression
+      type: System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,TResult}}
+      description: "To be added."
+    return:
+      type: System.Activities.Activity`1
+      description: "To be added."
+  overload: System.Activities.Expressions.ExpressionServices.Convert<TResult>*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Expressions.ExpressionServices.ConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  id: ConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  parent: System.Activities.Expressions.ExpressionServices
+  langs:
+  - csharp
+  name: ConvertReference(Expression<Func<ActivityContext,TResult>>)
+  nameWithType: ExpressionServices.ConvertReference(Expression<Func<ActivityContext,TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.ConvertReference(Expression<Func<ActivityContext,TResult>>)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities.Expressions
+  syntax:
+    content: public static System.Activities.Activity<System.Activities.Location<TResult>> ConvertReference<TResult> (System.Linq.Expressions.Expression<Func<System.Activities.ActivityContext,TResult>> expression);
+    parameters:
+    - id: expression
+      type: System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,TResult}}
+      description: "To be added."
+    return:
+      type: System.Activities.Activity{System.Activities.Location{TResult}}
+      description: "To be added."
+  overload: System.Activities.Expressions.ExpressionServices.ConvertReference<TResult>*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Expressions.ExpressionServices.TryConvert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity`1@)
+  id: TryConvert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity`1@)
+  parent: System.Activities.Expressions.ExpressionServices
+  langs:
+  - csharp
+  name: TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+  nameWithType: ExpressionServices.TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+  fullName: System.Activities.Expressions.ExpressionServices.TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities.Expressions
+  syntax:
+    content: public static bool TryConvert<TResult> (System.Linq.Expressions.Expression<Func<System.Activities.ActivityContext,TResult>> expression, out System.Activities.Activity<TResult> result);
+    parameters:
+    - id: expression
+      type: System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,TResult}}
+      description: "To be added."
+    - id: result
+      type: System.Activities.Activity`1
+      description: "To be added."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Activities.Expressions.ExpressionServices.TryConvert<TResult>*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.Expressions.ExpressionServices.TryConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity{System.Activities.Location{``0}}@)
+  id: TryConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity{System.Activities.Location{``0}}@)
+  parent: System.Activities.Expressions.ExpressionServices
+  langs:
+  - csharp
+  name: TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+  nameWithType: ExpressionServices.TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities.Expressions
+  syntax:
+    content: public static bool TryConvertReference<TResult> (System.Linq.Expressions.Expression<Func<System.Activities.ActivityContext,TResult>> expression, out System.Activities.Activity<System.Activities.Location<TResult>> result);
+    parameters:
+    - id: expression
+      type: System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,TResult}}
+      description: "To be added."
+    - id: result
+      type: System.Activities.Activity{System.Activities.Location{TResult}}
+      description: "To be added."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Activities.Expressions.ExpressionServices.TryConvertReference<TResult>*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Activities.Expressions.ExpressionServices.Convert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: Convert(Expression<Func<ActivityContext,TResult>>)
+  nameWithType: ExpressionServices.Convert(Expression<Func<ActivityContext,TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.Convert(Expression<Func<ActivityContext,TResult>>)
+- uid: System.Activities.Activity`1
+  parent: System.Activities
+  isExternal: false
+  name: Activity<TResult>
+  nameWithType: Activity<TResult>
+  fullName: System.Activities.Activity<TResult>
+- uid: System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,TResult}}
+  parent: System.Linq.Expressions
+  isExternal: true
+  name: Expression<Func<ActivityContext,TResult>>
+  nameWithType: Expression<Func<ActivityContext,TResult>>
+  fullName: System.Linq.Expressions.Expression<System.Func<System.Activities.ActivityContext,TResult>>
+  spec.csharp:
+  - uid: System.Linq.Expressions.Expression`1
+    name: Expression
+    nameWithType: Expression
+    fullName: Expression<System.Func<System.Activities.ActivityContext,TResult>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Func`2
+    name: Func
+    nameWithType: Func
+    fullName: Func<System.Activities.ActivityContext,TResult>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Activities.ActivityContext
+    name: ActivityContext
+    nameWithType: ActivityContext
+    fullName: ActivityContext
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: TResult
+    name: TResult
+    nameWithType: TResult
+    fullName: TResult
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Activities.Expressions.ExpressionServices.ConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}})
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: ConvertReference(Expression<Func<ActivityContext,TResult>>)
+  nameWithType: ExpressionServices.ConvertReference(Expression<Func<ActivityContext,TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.ConvertReference(Expression<Func<ActivityContext,TResult>>)
+- uid: System.Activities.Activity{System.Activities.Location{TResult}}
+  parent: System.Activities
+  isExternal: false
+  name: Activity<Location<TResult>>
+  nameWithType: Activity<Location<TResult>>
+  fullName: System.Activities.Activity<System.Activities.Location<TResult>>
+  spec.csharp:
+  - uid: System.Activities.Activity`1
+    name: Activity
+    nameWithType: Activity
+    fullName: Activity<System.Activities.Location<TResult>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Activities.Location`1
+    name: Location
+    nameWithType: Location
+    fullName: Location<TResult>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: TResult
+    name: TResult
+    nameWithType: TResult
+    fullName: TResult
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Activities.Expressions.ExpressionServices.TryConvert``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity`1@)
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+  nameWithType: ExpressionServices.TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+  fullName: System.Activities.Expressions.ExpressionServices.TryConvert(Expression<Func<ActivityContext,TResult>>,Activity<TResult>)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Activities.Expressions.ExpressionServices.TryConvertReference``1(System.Linq.Expressions.Expression{System.Func{System.Activities.ActivityContext,``0}},System.Activities.Activity{System.Activities.Location{``0}}@)
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+  nameWithType: ExpressionServices.TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+  fullName: System.Activities.Expressions.ExpressionServices.TryConvertReference(Expression<Func<ActivityContext,TResult>>,Activity<Location<TResult>>)
+- uid: System.Activities.Expressions.ExpressionServices.Convert<TResult>*
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: Convert<TResult>
+  nameWithType: ExpressionServices.Convert<TResult>
+- uid: System.Activities.Expressions.ExpressionServices.ConvertReference<TResult>*
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: ConvertReference<TResult>
+  nameWithType: ExpressionServices.ConvertReference<TResult>
+- uid: System.Activities.Expressions.ExpressionServices.TryConvert<TResult>*
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: TryConvert<TResult>
+  nameWithType: ExpressionServices.TryConvert<TResult>
+- uid: System.Activities.Expressions.ExpressionServices.TryConvertReference<TResult>*
+  parent: System.Activities.Expressions.ExpressionServices
+  isExternal: false
+  name: TryConvertReference<TResult>
+  nameWithType: ExpressionServices.TryConvertReference<TResult>

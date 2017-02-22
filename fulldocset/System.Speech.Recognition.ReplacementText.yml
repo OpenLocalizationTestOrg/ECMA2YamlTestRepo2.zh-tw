@@ -1,0 +1,203 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Speech.Recognition.ReplacementText
+  id: ReplacementText
+  children:
+  - System.Speech.Recognition.ReplacementText.CountOfWords
+  - System.Speech.Recognition.ReplacementText.DisplayAttributes
+  - System.Speech.Recognition.ReplacementText.FirstWordIndex
+  - System.Speech.Recognition.ReplacementText.Text
+  langs:
+  - csharp
+  name: ReplacementText
+  nameWithType: ReplacementText
+  fullName: System.Speech.Recognition.ReplacementText
+  type: Class
+  summary: "Contains information about a speech normalization procedure that has been performed on recognition results."
+  remarks: "Speech normalization is the use of special constructs or symbols to express speech in writing.       For example, suppose that this is recognized text:       “july four at twelve thirty one PM, I bought one point six kilograms of fish for fourteen dollars and six cents, at the pike place market in seattle washington nine eight one two two“       This is the same text after normalization:       “July 4 at 12:31 PM, I bought 1.6 kg of fish for $14.06, at the pike place market in Seattle WA 98122“       In this example there are five substitutions, each of which would be described by an instance of ReplacementText.       Using the ReplacementText object, an application can determine:      -   The location and number of words replaced by normalization. For more information, see <xref:System.Speech.Recognition.ReplacementText.FirstWordIndex%2A> or <xref:System.Speech.Recognition.ReplacementText.CountOfWords%2A>.      -   The replaced text and its display attributes. For more information, see <xref:System.Speech.Recognition.ReplacementText.Text%2A>, and  <xref:System.Speech.Recognition.ReplacementText.DisplayAttributes%2A>.       Instances of ReplacementText are typically obtained as members of the <xref:System.Collections.ObjectModel.Collection%601> object returned by the <xref:System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits%2A> property on <xref:System.Speech.Recognition.RecognizedPhrase> (or classes that inherit from <xref:System.Speech.Recognition.RecognizedPhrase>, such as <xref:System.Speech.Recognition.RecognitionResult>) when returned text has been normalized."
+  example:
+  - "The example below displays information in a user interface about a <xref:System.Speech.Recognition.RecognizedPhrase> object returned by a recognition engine.  \n  \n```c#  \ninternal static void DisplayBasicPhraseInfo(  \n        Label label,   \n        RecognizedPhrase result,   \n        SpeechRecognizer rec)   \n{  \n  if (result != null && label != null)   \n  {  \n    // Blank  \n    if (rec != null)   \n    {   \n      // Clear  \n      label.Text += String.Format(  \n                             \"  Recognizer currently at:   {0} mSec\\n\" +  \n                             \"  Audio Device currently at: {1} mSec\\n\",  \n                             rec.RecognizerAudioPosition.TotalMilliseconds,  \n                             rec.AudioPosition.TotalMilliseconds);  \n    }  \n  \n    if (result != null)   \n    { // Clear  \n      RecognitionResult recResult = result as RecognitionResult;  \n      if (recResult != null)   \n      {  \n        RecognizedAudio resultAudio = recResult.Audio;  \n        if (resultAudio == null)   \n        {  \n          label.Text += String.Format(\"  Emulated input\\n\");  \n        }   \n        else   \n        {  \n          label.Text += String.Format(  \n                               \"  Candidate Phrase at:       {0} mSec\\n\" +  \n                               \"  Phrase Length:             {1} mSec\\n\" +  \n                               \"  Input State Time:          {2}\\n\" +  \n                               \"  Input Format:              {3}\\n\",  \n                               resultAudio.AudioPosition.TotalMilliseconds,  \n                               resultAudio.Duration.TotalMilliseconds,  \n                               resultAudio.StartTime.ToShortTimeString(),  \n                               resultAudio.Format.EncodingFormat.ToString());  \n        }  \n      }  \n  \n      label.Text += String.Format(\"  Confidence Level:          {0}\\n\", result.Confidence);  \n      if (result.Grammar != null)   \n      {  \n        label.Text += String.Format(  \n                            \"  Recognizing Grammar:       {0}\\n\" +  \n                            \"  Recognizing Rule:          {1}\\n\",  \n                            ((result.Grammar.Name != null) ? (result.Grammar.Name) : \"None\"),  \n                            ((result.Grammar.RuleName != null) ? (result.Grammar.RuleName) : \"None\"));  \n      }  \n  \n      if  (result.ReplacementWordUnits.Count !=  0)    \n      {  \n        label.Text += String.Format(\"  Replacement text:\\n\");  \n        foreach (ReplacementText rep in result.ReplacementWordUnits)    \n        {  \n          string repText = rep.Text;  \n          // Add trailing spaces  \n  \n          if ((rep.DisplayAttributes & DisplayAttributes.OneTrailingSpace) !=  0)    \n          {  \n            repText += \" \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.TwoTrailingSpaces) !=  0)    \n          {  \n            repText += \"  \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ConsumeLeadingSpaces) != 0)    \n          {  \n            repText=repText.TrimStart();  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ZeroTrailingSpaces) != 0)   \n          {  \n            repText = repText.TrimEnd();  \n          }  \n          label.Text += String.Format(  \n                           \"      At index {0} for {1} words. Text: \\\"{2}\\\"\\n\",  \n                           rep.FirstWordIndex,  rep.CountOfWords, repText);  \n  \n        }  \n        label.Text += String.Format(\"\\n\\n\");  \n      }  \n    }  \n  }    \n}  \n```"
+  syntax:
+    content: public class ReplacementText
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.ReplacementText.CountOfWords
+  id: CountOfWords
+  parent: System.Speech.Recognition.ReplacementText
+  langs:
+  - csharp
+  name: CountOfWords
+  nameWithType: ReplacementText.CountOfWords
+  fullName: System.Speech.Recognition.ReplacementText.CountOfWords
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets the number of recognized words replaced by the speech normalization procedure."
+  remarks: ''
+  example:
+  - "The example below displays information in a user interface about a <xref:System.Speech.Recognition.RecognizedPhrase> object returned by a recognition engine.  \n  \n```c#  \ninternal static void DisplayBasicPhraseInfo(  \n        Label label,   \n        RecognizedPhrase result,   \n        SpeechRecognizer rec)   \n{  \n  if (result != null && label != null)   \n  {  \n    // Blank  \n    if (rec != null)   \n    {   \n      // Clear  \n      label.Text += String.Format(  \n                             \"  Recognizer currently at:   {0} mSec\\n\" +  \n                             \"  Audio Device currently at: {1} mSec\\n\",  \n                             rec.RecognizerAudioPosition.TotalMilliseconds,  \n                             rec.AudioPosition.TotalMilliseconds);  \n    }  \n  \n    if (result != null)   \n    { // Clear  \n      RecognitionResult recResult = result as RecognitionResult;  \n      if (recResult != null)   \n      {  \n        RecognizedAudio resultAudio = recResult.Audio;  \n        if (resultAudio == null)   \n        {  \n          label.Text += String.Format(\"  Emulated input\\n\");  \n        }   \n        else   \n        {  \n          label.Text += String.Format(  \n                               \"  Candidate Phrase at:       {0} mSec\\n\" +  \n                               \"  Phrase Length:             {1} mSec\\n\" +  \n                               \"  Input State Time:          {2}\\n\" +  \n                               \"  Input Format:              {3}\\n\",  \n                               resultAudio.AudioPosition.TotalMilliseconds,  \n                               resultAudio.Duration.TotalMilliseconds,  \n                               resultAudio.StartTime.ToShortTimeString(),  \n                               resultAudio.Format.EncodingFormat.ToString());  \n        }  \n      }  \n  \n      label.Text += String.Format(\"  Confidence Level:          {0}\\n\", result.Confidence);  \n      if (result.Grammar != null)   \n      {  \n        label.Text += String.Format(  \n                            \"  Recognizing Grammar:       {0}\\n\" +  \n                            \"  Recognizing Rule:          {1}\\n\",  \n                            ((result.Grammar.Name != null) ? (result.Grammar.Name) : \"None\"),  \n                            ((result.Grammar.RuleName != null) ? (result.Grammar.RuleName) : \"None\"));  \n      }  \n  \n      if  (result.ReplacementWordUnits.Count !=  0)    \n      {  \n        label.Text += String.Format(\"  Replacement text:\\n\");  \n        foreach (ReplacementText rep in result.ReplacementWordUnits)    \n        {  \n          string repText = rep.Text;  \n          // Add trailing spaces  \n  \n          if ((rep.DisplayAttributes & DisplayAttributes.OneTrailingSpace) !=  0)    \n          {  \n            repText += \" \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.TwoTrailingSpaces) !=  0)    \n          {  \n            repText += \"  \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ConsumeLeadingSpaces) != 0)    \n          {  \n            repText=repText.TrimStart();  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ZeroTrailingSpaces) != 0)   \n          {  \n            repText = repText.TrimEnd();  \n          }  \n          label.Text += String.Format(  \n                           \"      At index {0} for {1} words. Text: \\\"{2}\\\"\\n\",  \n                           rep.FirstWordIndex,  rep.CountOfWords, repText);  \n  \n        }  \n        label.Text += String.Format(\"\\n\\n\");  \n      }  \n    }  \n  }    \n}  \n```"
+  syntax:
+    content: public int CountOfWords { get; }
+    return:
+      type: System.Int32
+      description: "Returns the number of recognized words replaced by the speech normalization procedure."
+  overload: System.Speech.Recognition.ReplacementText.CountOfWords*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.ReplacementText.DisplayAttributes
+  id: DisplayAttributes
+  parent: System.Speech.Recognition.ReplacementText
+  langs:
+  - csharp
+  name: DisplayAttributes
+  nameWithType: ReplacementText.DisplayAttributes
+  fullName: System.Speech.Recognition.ReplacementText.DisplayAttributes
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets information about the leading and trailing spaces for the text replaced by the speech normalization procedure."
+  remarks: ''
+  example:
+  - "The example below displays information in a user interface about a <xref:System.Speech.Recognition.RecognizedPhrase> object returned by a recognition engine.  \n  \n```c#  \ninternal static void DisplayBasicPhraseInfo(  \n        Label label,   \n        RecognizedPhrase result,   \n        SpeechRecognizer rec)   \n{  \n  if (result != null && label != null)   \n  {  \n    // Blank  \n    if (rec != null)   \n    {   \n      // Clear  \n      label.Text += String.Format(  \n                             \"  Recognizer currently at:   {0} mSec\\n\" +  \n                             \"  Audio Device currently at: {1} mSec\\n\",  \n                             rec.RecognizerAudioPosition.TotalMilliseconds,  \n                             rec.AudioPosition.TotalMilliseconds);  \n    }  \n  \n    if (result != null)   \n    { // Clear  \n      RecognitionResult recResult = result as RecognitionResult;  \n      if (recResult != null)   \n      {  \n        RecognizedAudio resultAudio = recResult.Audio;  \n        if (resultAudio == null)   \n        {  \n          label.Text += String.Format(\"  Emulated input\\n\");  \n        }   \n        else   \n        {  \n          label.Text += String.Format(  \n                               \"  Candidate Phrase at:       {0} mSec\\n\" +  \n                               \"  Phrase Length:             {1} mSec\\n\" +  \n                               \"  Input State Time:          {2}\\n\" +  \n                               \"  Input Format:              {3}\\n\",  \n                               resultAudio.AudioPosition.TotalMilliseconds,  \n                               resultAudio.Duration.TotalMilliseconds,  \n                               resultAudio.StartTime.ToShortTimeString(),  \n                               resultAudio.Format.EncodingFormat.ToString());  \n        }  \n      }  \n  \n      label.Text += String.Format(\"  Confidence Level:          {0}\\n\", result.Confidence);  \n      if (result.Grammar != null)   \n      {  \n        label.Text += String.Format(  \n                            \"  Recognizing Grammar:       {0}\\n\" +  \n                            \"  Recognizing Rule:          {1}\\n\",  \n                            ((result.Grammar.Name != null) ? (result.Grammar.Name) : \"None\"),  \n                            ((result.Grammar.RuleName != null) ? (result.Grammar.RuleName) : \"None\"));  \n      }  \n  \n      if  (result.ReplacementWordUnits.Count !=  0)    \n      {  \n        label.Text += String.Format(\"  Replacement text:\\n\");  \n        foreach (ReplacementText rep in result.ReplacementWordUnits)    \n        {  \n          string repText = rep.Text;  \n          // Add trailing spaces  \n  \n          if ((rep.DisplayAttributes & DisplayAttributes.OneTrailingSpace) !=  0)    \n          {  \n            repText += \" \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.TwoTrailingSpaces) !=  0)    \n          {  \n            repText += \"  \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ConsumeLeadingSpaces) != 0)    \n          {  \n            repText=repText.TrimStart();  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ZeroTrailingSpaces) != 0)   \n          {  \n            repText = repText.TrimEnd();  \n          }  \n          label.Text += String.Format(  \n                           \"      At index {0} for {1} words. Text: \\\"{2}\\\"\\n\",  \n                           rep.FirstWordIndex,  rep.CountOfWords, repText);  \n  \n        }  \n        label.Text += String.Format(\"\\n\\n\");  \n      }  \n    }  \n  }    \n}  \n```"
+  syntax:
+    content: public System.Speech.Recognition.DisplayAttributes DisplayAttributes { get; }
+    return:
+      type: System.Speech.Recognition.DisplayAttributes
+      description: "Returns a <see cref=&quot;T:System.Speech.Recognition.DisplayAttributes&quot;></see> object that specifies the use of white space to display text replaced by normalization."
+  overload: System.Speech.Recognition.ReplacementText.DisplayAttributes*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.ReplacementText.FirstWordIndex
+  id: FirstWordIndex
+  parent: System.Speech.Recognition.ReplacementText
+  langs:
+  - csharp
+  name: FirstWordIndex
+  nameWithType: ReplacementText.FirstWordIndex
+  fullName: System.Speech.Recognition.ReplacementText.FirstWordIndex
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets the location of the first recognized word replaced by the speech normalization procedure."
+  remarks: ''
+  example:
+  - "In the following example, information about a <xref:System.Speech.Recognition.RecognizedPhrase> object returned by a recognition engine is displayed to a user interface.  \n  \n```c#  \ninternal static void DisplayBasicPhraseInfo(  \n        Label label,   \n        RecognizedPhrase result,   \n        SpeechRecognizer rec)   \n{  \n  if (result != null && label != null)   \n  {  \n    // Blank  \n    if (rec != null)   \n    {   \n      // Clear  \n      label.Text += String.Format(  \n                             \"  Recognizer currently at:   {0} mSec\\n\" +  \n                             \"  Audio Device currently at: {1} mSec\\n\",  \n                             rec.RecognizerAudioPosition.TotalMilliseconds,  \n                             rec.AudioPosition.TotalMilliseconds);  \n    }  \n  \n    if (result != null)   \n    { // Clear  \n      RecognitionResult recResult = result as RecognitionResult;  \n      if (recResult != null)   \n      {  \n        RecognizedAudio resultAudio = recResult.Audio;  \n        if (resultAudio == null)   \n        {  \n          label.Text += String.Format(\"  Emulated input\\n\");  \n        }   \n        else   \n        {  \n          label.Text += String.Format(  \n                               \"  Candidate Phrase at:       {0} mSec\\n\" +  \n                               \"  Phrase Length:             {1} mSec\\n\" +  \n                               \"  Input State Time:          {2}\\n\" +  \n                               \"  Input Format:              {3}\\n\",  \n                               resultAudio.AudioPosition.TotalMilliseconds,  \n                               resultAudio.Duration.TotalMilliseconds,  \n                               resultAudio.StartTime.ToShortTimeString(),  \n                               resultAudio.Format.EncodingFormat.ToString());  \n        }  \n      }  \n  \n      label.Text += String.Format(\"  Confidence Level:          {0}\\n\", result.Confidence);  \n      if (result.Grammar != null)   \n      {  \n        label.Text += String.Format(  \n                            \"  Recognizing Grammar:       {0}\\n\" +  \n                            \"  Recognizing Rule:          {1}\\n\",  \n                            ((result.Grammar.Name != null) ? (result.Grammar.Name) : \"None\"),  \n                            ((result.Grammar.RuleName != null) ? (result.Grammar.RuleName) : \"None\"));  \n      }  \n  \n      if  (result.ReplacementWordUnits.Count !=  0)    \n      {  \n        label.Text += String.Format(\"  Replacement text:\\n\");  \n        foreach (ReplacementText rep in result.ReplacementWordUnits)    \n        {  \n          string repText = rep.Text;  \n          // Add trailing spaces  \n  \n          if ((rep.DisplayAttributes & DisplayAttributes.OneTrailingSpace) !=  0)    \n          {  \n            repText += \" \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.TwoTrailingSpaces) !=  0)    \n          {  \n            repText += \"  \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ConsumeLeadingSpaces) != 0)    \n          {  \n            repText=repText.TrimStart();  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ZeroTrailingSpaces) != 0)   \n          {  \n            repText = repText.TrimEnd();  \n          }  \n          label.Text += String.Format(  \n                           \"      At index {0} for {1} words. Text: \\\"{2}\\\"\\n\",  \n                           rep.FirstWordIndex,  rep.CountOfWords, repText);  \n  \n        }  \n        label.Text += String.Format(\"\\n\\n\");  \n      }  \n    }  \n  }    \n}  \n```"
+  syntax:
+    content: public int FirstWordIndex { get; }
+    return:
+      type: System.Int32
+      description: "Returns the location of the first recognized word replaced by the speech normalization procedure."
+  overload: System.Speech.Recognition.ReplacementText.FirstWordIndex*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Speech.Recognition.ReplacementText.Text
+  id: Text
+  parent: System.Speech.Recognition.ReplacementText
+  langs:
+  - csharp
+  name: Text
+  nameWithType: ReplacementText.Text
+  fullName: System.Speech.Recognition.ReplacementText.Text
+  type: Property
+  assemblies:
+  - System.Speech
+  namespace: System.Speech.Recognition
+  summary: "Gets the recognized text replaced by the speech normalization procedure."
+  remarks: ''
+  example:
+  - "The example below displays information in a user interface about a <xref:System.Speech.Recognition.RecognizedPhrase> object returned by a recognition engine.  \n  \n```c#  \ninternal static void DisplayBasicPhraseInfo(  \n        Label label,   \n        RecognizedPhrase result,   \n        SpeechRecognizer rec)   \n{  \n  if (result != null && label != null)   \n  {  \n    // Blank  \n    if (rec != null)   \n    {   \n      // Clear  \n      label.Text += String.Format(  \n                             \"  Recognizer currently at:   {0} mSec\\n\" +  \n                             \"  Audio Device currently at: {1} mSec\\n\",  \n                             rec.RecognizerAudioPosition.TotalMilliseconds,  \n                             rec.AudioPosition.TotalMilliseconds);  \n    }  \n  \n    if (result != null)   \n    { // Clear  \n      RecognitionResult recResult = result as RecognitionResult;  \n      if (recResult != null)   \n      {  \n        RecognizedAudio resultAudio = recResult.Audio;  \n        if (resultAudio == null)   \n        {  \n          label.Text += String.Format(\"  Emulated input\\n\");  \n        }   \n        else   \n        {  \n          label.Text += String.Format(  \n                               \"  Candidate Phrase at:       {0} mSec\\n\" +  \n                               \"  Phrase Length:             {1} mSec\\n\" +  \n                               \"  Input State Time:          {2}\\n\" +  \n                               \"  Input Format:              {3}\\n\",  \n                               resultAudio.AudioPosition.TotalMilliseconds,  \n                               resultAudio.Duration.TotalMilliseconds,  \n                               resultAudio.StartTime.ToShortTimeString(),  \n                               resultAudio.Format.EncodingFormat.ToString());  \n        }  \n      }  \n  \n      label.Text += String.Format(\"  Confidence Level:          {0}\\n\", result.Confidence);  \n      if (result.Grammar != null)   \n      {  \n        label.Text += String.Format(  \n                            \"  Recognizing Grammar:       {0}\\n\" +  \n                            \"  Recognizing Rule:          {1}\\n\",  \n                            ((result.Grammar.Name != null) ? (result.Grammar.Name) : \"None\"),  \n                            ((result.Grammar.RuleName != null) ? (result.Grammar.RuleName) : \"None\"));  \n      }  \n  \n      if  (result.ReplacementWordUnits.Count !=  0)    \n      {  \n        label.Text += String.Format(\"  Replacement text:\\n\");  \n        foreach (ReplacementText rep in result.ReplacementWordUnits)    \n        {  \n          string repText = rep.Text;  \n          // Add trailing spaces  \n  \n          if ((rep.DisplayAttributes & DisplayAttributes.OneTrailingSpace) !=  0)    \n          {  \n            repText += \" \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.TwoTrailingSpaces) !=  0)    \n          {  \n            repText += \"  \";  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ConsumeLeadingSpaces) != 0)    \n          {  \n            repText=repText.TrimStart();  \n          }  \n          if ((rep.DisplayAttributes & DisplayAttributes.ZeroTrailingSpaces) != 0)   \n          {  \n            repText = repText.TrimEnd();  \n          }  \n          label.Text += String.Format(  \n                           \"      At index {0} for {1} words. Text: \\\"{2}\\\"\\n\",  \n                           rep.FirstWordIndex,  rep.CountOfWords, repText);  \n  \n        }  \n        label.Text += String.Format(\"\\n\\n\");  \n      }  \n    }  \n  }    \n}  \n```"
+  syntax:
+    content: public string Text { get; }
+    return:
+      type: System.String
+      description: "Returns the recognized text replaced by the speech normalization procedure."
+  overload: System.Speech.Recognition.ReplacementText.Text*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Speech.Recognition.ReplacementText.CountOfWords
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: CountOfWords
+  nameWithType: ReplacementText.CountOfWords
+  fullName: System.Speech.Recognition.ReplacementText.CountOfWords
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Speech.Recognition.ReplacementText.DisplayAttributes
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: DisplayAttributes
+  nameWithType: ReplacementText.DisplayAttributes
+  fullName: System.Speech.Recognition.ReplacementText.DisplayAttributes
+- uid: System.Speech.Recognition.DisplayAttributes
+  parent: System.Speech.Recognition
+  isExternal: false
+  name: DisplayAttributes
+  nameWithType: DisplayAttributes
+  fullName: System.Speech.Recognition.DisplayAttributes
+- uid: System.Speech.Recognition.ReplacementText.FirstWordIndex
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: FirstWordIndex
+  nameWithType: ReplacementText.FirstWordIndex
+  fullName: System.Speech.Recognition.ReplacementText.FirstWordIndex
+- uid: System.Speech.Recognition.ReplacementText.Text
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: Text
+  nameWithType: ReplacementText.Text
+  fullName: System.Speech.Recognition.ReplacementText.Text
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Speech.Recognition.ReplacementText.CountOfWords*
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: CountOfWords
+  nameWithType: ReplacementText.CountOfWords
+- uid: System.Speech.Recognition.ReplacementText.DisplayAttributes*
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: DisplayAttributes
+  nameWithType: ReplacementText.DisplayAttributes
+- uid: System.Speech.Recognition.ReplacementText.FirstWordIndex*
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: FirstWordIndex
+  nameWithType: ReplacementText.FirstWordIndex
+- uid: System.Speech.Recognition.ReplacementText.Text*
+  parent: System.Speech.Recognition.ReplacementText
+  isExternal: false
+  name: Text
+  nameWithType: ReplacementText.Text

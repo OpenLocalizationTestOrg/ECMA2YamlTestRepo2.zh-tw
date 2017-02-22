@@ -1,0 +1,957 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Security.AccessControl.MutexSecurity
+  id: MutexSecurity
+  children:
+  - System.Security.AccessControl.MutexSecurity.#ctor
+  - System.Security.AccessControl.MutexSecurity.#ctor(System.String,System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.MutexSecurity.AccessRightType
+  - System.Security.AccessControl.MutexSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
+  - System.Security.AccessControl.MutexSecurity.AccessRuleType
+  - System.Security.AccessControl.MutexSecurity.AddAccessRule(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.AddAuditRule(System.Security.AccessControl.MutexAuditRule)
+  - System.Security.AccessControl.MutexSecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
+  - System.Security.AccessControl.MutexSecurity.AuditRuleType
+  - System.Security.AccessControl.MutexSecurity.RemoveAccessRule(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.RemoveAuditRule(System.Security.AccessControl.MutexAuditRule)
+  - System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll(System.Security.AccessControl.MutexAuditRule)
+  - System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.MutexAuditRule)
+  - System.Security.AccessControl.MutexSecurity.ResetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.SetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  - System.Security.AccessControl.MutexSecurity.SetAuditRule(System.Security.AccessControl.MutexAuditRule)
+  langs:
+  - csharp
+  name: MutexSecurity
+  nameWithType: MutexSecurity
+  fullName: System.Security.AccessControl.MutexSecurity
+  type: Class
+  summary: "Represents the Windows access control security for a named mutex. This class cannot be inherited."
+  remarks: "A MutexSecurity object specifies access rights for a named system mutex, and also specifies how access attempts are audited. Access rights to the mutex are expressed as rules, with each access rule represented by a <xref:System.Security.AccessControl.MutexAccessRule> object. Each auditing rule is represented by a <xref:System.Security.AccessControl.MutexAuditRule> object.       This mirrors the underlying Windows security system, in which each securable object has at most one discretionary access control list (DACL) that controls access to the secured object, and at most one system access control list (SACL) that specifies which access attempts are audited. The DACL and SACL are ordered lists of access control entries (ACE) that specify access and auditing for users and groups. A <xref:System.Security.AccessControl.MutexAccessRule> or <xref:System.Security.AccessControl.MutexAuditRule> object might represent more than one ACE.      > [!NOTE] >  A <xref:System.Threading.Mutex> object can represent a local mutex or a named system mutex. Windows access control security is meaningful only for named system mutexes.       The MutexSecurity, <xref:System.Security.AccessControl.MutexAccessRule>, and <xref:System.Security.AccessControl.MutexAuditRule> classes hide the implementation details of ACLs and ACEs. They allow you to ignore the seventeen different ACE types and the complexity of correctly maintaining inheritance and propagation of access rights. These objects are also designed to prevent the following common access control errors:      -   Creating a security descriptor with a null DACL. A null reference to a DACL allows any user to add access rules to an object, potentially creating a denial-of-service attack. A new MutexSecurity object always starts with an empty DACL, which denies all access for all users.      -   Violating the canonical ordering of ACEs. If the ACE list in the DACL is not kept in the canonical order, users might inadvertently be given access to the secured object. For example, denied access rights must always appear before allowed access rights. MutexSecurity objects maintain the correct order internally.      -   Manipulating security descriptor flags, which should be under resource manager control only.      -   Creating invalid combinations of ACE flags.      -   Manipulating inherited ACEs. Inheritance and propagation are handled by the resource manager, in response to changes you make to access and audit rules.      -   Inserting meaningless ACEs into ACLs.       The only capabilities not supported by the .NET security objects are dangerous activities that should be avoided by the majority of application developers, such as the following:      -   Low-level tasks that are normally performed by the resource manager.      -   Adding or removing access control entries in ways that do not maintain the canonical ordering.       To modify Windows access control security for a named mutex, use the <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> method to get the MutexSecurity object. Modify the security object by adding and removing rules, and then use the <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName> method to reattach it.      > [!IMPORTANT] >  Changes you make to a MutexSecurity object do not affect the access levels of the named mutex until you call the <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName> method to assign the altered security object to the named mutex.       To copy access control security from one mutex to another, use the <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> method to get a MutexSecurity object representing the access and audit rules for the first mutex, and then use the <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName> method, or a constructor that accepts a MutexSecurity object, to assign those rules to the second mutex.       Users with an investment in the security descriptor definition language (SDDL) can use the <xref:System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorSddlForm%2A> method to set access rules for a named mutex, and the <xref:System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorSddlForm%2A> method to obtain a string that represents the access rules in SDDL format. This is not recommended for new development.      > [!NOTE] >  Security on synchronization objects is not supported for Windows 98 or Windows Millennium Edition."
+  example:
+  - "The following code example demonstrates the separation between <xref:System.Security.AccessControl.AccessControlType> rules and <xref:System.Security.AccessControl.AccessControlType> rules, and shows the combination of rights in compatible rules. The example creates a MutexSecurity object, adds rules that allow and deny various rights for the current user, and displays the resulting pair of rules. The example then allows new rights for the current user and displays the result, showing that the new rights are merged with the existing <xref:System.Security.AccessControl.AccessControlType> rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.MutexSecurity.AddAccessRule#1](~/add/codesnippet/VisualBasic/t-system.security.access_12_1.vb)]\n [!code-cs[System.Security.AccessControl.MutexSecurity.AddAccessRule#1](~/add/codesnippet/CSharp/t-system.security.access_12_1.cs)]"
+  syntax:
+    content: 'public sealed class MutexSecurity : System.Security.AccessControl.NativeObjectSecurity'
+  inheritance:
+  - System.Object
+  - System.Security.AccessControl.ObjectSecurity
+  - System.Security.AccessControl.CommonObjectSecurity
+  - System.Security.AccessControl.NativeObjectSecurity
+  implements: []
+  inheritedMembers:
+  - System.Security.AccessControl.CommonObjectSecurity.AddAccessRule(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.AddAuditRule(System.Security.AccessControl.AuditRule)
+  - System.Security.AccessControl.CommonObjectSecurity.GetAccessRules(System.Boolean,System.Boolean,System.Type)
+  - System.Security.AccessControl.CommonObjectSecurity.GetAuditRules(System.Boolean,System.Boolean,System.Type)
+  - System.Security.AccessControl.CommonObjectSecurity.ModifyAccess(System.Security.AccessControl.AccessControlModification,System.Security.AccessControl.AccessRule,System.Boolean@)
+  - System.Security.AccessControl.CommonObjectSecurity.ModifyAudit(System.Security.AccessControl.AccessControlModification,System.Security.AccessControl.AuditRule,System.Boolean@)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAccessRule(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAccessRuleAll(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAuditRule(System.Security.AccessControl.AuditRule)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAuditRuleAll(System.Security.AccessControl.AuditRule)
+  - System.Security.AccessControl.CommonObjectSecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.AuditRule)
+  - System.Security.AccessControl.CommonObjectSecurity.ResetAccessRule(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.SetAccessRule(System.Security.AccessControl.AccessRule)
+  - System.Security.AccessControl.CommonObjectSecurity.SetAuditRule(System.Security.AccessControl.AuditRule)
+  - System.Security.AccessControl.NativeObjectSecurity.Persist(System.Runtime.InteropServices.SafeHandle,System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.NativeObjectSecurity.Persist(System.Runtime.InteropServices.SafeHandle,System.Security.AccessControl.AccessControlSections,System.Object)
+  - System.Security.AccessControl.NativeObjectSecurity.Persist(System.String,System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.NativeObjectSecurity.Persist(System.String,System.Security.AccessControl.AccessControlSections,System.Object)
+  - System.Security.AccessControl.ObjectSecurity.AccessRulesModified
+  - System.Security.AccessControl.ObjectSecurity.AreAccessRulesCanonical
+  - System.Security.AccessControl.ObjectSecurity.AreAccessRulesProtected
+  - System.Security.AccessControl.ObjectSecurity.AreAuditRulesCanonical
+  - System.Security.AccessControl.ObjectSecurity.AreAuditRulesProtected
+  - System.Security.AccessControl.ObjectSecurity.AuditRulesModified
+  - System.Security.AccessControl.ObjectSecurity.GetGroup(System.Type)
+  - System.Security.AccessControl.ObjectSecurity.GetOwner(System.Type)
+  - System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorBinaryForm
+  - System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorSddlForm(System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.ObjectSecurity.GroupModified
+  - System.Security.AccessControl.ObjectSecurity.IsContainer
+  - System.Security.AccessControl.ObjectSecurity.IsDS
+  - System.Security.AccessControl.ObjectSecurity.IsSddlConversionSupported
+  - System.Security.AccessControl.ObjectSecurity.ModifyAccessRule(System.Security.AccessControl.AccessControlModification,System.Security.AccessControl.AccessRule,System.Boolean@)
+  - System.Security.AccessControl.ObjectSecurity.ModifyAuditRule(System.Security.AccessControl.AccessControlModification,System.Security.AccessControl.AuditRule,System.Boolean@)
+  - System.Security.AccessControl.ObjectSecurity.OwnerModified
+  - System.Security.AccessControl.ObjectSecurity.Persist(System.Boolean,System.String,System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.ObjectSecurity.PurgeAccessRules(System.Security.Principal.IdentityReference)
+  - System.Security.AccessControl.ObjectSecurity.PurgeAuditRules(System.Security.Principal.IdentityReference)
+  - System.Security.AccessControl.ObjectSecurity.ReadLock
+  - System.Security.AccessControl.ObjectSecurity.ReadUnlock
+  - System.Security.AccessControl.ObjectSecurity.SetAccessRuleProtection(System.Boolean,System.Boolean)
+  - System.Security.AccessControl.ObjectSecurity.SetAuditRuleProtection(System.Boolean,System.Boolean)
+  - System.Security.AccessControl.ObjectSecurity.SetGroup(System.Security.Principal.IdentityReference)
+  - System.Security.AccessControl.ObjectSecurity.SetOwner(System.Security.Principal.IdentityReference)
+  - System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorBinaryForm(System.Byte[])
+  - System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorBinaryForm(System.Byte[],System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorSddlForm(System.String)
+  - System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorSddlForm(System.String,System.Security.AccessControl.AccessControlSections)
+  - System.Security.AccessControl.ObjectSecurity.WriteLock
+  - System.Security.AccessControl.ObjectSecurity.WriteUnlock
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.#ctor
+  id: '#ctor'
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: MutexSecurity()
+  nameWithType: MutexSecurity.MutexSecurity()
+  fullName: System.Security.AccessControl.MutexSecurity.MutexSecurity()
+  type: Constructor
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Security.AccessControl.MutexSecurity&quot;></see> class with default values."
+  remarks: "A new <xref:System.Security.AccessControl.MutexSecurity> object always starts with an empty discretionary access list (DACL), which denies all access for all users."
+  syntax:
+    content: public MutexSecurity ();
+    parameters: []
+  overload: System.Security.AccessControl.MutexSecurity.#ctor*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "This class is not supported on Windows 98 or Windows Millennium Edition."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.#ctor(System.String,System.Security.AccessControl.AccessControlSections)
+  id: '#ctor(System.String,System.Security.AccessControl.AccessControlSections)'
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: MutexSecurity(String,AccessControlSections)
+  nameWithType: MutexSecurity.MutexSecurity(String,AccessControlSections)
+  fullName: System.Security.AccessControl.MutexSecurity.MutexSecurity(String,AccessControlSections)
+  type: Constructor
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Security.AccessControl.MutexSecurity&quot;></see> class with the specified sections of the access control security rules from the system mutex with the specified name."
+  remarks: "This constructor allows you to obtain the access control security for a named system mutex without first creating a <xref:System.Threading.Mutex> object.       Caution must be exercised when working with named system objects. If there is a system object named `name` that is not a mutex, its control access security might be retrieved."
+  syntax:
+    content: public MutexSecurity (string name, System.Security.AccessControl.AccessControlSections includeSections);
+    parameters:
+    - id: name
+      type: System.String
+      description: "The name of the system mutex whose access control security rules are to be retrieved."
+    - id: includeSections
+      type: System.Security.AccessControl.AccessControlSections
+      description: "A combination of  flags specifying the sections to retrieve."
+  overload: System.Security.AccessControl.MutexSecurity.#ctor*
+  exceptions:
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "There is no system object with the specified name."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "This class is not supported on Windows 98 or Windows Millennium Edition."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AccessRightType
+  id: AccessRightType
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AccessRightType
+  nameWithType: MutexSecurity.AccessRightType
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRightType
+  type: Property
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Gets the enumeration that the <see cref=&quot;T:System.Security.AccessControl.MutexSecurity&quot;></see> class uses to represent access rights."
+  remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AccessRightType%2A> property and return the type they use to represent access rights. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct enumeration type to use with each security object."
+  syntax:
+    content: public override Type AccessRightType { get; }
+    return:
+      type: System.Type
+      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.MutexRights&quot;></see> enumeration."
+  overload: System.Security.AccessControl.MutexSecurity.AccessRightType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
+  id: AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+  nameWithType: MutexSecurity.AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Creates a new access control rule for the specified user, with the specified access rights, access control, and flags."
+  remarks: "The recommended way to create access control rules is to use the constructors of the <xref:System.Security.AccessControl.MutexAccessRule> class.      > [!NOTE] >  Although inheritance and propagation flags are meaningless for named mutexes, it is still possible to specify them. This is not recommended, because it needlessly complicates the maintenance of rules, for example by interfering with the combination of rules that would otherwise be compatible."
+  syntax:
+    content: public override System.Security.AccessControl.AccessRule AccessRuleFactory (System.Security.Principal.IdentityReference identityReference, int accessMask, bool isInherited, System.Security.AccessControl.InheritanceFlags inheritanceFlags, System.Security.AccessControl.PropagationFlags propagationFlags, System.Security.AccessControl.AccessControlType type);
+    parameters:
+    - id: identityReference
+      type: System.Security.Principal.IdentityReference
+      description: "An  that identifies the user or group the rule applies to."
+    - id: accessMask
+      type: System.Int32
+      description: "A bitwise combination of  values specifying the access rights to allow or deny, cast to an integer."
+    - id: isInherited
+      type: System.Boolean
+      description: "Meaningless for named mutexes, because they have no hierarchy."
+    - id: inheritanceFlags
+      type: System.Security.AccessControl.InheritanceFlags
+      description: "Meaningless for named mutexes, because they have no hierarchy."
+    - id: propagationFlags
+      type: System.Security.AccessControl.PropagationFlags
+      description: "Meaningless for named mutexes, because they have no hierarchy."
+    - id: type
+      type: System.Security.AccessControl.AccessControlType
+      description: "One of the  values specifying whether the rights are allowed or denied."
+    return:
+      type: System.Security.AccessControl.AccessRule
+      description: "To be added."
+  overload: System.Security.AccessControl.MutexSecurity.AccessRuleFactory*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    accessMask, inheritanceFlags, propagationFlags, or type specifies an invalid value."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    identityReference is .  \n  \n -or-  \n  \n accessMask is zero."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    identityReference is neither of type , nor of a type such as  that can be converted to type ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleType
+  id: AccessRuleType
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AccessRuleType
+  nameWithType: MutexSecurity.AccessRuleType
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRuleType
+  type: Property
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Gets the type that the <see cref=&quot;T:System.Security.AccessControl.MutexSecurity&quot;></see> class uses to represent access rules."
+  remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AccessRuleType%2A> property and return the type they use to represent access rules. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct access rule type to use with each security object."
+  syntax:
+    content: public override Type AccessRuleType { get; }
+    return:
+      type: System.Type
+      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.MutexAccessRule&quot;></see> class."
+  overload: System.Security.AccessControl.MutexSecurity.AccessRuleType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AddAccessRule(System.Security.AccessControl.MutexAccessRule)
+  id: AddAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AddAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.AddAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.AddAccessRule(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for a matching access control rule with which the new rule can be merged. If none are found, adds the new rule."
+  remarks: "The AddAccessRule method searches for rules with the same user or group and the same <xref:System.Security.AccessControl.AccessControlType> as `rule`. If none are found, `rule` is added. If a matching rule is found, the rights in `rule` are merged with the existing rule."
+  example:
+  - "The following code example demonstrates the separation between <xref:System.Security.AccessControl.AccessControlType> rules and <xref:System.Security.AccessControl.AccessControlType> rules, and shows the combination of rights in compatible rules. The example creates a <xref:System.Security.AccessControl.MutexSecurity> object, adds rules that allow and deny various rights for the current user, and displays the resulting pair of rules. The example then allows new rights for the current user and displays the result, showing that the new rights are merged with the existing <xref:System.Security.AccessControl.AccessControlType> rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName><xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.MutexSecurity.AddAccessRule#1](~/add/codesnippet/VisualBasic/a07c477f-17a9-4bd4-908e-_1.vb)]\n [!code-cs[System.Security.AccessControl.MutexSecurity.AddAccessRule#1](~/add/codesnippet/CSharp/a07c477f-17a9-4bd4-908e-_1.cs)]"
+  syntax:
+    content: public void AddAccessRule (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "The access control rule to add."
+  overload: System.Security.AccessControl.MutexSecurity.AddAccessRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  - type: System.Security.Principal.IdentityNotMappedException
+    commentId: T:System.Security.Principal.IdentityNotMappedException
+    description: "\n    rule cannot be mapped to a known identity."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AddAuditRule(System.Security.AccessControl.MutexAuditRule)
+  id: AddAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AddAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.AddAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.AddAuditRule(MutexAuditRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for an audit rule with which the new rule can be merged. If none are found, adds the new rule."
+  remarks: "The AddAuditRule method searches for rules with the same user or group as `rule`. If none are found, `rule` is added. If a matching rule is found, the flags in `rule` are merged into the existing rule."
+  syntax:
+    content: public void AddAuditRule (System.Security.AccessControl.MutexAuditRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAuditRule
+      description: "The audit rule to add. The user specified by this rule determines the search."
+  overload: System.Security.AccessControl.MutexSecurity.AddAuditRule*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
+  id: AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+  nameWithType: MutexSecurity.AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+  fullName: System.Security.AccessControl.MutexSecurity.AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Creates a new audit rule, specifying the user the rule applies to, the access rights to audit, and the outcome that triggers the audit rule."
+  remarks: "The recommended way to create audit rules is to use the constructors of the <xref:System.Security.AccessControl.MutexAuditRule> class.      > [!NOTE] >  Although inheritance and propagation flags are meaningless for named mutexes, it is still possible to specify them. This is not recommended, because it needlessly complicates the maintenance of rules, for example by interfering with the combination of rules that would otherwise be compatible."
+  syntax:
+    content: public override System.Security.AccessControl.AuditRule AuditRuleFactory (System.Security.Principal.IdentityReference identityReference, int accessMask, bool isInherited, System.Security.AccessControl.InheritanceFlags inheritanceFlags, System.Security.AccessControl.PropagationFlags propagationFlags, System.Security.AccessControl.AuditFlags flags);
+    parameters:
+    - id: identityReference
+      type: System.Security.Principal.IdentityReference
+      description: "An  that identifies the user or group the rule applies to."
+    - id: accessMask
+      type: System.Int32
+      description: "A bitwise combination of  values specifying the access rights to audit, cast to an integer."
+    - id: isInherited
+      type: System.Boolean
+      description: "Meaningless for named wait handles, because they have no hierarchy."
+    - id: inheritanceFlags
+      type: System.Security.AccessControl.InheritanceFlags
+      description: "Meaningless for named wait handles, because they have no hierarchy."
+    - id: propagationFlags
+      type: System.Security.AccessControl.PropagationFlags
+      description: "Meaningless for named wait handles, because they have no hierarchy."
+    - id: flags
+      type: System.Security.AccessControl.AuditFlags
+      description: "A bitwise combination of  values that specify whether to audit successful access, failed access, or both."
+    return:
+      type: System.Security.AccessControl.AuditRule
+      description: "To be added."
+  overload: System.Security.AccessControl.MutexSecurity.AuditRuleFactory*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    accessMask, inheritanceFlags, propagationFlags, or flags specifies an invalid value."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    identityReference is .  \n  \n -or-  \n  \n accessMask is zero."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    identityReference is neither of type , nor of a type such as  that can be converted to type ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleType
+  id: AuditRuleType
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: AuditRuleType
+  nameWithType: MutexSecurity.AuditRuleType
+  fullName: System.Security.AccessControl.MutexSecurity.AuditRuleType
+  type: Property
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Gets the type that the <see cref=&quot;T:System.Security.AccessControl.MutexSecurity&quot;></see> class uses to represent audit rules."
+  remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AuditRuleType%2A> property and return the type they use to represent audit rights. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct audit rule type to use with each security object."
+  syntax:
+    content: public override Type AuditRuleType { get; }
+    return:
+      type: System.Type
+      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.MutexAuditRule&quot;></see> class."
+  overload: System.Security.AccessControl.MutexSecurity.AuditRuleType*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRule(System.Security.AccessControl.MutexAccessRule)
+  id: RemoveAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRule(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for an access control rule with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified rule, and with compatible inheritance and propagation flags; if such a rule is found, the rights contained in the specified access rule are removed from it."
+  remarks: "The current <xref:System.Security.AccessControl.MutexSecurity> is searched for a rule that has the same user and the same <xref:System.Security.AccessControl.AccessControlType> value as `rule`. If no such rule is found, no action is taken, and the method returns `false`. If matching rules are found, their inheritance and compatibility flags are checked for compatibility with the flags specified in `rule`. If no compatible rule is found, no action is taken, and the method returns `false`. If a rule with compatible flags is found, the rights specified in `rule` are removed from the compatible rule, and the method returns `true`. If `rule` specifies rights not contained in the compatible rule, no action is taken with respect to those rights. If all rights are removed from the compatible rule, the entire rule is removed from the current <xref:System.Security.AccessControl.MutexSecurity> object.      > [!IMPORTANT] >  Although you can specify inheritance and propagation flags for mutex access rules, by creating them with the <xref:System.Security.AccessControl.MutexSecurity.AccessRuleFactory%2A> method, this is not recommended. Inheritance and propagation have no meaning for named mutexes, and they make the maintenance of access rules more complicated."
+  example:
+  - "The following code example demonstrates the use of the RemoveAccessRule method to remove rights from an <xref:System.Security.AccessControl.AccessControlType> rule in a <xref:System.Security.AccessControl.MutexSecurity> object. It also shows that other rights in `rule` are ignored.  \n  \n The example creates a <xref:System.Security.AccessControl.MutexSecurity> object and adds rules that allow and deny various rights for the current user. The rights allowed include <xref:System.Security.AccessControl.MutexRights>, <xref:System.Security.AccessControl.MutexRights>, and <xref:System.Security.AccessControl.MutexRights>. The example then creates a new rule for the current user, including <xref:System.Security.AccessControl.MutexRights> and <xref:System.Security.AccessControl.MutexRights> rights, and uses that rule with the RemoveAccessRule method to remove <xref:System.Security.AccessControl.MutexRights> from the <xref:System.Security.AccessControl.AccessControlType> rule in the <xref:System.Security.AccessControl.MutexSecurity> object. The extraneous <xref:System.Security.AccessControl.MutexRights> right in `rule` is ignored.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.MutexSecurity.RemoveAccessRule#1](~/add/codesnippet/VisualBasic/02c8df82-84a8-4212-a3e0-_1.vb)]\n [!code-cs[System.Security.AccessControl.MutexSecurity.RemoveAccessRule#1](~/add/codesnippet/CSharp/02c8df82-84a8-4212-a3e0-_1.cs)]"
+  syntax:
+    content: public bool RemoveAccessRule (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "A  that specifies the user and  to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAccessRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll(System.Security.AccessControl.MutexAccessRule)
+  id: RemoveAccessRuleAll(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAccessRuleAll(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRuleAll(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for all access control rules with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified rule and, if found, removes them."
+  remarks: "The current <xref:System.Security.AccessControl.MutexSecurity> object is searched for rules that have the same user and the same <xref:System.Security.AccessControl.AccessControlType> value as `rule`. Any rights specified by `rule` are ignored when performing this search. If no matching rules are found, no action is taken."
+  example:
+  - "The following code example shows that the RemoveAccessRuleAll method removes all rules that match user and <xref:System.Security.AccessControl.AccessControlType>, ignoring rights.  \n  \n The example creates a <xref:System.Security.AccessControl.MutexSecurity> object, adds rules that allow and deny various rights for the current user, and then merges additional rights into the <xref:System.Security.AccessControl.AccessControlType> rule. The example then creates a new rule that allows the current user to take ownership, and uses that rule to remove the <xref:System.Security.AccessControl.AccessControlType> rule from the <xref:System.Security.AccessControl.MutexSecurity> object.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-cs[System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll#1](~/add/codesnippet/CSharp/6d97fdf7-4cee-497f-898e-_1.cs)]\n [!code-vb[System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll#1](~/add/codesnippet/VisualBasic/6d97fdf7-4cee-497f-898e-_1.vb)]"
+  syntax:
+    content: public void RemoveAccessRuleAll (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "A  that specifies the user and  to search for. Any rights specified by this rule are ignored."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.MutexAccessRule)
+  id: RemoveAccessRuleSpecific(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAccessRuleSpecific(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRuleSpecific(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for an access control rule that exactly matches the specified rule and, if found, removes it."
+  remarks: "The rule is removed only if it exactly matches `rule` in all details, including flags. Other rules with the same user and <xref:System.Security.AccessControl.AccessControlType> are not affected.      > [!IMPORTANT] >  A rule represents one or more underlying access control entries (ACE), and these entries are split or combined as necessary when you modify the access security rules for a user. Thus, a rule might no longer exist in the specific form it had when it was added, and in that case the RemoveAccessRuleSpecific method cannot remove it."
+  example:
+  - "The following code example shows that the RemoveAccessRuleSpecific method requires an exact match in order to remove a rule, and that rules to allow and deny rights are independent of each other.  \n  \n The example creates a <xref:System.Security.AccessControl.MutexSecurity> object, adds rules that allow and deny various rights for the current user, and then merges additional rights into the <xref:System.Security.AccessControl.AccessControlType> access rule. The example then passes the original <xref:System.Security.AccessControl.AccessControlType> rule to the RemoveAccessRuleSpecific method, and displays the results, showing that nothing is deleted. The example then constructs a rule that matches the <xref:System.Security.AccessControl.AccessControlType> rule in the <xref:System.Security.AccessControl.MutexSecurity> object, and successfully uses the RemoveAccessRuleSpecific method to remove the rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/VisualBasic/fa20d5ab-0fa1-47be-9c16-_1.vb)]\n [!code-cs[System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/CSharp/fa20d5ab-0fa1-47be-9c16-_1.cs)]"
+  syntax:
+    content: public void RemoveAccessRuleSpecific (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "The  to remove."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRule(System.Security.AccessControl.MutexAuditRule)
+  id: RemoveAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRule(MutexAuditRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for an audit control rule with the same user as the specified rule, and with compatible inheritance and propagation flags; if a compatible rule is found, the rights contained in the specified rule are removed from it."
+  remarks: "The current <xref:System.Security.AccessControl.MutexSecurity> is searched for an audit rule that has the same user as `rule`. If no such rule is found, no action is taken, and the method returns `false`. If matching rules are found, their inheritance and compatibility flags are checked for compatibility with the flags specified in `rule`. If no compatible rule is found, no action is taken, and the method returns `false`. If a rule with compatible flags is found, the rights specified in `rule` are removed from the compatible rule, and the method returns `true`. If `rule` specifies rights not contained in the compatible rule, no action is taken with respect to those rights. If all rights are removed from the compatible rule, the entire rule is removed from the current <xref:System.Security.AccessControl.MutexSecurity> object.      > [!IMPORTANT] >  Although you can specify inheritance and propagation flags for mutex audit rules, by creating them with the <xref:System.Security.AccessControl.MutexSecurity.AccessRuleFactory%2A> method, this is not recommended. Inheritance and propagation have no meaning for named mutexes, and they make the maintenance of audit rules more complicated."
+  syntax:
+    content: public bool RemoveAuditRule (System.Security.AccessControl.MutexAuditRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAuditRule
+      description: "A  that specifies the user to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAuditRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll(System.Security.AccessControl.MutexAuditRule)
+  id: RemoveAuditRuleAll(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAuditRuleAll(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRuleAll(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll(MutexAuditRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for all audit rules with the same user as the specified rule and, if found, removes them."
+  remarks: "The current <xref:System.Security.AccessControl.MutexSecurity> is searched for audit rules that have the same user as `rule`. Any rights specified by `rule` are ignored when performing this search. All matching rules are removed. If no matching rules are found, no action is taken."
+  syntax:
+    content: public void RemoveAuditRuleAll (System.Security.AccessControl.MutexAuditRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAuditRule
+      description: "A  that specifies the user to search for. Any rights specified by this rule are ignored."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.MutexAuditRule)
+  id: RemoveAuditRuleSpecific(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: RemoveAuditRuleSpecific(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRuleSpecific(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific(MutexAuditRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Searches for an audit rule that exactly matches the specified rule and, if found, removes it."
+  remarks: "The rule is removed only if it exactly matches `rule` in all details, including flags. Other audit rules for the same user are not affected.      > [!IMPORTANT] >  A rule represents one or more underlying access control entries (ACE), and these entries are split or combined as necessary when you modify the audit security rules for a user. Thus, a rule might no longer exist in the specific form it had when it was added, and in that case the RemoveAuditRuleSpecific method cannot remove it."
+  syntax:
+    content: public void RemoveAuditRuleSpecific (System.Security.AccessControl.MutexAuditRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAuditRule
+      description: "The  to be removed."
+  overload: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.ResetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  id: ResetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: ResetAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.ResetAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.ResetAccessRule(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Removes all access control rules with the same user as the specified rule, regardless of <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see>, and then adds the specified rule."
+  remarks: "If there are no access rules whose user matches the specified rule, `rule` is added."
+  example:
+  - "The following code example shows how the ResetAccessRule method replaces all rules for the matching user with the rule specified for the match.  \n  \n The example creates a <xref:System.Security.AccessControl.MutexSecurity> object and adds rules that allow and deny various rights for the current user. The example then creates a new rule that allows the current user full control, and uses the ResetAccessRule method to replace both of the existing rules with the new rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-cs[System.Security.AccessControl.MutexSecurity.ResetAccessRule#1](~/add/codesnippet/CSharp/382093ed-47a5-4dd0-aee6-_1.cs)]\n [!code-vb[System.Security.AccessControl.MutexSecurity.ResetAccessRule#1](~/add/codesnippet/VisualBasic/382093ed-47a5-4dd0-aee6-_1.vb)]"
+  syntax:
+    content: public void ResetAccessRule (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "The  to add. The user specified by this rule determines the rules to remove before this rule is added."
+  overload: System.Security.AccessControl.MutexSecurity.ResetAccessRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.SetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  id: SetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: SetAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.SetAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.SetAccessRule(MutexAccessRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Removes all access control rules with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified rule, and then adds the specified rule."
+  remarks: "If the specified rule has <xref:System.Security.AccessControl.AccessControlType>, the effect of this method is to remove all <xref:System.Security.AccessControl.AccessControlType> rules for the specified user, replacing them with the specified rule. If the specified rule has <xref:System.Security.AccessControl.AccessControlType>, all <xref:System.Security.AccessControl.AccessControlType> rules for the specified user are replaced with the specified rule.       If there are no rules whose user and <xref:System.Security.AccessControl.AccessControlType> match the specified rule, `rule` is added."
+  example:
+  - "The following code example shows how the SetAccessRule method removes all rules that match both the user and the <xref:System.Security.AccessControl.AccessControlType> of `rule`, replacing them with `rule`.  \n  \n The example creates a <xref:System.Security.AccessControl.MutexSecurity> object and adds rules that allow and deny various rights for the current user. The example then creates a new rule that allows the current user full control, and uses the SetAccessRule method to replace the existing Allow rule with the new rule. The rule that denies access is not affected.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:System.Threading.Mutex> object. Examples that attach security objects can be found in <xref:System.Threading.Mutex.GetAccessControl%2A?displayProperty=fullName> and <xref:System.Threading.Mutex.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.MutexSecurity.SetAccessRule#1](~/add/codesnippet/VisualBasic/5e6eedb1-8b35-40cc-b676-_1.vb)]\n [!code-cs[System.Security.AccessControl.MutexSecurity.SetAccessRule#1](~/add/codesnippet/CSharp/5e6eedb1-8b35-40cc-b676-_1.cs)]"
+  syntax:
+    content: public void SetAccessRule (System.Security.AccessControl.MutexAccessRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAccessRule
+      description: "The  to add. The user and  of this rule determine the rules to remove before this rule is added."
+  overload: System.Security.AccessControl.MutexSecurity.SetAccessRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Security.AccessControl.MutexSecurity.SetAuditRule(System.Security.AccessControl.MutexAuditRule)
+  id: SetAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  langs:
+  - csharp
+  name: SetAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.SetAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.SetAuditRule(MutexAuditRule)
+  type: Method
+  assemblies:
+  - mscorlib
+  namespace: System.Security.AccessControl
+  summary: "Removes all audit rules with the same user as the specified rule, regardless of the <see cref=&quot;T:System.Security.AccessControl.AuditFlags&quot;></see> value, and then adds the specified rule."
+  remarks: "If there are no audit rules whose user matches the specified rule, `rule` is added."
+  syntax:
+    content: public void SetAuditRule (System.Security.AccessControl.MutexAuditRule rule);
+    parameters:
+    - id: rule
+      type: System.Security.AccessControl.MutexAuditRule
+      description: "The  to add. The user specified by this rule determines the rules to remove before this rule is added."
+  overload: System.Security.AccessControl.MutexSecurity.SetAuditRule*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rule is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Security.AccessControl.NativeObjectSecurity
+  isExternal: false
+  name: System.Security.AccessControl.NativeObjectSecurity
+- uid: System.Security.AccessControl.MutexSecurity.#ctor
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: MutexSecurity()
+  nameWithType: MutexSecurity.MutexSecurity()
+  fullName: System.Security.AccessControl.MutexSecurity.MutexSecurity()
+- uid: System.Security.AccessControl.MutexSecurity.#ctor(System.String,System.Security.AccessControl.AccessControlSections)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: MutexSecurity(String,AccessControlSections)
+  nameWithType: MutexSecurity.MutexSecurity(String,AccessControlSections)
+  fullName: System.Security.AccessControl.MutexSecurity.MutexSecurity(String,AccessControlSections)
+- uid: System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: System.Security.AccessControl.AccessControlSections
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: AccessControlSections
+  nameWithType: AccessControlSections
+  fullName: System.Security.AccessControl.AccessControlSections
+- uid: System.Security.AccessControl.MutexSecurity.AccessRightType
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRightType
+  nameWithType: MutexSecurity.AccessRightType
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRightType
+- uid: System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+  nameWithType: MutexSecurity.AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AccessControlType)
+- uid: System.Security.AccessControl.AccessRule
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: AccessRule
+  nameWithType: AccessRule
+  fullName: System.Security.AccessControl.AccessRule
+- uid: System.Security.Principal.IdentityReference
+  parent: System.Security.Principal
+  isExternal: false
+  name: IdentityReference
+  nameWithType: IdentityReference
+  fullName: System.Security.Principal.IdentityReference
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Security.AccessControl.InheritanceFlags
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: InheritanceFlags
+  nameWithType: InheritanceFlags
+  fullName: System.Security.AccessControl.InheritanceFlags
+- uid: System.Security.AccessControl.PropagationFlags
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: PropagationFlags
+  nameWithType: PropagationFlags
+  fullName: System.Security.AccessControl.PropagationFlags
+- uid: System.Security.AccessControl.AccessControlType
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: AccessControlType
+  nameWithType: AccessControlType
+  fullName: System.Security.AccessControl.AccessControlType
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleType
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRuleType
+  nameWithType: MutexSecurity.AccessRuleType
+  fullName: System.Security.AccessControl.MutexSecurity.AccessRuleType
+- uid: System.Security.AccessControl.MutexSecurity.AddAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AddAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.AddAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.AddAccessRule(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexAccessRule
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: MutexAccessRule
+  nameWithType: MutexAccessRule
+  fullName: System.Security.AccessControl.MutexAccessRule
+- uid: System.Security.AccessControl.MutexSecurity.AddAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AddAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.AddAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.AddAuditRule(MutexAuditRule)
+- uid: System.Security.AccessControl.MutexAuditRule
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: MutexAuditRule
+  nameWithType: MutexAuditRule
+  fullName: System.Security.AccessControl.MutexAuditRule
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+  nameWithType: MutexSecurity.AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+  fullName: System.Security.AccessControl.MutexSecurity.AuditRuleFactory(IdentityReference,Int32,Boolean,InheritanceFlags,PropagationFlags,AuditFlags)
+- uid: System.Security.AccessControl.AuditRule
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: AuditRule
+  nameWithType: AuditRule
+  fullName: System.Security.AccessControl.AuditRule
+- uid: System.Security.AccessControl.AuditFlags
+  parent: System.Security.AccessControl
+  isExternal: false
+  name: AuditFlags
+  nameWithType: AuditFlags
+  fullName: System.Security.AccessControl.AuditFlags
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleType
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AuditRuleType
+  nameWithType: MutexSecurity.AuditRuleType
+  fullName: System.Security.AccessControl.MutexSecurity.AuditRuleType
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRule(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRuleAll(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRuleAll(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRuleSpecific(MutexAccessRule)
+  nameWithType: MutexSecurity.RemoveAccessRuleSpecific(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRule(MutexAuditRule)
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRuleAll(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRuleAll(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll(MutexAuditRule)
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRuleSpecific(MutexAuditRule)
+  nameWithType: MutexSecurity.RemoveAuditRuleSpecific(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific(MutexAuditRule)
+- uid: System.Security.AccessControl.MutexSecurity.ResetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: ResetAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.ResetAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.ResetAccessRule(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexSecurity.SetAccessRule(System.Security.AccessControl.MutexAccessRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: SetAccessRule(MutexAccessRule)
+  nameWithType: MutexSecurity.SetAccessRule(MutexAccessRule)
+  fullName: System.Security.AccessControl.MutexSecurity.SetAccessRule(MutexAccessRule)
+- uid: System.Security.AccessControl.MutexSecurity.SetAuditRule(System.Security.AccessControl.MutexAuditRule)
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: SetAuditRule(MutexAuditRule)
+  nameWithType: MutexSecurity.SetAuditRule(MutexAuditRule)
+  fullName: System.Security.AccessControl.MutexSecurity.SetAuditRule(MutexAuditRule)
+- uid: System.Security.AccessControl.MutexSecurity.#ctor*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: MutexSecurity
+  nameWithType: MutexSecurity.MutexSecurity
+- uid: System.Security.AccessControl.MutexSecurity.AccessRightType*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRightType
+  nameWithType: MutexSecurity.AccessRightType
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleFactory*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRuleFactory
+  nameWithType: MutexSecurity.AccessRuleFactory
+- uid: System.Security.AccessControl.MutexSecurity.AccessRuleType*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AccessRuleType
+  nameWithType: MutexSecurity.AccessRuleType
+- uid: System.Security.AccessControl.MutexSecurity.AddAccessRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AddAccessRule
+  nameWithType: MutexSecurity.AddAccessRule
+- uid: System.Security.AccessControl.MutexSecurity.AddAuditRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AddAuditRule
+  nameWithType: MutexSecurity.AddAuditRule
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleFactory*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AuditRuleFactory
+  nameWithType: MutexSecurity.AuditRuleFactory
+- uid: System.Security.AccessControl.MutexSecurity.AuditRuleType*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: AuditRuleType
+  nameWithType: MutexSecurity.AuditRuleType
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRule
+  nameWithType: MutexSecurity.RemoveAccessRule
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleAll*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRuleAll
+  nameWithType: MutexSecurity.RemoveAccessRuleAll
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAccessRuleSpecific*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAccessRuleSpecific
+  nameWithType: MutexSecurity.RemoveAccessRuleSpecific
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRule
+  nameWithType: MutexSecurity.RemoveAuditRule
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleAll*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRuleAll
+  nameWithType: MutexSecurity.RemoveAuditRuleAll
+- uid: System.Security.AccessControl.MutexSecurity.RemoveAuditRuleSpecific*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: RemoveAuditRuleSpecific
+  nameWithType: MutexSecurity.RemoveAuditRuleSpecific
+- uid: System.Security.AccessControl.MutexSecurity.ResetAccessRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: ResetAccessRule
+  nameWithType: MutexSecurity.ResetAccessRule
+- uid: System.Security.AccessControl.MutexSecurity.SetAccessRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: SetAccessRule
+  nameWithType: MutexSecurity.SetAccessRule
+- uid: System.Security.AccessControl.MutexSecurity.SetAuditRule*
+  parent: System.Security.AccessControl.MutexSecurity
+  isExternal: false
+  name: SetAuditRule
+  nameWithType: MutexSecurity.SetAuditRule

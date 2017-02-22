@@ -1,0 +1,558 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Activities.NativeActivity
+  id: NativeActivity
+  children:
+  - System.Activities.NativeActivity.#ctor
+  - System.Activities.NativeActivity.Abort(System.Activities.NativeActivityAbortContext)
+  - System.Activities.NativeActivity.CacheMetadata(System.Activities.ActivityMetadata)
+  - System.Activities.NativeActivity.CacheMetadata(System.Activities.NativeActivityMetadata)
+  - System.Activities.NativeActivity.Cancel(System.Activities.NativeActivityContext)
+  - System.Activities.NativeActivity.CanInduceIdle
+  - System.Activities.NativeActivity.Execute(System.Activities.NativeActivityContext)
+  - System.Activities.NativeActivity.Implementation
+  - System.Activities.NativeActivity.ImplementationVersion
+  - System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
+  - System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
+  - System.Activities.NativeActivity.UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
+  langs:
+  - csharp
+  name: NativeActivity
+  nameWithType: NativeActivity
+  fullName: System.Activities.NativeActivity
+  type: Class
+  summary: "Abstract base class for custom activities that implement execution logic using the &lt;xref:System.Activities.NativeActivity.Execute%2A&gt; method, which has full access to the runtime’s features."
+  remarks: ''
+  example:
+  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n```  \npublic sealed class MySequence : NativeActivity  \n{  \n    Collection<Activity> children;  \n    Collection<Variable> variables;  \n    Variable<int> currentIndex;  \n    CompletionCallback onChildComplete;  \n  \n    public MySequence()  \n        : base()  \n    {  \n        this.children = new Collection<Activity>();  \n        this.variables = new Collection<Variable>();  \n        this.currentIndex = new Variable<int>();  \n    }  \n  \n    public Collection<Activity> Activities  \n    {  \n        get  \n        {  \n            return this.children;  \n        }  \n    }  \n    public Collection<Variable> Variables  \n    {  \n        get  \n        {  \n            return this.variables;  \n        }  \n    }  \n    protected override void CacheMetadata(NativeActivityMetadata metadata)  \n    {  \n        //call base.CacheMetadata to add the Activities and Variables to this activity's metadata  \n        base.CacheMetadata(metadata);  \n        //add the private implementation variable: currentIndex   \n        metadata.AddImplementationVariable(this.currentIndex);  \n    }                     \n  \n    protected override void Execute(NativeActivityContext context)  \n    {  \n        InternalExecute(context, null);  \n    }  \n    void InternalExecute(NativeActivityContext context, ActivityInstance instance)  \n    {  \n        //grab the index of the current Activity  \n        int currentActivityIndex = this.currentIndex.Get(context);  \n        if (currentActivityIndex == Activities.Count)  \n        {  \n            //if the currentActivityIndex is equal to the count of MySequence's Activities  \n            //MySequence is complete  \n            return;  \n        }  \n  \n        if (this.onChildComplete == null)  \n        {  \n            //on completion of the current child, have the runtime call back on this method  \n            this.onChildComplete = new CompletionCallback(InternalExecute);  \n        }  \n        //grab the next Activity in MySequence.Activities and schedule it  \n        Activity nextChild = Activities[currentActivityIndex];  \n        context.ScheduleActivity(nextChild, this.onChildComplete);  \n  \n        //increment the currentIndex  \n        this.currentIndex.Set(context, ++currentActivityIndex);  \n    }  \n}  \n```"
+  syntax:
+    content: 'public abstract class NativeActivity : System.Activities.Activity'
+  inheritance:
+  - System.Object
+  - System.Activities.Activity
+  implements: []
+  inheritedMembers:
+  - System.Activities.Activity.CacheId
+  - System.Activities.Activity.Constraints
+  - System.Activities.Activity.DisplayName
+  - System.Activities.Activity.Id
+  - System.Activities.Activity.ShouldSerializeDisplayName
+  - System.Activities.Activity.ToString
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.#ctor
+  id: '#ctor'
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: NativeActivity()
+  nameWithType: NativeActivity.NativeActivity()
+  fullName: System.Activities.NativeActivity.NativeActivity()
+  type: Constructor
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "When implemented in a derived class, creates a new instance of the derived class."
+  remarks: ''
+  example:
+  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#1](~/add/codesnippet/CSharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#1)]"
+  syntax:
+    content: protected NativeActivity ();
+    parameters: []
+  overload: System.Activities.NativeActivity.#ctor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.Abort(System.Activities.NativeActivityAbortContext)
+  id: Abort(System.Activities.NativeActivityAbortContext)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: Abort(NativeActivityAbortContext)
+  nameWithType: NativeActivity.Abort(NativeActivityAbortContext)
+  fullName: System.Activities.NativeActivity.Abort(NativeActivityAbortContext)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "When implemented in a derived class, takes actions in response to the activity being aborted."
+  syntax:
+    content: protected virtual void Abort (System.Activities.NativeActivityAbortContext context);
+    parameters:
+    - id: context
+      type: System.Activities.NativeActivityAbortContext
+      description: "The execution context in which the activity executes."
+  overload: System.Activities.NativeActivity.Abort*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.ActivityMetadata)
+  id: CacheMetadata(System.Activities.ActivityMetadata)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: CacheMetadata(ActivityMetadata)
+  nameWithType: NativeActivity.CacheMetadata(ActivityMetadata)
+  fullName: System.Activities.NativeActivity.CacheMetadata(ActivityMetadata)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Not implemented. Use the &lt;xref:System.Activities.NativeActivity.CacheMetadata%2A&gt; method instead."
+  remarks: "Custom activity authors can provide validation logic in an activity&quot;s <xref:System.Activities.NativeActivity.CacheMetadata%2A> override. Any exceptions that are thrown from <xref:System.Activities.NativeActivity.CacheMetadata%2A> are not treated as validation errors. These exceptions will escape from the call to <xref:System.Activities.Validation.ActivityValidationServices.Validate%2A> and must be handled by the caller."
+  syntax:
+    content: protected override sealed void CacheMetadata (System.Activities.ActivityMetadata metadata);
+    parameters:
+    - id: metadata
+      type: System.Activities.ActivityMetadata
+      description: "Not implemented."
+  overload: System.Activities.NativeActivity.CacheMetadata*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.NativeActivityMetadata)
+  id: CacheMetadata(System.Activities.NativeActivityMetadata)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: CacheMetadata(NativeActivityMetadata)
+  nameWithType: NativeActivity.CacheMetadata(NativeActivityMetadata)
+  fullName: System.Activities.NativeActivity.CacheMetadata(NativeActivityMetadata)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Creates and validates a description of the activity’s arguments, variables, child activities, and activity delegates."
+  remarks: "The workflow runtime uses the default implementation of CacheMetadata to ensure correct construction of a workflow as well as to manage run-time relationships and lifetime rules. The default implementation of CacheMetadata examines the public members of the activity type using the type’s <xref:System.ComponentModel.TypeDescriptor>. These public members are of type <xref:System.Activities.Argument>, <xref:System.Activities.Variable>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Variable>](assetId:///T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Variable>?qualifyHint=False&amp;autoUpgrade=True), <xref:System.Activities.Activity>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Activity>](assetId:///T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Activity>?qualifyHint=False&amp;autoUpgrade=True), or <xref:System.Activities.ActivityDelegate>. You can override this method to customize the building of the activity’s run-time description and to provide custom validation logic. Any exceptions that are thrown from CacheMetadata are not treated as validation errors. These exceptions will escape from the call to <xref:System.Activities.Validation.ActivityValidationServices.Validate%2A> and must be handled by the caller."
+  example:
+  - "The following code sample demonstrates using CacheMetadata in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#2](~/add/codesnippet/CSharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#2)]"
+  syntax:
+    content: protected virtual void CacheMetadata (System.Activities.NativeActivityMetadata metadata);
+    parameters:
+    - id: metadata
+      type: System.Activities.NativeActivityMetadata
+      description: "The activity’s metadata that encapsulates the activity’s arguments, variables, child activities, and activity delegates."
+  overload: System.Activities.NativeActivity.CacheMetadata*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.Cancel(System.Activities.NativeActivityContext)
+  id: Cancel(System.Activities.NativeActivityContext)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: Cancel(NativeActivityContext)
+  nameWithType: NativeActivity.Cancel(NativeActivityContext)
+  fullName: System.Activities.NativeActivity.Cancel(NativeActivityContext)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "When implemented in a derived class, runs logic to cause graceful early completion of the activity."
+  remarks: ''
+  example:
+  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](../Topic/Non-Generic%20ParallelForEach.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/CSharp/nongenericparallelforeach/parallelforeach.cs#2)]"
+  syntax:
+    content: protected virtual void Cancel (System.Activities.NativeActivityContext context);
+    parameters:
+    - id: context
+      type: System.Activities.NativeActivityContext
+      description: "The execution context in which the activity executes."
+  overload: System.Activities.NativeActivity.Cancel*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.CanInduceIdle
+  id: CanInduceIdle
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: CanInduceIdle
+  nameWithType: NativeActivity.CanInduceIdle
+  fullName: System.Activities.NativeActivity.CanInduceIdle
+  type: Property
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Gets or sets a value that indicates whether the activity can cause the workflow to become idle."
+  syntax:
+    content: protected virtual bool CanInduceIdle { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the activity can cause the workflow to become idle. This value is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> by default."
+  overload: System.Activities.NativeActivity.CanInduceIdle*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.Execute(System.Activities.NativeActivityContext)
+  id: Execute(System.Activities.NativeActivityContext)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: Execute(NativeActivityContext)
+  nameWithType: NativeActivity.Execute(NativeActivityContext)
+  fullName: System.Activities.NativeActivity.Execute(NativeActivityContext)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "When implemented in a derived class, runs the activity’s execution logic."
+  remarks: ''
+  example:
+  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](../Topic/Non-Generic%20ParallelForEach.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/CSharp/nongenericparallelforeach/parallelforeach.cs#2)]"
+  syntax:
+    content: protected abstract void Execute (System.Activities.NativeActivityContext context);
+    parameters:
+    - id: context
+      type: System.Activities.NativeActivityContext
+      description: "The execution context in which the activity executes."
+  overload: System.Activities.NativeActivity.Execute*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.Implementation
+  id: Implementation
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: Implementation
+  nameWithType: NativeActivity.Implementation
+  fullName: System.Activities.NativeActivity.Implementation
+  type: Property
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "The execution logic of the activity."
+  syntax:
+    content: protected override sealed Func<System.Activities.Activity> Implementation { get; set; }
+    return:
+      type: System.Func{System.Activities.Activity}
+      description: "The execution logic."
+  overload: System.Activities.NativeActivity.Implementation*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.ImplementationVersion
+  id: ImplementationVersion
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: ImplementationVersion
+  nameWithType: NativeActivity.ImplementationVersion
+  fullName: System.Activities.NativeActivity.ImplementationVersion
+  type: Property
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Gets or sets the implementation version of the activity."
+  syntax:
+    content: protected override sealed Version ImplementationVersion { get; set; }
+    return:
+      type: System.Version
+      description: "The implementation version of the activity."
+  overload: System.Activities.NativeActivity.ImplementationVersion*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
+  id: OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+  nameWithType: NativeActivity.OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+  fullName: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Raises an event when creating a map for the dynamic update."
+  syntax:
+    content: protected virtual void OnCreateDynamicUpdateMap (System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata metadata, System.Activities.Activity originalActivity);
+    parameters:
+    - id: metadata
+      type: System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata
+      description: "The metadata."
+    - id: originalActivity
+      type: System.Activities.Activity
+      description: "The original activity."
+  overload: System.Activities.NativeActivity.OnCreateDynamicUpdateMap*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
+  id: OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+  nameWithType: NativeActivity.OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+  fullName: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Raises an event when creating a map for the dynamic update."
+  syntax:
+    content: protected override sealed void OnCreateDynamicUpdateMap (System.Activities.DynamicUpdate.UpdateMapMetadata metadata, System.Activities.Activity originalActivity);
+    parameters:
+    - id: metadata
+      type: System.Activities.DynamicUpdate.UpdateMapMetadata
+      description: "The metadata."
+    - id: originalActivity
+      type: System.Activities.Activity
+      description: "The original activity."
+  overload: System.Activities.NativeActivity.OnCreateDynamicUpdateMap*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Activities.NativeActivity.UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
+  id: UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
+  parent: System.Activities.NativeActivity
+  langs:
+  - csharp
+  name: UpdateInstance(NativeActivityUpdateContext)
+  nameWithType: NativeActivity.UpdateInstance(NativeActivityUpdateContext)
+  fullName: System.Activities.NativeActivity.UpdateInstance(NativeActivityUpdateContext)
+  type: Method
+  assemblies:
+  - System.Activities
+  namespace: System.Activities
+  summary: "Updates the instance of <see cref=&quot;T:System.Activities.NativeActivity&quot;></see>."
+  syntax:
+    content: protected virtual void UpdateInstance (System.Activities.DynamicUpdate.NativeActivityUpdateContext updateContext);
+    parameters:
+    - id: updateContext
+      type: System.Activities.DynamicUpdate.NativeActivityUpdateContext
+      description: "The update context."
+  overload: System.Activities.NativeActivity.UpdateInstance*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Activities.Activity
+  isExternal: false
+  name: System.Activities.Activity
+- uid: System.Activities.NativeActivity.#ctor
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: NativeActivity()
+  nameWithType: NativeActivity.NativeActivity()
+  fullName: System.Activities.NativeActivity.NativeActivity()
+- uid: System.Activities.NativeActivity.Abort(System.Activities.NativeActivityAbortContext)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Abort(NativeActivityAbortContext)
+  nameWithType: NativeActivity.Abort(NativeActivityAbortContext)
+  fullName: System.Activities.NativeActivity.Abort(NativeActivityAbortContext)
+- uid: System.Activities.NativeActivityAbortContext
+  parent: System.Activities
+  isExternal: false
+  name: NativeActivityAbortContext
+  nameWithType: NativeActivityAbortContext
+  fullName: System.Activities.NativeActivityAbortContext
+- uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.ActivityMetadata)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: CacheMetadata(ActivityMetadata)
+  nameWithType: NativeActivity.CacheMetadata(ActivityMetadata)
+  fullName: System.Activities.NativeActivity.CacheMetadata(ActivityMetadata)
+- uid: System.Activities.ActivityMetadata
+  parent: System.Activities
+  isExternal: false
+  name: ActivityMetadata
+  nameWithType: ActivityMetadata
+  fullName: System.Activities.ActivityMetadata
+- uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.NativeActivityMetadata)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: CacheMetadata(NativeActivityMetadata)
+  nameWithType: NativeActivity.CacheMetadata(NativeActivityMetadata)
+  fullName: System.Activities.NativeActivity.CacheMetadata(NativeActivityMetadata)
+- uid: System.Activities.NativeActivityMetadata
+  parent: System.Activities
+  isExternal: false
+  name: NativeActivityMetadata
+  nameWithType: NativeActivityMetadata
+  fullName: System.Activities.NativeActivityMetadata
+- uid: System.Activities.NativeActivity.Cancel(System.Activities.NativeActivityContext)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Cancel(NativeActivityContext)
+  nameWithType: NativeActivity.Cancel(NativeActivityContext)
+  fullName: System.Activities.NativeActivity.Cancel(NativeActivityContext)
+- uid: System.Activities.NativeActivityContext
+  parent: System.Activities
+  isExternal: false
+  name: NativeActivityContext
+  nameWithType: NativeActivityContext
+  fullName: System.Activities.NativeActivityContext
+- uid: System.Activities.NativeActivity.CanInduceIdle
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: CanInduceIdle
+  nameWithType: NativeActivity.CanInduceIdle
+  fullName: System.Activities.NativeActivity.CanInduceIdle
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Activities.NativeActivity.Execute(System.Activities.NativeActivityContext)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Execute(NativeActivityContext)
+  nameWithType: NativeActivity.Execute(NativeActivityContext)
+  fullName: System.Activities.NativeActivity.Execute(NativeActivityContext)
+- uid: System.Activities.NativeActivity.Implementation
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Implementation
+  nameWithType: NativeActivity.Implementation
+  fullName: System.Activities.NativeActivity.Implementation
+- uid: System.Func{System.Activities.Activity}
+  parent: System
+  isExternal: true
+  name: Func<Activity>
+  nameWithType: Func<Activity>
+  fullName: System.Func<System.Activities.Activity>
+  spec.csharp:
+  - uid: System.Func`1
+    name: Func
+    nameWithType: Func
+    fullName: Func<System.Activities.Activity>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Activities.Activity
+    name: Activity
+    nameWithType: Activity
+    fullName: Activity
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+- uid: System.Activities.NativeActivity.ImplementationVersion
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: ImplementationVersion
+  nameWithType: NativeActivity.ImplementationVersion
+  fullName: System.Activities.NativeActivity.ImplementationVersion
+- uid: System.Version
+  parent: System
+  isExternal: true
+  name: Version
+  nameWithType: Version
+  fullName: System.Version
+- uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+  nameWithType: NativeActivity.OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+  fullName: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(NativeActivityUpdateMapMetadata,Activity)
+- uid: System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata
+  parent: System.Activities.DynamicUpdate
+  isExternal: false
+  name: NativeActivityUpdateMapMetadata
+  nameWithType: NativeActivityUpdateMapMetadata
+  fullName: System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata
+- uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+  nameWithType: NativeActivity.OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+  fullName: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(UpdateMapMetadata,Activity)
+- uid: System.Activities.DynamicUpdate.UpdateMapMetadata
+  parent: System.Activities.DynamicUpdate
+  isExternal: false
+  name: UpdateMapMetadata
+  nameWithType: UpdateMapMetadata
+  fullName: System.Activities.DynamicUpdate.UpdateMapMetadata
+- uid: System.Activities.NativeActivity.UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: UpdateInstance(NativeActivityUpdateContext)
+  nameWithType: NativeActivity.UpdateInstance(NativeActivityUpdateContext)
+  fullName: System.Activities.NativeActivity.UpdateInstance(NativeActivityUpdateContext)
+- uid: System.Activities.DynamicUpdate.NativeActivityUpdateContext
+  parent: System.Activities.DynamicUpdate
+  isExternal: false
+  name: NativeActivityUpdateContext
+  nameWithType: NativeActivityUpdateContext
+  fullName: System.Activities.DynamicUpdate.NativeActivityUpdateContext
+- uid: System.Activities.NativeActivity.#ctor*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: NativeActivity
+  nameWithType: NativeActivity.NativeActivity
+- uid: System.Activities.NativeActivity.Abort*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Abort
+  nameWithType: NativeActivity.Abort
+- uid: System.Activities.NativeActivity.CacheMetadata*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: CacheMetadata
+  nameWithType: NativeActivity.CacheMetadata
+- uid: System.Activities.NativeActivity.Cancel*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Cancel
+  nameWithType: NativeActivity.Cancel
+- uid: System.Activities.NativeActivity.CanInduceIdle*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: CanInduceIdle
+  nameWithType: NativeActivity.CanInduceIdle
+- uid: System.Activities.NativeActivity.Execute*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Execute
+  nameWithType: NativeActivity.Execute
+- uid: System.Activities.NativeActivity.Implementation*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: Implementation
+  nameWithType: NativeActivity.Implementation
+- uid: System.Activities.NativeActivity.ImplementationVersion*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: ImplementationVersion
+  nameWithType: NativeActivity.ImplementationVersion
+- uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: OnCreateDynamicUpdateMap
+  nameWithType: NativeActivity.OnCreateDynamicUpdateMap
+- uid: System.Activities.NativeActivity.UpdateInstance*
+  parent: System.Activities.NativeActivity
+  isExternal: false
+  name: UpdateInstance
+  nameWithType: NativeActivity.UpdateInstance

@@ -1,0 +1,75 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Data.Services.Client.ChangeOperationResponse
+  id: ChangeOperationResponse
+  children:
+  - System.Data.Services.Client.ChangeOperationResponse.Descriptor
+  langs:
+  - csharp
+  name: ChangeOperationResponse
+  nameWithType: ChangeOperationResponse
+  fullName: System.Data.Services.Client.ChangeOperationResponse
+  type: Class
+  summary: "Results returned after a call to &lt;xref:System.Data.Services.Client.DataServiceContext.SaveChanges%2A&gt; when enumerating operation responses returned by the <see cref=&quot;T:System.Data.Services.Client.DataServiceResponse&quot;></see> class."
+  remarks: "ChangeOperationResponse objects are not intended to be constructed directly by a user of this library. Instead, references are returned when enumerating the operation responses returned via the enumerator on the <xref:System.Data.Services.Client.DataServiceResponse> class.       <xref:System.Data.Services.Client.DataServiceContext.SaveChanges%2A> submits pending changes to the data service collected by the <xref:System.Data.Services.Client.DataServiceContext> since the last call to <xref:System.Data.Services.Client.DataServiceContext.SaveChanges%2A>. Changes are added to the context by calling <xref:System.Data.Services.Client.DataServiceContext.AddObject%2A>, <xref:System.Data.Services.Client.DataServiceContext.AddLink%2A>, <xref:System.Data.Services.Client.DataServiceContext.DeleteObject%2A>, <xref:System.Data.Services.Client.DataServiceContext.DeleteLink%2A>, <xref:System.Data.Services.Client.DataServiceContext.Detach%2A>, <xref:System.Data.Services.Client.DataServiceContext.DetachLink%2A>, and similar methods.       <xref:System.Data.Services.Client.DataServiceContext.SaveChanges%2A> returns a <xref:System.Data.Services.Client.DataServiceResponse> that represents the response to all operations sent to the data service. The <xref:System.Data.Services.Client.DataServiceResponse> object includes a sequence of ChangeOperationResponse objects that, in turn, contain a sequence of <xref:System.Data.Services.Client.EntityDescriptor> or <xref:System.Data.Services.Client.LinkDescriptor> instances that represent the changes that were persisted or attempted."
+  example:
+  - "The following code shows how to process the results of a call to <xref:System.Data.Services.Client.DataServiceContext.SaveChanges%2A>.  \n  \n```  \nDataServiceContext service = new DataServiceContext(new Uri(\"http://myserviceroot\"));  \n  \n// Do insert, update, delete, or attach operations.  \n  \nDataServiceResponse dsr;  \n  \ntry  \n{  \n    dsr = service.SaveChanges(SaveChangesOptions.Batch);    \n   // Or service.SaveChanges(SaveChangesOptions.ContinueOnError);   \n   //Or service.SaveChanges();  \n   // If there are no errors during save changes, process the results:  \n  \n    if (dsr.IsBatchResponse)  \n    {  \n           /*inspect HTTP artifacts associated with the entire batch:  \n                             dsr.BatchHeaders, dsr.BatchStatusCode*/ }  \n  \n    foreach (ChangeOperationResponse cor in dsr)  \n    {  \n  \n            if (cor.Descriptor is EntityDescriptor)  \n            {  \n                EntityDescriptor ed = (EntityDescriptor)cor.Descriptor;  \n                // This should be the case if  \n                // SaveChanges did not throw an exception.    \n  \n                // After an entity is processed by SaveChanges,  \n                // it is always moved to the unchanged state.  \n                System.Diagnostics.Debug.Assert(  \n                           ed.State == EntityStates.Unchanged);    \n                // This shows that the state should be unchanged if  \n                // the result is success.  \n  \n                //process the entity in the response payload: ed.Entity  \n            }  \n            else if (cor.Descriptor is LinkDescriptor)  \n            {  \n                LinkDescriptor ld = (LinkDescriptor)cor.Descriptor;  \n               // This should be the case if SaveChanges did not throw an exception.  \n  \n               // After an entity is processed by SaveChanges it  \n               // is always moved to the unchanged state.  \n                System.Diagnostics.Debug.Assert(  \n                            ld.State == EntityStates.Unchanged);    \n                // The state should be unchanged if the result is success.  \n  \n                //process the link in the response payload: ld.Source,  \n                // ld.SourceProperty, or ld.Target.  \n            }  \n     }  \n  \n}  \ncatch (DataServiceSaveException se)  \n{  \n    // Error while saving changes  \n    dsr = se.Response;  \n  \n    if (dsr.IsBatchResponse)   \n    {   \n        /*inspect HTTP artifacts associated with the entire batch:  \n             dsr.BatchHeaders, dsr.BatchStatusCode*/   \n}      \n}  \n  \n    foreach (ChangeOperationResponse cor in dsr)  \n    {  \n        if (cor.Error != null)  \n        {  \n            //process error  \n        }  \n        else  \n        {  \n            // same success case processing as in the loop over DSRs results in   \n            // the try block. You could put that processing in a method   \n            // and call it from here.      \n        }  \n    }  \n  \n}  \n  \n catch(Exception)  \n {  \n    // Error while saving changes, but not thrown by the client library.  \n  \n    // Process ArgumentException, InvalidOperationException, or similar.  \n}  \n}  \n  \n```"
+  syntax:
+    content: 'public sealed class ChangeOperationResponse : System.Data.Services.Client.OperationResponse'
+  inheritance:
+  - System.Object
+  - System.Data.Services.Client.OperationResponse
+  implements: []
+  inheritedMembers:
+  - System.Data.Services.Client.OperationResponse.Error
+  - System.Data.Services.Client.OperationResponse.Headers
+  - System.Data.Services.Client.OperationResponse.StatusCode
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Data.Services.Client.ChangeOperationResponse.Descriptor
+  id: Descriptor
+  parent: System.Data.Services.Client.ChangeOperationResponse
+  langs:
+  - csharp
+  name: Descriptor
+  nameWithType: ChangeOperationResponse.Descriptor
+  fullName: System.Data.Services.Client.ChangeOperationResponse.Descriptor
+  type: Property
+  assemblies:
+  - System.Data.Services.Client
+  namespace: System.Data.Services.Client
+  summary: "Gets the <see cref=&quot;T:System.Data.Services.Client.EntityDescriptor&quot;></see> or <see cref=&quot;T:System.Data.Services.Client.LinkDescriptor&quot;></see> modified by a change operation."
+  syntax:
+    content: public System.Data.Services.Client.Descriptor Descriptor { get; }
+    return:
+      type: System.Data.Services.Client.Descriptor
+      description: "An <see cref=&quot;T:System.Data.Services.Client.EntityDescriptor&quot;></see> or <see cref=&quot;T:System.Data.Services.Client.LinkDescriptor&quot;></see> modified by a change operation."
+  overload: System.Data.Services.Client.ChangeOperationResponse.Descriptor*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Data.Services.Client.OperationResponse
+  isExternal: false
+  name: System.Data.Services.Client.OperationResponse
+- uid: System.Data.Services.Client.ChangeOperationResponse.Descriptor
+  parent: System.Data.Services.Client.ChangeOperationResponse
+  isExternal: false
+  name: Descriptor
+  nameWithType: ChangeOperationResponse.Descriptor
+  fullName: System.Data.Services.Client.ChangeOperationResponse.Descriptor
+- uid: System.Data.Services.Client.Descriptor
+  parent: System.Data.Services.Client
+  isExternal: false
+  name: Descriptor
+  nameWithType: Descriptor
+  fullName: System.Data.Services.Client.Descriptor
+- uid: System.Data.Services.Client.ChangeOperationResponse.Descriptor*
+  parent: System.Data.Services.Client.ChangeOperationResponse
+  isExternal: false
+  name: Descriptor
+  nameWithType: ChangeOperationResponse.Descriptor

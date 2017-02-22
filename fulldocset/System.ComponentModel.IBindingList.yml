@@ -1,0 +1,682 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.ComponentModel.IBindingList
+  id: IBindingList
+  children:
+  - System.ComponentModel.IBindingList.AddIndex(System.ComponentModel.PropertyDescriptor)
+  - System.ComponentModel.IBindingList.AddNew
+  - System.ComponentModel.IBindingList.AllowEdit
+  - System.ComponentModel.IBindingList.AllowNew
+  - System.ComponentModel.IBindingList.AllowRemove
+  - System.ComponentModel.IBindingList.ApplySort(System.ComponentModel.PropertyDescriptor,System.ComponentModel.ListSortDirection)
+  - System.ComponentModel.IBindingList.Find(System.ComponentModel.PropertyDescriptor,System.Object)
+  - System.ComponentModel.IBindingList.IsSorted
+  - System.ComponentModel.IBindingList.ListChanged
+  - System.ComponentModel.IBindingList.RemoveIndex(System.ComponentModel.PropertyDescriptor)
+  - System.ComponentModel.IBindingList.RemoveSort
+  - System.ComponentModel.IBindingList.SortDirection
+  - System.ComponentModel.IBindingList.SortProperty
+  - System.ComponentModel.IBindingList.SupportsChangeNotification
+  - System.ComponentModel.IBindingList.SupportsSearching
+  - System.ComponentModel.IBindingList.SupportsSorting
+  langs:
+  - csharp
+  name: IBindingList
+  nameWithType: IBindingList
+  fullName: System.ComponentModel.IBindingList
+  type: Interface
+  summary: "Provides the features required to support both complex and simple scenarios when binding to a data source."
+  remarks: "This interface is implemented by the <xref:System.Data.DataView> class. Implementation of a method should exhibit the same behavior as the implementation of that method in the <xref:System.Data.DataView> class.       When you call the <xref:System.ComponentModel.IBindingList.ApplySort%2A> or <xref:System.ComponentModel.IBindingList.RemoveSort%2A> methods, you should raise a <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration.       When you call the <xref:System.ComponentModel.IBindingList.AddNew%2A> method, you should raise a <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration carrying the appropriate index. The added row is in a state where pressing the ESC on a <xref:System.Windows.Forms.DataGridView> control can remove the new row. Raising the <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration a second time on this row indicates that the item is now a row not in the &quot;new&quot; state.       When you remove an item or call the <xref:System.ComponentModel.IEditableObject.CancelEdit%2A> method on a new row (if that row implements <xref:System.ComponentModel.IEditableObject>), you should raise a <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration carrying the appropriate index."
+  example:
+  - "The following example provides a simple implementation of the IBindingList interface. The `CustomerList` class stores customer information in a list. This example assumes that you have used the `Customer` class that can be found in the example in the <xref:System.ComponentModel.IEditableObject> class.  \n  \n [!code-cs[Binding_Editable#2](~/add/codesnippet/CSharp/t-system.componentmodel._23_1.cs)]\n [!code-cpp[Binding_Editable#2](~/add/codesnippet/CPP/t-system.componentmodel._23_1.cpp)]\n [!code-vb[Binding_Editable#2](~/add/codesnippet/VisualBasic/t-system.componentmodel._23_1.vb)]"
+  syntax:
+    content: 'public interface IBindingList : System.Collections.IList'
+  implements:
+  - System.Collections.IList
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.AddIndex(System.ComponentModel.PropertyDescriptor)
+  id: AddIndex(System.ComponentModel.PropertyDescriptor)
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: AddIndex(PropertyDescriptor)
+  nameWithType: IBindingList.AddIndex(PropertyDescriptor)
+  fullName: System.ComponentModel.IBindingList.AddIndex(PropertyDescriptor)
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Adds the <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see> to the indexes used for searching."
+  remarks: "The list must support this method. However, support for this method can be a nonoperation."
+  syntax:
+    content: public void AddIndex (System.ComponentModel.PropertyDescriptor property);
+    parameters:
+    - id: property
+      type: System.ComponentModel.PropertyDescriptor
+      description: "The  to add to the indexes used for searching."
+  overload: System.ComponentModel.IBindingList.AddIndex*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.AddNew
+  id: AddNew
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: AddNew()
+  nameWithType: IBindingList.AddNew()
+  fullName: System.ComponentModel.IBindingList.AddNew()
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Adds a new item to the list."
+  remarks: "This method is supported only if <xref:System.ComponentModel.IBindingList.AllowNew%2A> is `true`; otherwise, a <xref:System.NotSupportedException> is thrown.       Implementing this method means that the <xref:System.ComponentModel.IBindingList> list must understand the type of objects to add to the list and must understand how to create a new instance of that type. For example, if you have a collection of `myCustomer` objects, the AddNew method should add a new `myCustomer` object to the list.      > [!NOTE] >  If the objects in this list implement the <xref:System.ComponentModel.IEditableObject> interface, calling the <xref:System.ComponentModel.IEditableObject.CancelEdit%2A> method should discard an object, not add it to the list, when the object was created using the AddNew method. The object should only be added to the list when the <xref:System.ComponentModel.IEditableObject.EndEdit%2A?displayProperty=fullName> method is called. Therefore, you must sychronize the object and the list carefully.       When this method is called, you should raise a <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration carrying the appropriate index. The added row is in a state where hitting Esc on a <xref:System.Windows.Forms.DataGridView> control can remove the new row. Raising the <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration a second time on this row indicates that the item is now a normal row (not in new state)."
+  syntax:
+    content: public object AddNew ();
+    parameters: []
+    return:
+      type: System.Object
+      description: "To be added."
+  overload: System.ComponentModel.IBindingList.AddNew*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.AllowNew%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.AllowEdit
+  id: AllowEdit
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: AllowEdit
+  nameWithType: IBindingList.AllowEdit
+  fullName: System.ComponentModel.IBindingList.AllowEdit
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether you can update items in the list."
+  syntax:
+    content: public bool AllowEdit { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if you can update the items in the list; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.AllowEdit*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.AllowNew
+  id: AllowNew
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: AllowNew
+  nameWithType: IBindingList.AllowNew
+  fullName: System.ComponentModel.IBindingList.AllowNew
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether you can add items to the list using &lt;xref:System.ComponentModel.IBindingList.AddNew%2A&gt;."
+  remarks: "If <xref:System.Collections.IList.IsFixedSize%2A?displayProperty=fullName> or <xref:System.Collections.IList.IsReadOnly%2A?displayProperty=fullName> is `true`, this property returns `false`."
+  syntax:
+    content: public bool AllowNew { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if you can add items to the list using &lt;xref:System.ComponentModel.IBindingList.AddNew%2A&gt;; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.AllowNew*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.AllowRemove
+  id: AllowRemove
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: AllowRemove
+  nameWithType: IBindingList.AllowRemove
+  fullName: System.ComponentModel.IBindingList.AllowRemove
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether you can remove items from the list, using &lt;xref:System.Collections.IList.Remove%2A&gt; or &lt;xref:System.Collections.IList.RemoveAt%2A&gt;."
+  remarks: "If <xref:System.Collections.IList.IsFixedSize%2A?displayProperty=fullName> or <xref:System.Collections.IList.IsReadOnly%2A?displayProperty=fullName> is `true`, this property returns `false`.      > [!NOTE] >  If AllowRemove returns `false`, <xref:System.Collections.IList.Remove%2A?displayProperty=fullName> and <xref:System.Collections.IList.RemoveAt%2A?displayProperty=fullName> throw a <xref:System.NotSupportedException>."
+  syntax:
+    content: public bool AllowRemove { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if you can remove items from the list; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.AllowRemove*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.ApplySort(System.ComponentModel.PropertyDescriptor,System.ComponentModel.ListSortDirection)
+  id: ApplySort(System.ComponentModel.PropertyDescriptor,System.ComponentModel.ListSortDirection)
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: ApplySort(PropertyDescriptor,ListSortDirection)
+  nameWithType: IBindingList.ApplySort(PropertyDescriptor,ListSortDirection)
+  fullName: System.ComponentModel.IBindingList.ApplySort(PropertyDescriptor,ListSortDirection)
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Sorts the list based on a <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see> and a <see cref=&quot;T:System.ComponentModel.ListSortDirection&quot;></see>."
+  remarks: "If items are added or removed, these items are placed in the order of the sort.       This method is supported if <xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is `true`; otherwise, this method throws a <xref:System.NotSupportedException>."
+  syntax:
+    content: public void ApplySort (System.ComponentModel.PropertyDescriptor property, System.ComponentModel.ListSortDirection direction);
+    parameters:
+    - id: property
+      type: System.ComponentModel.PropertyDescriptor
+      description: "The  to sort by."
+    - id: direction
+      type: System.ComponentModel.ListSortDirection
+      description: "One of the  values."
+  overload: System.ComponentModel.IBindingList.ApplySort*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.Find(System.ComponentModel.PropertyDescriptor,System.Object)
+  id: Find(System.ComponentModel.PropertyDescriptor,System.Object)
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: Find(PropertyDescriptor,Object)
+  nameWithType: IBindingList.Find(PropertyDescriptor,Object)
+  fullName: System.ComponentModel.IBindingList.Find(PropertyDescriptor,Object)
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Returns the index of the row that has the given <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see>."
+  remarks: "This method will select the first row where the value of the `property` parameter equals the value of the `key` parameter.       This method is supported if <xref:System.ComponentModel.IBindingList.SupportsSearching%2A> is `true`, otherwise this method throws a <xref:System.NotSupportedException>."
+  example:
+  - "The following code example demonstrates how to implement the Find method.  \n  \n [!code-cs[System.Windows.Forms.BindingSourceAndBindingListOfT#3](~/add/codesnippet/CSharp/03c83841-f554-4f60-86f9-_1.cs)]\n [!code-vb[System.Windows.Forms.BindingSourceAndBindingListOfT#3](~/add/codesnippet/VisualBasic/03c83841-f554-4f60-86f9-_1.vb)]"
+  syntax:
+    content: public int Find (System.ComponentModel.PropertyDescriptor property, object key);
+    parameters:
+    - id: property
+      type: System.ComponentModel.PropertyDescriptor
+      description: "The  to search on."
+    - id: key
+      type: System.Object
+      description: "The value of the `property` parameter to search for."
+    return:
+      type: System.Int32
+      description: "To be added."
+  overload: System.ComponentModel.IBindingList.Find*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSearching%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.IsSorted
+  id: IsSorted
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: IsSorted
+  nameWithType: IBindingList.IsSorted
+  fullName: System.ComponentModel.IBindingList.IsSorted
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether the items in the list are sorted."
+  remarks: "This property is supported if <xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is `true`; otherwise, this property throws a <xref:System.NotSupportedException>.       If IsSorted returns `true`, items are added or removed in the order of the sort."
+  syntax:
+    content: public bool IsSorted { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if &lt;xref:System.ComponentModel.IBindingList.ApplySort%2A&gt; has been called and &lt;xref:System.ComponentModel.IBindingList.RemoveSort%2A&gt; has not been called; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.IsSorted*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.ListChanged
+  id: ListChanged
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: ListChanged
+  nameWithType: IBindingList.ListChanged
+  fullName: System.ComponentModel.IBindingList.ListChanged
+  type: Event
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Occurs when the list changes or an item in the list changes."
+  remarks: "This event is raised only if the <xref:System.ComponentModel.IBindingList.SupportsChangeNotification%2A> property is `true`."
+  syntax:
+    content: public event System.ComponentModel.ListChangedEventHandler ListChanged;
+    return:
+      type: System.ComponentModel.ListChangedEventHandler
+      description: "To be added."
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.RemoveIndex(System.ComponentModel.PropertyDescriptor)
+  id: RemoveIndex(System.ComponentModel.PropertyDescriptor)
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: RemoveIndex(PropertyDescriptor)
+  nameWithType: IBindingList.RemoveIndex(PropertyDescriptor)
+  fullName: System.ComponentModel.IBindingList.RemoveIndex(PropertyDescriptor)
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Removes the <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see> from the indexes used for searching."
+  remarks: "The list must support this method. However, support for this method can be a nonoperation."
+  syntax:
+    content: public void RemoveIndex (System.ComponentModel.PropertyDescriptor property);
+    parameters:
+    - id: property
+      type: System.ComponentModel.PropertyDescriptor
+      description: "The  to remove from the indexes used for searching."
+  overload: System.ComponentModel.IBindingList.RemoveIndex*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.RemoveSort
+  id: RemoveSort
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: RemoveSort()
+  nameWithType: IBindingList.RemoveSort()
+  fullName: System.ComponentModel.IBindingList.RemoveSort()
+  type: Method
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Removes any sort applied using &lt;xref:System.ComponentModel.IBindingList.ApplySort%2A&gt;."
+  remarks: "This property is supported if <xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is `true`; otherwise, this property throws a <xref:System.NotSupportedException>.       When you call this method, you should raise a <xref:System.ComponentModel.IBindingList.ListChanged> event with the <xref:System.ComponentModel.ListChangedType> enumeration."
+  syntax:
+    content: public void RemoveSort ();
+    parameters: []
+  overload: System.ComponentModel.IBindingList.RemoveSort*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.SortDirection
+  id: SortDirection
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: SortDirection
+  nameWithType: IBindingList.SortDirection
+  fullName: System.ComponentModel.IBindingList.SortDirection
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets the direction of the sort."
+  remarks: "This property is supported if <xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is `true`; otherwise, this property throws a <xref:System.NotSupportedException>."
+  syntax:
+    content: public System.ComponentModel.ListSortDirection SortDirection { get; }
+    return:
+      type: System.ComponentModel.ListSortDirection
+      description: "One of the <see cref=&quot;T:System.ComponentModel.ListSortDirection&quot;></see> values."
+  overload: System.ComponentModel.IBindingList.SortDirection*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.SortProperty
+  id: SortProperty
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: SortProperty
+  nameWithType: IBindingList.SortProperty
+  fullName: System.ComponentModel.IBindingList.SortProperty
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets the <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see> that is being used for sorting."
+  remarks: "This property is supported if <xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is `true`; otherwise, this property throws a <xref:System.NotSupportedException>."
+  syntax:
+    content: public System.ComponentModel.PropertyDescriptor SortProperty { get; }
+    return:
+      type: System.ComponentModel.PropertyDescriptor
+      description: "The <see cref=&quot;T:System.ComponentModel.PropertyDescriptor&quot;></see> that is being used for sorting."
+  overload: System.ComponentModel.IBindingList.SortProperty*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "<xref:System.ComponentModel.IBindingList.SupportsSorting%2A> is ."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.SupportsChangeNotification
+  id: SupportsChangeNotification
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: SupportsChangeNotification
+  nameWithType: IBindingList.SupportsChangeNotification
+  fullName: System.ComponentModel.IBindingList.SupportsChangeNotification
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether a <see cref=&quot;E:System.ComponentModel.IBindingList.ListChanged&quot;></see> event is raised when the list changes or an item in the list changes."
+  remarks: "Objects in the list must notify the list when they change, so the list can raise a <xref:System.ComponentModel.IBindingList.ListChanged> event."
+  syntax:
+    content: public bool SupportsChangeNotification { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if a <see cref=&quot;E:System.ComponentModel.IBindingList.ListChanged&quot;></see> event is raised when the list changes or when an item changes; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.SupportsChangeNotification*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.SupportsSearching
+  id: SupportsSearching
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: SupportsSearching
+  nameWithType: IBindingList.SupportsSearching
+  fullName: System.ComponentModel.IBindingList.SupportsSearching
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether the list supports searching using the &lt;xref:System.ComponentModel.IBindingList.Find%2A&gt; method."
+  remarks: ''
+  example:
+  - "The following code example demonstrates how to implement the SupportsSearching property.  \n  \n [!code-cs[System.Windows.Forms.BindingSourceAndBindingListOfT#3](~/add/codesnippet/CSharp/p-system.componentmodel._7_1.cs)]\n [!code-vb[System.Windows.Forms.BindingSourceAndBindingListOfT#3](~/add/codesnippet/VisualBasic/p-system.componentmodel._7_1.vb)]"
+  syntax:
+    content: public bool SupportsSearching { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the list supports searching using the &lt;xref:System.ComponentModel.IBindingList.Find%2A&gt; method; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.SupportsSearching*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ComponentModel.IBindingList.SupportsSorting
+  id: SupportsSorting
+  parent: System.ComponentModel.IBindingList
+  langs:
+  - csharp
+  name: SupportsSorting
+  nameWithType: IBindingList.SupportsSorting
+  fullName: System.ComponentModel.IBindingList.SupportsSorting
+  type: Property
+  assemblies:
+  - System
+  namespace: System.ComponentModel
+  summary: "Gets whether the list supports sorting."
+  remarks: "If this property is `true`, then <xref:System.ComponentModel.IBindingList.IsSorted%2A>, <xref:System.ComponentModel.IBindingList.SortProperty%2A>, <xref:System.ComponentModel.IBindingList.SortDirection%2A>, <xref:System.ComponentModel.IBindingList.ApplySort%2A>, and <xref:System.ComponentModel.IBindingList.RemoveSort%2A> are supported."
+  syntax:
+    content: public bool SupportsSorting { get; }
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the list supports sorting; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.ComponentModel.IBindingList.SupportsSorting*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.ComponentModel.IBindingList.AddIndex(System.ComponentModel.PropertyDescriptor)
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AddIndex(PropertyDescriptor)
+  nameWithType: IBindingList.AddIndex(PropertyDescriptor)
+  fullName: System.ComponentModel.IBindingList.AddIndex(PropertyDescriptor)
+- uid: System.ComponentModel.PropertyDescriptor
+  parent: System.ComponentModel
+  isExternal: false
+  name: PropertyDescriptor
+  nameWithType: PropertyDescriptor
+  fullName: System.ComponentModel.PropertyDescriptor
+- uid: System.ComponentModel.IBindingList.AddNew
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AddNew()
+  nameWithType: IBindingList.AddNew()
+  fullName: System.ComponentModel.IBindingList.AddNew()
+- uid: System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.ComponentModel.IBindingList.AllowEdit
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowEdit
+  nameWithType: IBindingList.AllowEdit
+  fullName: System.ComponentModel.IBindingList.AllowEdit
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.ComponentModel.IBindingList.AllowNew
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowNew
+  nameWithType: IBindingList.AllowNew
+  fullName: System.ComponentModel.IBindingList.AllowNew
+- uid: System.ComponentModel.IBindingList.AllowRemove
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowRemove
+  nameWithType: IBindingList.AllowRemove
+  fullName: System.ComponentModel.IBindingList.AllowRemove
+- uid: System.ComponentModel.IBindingList.ApplySort(System.ComponentModel.PropertyDescriptor,System.ComponentModel.ListSortDirection)
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: ApplySort(PropertyDescriptor,ListSortDirection)
+  nameWithType: IBindingList.ApplySort(PropertyDescriptor,ListSortDirection)
+  fullName: System.ComponentModel.IBindingList.ApplySort(PropertyDescriptor,ListSortDirection)
+- uid: System.ComponentModel.ListSortDirection
+  parent: System.ComponentModel
+  isExternal: false
+  name: ListSortDirection
+  nameWithType: ListSortDirection
+  fullName: System.ComponentModel.ListSortDirection
+- uid: System.ComponentModel.IBindingList.Find(System.ComponentModel.PropertyDescriptor,System.Object)
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: Find(PropertyDescriptor,Object)
+  nameWithType: IBindingList.Find(PropertyDescriptor,Object)
+  fullName: System.ComponentModel.IBindingList.Find(PropertyDescriptor,Object)
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.ComponentModel.IBindingList.IsSorted
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: IsSorted
+  nameWithType: IBindingList.IsSorted
+  fullName: System.ComponentModel.IBindingList.IsSorted
+- uid: System.ComponentModel.IBindingList.ListChanged
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: ListChanged
+  nameWithType: IBindingList.ListChanged
+  fullName: System.ComponentModel.IBindingList.ListChanged
+- uid: System.ComponentModel.ListChangedEventHandler
+  parent: System.ComponentModel
+  isExternal: false
+  name: ListChangedEventHandler
+  nameWithType: ListChangedEventHandler
+  fullName: System.ComponentModel.ListChangedEventHandler
+- uid: System.ComponentModel.IBindingList.RemoveIndex(System.ComponentModel.PropertyDescriptor)
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: RemoveIndex(PropertyDescriptor)
+  nameWithType: IBindingList.RemoveIndex(PropertyDescriptor)
+  fullName: System.ComponentModel.IBindingList.RemoveIndex(PropertyDescriptor)
+- uid: System.ComponentModel.IBindingList.RemoveSort
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: RemoveSort()
+  nameWithType: IBindingList.RemoveSort()
+  fullName: System.ComponentModel.IBindingList.RemoveSort()
+- uid: System.ComponentModel.IBindingList.SortDirection
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SortDirection
+  nameWithType: IBindingList.SortDirection
+  fullName: System.ComponentModel.IBindingList.SortDirection
+- uid: System.ComponentModel.IBindingList.SortProperty
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SortProperty
+  nameWithType: IBindingList.SortProperty
+  fullName: System.ComponentModel.IBindingList.SortProperty
+- uid: System.ComponentModel.IBindingList.SupportsChangeNotification
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsChangeNotification
+  nameWithType: IBindingList.SupportsChangeNotification
+  fullName: System.ComponentModel.IBindingList.SupportsChangeNotification
+- uid: System.ComponentModel.IBindingList.SupportsSearching
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsSearching
+  nameWithType: IBindingList.SupportsSearching
+  fullName: System.ComponentModel.IBindingList.SupportsSearching
+- uid: System.ComponentModel.IBindingList.SupportsSorting
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsSorting
+  nameWithType: IBindingList.SupportsSorting
+  fullName: System.ComponentModel.IBindingList.SupportsSorting
+- uid: System.ComponentModel.IBindingList.AddIndex*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AddIndex
+  nameWithType: IBindingList.AddIndex
+- uid: System.ComponentModel.IBindingList.AddNew*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AddNew
+  nameWithType: IBindingList.AddNew
+- uid: System.ComponentModel.IBindingList.AllowEdit*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowEdit
+  nameWithType: IBindingList.AllowEdit
+- uid: System.ComponentModel.IBindingList.AllowNew*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowNew
+  nameWithType: IBindingList.AllowNew
+- uid: System.ComponentModel.IBindingList.AllowRemove*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: AllowRemove
+  nameWithType: IBindingList.AllowRemove
+- uid: System.ComponentModel.IBindingList.ApplySort*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: ApplySort
+  nameWithType: IBindingList.ApplySort
+- uid: System.ComponentModel.IBindingList.Find*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: Find
+  nameWithType: IBindingList.Find
+- uid: System.ComponentModel.IBindingList.IsSorted*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: IsSorted
+  nameWithType: IBindingList.IsSorted
+- uid: System.ComponentModel.IBindingList.RemoveIndex*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: RemoveIndex
+  nameWithType: IBindingList.RemoveIndex
+- uid: System.ComponentModel.IBindingList.RemoveSort*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: RemoveSort
+  nameWithType: IBindingList.RemoveSort
+- uid: System.ComponentModel.IBindingList.SortDirection*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SortDirection
+  nameWithType: IBindingList.SortDirection
+- uid: System.ComponentModel.IBindingList.SortProperty*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SortProperty
+  nameWithType: IBindingList.SortProperty
+- uid: System.ComponentModel.IBindingList.SupportsChangeNotification*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsChangeNotification
+  nameWithType: IBindingList.SupportsChangeNotification
+- uid: System.ComponentModel.IBindingList.SupportsSearching*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsSearching
+  nameWithType: IBindingList.SupportsSearching
+- uid: System.ComponentModel.IBindingList.SupportsSorting*
+  parent: System.ComponentModel.IBindingList
+  isExternal: false
+  name: SupportsSorting
+  nameWithType: IBindingList.SupportsSorting

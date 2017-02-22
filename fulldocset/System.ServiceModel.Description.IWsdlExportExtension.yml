@@ -1,0 +1,127 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.ServiceModel.Description.IWsdlExportExtension
+  id: IWsdlExportExtension
+  children:
+  - System.ServiceModel.Description.IWsdlExportExtension.ExportContract(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlContractConversionContext)
+  - System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlEndpointConversionContext)
+  langs:
+  - csharp
+  name: IWsdlExportExtension
+  nameWithType: IWsdlExportExtension
+  fullName: System.ServiceModel.Description.IWsdlExportExtension
+  type: Interface
+  summary: "Defines endpoint or contract behaviors that can export custom metadata."
+  remarks: "To modify and extend the Web Services Description Language (WSDL) exported by <xref:System.ServiceModel.Description.WsdlExporter> objects, implement the IWsdlExportExtension interface on an endpoint, contract, or operation behavior (an object that implements either <xref:System.ServiceModel.Description.IContractBehavior>, <xref:System.ServiceModel.Description.IEndpointBehavior>, or <xref:System.ServiceModel.Description.IOperationBehavior>) and add the behavior to the <xref:System.ServiceModel.Description.ServiceEndpoint.Behaviors%2A>, <xref:System.ServiceModel.Description.ContractDescription.Behaviors%2A>, or <xref:System.ServiceModel.Description.OperationDescription.Behaviors%2A> property. In addition, you can also implement IWsdlExportExtension on a <xref:System.ServiceModel.Channels.BindingElement>.      > [!NOTE] >  IWsdlExportExtension implementations are never invoked if they are implemented as an <xref:System.ServiceModel.Description.IServiceBehavior>.       IWsdlExportExtension does not export custom policy assertions even though [!INCLUDE[indigo1](~/add/includes/indigo1-md.md)] exports custom binding policy assertions to the appropriate element inside WSDL. If you want to export custom policy assertions, implement the <xref:System.ServiceModel.Description.IPolicyExportExtension> interface.       The metadata publication process begins by calling <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A?displayProperty=fullName> which in turn calls <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A?displayProperty=fullName> for each endpoint.       The endpoint is exported by first exporting its contract.When exporting a contract the <xref:System.ServiceModel.Description.WsdlExporter?displayProperty=fullName> calls the <xref:System.ServiceModel.Description.IWsdlExportExtension.ExportContract%2A?displayProperty=fullName> method on all IWsdlExportExtension implementations on the contract, and operation behaviors for that contract. Operations that use wildcard actions are not exported in metadata, so IWsdlExportExtension implementations on operation behaviors for these operations are not exported.       After exporting the contract, the port and binding are exported and exported policy expressions are attached.       Both the <xref:System.ServiceModel.Description.IWsdlExportExtension.ExportContract%2A> and the <xref:System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint%2A> methods provide access to the <xref:System.ServiceModel.Description.WsdlExporter> so that IWsdlExportExtension implementations can report recoverable errors and warnings through the <xref:System.ServiceModel.Description.MetadataExporter.Errors%2A> property. The context objects passed into both methods provide convenient mappings from exported WSDL elements to properties of <xref:System.ServiceModel.Description.ContractDescription> and <xref:System.ServiceModel.Description.ServiceEndpoint> objects.       If an IWsdlExportExtension implementation throws an exception on export, the generated metadata is in an inconsistent state and the <xref:System.ServiceModel.Description.WsdlExporter> object should be discarded.      > [!NOTE] >  Custom export extension must run after the built-in serializer populates the service description."
+  example:
+  - "The following code example shows an IWsdlExportExtension that adds custom documentation attributes to the WSDL file as WSDL annotations.  \n  \n [!code-cs[C_CustomWSDLExtensions#6](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#6)]  \n[!code-cs[C_CustomWSDLExtensions#7](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#7)]"
+  syntax:
+    content: public interface IWsdlExportExtension
+  implements: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportContract(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlContractConversionContext)
+  id: ExportContract(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlContractConversionContext)
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  langs:
+  - csharp
+  name: ExportContract(WsdlExporter,WsdlContractConversionContext)
+  nameWithType: IWsdlExportExtension.ExportContract(WsdlExporter,WsdlContractConversionContext)
+  fullName: System.ServiceModel.Description.IWsdlExportExtension.ExportContract(WsdlExporter,WsdlContractConversionContext)
+  type: Method
+  assemblies:
+  - System.ServiceModel
+  namespace: System.ServiceModel.Description
+  summary: "Writes custom Web Services Description Language (WSDL) elements into the generated WSDL for a contract."
+  remarks: "The ExportContract method is called when the metadata export system is exporting the contract. Only contract and operation behaviors implementing <xref:System.ServiceModel.Description.IWsdlExportExtension> get the ExportContract call. All behaviors implementing <xref:System.ServiceModel.Description.IWsdlExportExtension> get the <xref:System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint%2A> call.       Use the `context` parameter to modify the WSDL to be exported. For an example, see the Example section."
+  example:
+  - "The following code example shows an <xref:System.ServiceModel.Description.IWsdlExportExtension> that adds custom documentation attributes to the WSDL file as WSDL annotations.  \n  \n [!code-cs[C_CustomWSDLExtensions#6](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#6)]  \n[!code-cs[C_CustomWSDLExtensions#7](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#7)]"
+  syntax:
+    content: public void ExportContract (System.ServiceModel.Description.WsdlExporter exporter, System.ServiceModel.Description.WsdlContractConversionContext context);
+    parameters:
+    - id: exporter
+      type: System.ServiceModel.Description.WsdlExporter
+      description: "The  that exports the contract information."
+    - id: context
+      type: System.ServiceModel.Description.WsdlContractConversionContext
+      description: "Provides mappings from exported WSDL elements to the contract description."
+  overload: System.ServiceModel.Description.IWsdlExportExtension.ExportContract*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlEndpointConversionContext)
+  id: ExportEndpoint(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlEndpointConversionContext)
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  langs:
+  - csharp
+  name: ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+  nameWithType: IWsdlExportExtension.ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+  fullName: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+  type: Method
+  assemblies:
+  - System.ServiceModel
+  namespace: System.ServiceModel.Description
+  summary: "Writes custom Web Services Description Language (WSDL) elements into the generated WSDL for an endpoint."
+  remarks: "Implement the ExportEndpoint method to modify the WSDL exported for an endpoint. This method is called after the contract has been exported by <xref:System.ServiceModel.Description.IWsdlExportExtension.ExportContract%2A>."
+  example:
+  - "The following code example shows an <xref:System.ServiceModel.Description.IWsdlExportExtension> that adds custom documentation attributes to the WSDL file as WSDL annotations.  \n  \n [!code-cs[C_CustomWSDLExtensions#6](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#6)]  \n[!code-cs[C_CustomWSDLExtensions#7](~/add/codesnippet/CSharp/c_customwsdlextensions.client/wsdldocumentationattribute.cs#7)]"
+  syntax:
+    content: public void ExportEndpoint (System.ServiceModel.Description.WsdlExporter exporter, System.ServiceModel.Description.WsdlEndpointConversionContext context);
+    parameters:
+    - id: exporter
+      type: System.ServiceModel.Description.WsdlExporter
+      description: "The  that exports the endpoint information."
+    - id: context
+      type: System.ServiceModel.Description.WsdlEndpointConversionContext
+      description: "Provides mappings from exported WSDL elements to the endpoint description."
+  overload: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportContract(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlContractConversionContext)
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  isExternal: false
+  name: ExportContract(WsdlExporter,WsdlContractConversionContext)
+  nameWithType: IWsdlExportExtension.ExportContract(WsdlExporter,WsdlContractConversionContext)
+  fullName: System.ServiceModel.Description.IWsdlExportExtension.ExportContract(WsdlExporter,WsdlContractConversionContext)
+- uid: System.ServiceModel.Description.WsdlExporter
+  parent: System.ServiceModel.Description
+  isExternal: false
+  name: WsdlExporter
+  nameWithType: WsdlExporter
+  fullName: System.ServiceModel.Description.WsdlExporter
+- uid: System.ServiceModel.Description.WsdlContractConversionContext
+  parent: System.ServiceModel.Description
+  isExternal: false
+  name: WsdlContractConversionContext
+  nameWithType: WsdlContractConversionContext
+  fullName: System.ServiceModel.Description.WsdlContractConversionContext
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint(System.ServiceModel.Description.WsdlExporter,System.ServiceModel.Description.WsdlEndpointConversionContext)
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  isExternal: false
+  name: ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+  nameWithType: IWsdlExportExtension.ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+  fullName: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint(WsdlExporter,WsdlEndpointConversionContext)
+- uid: System.ServiceModel.Description.WsdlEndpointConversionContext
+  parent: System.ServiceModel.Description
+  isExternal: false
+  name: WsdlEndpointConversionContext
+  nameWithType: WsdlEndpointConversionContext
+  fullName: System.ServiceModel.Description.WsdlEndpointConversionContext
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportContract*
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  isExternal: false
+  name: ExportContract
+  nameWithType: IWsdlExportExtension.ExportContract
+- uid: System.ServiceModel.Description.IWsdlExportExtension.ExportEndpoint*
+  parent: System.ServiceModel.Description.IWsdlExportExtension
+  isExternal: false
+  name: ExportEndpoint
+  nameWithType: IWsdlExportExtension.ExportEndpoint

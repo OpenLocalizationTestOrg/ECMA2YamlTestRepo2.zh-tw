@@ -1,0 +1,266 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Diagnostics.EventInstance
+  id: EventInstance
+  children:
+  - System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32)
+  - System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32,System.Diagnostics.EventLogEntryType)
+  - System.Diagnostics.EventInstance.CategoryId
+  - System.Diagnostics.EventInstance.EntryType
+  - System.Diagnostics.EventInstance.InstanceId
+  langs:
+  - csharp
+  name: EventInstance
+  nameWithType: EventInstance
+  fullName: System.Diagnostics.EventInstance
+  type: Class
+  summary: "Represents language-neutral information for an event log entry."
+  remarks: "Use EventInstance to write an event log entry with a resource identifier rather than a string value. To write an event log entry, initialize the <xref:System.Diagnostics.EventInstance.InstanceId%2A> property and pass the instance to the <xref:System.Diagnostics.EventLog.WriteEvent%2A> method. The Event Viewer uses the instance identifier to find and display the corresponding string from the localized resource file based on current language settings. You must register the event source with the corresponding resource file before you write events using resource identifiers.       When writing events, you can set the <xref:System.Diagnostics.EventInstance.EntryType%2A> property to specify the icon that the Event Viewer displays for the entry. You can also specify a <xref:System.Diagnostics.EventInstance.CategoryId%2A> property to specify the category that the Event Viewer displays for the entry.       The Event Viewer uses the category to filter events written by an event source. The Event Viewer can display the category as a numeric value, or it can use the category as a resource identifier to display a localized category string.       To display localized category strings in the Event Viewer, you must use an event source configured with a category resource file, and set the <xref:System.Diagnostics.EventInstance.CategoryId%2A> to a resource identifier in the category resource file. If the event source does not have a configured category resource file, or the specified <xref:System.Diagnostics.EventInstance.CategoryId%2A> does not index a string in the category resource file, and then the Event Viewer displays the numeric category value for that entry. Configure the category resource file, along with the number of category strings in the resource file, using the <xref:System.Diagnostics.EventLogInstaller> or the <xref:System.Diagnostics.EventSourceCreationData> class.       You must register a source for an event log before using EventInstance to write an event with the <xref:System.Diagnostics.EventLog.WriteEvent%2A> method. The source must be configured for writing localized entries to the log and the source must define at least a message resource file.       Create the new event source during the installation of your application. This allows time for the operating system to refresh its list of registered event sources and their configurations. If the operating system has not refreshed its list of event sources, and you attempt to write an event with the new source, the write operation will fail. You can configure a new source using an <xref:System.Diagnostics.EventLogInstaller>, or using the <xref:System.Diagnostics.EventLog.CreateEventSource%2A> method. You must have administrative rights on the computer to create a new event source.       For details about defining event messages and building event log resource files, see the &quot;Message Compiler&quot; topic in the Platform SDK documentation at [http://msdn.microsoft.com](http://msdn.microsoft.com)."
+  example:
+  - "The following code example writes an informational event entry, and then reuses the EventInstance to write an entry for a warning event to an existing event log. The event message text is specified using a resource identifier in a message resource file. The code example assumes that the corresponding message resource file has been registered for the source.  \n  \n [!code-cpp[EventLog_WriteEvent#9](~/add/codesnippet/CPP/t-system.diagnostics.eve_2_1.cpp)]\n [!code-vb[EventLog_WriteEvent#9](~/add/codesnippet/VisualBasic/t-system.diagnostics.eve_2_1.vb)]\n [!code-cs[EventLog_WriteEvent#9](~/add/codesnippet/CSharp/t-system.diagnostics.eve_2_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public class EventInstance
+  inheritance:
+  - System.Object
+  implements: []
+  inheritedMembers: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32)
+  id: '#ctor(System.Int64,System.Int32)'
+  parent: System.Diagnostics.EventInstance
+  langs:
+  - csharp
+  name: EventInstance(Int64,Int32)
+  nameWithType: EventInstance.EventInstance(Int64,Int32)
+  fullName: System.Diagnostics.EventInstance.EventInstance(Int64,Int32)
+  type: Constructor
+  assemblies:
+  - System
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventInstance&quot;></see> class using the specified resource identifiers for the localized message and category text of the event entry."
+  remarks: "To write an informational entry to an event log, initialize an <xref:System.Diagnostics.EventInstance> and pass it to the <xref:System.Diagnostics.EventLog.WriteEvent%2A> method. Set the `instanceId` to the resource identifier of the event message in the corresponding <xref:System.Diagnostics.EventSourceCreationData.MessageResourceFile%2A> property for the source. Set the `categoryId` to a numeric category value, or the resource identifier of the event category in the <xref:System.Diagnostics.EventSourceCreationData.CategoryResourceFile%2A> property for the source; set the `categoryId` to zero for no event category. The <xref:System.Diagnostics.EventInstance.EntryType%2A> property for the new instance is set to <xref:System.Diagnostics.EventLogEntryType> by default.       The Event Viewer uses the resource identifiers to display the corresponding strings from the localized resource files for the source. You must register the source with the corresponding resource files before you can write events using resource identifiers."
+  example:
+  - "The following code example writes an informational event entry, and then reuses the <xref:System.Diagnostics.EventInstance> to write an entry for a warning event to an existing event log. The event message text is specified using a resource identifier in a message resource file. The code example assumes that the corresponding message resource file has been registered for the source.  \n  \n [!code-cpp[EventLog_WriteEvent#9](~/add/codesnippet/CPP/m-system.diagnostics.eve_5_1.cpp)]\n [!code-vb[EventLog_WriteEvent#9](~/add/codesnippet/VisualBasic/m-system.diagnostics.eve_5_1.vb)]\n [!code-cs[EventLog_WriteEvent#9](~/add/codesnippet/CSharp/m-system.diagnostics.eve_5_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public EventInstance (long instanceId, int categoryId);
+    parameters:
+    - id: instanceId
+      type: System.Int64
+      description: "A resource identifier that corresponds to a string defined in the message resource file of the event source."
+    - id: categoryId
+      type: System.Int32
+      description: "A resource identifier that corresponds to a string defined in the category resource file of the event source, or zero to specify no category for the event."
+  overload: System.Diagnostics.EventInstance.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The instanceId parameter is a negative value or a value larger than <xref:System.UInt32.MaxValue?displayProperty=fullName>.       -or-       The categoryId parameter is a negative value or a value larger than <xref:System.UInt16.MaxValue?displayProperty=fullName>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32,System.Diagnostics.EventLogEntryType)
+  id: '#ctor(System.Int64,System.Int32,System.Diagnostics.EventLogEntryType)'
+  parent: System.Diagnostics.EventInstance
+  langs:
+  - csharp
+  name: EventInstance(Int64,Int32,EventLogEntryType)
+  nameWithType: EventInstance.EventInstance(Int64,Int32,EventLogEntryType)
+  fullName: System.Diagnostics.EventInstance.EventInstance(Int64,Int32,EventLogEntryType)
+  type: Constructor
+  assemblies:
+  - System
+  namespace: System.Diagnostics
+  summary: "Initializes a new instance of the <see cref=&quot;T:System.Diagnostics.EventInstance&quot;></see> class using the specified resource identifiers for the localized message and category text of the event entry and the specified event log entry type."
+  remarks: "To write an entry to an event log, initialize an <xref:System.Diagnostics.EventInstance> and pass it to the <xref:System.Diagnostics.EventLog.WriteEvent%2A> method. Set the `instanceId` to the resource identifier of the event message in the corresponding <xref:System.Diagnostics.EventSourceCreationData.MessageResourceFile%2A> property for the source. Set the `categoryId` to a numeric category value, or the resource identifier of the event category in the <xref:System.Diagnostics.EventSourceCreationData.CategoryResourceFile%2A> property for the source; set the `categoryId` to zero for no event category.       The Event Viewer uses the resource identifiers to display the corresponding strings from the localized resource files for the source. You must register the source with the corresponding resource files before you can write events using resource identifiers.       Set the `entryType` to one of the pre-defined entry types. The Event Viewer uses the event type to determine which icon to display in the list view of the event log."
+  example:
+  - "The following code example writes two audit event entries to the event log `myNewLog`. The code example creates a new event source and a new event log if they do not exist on the local computer. The event message text is specified using a resource identifier in a resource file.  \n  \n [!code-cpp[EventLog_WriteEvent#7](~/add/codesnippet/CPP/fc333350-d8a8-40ee-b15e-_1.cpp)]\n [!code-vb[EventLog_WriteEvent#7](~/add/codesnippet/VisualBasic/fc333350-d8a8-40ee-b15e-_1.vb)]\n [!code-cs[EventLog_WriteEvent#7](~/add/codesnippet/CSharp/fc333350-d8a8-40ee-b15e-_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public EventInstance (long instanceId, int categoryId, System.Diagnostics.EventLogEntryType entryType);
+    parameters:
+    - id: instanceId
+      type: System.Int64
+      description: "A resource identifier that corresponds to a string defined in the message resource file of the event source."
+    - id: categoryId
+      type: System.Int32
+      description: "A resource identifier that corresponds to a string defined in the category resource file of the event source, or zero to specify no category for the event."
+    - id: entryType
+      type: System.Diagnostics.EventLogEntryType
+      description: "An  value that indicates the event type."
+  overload: System.Diagnostics.EventInstance.#ctor*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: "\n    entryType is not a valid  value."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    instanceId is a negative value or a value larger than <xref:System.UInt32.MaxValue?displayProperty=fullName>.  \n  \n -or-  \n  \n categoryId is a negative value or a value larger than <xref:System.UInt16.MaxValue?displayProperty=fullName>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventInstance.CategoryId
+  id: CategoryId
+  parent: System.Diagnostics.EventInstance
+  langs:
+  - csharp
+  name: CategoryId
+  nameWithType: EventInstance.CategoryId
+  fullName: System.Diagnostics.EventInstance.CategoryId
+  type: Property
+  assemblies:
+  - System
+  namespace: System.Diagnostics
+  summary: "Gets or sets the resource identifier that specifies the application-defined category of the event entry."
+  remarks: "Event log categories are application-defined values that help filter events, or provide further information about the event. For example, your application can define separate categories for different components or different operations.       Set the CategoryId property to specify the category that the Event Viewer displays for the entry. The Event Viewer can display the category as a numeric value, or it can use the CategoryId as a resource identifier to display a localized category string based on the current language settings.       To display localized category strings in the Event Viewer, you must use an event source configured with a category resource file, and set the CategoryId to a resource identifier in the category resource file. If the event source does not have a configured category resource file, or the specified CategoryId does not index a string in the category resource file, and then the Event Viewer displays the numeric category value for that entry.       You must register the source with the corresponding resource file before you write event categories using resource identifiers. Configure the category resource file, along with the number of category strings in the resource file, using the <xref:System.Diagnostics.EventLogInstaller> or the <xref:System.Diagnostics.EventSourceCreationData> class. When defining category strings in a resource file, the category resource identifiers must be numbered consecutively starting at 1, up to the configured <xref:System.Diagnostics.EventSourceCreationData.CategoryCount%2A> property value.       Event categories are optional. If your application does not use categories, do not set the CategoryId for the event log entry.       For details about defining event messages and building event resource files, see the &quot;Message Compiler&quot; topic in the Platform SDK documentation at [http://msdn.microsoft.com](http://msdn.microsoft.com/). For details about defining event categories in resource files, see the &quot;Event Categories&quot; topic in the Platform SDK"
+  example:
+  - "The following code example writes an informational event entry, and then reuses the <xref:System.Diagnostics.EventInstance> to write an entry for a warning event to an existing event log. The event message text is specified using a resource identifier in a message resource file. The code example assumes that the corresponding message resource file has been registered for the source.  \n  \n [!code-cpp[EventLog_WriteEvent#9](~/add/codesnippet/CPP/p-system.diagnostics.eve_24_1.cpp)]\n [!code-vb[EventLog_WriteEvent#9](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_24_1.vb)]\n [!code-cs[EventLog_WriteEvent#9](~/add/codesnippet/CSharp/p-system.diagnostics.eve_24_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public int CategoryId { get; set; }
+    return:
+      type: System.Int32
+      description: "A numeric category value or resource identifier that corresponds to a string defined in the category resource file of the event source. The default is zero, which signifies that no category will be displayed for the event entry."
+  overload: System.Diagnostics.EventInstance.CategoryId*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The property is set to a negative value or to a value larger than <xref:System.UInt16.MaxValue?displayProperty=fullName>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventInstance.EntryType
+  id: EntryType
+  parent: System.Diagnostics.EventInstance
+  langs:
+  - csharp
+  name: EntryType
+  nameWithType: EventInstance.EntryType
+  fullName: System.Diagnostics.EventInstance.EntryType
+  type: Property
+  assemblies:
+  - System
+  namespace: System.Diagnostics
+  summary: "Gets or sets the event type of the event log entry."
+  remarks: "Each event is of a single type, which the application indicates when it reports the event. The Event Viewer uses the event type to determine which icon to display in the list view of the event log."
+  example:
+  - "The following code example writes an informational event entry, and then reuses the <xref:System.Diagnostics.EventInstance> to write an entry for a warning event to an existing event log. The event message text is specified using a resource identifier in a message resource file. The code example assumes that the corresponding message resource file has been registered for the source.  \n  \n [!code-cpp[EventLog_WriteEvent#9](~/add/codesnippet/CPP/p-system.diagnostics.eve_11_1.cpp)]\n [!code-vb[EventLog_WriteEvent#9](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_11_1.vb)]\n [!code-cs[EventLog_WriteEvent#9](~/add/codesnippet/CSharp/p-system.diagnostics.eve_11_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public System.Diagnostics.EventLogEntryType EntryType { get; set; }
+    return:
+      type: System.Diagnostics.EventLogEntryType
+      description: "An <see cref=&quot;T:System.Diagnostics.EventLogEntryType&quot;></see> value that indicates the event entry type. The default value is <see cref=&quot;T:System.Diagnostics.EventLogEntryType&quot;></see>."
+  overload: System.Diagnostics.EventInstance.EntryType*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: "The property is not set to a valid  value."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Diagnostics.EventInstance.InstanceId
+  id: InstanceId
+  parent: System.Diagnostics.EventInstance
+  langs:
+  - csharp
+  name: InstanceId
+  nameWithType: EventInstance.InstanceId
+  fullName: System.Diagnostics.EventInstance.InstanceId
+  type: Property
+  assemblies:
+  - System
+  namespace: System.Diagnostics
+  summary: "Gets or sets the resource identifier that designates the message text of the event entry."
+  remarks: "The InstanceId property uniquely identifies an event entry for a configured event source. For events defined in message resource files, the InstanceId corresponds to the resource identifier compiled from the message definition fields in the message text file. Your application can write localized event log entries by setting the InstanceId to a resource identifier. The Event Viewer uses the InstanceId resource identifier to find and display the corresponding string from the localized resource file based on current language settings. You must register the source with the corresponding resource file before you write events using resource identifiers.       For details about defining event messages and building event log resource files, see the &quot;Message Compiler&quot; topic in the Platform SDK documentation at [http://msdn.microsoft.com](http://msdn.microsoft.com/). For details about event log identifiers, see the &quot;Event Identifiers&quot; topic in the Platform SDK."
+  example:
+  - "The following code example writes an informational event entry, and then reuses the <xref:System.Diagnostics.EventInstance> to write an entry for a warning event to an existing event log. The event message text is specified using a resource identifier in a message resource file. The code example assumes that the corresponding message resource file has been registered for the source.  \n  \n [!code-cpp[EventLog_WriteEvent#9](~/add/codesnippet/CPP/p-system.diagnostics.eve_16_1.cpp)]\n [!code-vb[EventLog_WriteEvent#9](~/add/codesnippet/VisualBasic/p-system.diagnostics.eve_16_1.vb)]\n [!code-cs[EventLog_WriteEvent#9](~/add/codesnippet/CSharp/p-system.diagnostics.eve_16_1.cs)]  \n  \n The code example uses the following message text file, built into the resource library EventLogMsgs.dll. A message text file is the source from which the message resource file is created. The message text file defines the resource identifiers and text for the category, event message, and parameter insertion strings.  \n  \n```  \n; // EventLogMsgs.mc  \n; // ********************************************************  \n  \n; // Use the following commands to build this file:  \n  \n; //   mc -s EventLogMsgs.mc  \n; //   rc EventLogMsgs.rc  \n; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   \n; // ********************************************************  \n  \n; // - Event categories -  \n; // Categories must be numbered consecutively starting at 1.  \n; // ********************************************************  \n  \nMessageId=0x1  \nSeverity=Success  \nSymbolicName=INSTALL_CATEGORY  \nLanguage=English  \nInstallation  \n.  \n  \nMessageId=0x2  \nSeverity=Success  \nSymbolicName=QUERY_CATEGORY  \nLanguage=English  \nDatabase Query  \n.  \n  \nMessageId=0x3  \nSeverity=Success  \nSymbolicName=REFRESH_CATEGORY  \nLanguage=English  \nData Refresh  \n.  \n  \n; // - Event messages -  \n; // *********************************  \n  \nMessageId = 1000  \nSeverity = Success  \nFacility = Application  \nSymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  \nLanguage=English  \nMy application message text, in English, for message id 1000, called from %1.  \n.  \n  \nMessageId = 1001  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  \nLanguage=English  \nMy application message text, in English, for message id 1001, called from %1.  \n.  \n  \nMessageId = 1002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = GENERIC_INFO_MESSAGE_ID_1002  \nLanguage=English  \nMy generic information message in English, for message id 1002.  \n.  \n  \nMessageId = 1003  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  \nLanguage=English  \nMy generic warning message in English, for message id 1003, called from %1.  \n.  \n  \nMessageId = 1004  \nSeverity = Success  \nFacility = Application  \nSymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  \nLanguage=English  \nThe update cycle is complete for %%5002.  \n.  \n  \nMessageId = 1005  \nSeverity = Warning  \nFacility = Application  \nSymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  \nLanguage=English  \nThe refresh operation did not complete because the connection to server %1 could not be established.  \n.  \n  \n; // - Event log display name -  \n; // ********************************************************  \n  \nMessageId = 5001  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  \nLanguage=English  \nSample Event Log  \n.  \n  \n; // - Event message parameters -  \n; //   Language independent insertion strings  \n; // ********************************************************  \n  \nMessageId = 5002  \nSeverity = Success  \nFacility = Application  \nSymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  \nLanguage=English  \nSVC_UPDATE.EXE  \n.  \n```"
+  syntax:
+    content: public long InstanceId { get; set; }
+    return:
+      type: System.Int64
+      description: "A resource identifier that corresponds to a string defined in the message resource file of the event source."
+  overload: System.Diagnostics.EventInstance.InstanceId*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The property is set to a negative value or to a value larger than <xref:System.UInt32.MaxValue?displayProperty=fullName>."
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32)
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: EventInstance(Int64,Int32)
+  nameWithType: EventInstance.EventInstance(Int64,Int32)
+  fullName: System.Diagnostics.EventInstance.EventInstance(Int64,Int32)
+- uid: System.Int64
+  parent: System
+  isExternal: true
+  name: Int64
+  nameWithType: Int64
+  fullName: System.Int64
+- uid: System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Diagnostics.EventInstance.#ctor(System.Int64,System.Int32,System.Diagnostics.EventLogEntryType)
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: EventInstance(Int64,Int32,EventLogEntryType)
+  nameWithType: EventInstance.EventInstance(Int64,Int32,EventLogEntryType)
+  fullName: System.Diagnostics.EventInstance.EventInstance(Int64,Int32,EventLogEntryType)
+- uid: System.Diagnostics.EventLogEntryType
+  parent: System.Diagnostics
+  isExternal: false
+  name: EventLogEntryType
+  nameWithType: EventLogEntryType
+  fullName: System.Diagnostics.EventLogEntryType
+- uid: System.Diagnostics.EventInstance.CategoryId
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: CategoryId
+  nameWithType: EventInstance.CategoryId
+  fullName: System.Diagnostics.EventInstance.CategoryId
+- uid: System.Diagnostics.EventInstance.EntryType
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: EntryType
+  nameWithType: EventInstance.EntryType
+  fullName: System.Diagnostics.EventInstance.EntryType
+- uid: System.Diagnostics.EventInstance.InstanceId
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: InstanceId
+  nameWithType: EventInstance.InstanceId
+  fullName: System.Diagnostics.EventInstance.InstanceId
+- uid: System.Diagnostics.EventInstance.#ctor*
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: EventInstance
+  nameWithType: EventInstance.EventInstance
+- uid: System.Diagnostics.EventInstance.CategoryId*
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: CategoryId
+  nameWithType: EventInstance.CategoryId
+- uid: System.Diagnostics.EventInstance.EntryType*
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: EntryType
+  nameWithType: EventInstance.EntryType
+- uid: System.Diagnostics.EventInstance.InstanceId*
+  parent: System.Diagnostics.EventInstance
+  isExternal: false
+  name: InstanceId
+  nameWithType: EventInstance.InstanceId

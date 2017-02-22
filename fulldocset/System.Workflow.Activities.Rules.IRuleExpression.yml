@@ -1,0 +1,323 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Workflow.Activities.Rules.IRuleExpression
+  id: IRuleExpression
+  children:
+  - System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage(System.Workflow.Activities.Rules.RuleAnalysis,System.Boolean,System.Boolean,System.Workflow.Activities.Rules.RulePathQualifier)
+  - System.Workflow.Activities.Rules.IRuleExpression.Clone
+  - System.Workflow.Activities.Rules.IRuleExpression.Decompile(System.Text.StringBuilder,System.CodeDom.CodeExpression)
+  - System.Workflow.Activities.Rules.IRuleExpression.Evaluate(System.Workflow.Activities.Rules.RuleExecution)
+  - System.Workflow.Activities.Rules.IRuleExpression.Match(System.CodeDom.CodeExpression)
+  - System.Workflow.Activities.Rules.IRuleExpression.Validate(System.Workflow.Activities.Rules.RuleValidation,System.Boolean)
+  langs:
+  - csharp
+  name: IRuleExpression
+  nameWithType: IRuleExpression
+  fullName: System.Workflow.Activities.Rules.IRuleExpression
+  type: Interface
+  summary: "Represents the base class from which custom expression writers must derive to write custom expressions."
+  remarks: ''
+  example:
+  - "The following code creates an expression that can be used in declarative conditions and rule sets. The expression is named `TwoOfThree`, and takes 3 parameters, all of which must evaluate to Booleans. This expression returns `true` if 2 of the 3 expressions return `true`.  \n  \n To use this code, add it to a Class Library project and reference the library from your workflow project.  \n  \n```c#  \nusing System.CodeDom;  \nusing System.Text;  \nusing System.Workflow.Activities.Rules;  \nusing System.Workflow.ComponentModel.Compiler;  \n  \nnamespace TwoOfThreeRuleExpression  \n{  \n    public class TwoOfThree : CodeExpression, IRuleExpression  \n    {  \n        CodeExpression expression1, expression2, expression3;  \n  \n        public CodeExpression First  \n        {  \n            get { return expression1; }  \n            set { expression1 = value; }  \n        }  \n  \n        public CodeExpression Second  \n        {  \n            get { return expression2; }  \n            set { expression2 = value; }  \n        }  \n  \n        public CodeExpression Third  \n        {  \n            get { return expression3; }  \n            set { expression3 = value; }  \n        }  \n  \n        public TwoOfThree()  \n        {  \n            // constructor required for deserialization  \n        }  \n  \n        public TwoOfThree(CodeExpression first, CodeExpression second, CodeExpression third)  \n        {  \n            // constructor required by parser  \n            expression1 = first;  \n            expression2 = second;  \n            expression3 = third;  \n        }  \n  \n        public void AnalyzeUsage(RuleAnalysis analysis, bool isRead, bool isWritten, RulePathQualifier qualifier)  \n        {  \n            // check what the 3 expressions use  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression1, true, false, null);  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression2, true, false, null);  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression3, true, false, null);  \n        }  \n  \n        public CodeExpression Clone()  \n        {  \n            TwoOfThree result = new TwoOfThree();  \n            result.expression1 = RuleExpressionWalker.Clone(expression1);  \n            result.expression2 = RuleExpressionWalker.Clone(expression2);  \n            result.expression3 = RuleExpressionWalker.Clone(expression3);  \n            return result;  \n        }  \n  \n        public void Decompile(StringBuilder stringBuilder, CodeExpression parentExpression)  \n        {  \n            // what should be displayed by the parser  \n            stringBuilder.Append(\"TwoOfThree(\");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression1, this);  \n            stringBuilder.Append(\", \");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression2, this);  \n            stringBuilder.Append(\", \");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression3, this);  \n            stringBuilder.Append(\")\");  \n        }  \n  \n        static RuleLiteralResult resultTrue = new RuleLiteralResult(true);  \n        static RuleLiteralResult resultFalse = new RuleLiteralResult(false);  \n  \n        public RuleExpressionResult Evaluate(RuleExecution execution)  \n        {  \n            // start by doing the first 2 expressions  \n            RuleExpressionResult r1 = RuleExpressionWalker.Evaluate(execution, expression1);  \n            RuleExpressionResult r2 = RuleExpressionWalker.Evaluate(execution, expression2);  \n            bool b1 = (bool)r1.Value;  \n            bool b2 = (bool)r2.Value;  \n            if (b1 && b2)  \n            {  \n                // both are true, so result is true  \n                return resultTrue;  \n            }  \n            else if (b1 || b2)  \n            {  \n                // only one of the first 2 is true, evaluate the third to determine result  \n                return RuleExpressionWalker.Evaluate(execution, expression3);  \n            }  \n            else  \n                // both e1 and e2 are false, so skip e3 and return false;  \n                return resultFalse;  \n        }  \n  \n        public bool Match(CodeExpression expression)  \n        {  \n            TwoOfThree other = expression as TwoOfThree;  \n            return (other != null) &&  \n                RuleExpressionWalker.Match(expression1, other.expression1) &&  \n                RuleExpressionWalker.Match(expression2, other.expression2) &&  \n                RuleExpressionWalker.Match(expression3, other.expression3);  \n        }  \n  \n        public RuleExpressionInfo Validate(RuleValidation validation, bool isWritten)  \n        {  \n            ValidateExpression(validation, expression1, \"First\");  \n            ValidateExpression(validation, expression2, \"Second\");  \n            ValidateExpression(validation, expression3, \"Third\");  \n            return new RuleExpressionInfo(typeof(bool));  \n        }  \n  \n        private void ValidateExpression(RuleValidation validation, CodeExpression expression, string propertyName)  \n        {  \n            ValidationError error;  \n            if (expression == null)  \n            {  \n                error = new ValidationError(propertyName + \" cannot be null\", 123);  \n                validation.Errors.Add(error);  \n            }  \n            else  \n            {  \n                RuleExpressionInfo result = RuleExpressionWalker.Validate(validation, expression, false);  \n                if ((result == null) || (result.ExpressionType != typeof(bool)))  \n                {  \n                    error = new ValidationError(propertyName + \" must return boolean result\", 123);  \n                    validation.Errors.Add(error);  \n                }  \n            }  \n        }  \n    }  \n}  \n```"
+  syntax:
+    content: public interface IRuleExpression
+  implements: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage(System.Workflow.Activities.Rules.RuleAnalysis,System.Boolean,System.Boolean,System.Workflow.Activities.Rules.RulePathQualifier)
+  id: AnalyzeUsage(System.Workflow.Activities.Rules.RuleAnalysis,System.Boolean,System.Boolean,System.Workflow.Activities.Rules.RulePathQualifier)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+  nameWithType: IRuleExpression.AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "When overridden in a derived class, reports on how the object uses fields and properties in the context type."
+  syntax:
+    content: public void AnalyzeUsage (System.Workflow.Activities.Rules.RuleAnalysis analysis, bool isRead, bool isWritten, System.Workflow.Activities.Rules.RulePathQualifier qualifier);
+    parameters:
+    - id: analysis
+      type: System.Workflow.Activities.Rules.RuleAnalysis
+      description: "The  method to store fields and properties read by a condition or read by an action."
+    - id: isRead
+      type: System.Boolean
+      description: "\n     if the expression is being read from;  if the expression is not being read from."
+    - id: isWritten
+      type: System.Boolean
+      description: "\n     if the expression is being written to;  if the expression is not being written to."
+    - id: qualifier
+      type: System.Workflow.Activities.Rules.RulePathQualifier
+      description: "The path of a field or property."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Clone
+  id: Clone
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: Clone()
+  nameWithType: IRuleExpression.Clone()
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Clone()
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "When overridden in a derived class, creates a deep copy of the current <see cref=&quot;T:System.CodeDom.CodeExpression&quot;></see>."
+  syntax:
+    content: public System.CodeDom.CodeExpression Clone ();
+    parameters: []
+    return:
+      type: System.CodeDom.CodeExpression
+      description: "To be added."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.Clone*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Decompile(System.Text.StringBuilder,System.CodeDom.CodeExpression)
+  id: Decompile(System.Text.StringBuilder,System.CodeDom.CodeExpression)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: Decompile(StringBuilder,CodeExpression)
+  nameWithType: IRuleExpression.Decompile(StringBuilder,CodeExpression)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Decompile(StringBuilder,CodeExpression)
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "When overridden in a derived class, decompiles the custom expression into string form."
+  syntax:
+    content: public void Decompile (System.Text.StringBuilder stringBuilder, System.CodeDom.CodeExpression parentExpression);
+    parameters:
+    - id: stringBuilder
+      type: System.Text.StringBuilder
+      description: "A mutable string for the decompiled expression. This method should append the decompiled syntax for this subexpression."
+    - id: parentExpression
+      type: System.CodeDom.CodeExpression
+      description: "The parent code expression. This can be used to determine operator precedence, and whether this subexpression needs to be parenthesized."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.Decompile*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Evaluate(System.Workflow.Activities.Rules.RuleExecution)
+  id: Evaluate(System.Workflow.Activities.Rules.RuleExecution)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: Evaluate(RuleExecution)
+  nameWithType: IRuleExpression.Evaluate(RuleExecution)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Evaluate(RuleExecution)
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "When overridden in a derived class, evaluates the custom expression."
+  syntax:
+    content: public System.Workflow.Activities.Rules.RuleExpressionResult Evaluate (System.Workflow.Activities.Rules.RuleExecution execution);
+    parameters:
+    - id: execution
+      type: System.Workflow.Activities.Rules.RuleExecution
+      description: "The  to execute the expression."
+    return:
+      type: System.Workflow.Activities.Rules.RuleExpressionResult
+      description: "To be added."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.Evaluate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Match(System.CodeDom.CodeExpression)
+  id: Match(System.CodeDom.CodeExpression)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: Match(CodeExpression)
+  nameWithType: IRuleExpression.Match(CodeExpression)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Match(CodeExpression)
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "Compares the current expression to another expression to determine whether they are equal."
+  syntax:
+    content: public bool Match (System.CodeDom.CodeExpression expression);
+    parameters:
+    - id: expression
+      type: System.CodeDom.CodeExpression
+      description: "The expression to compare the current expression to."
+    return:
+      type: System.Boolean
+      description: "To be added."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.Match*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Validate(System.Workflow.Activities.Rules.RuleValidation,System.Boolean)
+  id: Validate(System.Workflow.Activities.Rules.RuleValidation,System.Boolean)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  langs:
+  - csharp
+  name: Validate(RuleValidation,Boolean)
+  nameWithType: IRuleExpression.Validate(RuleValidation,Boolean)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Validate(RuleValidation,Boolean)
+  type: Method
+  assemblies:
+  - System.Workflow.Activities
+  namespace: System.Workflow.Activities.Rules
+  summary: "When overridden in a derived class, verifies that the expression is configured correctly and has no errors."
+  syntax:
+    content: public System.Workflow.Activities.Rules.RuleExpressionInfo Validate (System.Workflow.Activities.Rules.RuleValidation validation, bool isWritten);
+    parameters:
+    - id: validation
+      type: System.Workflow.Activities.Rules.RuleValidation
+      description: "The  to manage the validation process."
+    - id: isWritten
+      type: System.Boolean
+      description: "\n     if the expression is being written to;  if the expression is not being written to."
+    return:
+      type: System.Workflow.Activities.Rules.RuleExpressionInfo
+      description: "To be added."
+  overload: System.Workflow.Activities.Rules.IRuleExpression.Validate*
+  exceptions: []
+  platform:
+  - net-11
+  - net-20
+  - netcore-10
+references:
+- uid: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage(System.Workflow.Activities.Rules.RuleAnalysis,System.Boolean,System.Boolean,System.Workflow.Activities.Rules.RulePathQualifier)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+  nameWithType: IRuleExpression.AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage(RuleAnalysis,Boolean,Boolean,RulePathQualifier)
+- uid: System.Workflow.Activities.Rules.RuleAnalysis
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RuleAnalysis
+  nameWithType: RuleAnalysis
+  fullName: System.Workflow.Activities.Rules.RuleAnalysis
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Workflow.Activities.Rules.RulePathQualifier
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RulePathQualifier
+  nameWithType: RulePathQualifier
+  fullName: System.Workflow.Activities.Rules.RulePathQualifier
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Clone
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Clone()
+  nameWithType: IRuleExpression.Clone()
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Clone()
+- uid: System.CodeDom.CodeExpression
+  parent: System.CodeDom
+  isExternal: false
+  name: CodeExpression
+  nameWithType: CodeExpression
+  fullName: System.CodeDom.CodeExpression
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Decompile(System.Text.StringBuilder,System.CodeDom.CodeExpression)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Decompile(StringBuilder,CodeExpression)
+  nameWithType: IRuleExpression.Decompile(StringBuilder,CodeExpression)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Decompile(StringBuilder,CodeExpression)
+- uid: System.Text.StringBuilder
+  parent: System.Text
+  isExternal: true
+  name: StringBuilder
+  nameWithType: StringBuilder
+  fullName: System.Text.StringBuilder
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Evaluate(System.Workflow.Activities.Rules.RuleExecution)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Evaluate(RuleExecution)
+  nameWithType: IRuleExpression.Evaluate(RuleExecution)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Evaluate(RuleExecution)
+- uid: System.Workflow.Activities.Rules.RuleExpressionResult
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RuleExpressionResult
+  nameWithType: RuleExpressionResult
+  fullName: System.Workflow.Activities.Rules.RuleExpressionResult
+- uid: System.Workflow.Activities.Rules.RuleExecution
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RuleExecution
+  nameWithType: RuleExecution
+  fullName: System.Workflow.Activities.Rules.RuleExecution
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Match(System.CodeDom.CodeExpression)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Match(CodeExpression)
+  nameWithType: IRuleExpression.Match(CodeExpression)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Match(CodeExpression)
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Validate(System.Workflow.Activities.Rules.RuleValidation,System.Boolean)
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Validate(RuleValidation,Boolean)
+  nameWithType: IRuleExpression.Validate(RuleValidation,Boolean)
+  fullName: System.Workflow.Activities.Rules.IRuleExpression.Validate(RuleValidation,Boolean)
+- uid: System.Workflow.Activities.Rules.RuleExpressionInfo
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RuleExpressionInfo
+  nameWithType: RuleExpressionInfo
+  fullName: System.Workflow.Activities.Rules.RuleExpressionInfo
+- uid: System.Workflow.Activities.Rules.RuleValidation
+  parent: System.Workflow.Activities.Rules
+  isExternal: false
+  name: RuleValidation
+  nameWithType: RuleValidation
+  fullName: System.Workflow.Activities.Rules.RuleValidation
+- uid: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: AnalyzeUsage
+  nameWithType: IRuleExpression.AnalyzeUsage
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Clone*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Clone
+  nameWithType: IRuleExpression.Clone
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Decompile*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Decompile
+  nameWithType: IRuleExpression.Decompile
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Evaluate*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Evaluate
+  nameWithType: IRuleExpression.Evaluate
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Match*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Match
+  nameWithType: IRuleExpression.Match
+- uid: System.Workflow.Activities.Rules.IRuleExpression.Validate*
+  parent: System.Workflow.Activities.Rules.IRuleExpression
+  isExternal: false
+  name: Validate
+  nameWithType: IRuleExpression.Validate
