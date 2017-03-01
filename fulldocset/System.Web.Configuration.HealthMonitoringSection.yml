@@ -21,7 +21,7 @@ items:
   summary: "Configures ASP.NET profiles that determine how health-monitoring events are sent to event providers. This class cannot be inherited."
   remarks: "This class corresponds to the `<healthMonitoring>` configuration file element.      > [!NOTE] >  Medium trust or higher is required to raise an event."
   example:
-  - "The following configuration file excerpt shows how to specify the HealthMonitoringSection class.  \n  \n```  \n<healthMonitoring  \n  enabled=\"true\"  \n  heartBeatInterval=\"0\">  \n  <bufferModes>  \n    <add name=\"Critical Notification\"  \n      maxBufferSize=\"100\"  \n      maxFlushSize=\"20\"  \n      urgentFlushThreshold=\"1\"  \n      regularFlushInterval=\"Infinite\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Notification\"  \n      maxBufferSize=\"300\"  \n      maxFlushSize=\"20\"  \n      urgentFlushThreshold=\"1\"  \n      regularFlushInterval=\"Infinite\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Analysis\"  \n      maxBufferSize=\"1000\"  \n      maxFlushSize=\"100\"  \n      urgentFlushThreshold=\"100\"  \n      regularFlushInterval=\"00:05:00\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Logging\"  \n      maxBufferSize=\"1000\"  \n      maxFlushSize=\"200\"  \n      urgentFlushThreshold=\"800\"  \n      regularFlushInterval=\"00:30:00\"  \n      urgentFlushInterval=\"00:05:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n  </bufferModes>  \n  <providers>  \n    <add name=\"CriticalMailEventProvider\"  \n      type=\"System.Web.Management.SimpleMailWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      from=\"sender address\"  \n      to=\"bob@contoso.com\"  \n      cc=\"stella@contoso.com\"  \n      bcc=\"joe@contoso.com\"  \n      priority=\"High\"  \n      bodyHeader=\"Warning!\"  \n      bodyFooter=\"Please investigate ASAP.\"  \n      subjectPrefix=\"Action required.\"  \n      buffer=\"true\"  \n      bufferMode=\"Critical Notification\"  \n      maxEventLength=\"4096\"  \n      maxSize=\"4096\"  \n      maxMessagesPerNotification=\"1\"  \n    />  \n    <add name=\"EventLogProvider\"  \n      type=\"System.Web.Management.EventLogWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      buffer=\"true\"  \n      bufferMode=\"Logging\"  \n    />  \n    <add name=\"SqlWebEventProvider\"  \n      type=\"System.Web.Management.SqlWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      connectionStringName=\"LocalSqlServer\"  \n      maxEventDetailsLength=\"1073741823\"  \n      buffer=\"true\"  \n      bufferMode=\"Analysis\"  \n    />  \n    <add name=\"WmiWebEventProvider\"  \n      type=\"System.Web.Management.WmiWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      buffer=\"true\"  \n      bufferMode=\"Notification\"  \n    />  \n  </providers>  \n  <eventMappings>  \n    <add name=\"All Events\"  \n      type=\"System.Web.Management.WebBaseEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"HeartBeats\"  \n      type=\"System.Web.Management.WebHeartbeatEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Application Lifetime Events\"  \n      type=\"System.Web.Management.WebApplicationLifetimeEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Request Processing Events\"  \n      type=\"System.Web.Management.WebRequestEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"All Errors\"  \n      type=\"System.Web.Management.WebBaseErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Infrastructure Errors\"  \n      type=\"System.Web.Management.WebErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Request Processing Errors\"  \n      type=\"System.Web.Management.WebRequestErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"All Audits\"  \n      type=\"System.Web.Management.WebAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Failure Audits\"  \n      type=\"System.Web.Management.WebFailureAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Success Audits\"  \n      type=\"System.Web.Management.WebSuccessAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n  </eventMappings>  \n  <profiles>  \n    <add name=\"Default\"  \n      minInstances=\"1\"  \n      maxLimit=\"Infinite\"  \n      minInterval=\"00:10:00\"  \n    />  \n    <add name=\"Critical\"  \n      minInstances=\"1\"  \n      maxLimit=\"1024\"  \n      minInterval=\"00:00:00\"  \n    />  \n  </profiles>  \n  <rules>  \n    <add name=\"All Errors Default\"  \n      eventName=\"All Errors\"  \n      provider=\"EventLogProvider\"  \n      profile=\"Default\"  \n      minInterval=\"00:01:00\"   \n    />  \n    <add name=\"All Audits Default\"  \n      eventName=\"All Audits\"  \n      provider=\"SqlWebEventProvider\"  \n      profile=\"Default\"  \n      minInterval=\"00:00:30\"   \n    />  \n    <add name=\"Failure Audits Default\"  \n      eventName=\"Failure Audits\"  \n      provider=\"WmiWebEventProvider\"  \n      profile=\"Critical\"  \n      minInterval=\"00:00:30\"   \n     />  \n     <add name=\"Request Processing Errors\"  \n       eventName=\"Request Processing Errors\"  \n       provider=\"CriticalMailEventProvider\"  \n       profile=\"Default\"  \n     />  \n     <add name=\"Infrastructure Notifications\"  \n      eventName=\"Infrastructure Errors\"  \n      provider=\"CriticalMailEventProvider\"  \n      profile=\"Critical\"  \n    />  \n  </rules>  \n</healthMonitoring>   \n```  \n  \n The following code example shows how to use the HealthMonitoringSection class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#1](~/add/codesnippet/CSharp/t-system.web.configurati_18_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#1](~/add/codesnippet/VisualBasic/t-system.web.configurati_18_1.vb)]"
+  - "The following configuration file excerpt shows how to specify the HealthMonitoringSection class.  \n  \n```  \n<healthMonitoring  \n  enabled=\"true\"  \n  heartBeatInterval=\"0\">  \n  <bufferModes>  \n    <add name=\"Critical Notification\"  \n      maxBufferSize=\"100\"  \n      maxFlushSize=\"20\"  \n      urgentFlushThreshold=\"1\"  \n      regularFlushInterval=\"Infinite\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Notification\"  \n      maxBufferSize=\"300\"  \n      maxFlushSize=\"20\"  \n      urgentFlushThreshold=\"1\"  \n      regularFlushInterval=\"Infinite\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Analysis\"  \n      maxBufferSize=\"1000\"  \n      maxFlushSize=\"100\"  \n      urgentFlushThreshold=\"100\"  \n      regularFlushInterval=\"00:05:00\"  \n      urgentFlushInterval=\"00:01:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n    <add name=\"Logging\"  \n      maxBufferSize=\"1000\"  \n      maxFlushSize=\"200\"  \n      urgentFlushThreshold=\"800\"  \n      regularFlushInterval=\"00:30:00\"  \n      urgentFlushInterval=\"00:05:00\"  \n      maxBufferThreads=\"1\"  \n    />  \n  </bufferModes>  \n  <providers>  \n    <add name=\"CriticalMailEventProvider\"  \n      type=\"System.Web.Management.SimpleMailWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      from=\"sender address\"  \n      to=\"bob@contoso.com\"  \n      cc=\"stella@contoso.com\"  \n      bcc=\"joe@contoso.com\"  \n      priority=\"High\"  \n      bodyHeader=\"Warning!\"  \n      bodyFooter=\"Please investigate ASAP.\"  \n      subjectPrefix=\"Action required.\"  \n      buffer=\"true\"  \n      bufferMode=\"Critical Notification\"  \n      maxEventLength=\"4096\"  \n      maxSize=\"4096\"  \n      maxMessagesPerNotification=\"1\"  \n    />  \n    <add name=\"EventLogProvider\"  \n      type=\"System.Web.Management.EventLogWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      buffer=\"true\"  \n      bufferMode=\"Logging\"  \n    />  \n    <add name=\"SqlWebEventProvider\"  \n      type=\"System.Web.Management.SqlWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      connectionStringName=\"LocalSqlServer\"  \n      maxEventDetailsLength=\"1073741823\"  \n      buffer=\"true\"  \n      bufferMode=\"Analysis\"  \n    />  \n    <add name=\"WmiWebEventProvider\"  \n      type=\"System.Web.Management.WmiWebEventProvider, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"  \n      buffer=\"true\"  \n      bufferMode=\"Notification\"  \n    />  \n  </providers>  \n  <eventMappings>  \n    <add name=\"All Events\"  \n      type=\"System.Web.Management.WebBaseEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"HeartBeats\"  \n      type=\"System.Web.Management.WebHeartbeatEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Application Lifetime Events\"  \n      type=\"System.Web.Management.WebApplicationLifetimeEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Request Processing Events\"  \n      type=\"System.Web.Management.WebRequestEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"All Errors\"  \n      type=\"System.Web.Management.WebBaseErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Infrastructure Errors\"  \n      type=\"System.Web.Management.WebErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Request Processing Errors\"  \n      type=\"System.Web.Management.WebRequestErrorEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"All Audits\"  \n      type=\"System.Web.Management.WebAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Failure Audits\"  \n      type=\"System.Web.Management.WebFailureAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n    <add name=\"Success Audits\"  \n      type=\"System.Web.Management.WebSuccessAuditEvent, System.Web, Version=%ASSEMBLY_VERSION%, Culture=neutral, PublicKeyToken=%MICROSOFT_PUBLICKEY%\"   \n    />  \n  </eventMappings>  \n  <profiles>  \n    <add name=\"Default\"  \n      minInstances=\"1\"  \n      maxLimit=\"Infinite\"  \n      minInterval=\"00:10:00\"  \n    />  \n    <add name=\"Critical\"  \n      minInstances=\"1\"  \n      maxLimit=\"1024\"  \n      minInterval=\"00:00:00\"  \n    />  \n  </profiles>  \n  <rules>  \n    <add name=\"All Errors Default\"  \n      eventName=\"All Errors\"  \n      provider=\"EventLogProvider\"  \n      profile=\"Default\"  \n      minInterval=\"00:01:00\"   \n    />  \n    <add name=\"All Audits Default\"  \n      eventName=\"All Audits\"  \n      provider=\"SqlWebEventProvider\"  \n      profile=\"Default\"  \n      minInterval=\"00:00:30\"   \n    />  \n    <add name=\"Failure Audits Default\"  \n      eventName=\"Failure Audits\"  \n      provider=\"WmiWebEventProvider\"  \n      profile=\"Critical\"  \n      minInterval=\"00:00:30\"   \n     />  \n     <add name=\"Request Processing Errors\"  \n       eventName=\"Request Processing Errors\"  \n       provider=\"CriticalMailEventProvider\"  \n       profile=\"Default\"  \n     />  \n     <add name=\"Infrastructure Notifications\"  \n      eventName=\"Infrastructure Errors\"  \n      provider=\"CriticalMailEventProvider\"  \n      profile=\"Critical\"  \n    />  \n  </rules>  \n</healthMonitoring>   \n```  \n  \n The following code example shows how to use the HealthMonitoringSection class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#1](~/add/codesnippet/csharp/t-system.web.configurati_18_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#1](~/add/codesnippet/visualbasic/t-system.web.configurati_18_1.vb)]"
   syntax:
     content: 'public sealed class HealthMonitoringSection : System.Configuration.ConfigurationSection'
   inheritance:
@@ -72,9 +72,7 @@ items:
   - System.Configuration.ConfigurationSection.ShouldSerializePropertyInTargetVersion(System.Configuration.ConfigurationProperty,System.String,System.Runtime.Versioning.FrameworkName,System.Configuration.ConfigurationElement)
   - System.Configuration.ConfigurationSection.ShouldSerializeSectionInTargetVersion(System.Runtime.Versioning.FrameworkName)
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.#ctor
   id: '#ctor'
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -87,7 +85,7 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.Configuration.HealthMonitoringSection&quot;></see> class using default settings."
+  summary: "Initializes a new instance of the <xref href=&quot;System.Web.Configuration.HealthMonitoringSection&quot;></xref> class using default settings."
   remarks: "This constructor is not intended to be used directly from your code.       The following table shows the default settings that are used for this constructor.      |Setting|Default value|   |-------------|-------------------|   |<xref:System.Web.Configuration.HealthMonitoringSection.Enabled%2A>|`true`|"
   syntax:
     content: public HealthMonitoringSection ();
@@ -95,9 +93,7 @@ items:
   overload: System.Web.Configuration.HealthMonitoringSection.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.BufferModes
   id: BufferModes
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -113,18 +109,16 @@ items:
   summary: "Gets a collection of objects that specify the settings for the buffer modes."
   remarks: "This is a collection of <xref:System.Web.Configuration.BufferModeSettings> objects that define the manner in which health-monitoring events can be buffered before they are raised.       This property defaults to an empty <xref:System.Web.Configuration.BufferModesCollection> collection."
   example:
-  - "The following code example shows how to use the BufferModes property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#4](~/add/codesnippet/CSharp/p-system.web.configurati_300_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#4](~/add/codesnippet/VisualBasic/p-system.web.configurati_300_1.vb)]"
+  - "The following code example shows how to use the BufferModes property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#4](~/add/codesnippet/csharp/p-system.web.configurati_300_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#4](~/add/codesnippet/visualbasic/p-system.web.configurati_300_1.vb)]"
   syntax:
     content: public System.Web.Configuration.BufferModesCollection BufferModes { get; }
     return:
       type: System.Web.Configuration.BufferModesCollection
-      description: "A <see cref=&quot;T:System.Web.Configuration.BufferModesCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.BufferModeSettings&quot;></see> objects."
+      description: "A <xref href=&quot;System.Web.Configuration.BufferModesCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.BufferModeSettings&quot;></xref> objects."
   overload: System.Web.Configuration.HealthMonitoringSection.BufferModes*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.Enabled
   id: Enabled
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -140,7 +134,7 @@ items:
   summary: "Gets or sets a value indicating whether health monitoring is enabled."
   remarks: ''
   example:
-  - "The following code example shows how to get the current value from the Enabled property and how to disable health monitoring by setting this property to a value of `false`. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#2](~/add/codesnippet/CSharp/p-system.web.configurati_81_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#2](~/add/codesnippet/VisualBasic/p-system.web.configurati_81_1.vb)]"
+  - "The following code example shows how to get the current value from the Enabled property and how to disable health monitoring by setting this property to a value of `false`. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#2](~/add/codesnippet/csharp/p-system.web.configurati_81_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#2](~/add/codesnippet/visualbasic/p-system.web.configurati_81_1.vb)]"
   syntax:
     content: public bool Enabled { get; set; }
     return:
@@ -149,9 +143,7 @@ items:
   overload: System.Web.Configuration.HealthMonitoringSection.Enabled*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.EventMappings
   id: EventMappings
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -164,21 +156,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Gets a <see cref=&quot;T:System.Web.Configuration.EventMappingSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.EventMappingSettings&quot;></see> objects."
+  summary: "Gets a <xref href=&quot;System.Web.Configuration.EventMappingSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.EventMappingSettings&quot;></xref> objects."
   remarks: ''
   example:
-  - "The following code example shows how to use the EventMappings property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#5](~/add/codesnippet/CSharp/p-system.web.configurati_86_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#5](~/add/codesnippet/VisualBasic/p-system.web.configurati_86_1.vb)]"
+  - "The following code example shows how to use the EventMappings property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#5](~/add/codesnippet/csharp/p-system.web.configurati_86_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#5](~/add/codesnippet/visualbasic/p-system.web.configurati_86_1.vb)]"
   syntax:
     content: public System.Web.Configuration.EventMappingSettingsCollection EventMappings { get; }
     return:
       type: System.Web.Configuration.EventMappingSettingsCollection
-      description: "A <see cref=&quot;T:System.Web.Configuration.EventMappingSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.EventMappingSettings&quot;></see> objects. The default is an empty <see cref=&quot;T:System.Web.Configuration.EventMappingSettingsCollection&quot;></see> collection."
+      description: "A <xref href=&quot;System.Web.Configuration.EventMappingSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.EventMappingSettings&quot;></xref> objects. The default is an empty <xref href=&quot;System.Web.Configuration.EventMappingSettingsCollection&quot;></xref> collection."
   overload: System.Web.Configuration.HealthMonitoringSection.EventMappings*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.HeartbeatInterval
   id: HeartbeatInterval
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -191,21 +181,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Gets or sets the interval used by the application domain when it raises the <see cref=&quot;T:System.Web.Management.WebHeartbeatEvent&quot;></see> event."
+  summary: "Gets or sets the interval used by the application domain when it raises the <xref href=&quot;System.Web.Management.WebHeartbeatEvent&quot;></xref> event."
   remarks: "If the <xref:System.TimeSpan> value is zero ticks, no <xref:System.Web.Management.WebHeartbeatEvent> event is raised."
   example:
-  - "The following code example shows how to use the HeartbeatInterval property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#3](~/add/codesnippet/CSharp/p-system.web.configurati_3_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#3](~/add/codesnippet/VisualBasic/p-system.web.configurati_3_1.vb)]"
+  - "The following code example shows how to use the HeartbeatInterval property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#3](~/add/codesnippet/csharp/p-system.web.configurati_3_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#3](~/add/codesnippet/visualbasic/p-system.web.configurati_3_1.vb)]"
   syntax:
     content: public TimeSpan HeartbeatInterval { get; set; }
     return:
       type: System.TimeSpan
-      description: "The interval used by the application domain when it raises the <see cref=&quot;T:System.Web.Management.WebHeartbeatEvent&quot;></see> event."
+      description: "The interval used by the application domain when it raises the <xref href=&quot;System.Web.Management.WebHeartbeatEvent&quot;></xref> event."
   overload: System.Web.Configuration.HealthMonitoringSection.HeartbeatInterval*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.Profiles
   id: Profiles
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -218,21 +206,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Gets a <see cref=&quot;T:System.Web.Configuration.ProfileSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.ProfileSettings&quot;></see> objects."
+  summary: "Gets a <xref href=&quot;System.Web.Configuration.ProfileSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.ProfileSettings&quot;></xref> objects."
   remarks: ''
   example:
-  - "The following code example shows how to use the Profiles property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#6](~/add/codesnippet/CSharp/p-system.web.configurati_390_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#6](~/add/codesnippet/VisualBasic/p-system.web.configurati_390_1.vb)]"
+  - "The following code example shows how to use the Profiles property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#6](~/add/codesnippet/csharp/p-system.web.configurati_390_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#6](~/add/codesnippet/visualbasic/p-system.web.configurati_390_1.vb)]"
   syntax:
     content: public System.Web.Configuration.ProfileSettingsCollection Profiles { get; }
     return:
       type: System.Web.Configuration.ProfileSettingsCollection
-      description: "A <see cref=&quot;T:System.Web.Configuration.ProfileSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.ProfileSettings&quot;></see> objects. The default is an empty <see cref=&quot;T:System.Web.Configuration.ProfileSettingsCollection&quot;></see> collection."
+      description: "A <xref href=&quot;System.Web.Configuration.ProfileSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.ProfileSettings&quot;></xref> objects. The default is an empty <xref href=&quot;System.Web.Configuration.ProfileSettingsCollection&quot;></xref> collection."
   overload: System.Web.Configuration.HealthMonitoringSection.Profiles*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.Properties
   id: Properties
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -253,9 +239,7 @@ items:
   overload: System.Web.Configuration.HealthMonitoringSection.Properties*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.Providers
   id: Providers
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -268,21 +252,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Gets a <see cref=&quot;T:System.Configuration.ProviderSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Configuration.ProviderSettings&quot;></see> objects."
+  summary: "Gets a <xref href=&quot;System.Configuration.ProviderSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Configuration.ProviderSettings&quot;></xref> objects."
   remarks: "The Providers property specifies which provider is used for which of the events defined in the <xref:System.Web.Configuration.HealthMonitoringSection.EventMappings%2A> property."
   example:
-  - "The following code example shows how to use the Providers property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#7](~/add/codesnippet/CSharp/p-system.web.configurati_234_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#7](~/add/codesnippet/VisualBasic/p-system.web.configurati_234_1.vb)]"
+  - "The following code example shows how to use the Providers property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#7](~/add/codesnippet/csharp/p-system.web.configurati_234_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#7](~/add/codesnippet/visualbasic/p-system.web.configurati_234_1.vb)]"
   syntax:
     content: public System.Configuration.ProviderSettingsCollection Providers { get; }
     return:
       type: System.Configuration.ProviderSettingsCollection
-      description: "A <see cref=&quot;T:System.Configuration.ProviderSettingsCollection&quot;></see> collection. The default is an empty <see cref=&quot;T:System.Configuration.ProviderSettingsCollection&quot;></see> collection."
+      description: "A <xref href=&quot;System.Configuration.ProviderSettingsCollection&quot;></xref> collection. The default is an empty <xref href=&quot;System.Configuration.ProviderSettingsCollection&quot;></xref> collection."
   overload: System.Web.Configuration.HealthMonitoringSection.Providers*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.Configuration.HealthMonitoringSection.Rules
   id: Rules
   parent: System.Web.Configuration.HealthMonitoringSection
@@ -295,21 +277,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Configuration
-  summary: "Gets a <see cref=&quot;T:System.Web.Configuration.RuleSettingsCollection&quot;></see> collection of <see cref=&quot;T:System.Web.Configuration.RuleSettings&quot;></see> objects."
+  summary: "Gets a <xref href=&quot;System.Web.Configuration.RuleSettingsCollection&quot;></xref> collection of <xref href=&quot;System.Web.Configuration.RuleSettings&quot;></xref> objects."
   remarks: "Each <xref:System.Web.Configuration.RuleSettings> object defines a connection between an event defined in the <xref:System.Web.Configuration.HealthMonitoringSection.EventMappings%2A> property and an event provider defined in the <xref:System.Web.Configuration.HealthMonitoringSection.Providers%2A> property."
   example:
-  - "The following code example shows how to use the Rules property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#8](~/add/codesnippet/CSharp/p-system.web.configurati_167_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#8](~/add/codesnippet/VisualBasic/p-system.web.configurati_167_1.vb)]"
+  - "The following code example shows how to use the Rules property. This code example is part of a larger example provided for the <xref:System.Web.Configuration.HealthMonitoringSection> class.  \n  \n [!code-cs[System.Web.Configuration.HealthMonitoringSection#8](~/add/codesnippet/csharp/p-system.web.configurati_167_1.cs)]\n [!code-vb[System.Web.Configuration.HealthMonitoringSection#8](~/add/codesnippet/visualbasic/p-system.web.configurati_167_1.vb)]"
   syntax:
     content: public System.Web.Configuration.RuleSettingsCollection Rules { get; }
     return:
       type: System.Web.Configuration.RuleSettingsCollection
-      description: "A <see cref=&quot;T:System.Web.Configuration.RuleSettingsCollection&quot;></see> collection. The default is an empty <see cref=&quot;T:System.Web.Configuration.RuleSettingsCollection&quot;></see> collection"
+      description: "A <xref href=&quot;System.Web.Configuration.RuleSettingsCollection&quot;></xref> collection. The default is an empty <xref href=&quot;System.Web.Configuration.RuleSettingsCollection&quot;></xref> collection"
   overload: System.Web.Configuration.HealthMonitoringSection.Rules*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Configuration.ConfigurationSection
   isExternal: false

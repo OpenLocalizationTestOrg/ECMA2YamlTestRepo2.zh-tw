@@ -29,7 +29,7 @@ items:
   summary: "Represents the Windows access control security for a registry key. This class cannot be inherited."
   remarks: "A RegistrySecurity object specifies access rights for a registry key, and also specifies how access attempts are audited. Access rights to the registry key are expressed as rules, with each access rule represented by a <xref:System.Security.AccessControl.RegistryAccessRule> object. Each auditing rule is represented by a <xref:System.Security.AccessControl.RegistryAuditRule> object.       This mirrors the underlying Windows security system, in which each securable object has at most one discretionary access control list (DACL) that controls access to the secured object, and at most one system access control list (SACL) that specifies which access attempts are audited. The DACL and SACL are ordered lists of access control entries (ACE) that specify access and auditing for users and groups. A <xref:System.Security.AccessControl.RegistryAccessRule> or <xref:System.Security.AccessControl.RegistryAuditRule> object might represent more than one ACE.      > [!NOTE] >  Windows access control security can only be applied to registry keys. It cannot be applied to individual key/value pairs stored in a key.       The RegistrySecurity, <xref:System.Security.AccessControl.RegistryAccessRule>, and <xref:System.Security.AccessControl.RegistryAuditRule> classes hide the implementation details of ACLs and ACEs. They allow you to ignore the seventeen different ACE types and the complexity of correctly maintaining inheritance and propagation of access rights. These objects are also designed to prevent the following common access control errors:      -   Creating a security descriptor with a null DACL. A null reference to a DACL allows any user to add access rules to an object, potentially creating a denial-of-service attack. A new RegistrySecurity object always starts with an empty DACL, which denies all access for all users.      -   Violating the canonical ordering of ACEs. If the ACE list in the DACL is not kept in the canonical order, users might inadvertently be given access to the secured object. For example, denied access rights must always appear before allowed access rights. RegistrySecurity objects maintain the correct order internally.      -   Manipulating security descriptor flags, which should be under resource manager control only.      -   Creating invalid combinations of ACE flags.      -   Manipulating inherited ACEs. Inheritance and propagation are handled by the resource manager, in response to changes you make to access and audit rules.      -   Inserting meaningless ACEs into ACLs.       The only capabilities not supported by the .NET security objects are dangerous activities that should be avoided by the majority of application developers, such as the following:      -   Low-level tasks that are normally performed by the resource manager.      -   Adding or removing access control entries in ways that do not maintain the canonical ordering.       To modify Windows access control security for a registry key, use the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method to get the RegistrySecurity object. Modify the security object by adding and removing rules, and then use the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method to reattach it.      > [!IMPORTANT] >  Changes you make to a RegistrySecurity object do not affect the access levels of the registry key until you call the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method to assign the altered security object to the registry key.       To copy access control security from one registry key to another, use the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method to get a RegistrySecurity object representing the access and audit rules for the first registry key, and then use the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method to assign those rules to the second registry key. You can also assign the rules to a second registry key with an <xref:Microsoft.Win32.RegistryKey.OpenSubKey%2A?displayProperty=fullName> or <xref:Microsoft.Win32.RegistryKey.CreateSubKey%2A?displayProperty=fullName> method that takes a RegistrySecurity object parameter.       Users with an investment in the security descriptor definition language (SDDL) can use the <xref:System.Security.AccessControl.ObjectSecurity.SetSecurityDescriptorSddlForm%2A> method to set access rules for a registry key, and the <xref:System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorSddlForm%2A> method to obtain a string that represents the access rules in SDDL format. This is not recommended for new development."
   example:
-  - "This section contains two code examples. The first example shows how compatible rules merge when added and removed, and the second shows how inheritance and propagation flags affect the addition and deletion of rules.  \n  \n Example 1  \n  \n The following code example shows how the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method removes rights from a compatible rule, and how the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method merges rights with compatible rules.  \n  \n The example creates a RegistrySecurity object and adds a rule that allows the current user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName> rights. The example then creates a rule that grants the user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName>, with the same inheritance and propagation rights as the first rule, and uses the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method to remove this new rule from the RegistrySecurity object. <xref:System.Security.AccessControl.RegistryRights> is a constituent of <xref:System.Security.AccessControl.RegistryRights>, so it is removed from the compatible rule. The rules in the RegistrySecurity object are displayed, showing the remaining constituents of <xref:System.Security.AccessControl.RegistryRights>.  \n  \n The example code then calls the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method to merge the <xref:System.Security.AccessControl.RegistryRights> right back into the rule in the RegistrySecurity object.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. The second example in this section attaches a security object, and so do the examples in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> and <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/VisualBasic/t-system.security.access_15_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/CSharp/t-system.security.access_15_1.cs)]  \n  \n Example 2  \n  \n The following code example demonstrates access rules with inheritance and propagation. The example creates a RegistrySecurity object, then creates and adds two rules that have the <xref:System.Security.AccessControl.InheritanceFlags> flag. The first rule has no propagation flags, while the second has <xref:System.Security.AccessControl.PropagationFlags> and <xref:System.Security.AccessControl.PropagationFlags>.  \n  \n The program displays the rules in the RegistrySecurity object, and then uses the RegistrySecurity object to create a subkey. The program creates a child subkey and a grandchild subkey, then displays the security for each subkey. Finally, the program deletes the test keys.  \n  \n [!code-vb[System.Security.AccessControl.RegistryAccessRule.ctor2#1](~/add/codesnippet/VisualBasic/t-system.security.access_15_2.vb)]\n [!code-cs[System.Security.AccessControl.RegistryAccessRule.ctor2#1](~/add/codesnippet/CSharp/t-system.security.access_15_2.cs)]"
+  - "This section contains two code examples. The first example shows how compatible rules merge when added and removed, and the second shows how inheritance and propagation flags affect the addition and deletion of rules.  \n  \n Example 1  \n  \n The following code example shows how the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method removes rights from a compatible rule, and how the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method merges rights with compatible rules.  \n  \n The example creates a RegistrySecurity object and adds a rule that allows the current user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName> rights. The example then creates a rule that grants the user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName>, with the same inheritance and propagation rights as the first rule, and uses the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method to remove this new rule from the RegistrySecurity object. <xref:System.Security.AccessControl.RegistryRights> is a constituent of <xref:System.Security.AccessControl.RegistryRights>, so it is removed from the compatible rule. The rules in the RegistrySecurity object are displayed, showing the remaining constituents of <xref:System.Security.AccessControl.RegistryRights>.  \n  \n The example code then calls the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method to merge the <xref:System.Security.AccessControl.RegistryRights> right back into the rule in the RegistrySecurity object.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. The second example in this section attaches a security object, and so do the examples in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> and <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/visualbasic/t-system.security.access_15_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/csharp/t-system.security.access_15_1.cs)]  \n  \n Example 2  \n  \n The following code example demonstrates access rules with inheritance and propagation. The example creates a RegistrySecurity object, then creates and adds two rules that have the <xref:System.Security.AccessControl.InheritanceFlags> flag. The first rule has no propagation flags, while the second has <xref:System.Security.AccessControl.PropagationFlags> and <xref:System.Security.AccessControl.PropagationFlags>.  \n  \n The program displays the rules in the RegistrySecurity object, and then uses the RegistrySecurity object to create a subkey. The program creates a child subkey and a grandchild subkey, then displays the security for each subkey. Finally, the program deletes the test keys.  \n  \n [!code-vb[System.Security.AccessControl.RegistryAccessRule.ctor2#1](~/add/codesnippet/visualbasic/t-system.security.access_15_2.vb)]\n [!code-cs[System.Security.AccessControl.RegistryAccessRule.ctor2#1](~/add/codesnippet/csharp/t-system.security.access_15_2.cs)]"
   syntax:
     content: 'public sealed class RegistrySecurity : System.Security.AccessControl.NativeObjectSecurity'
   inheritance:
@@ -91,9 +91,7 @@ items:
   - System.Security.AccessControl.ObjectSecurity.WriteLock
   - System.Security.AccessControl.ObjectSecurity.WriteUnlock
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.#ctor
   id: '#ctor'
   parent: System.Security.AccessControl.RegistrySecurity
@@ -106,7 +104,7 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.Security.AccessControl.RegistrySecurity&quot;></see> class with default values."
+  summary: "Initializes a new instance of the <xref href=&quot;System.Security.AccessControl.RegistrySecurity&quot;></xref> class with default values."
   remarks: "A new <xref:System.Security.AccessControl.RegistrySecurity> object always starts with an empty discretionary access list (DACL), which denies all access for all users."
   syntax:
     content: public RegistrySecurity ();
@@ -114,9 +112,7 @@ items:
   overload: System.Security.AccessControl.RegistrySecurity.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AccessRightType
   id: AccessRightType
   parent: System.Security.AccessControl.RegistrySecurity
@@ -129,19 +125,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Gets the enumeration type that the <see cref=&quot;T:System.Security.AccessControl.RegistrySecurity&quot;></see> class uses to represent access rights."
+  summary: "Gets the enumeration type that the <xref href=&quot;System.Security.AccessControl.RegistrySecurity&quot;></xref> class uses to represent access rights."
   remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AccessRightType%2A> property and return the type they use to represent access rights. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct enumeration type to use with each security object."
   syntax:
     content: public override Type AccessRightType { get; }
     return:
       type: System.Type
-      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.RegistryRights&quot;></see> enumeration."
+      description: "A <xref:System.Type> object representing the <xref href=&quot;System.Security.AccessControl.RegistryRights&quot;></xref> enumeration."
   overload: System.Security.AccessControl.RegistrySecurity.AccessRightType*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
   id: AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -161,40 +155,38 @@ items:
     parameters:
     - id: identityReference
       type: System.Security.Principal.IdentityReference
-      description: "An  that identifies the user or group the rule applies to."
+      description: "An <xref href=&quot;System.Security.Principal.IdentityReference&quot;></xref> that identifies the user or group the rule applies to."
     - id: accessMask
       type: System.Int32
-      description: "A bitwise combination of  values specifying the access rights to allow or deny, cast to an integer."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.RegistryRights&quot;></xref> values specifying the access rights to allow or deny, cast to an integer."
     - id: isInherited
       type: System.Boolean
       description: "A Boolean value specifying whether the rule is inherited."
     - id: inheritanceFlags
       type: System.Security.AccessControl.InheritanceFlags
-      description: "A bitwise combination of  values specifying how the rule is inherited by subkeys."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.InheritanceFlags&quot;></xref> values specifying how the rule is inherited by subkeys."
     - id: propagationFlags
       type: System.Security.AccessControl.PropagationFlags
-      description: "A bitwise combination of  values that modify the way the rule is inherited by subkeys. Meaningless if the value of `inheritanceFlags` is ."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.PropagationFlags&quot;></xref> values that modify the way the rule is inherited by subkeys. Meaningless if the value of `inheritanceFlags` is <xref href=&quot;System.Security.AccessControl.InheritanceFlags&quot;></xref>."
     - id: type
       type: System.Security.AccessControl.AccessControlType
-      description: "One of the  values specifying whether the rights are allowed or denied."
+      description: "One of the <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> values specifying whether the rights are allowed or denied."
     return:
       type: System.Security.AccessControl.AccessRule
-      description: "To be added."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> object representing the specified rights for the specified user."
   overload: System.Security.AccessControl.RegistrySecurity.AccessRuleFactory*
   exceptions:
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "\n    accessMask, inheritanceFlags, propagationFlags, or type specifies an invalid value."
+    description: "<code>accessMask</code>, <code>inheritanceFlags</code>, <code>propagationFlags</code>, or <code>type</code> specifies an invalid value."
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    identityReference is .  \n  \n -or-  \n  \n accessMask is zero."
+    description: "<code>identityReference</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       <code>accessMask</code> is zero."
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "\n    identityReference is neither of type , nor of a type such as  that can be converted to type ."
+    description: "<code>identityReference</code> is neither of type <xref href=&quot;System.Security.Principal.SecurityIdentifier&quot;></xref>, nor of a type such as <xref href=&quot;System.Security.Principal.NTAccount&quot;></xref> that can be converted to type <xref href=&quot;System.Security.Principal.SecurityIdentifier&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AccessRuleType
   id: AccessRuleType
   parent: System.Security.AccessControl.RegistrySecurity
@@ -207,19 +199,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Gets the type that the <see cref=&quot;T:System.Security.AccessControl.RegistrySecurity&quot;></see> class uses to represent access rules."
+  summary: "Gets the type that the <xref href=&quot;System.Security.AccessControl.RegistrySecurity&quot;></xref> class uses to represent access rules."
   remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AccessRuleType%2A> property and return the type they use to represent access rules. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct access rule type to use with each security object."
   syntax:
     content: public override Type AccessRuleType { get; }
     return:
       type: System.Type
-      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.RegistryAccessRule&quot;></see> class."
+      description: "A <xref:System.Type> object representing the <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> class."
   overload: System.Security.AccessControl.RegistrySecurity.AccessRuleType*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AddAccessRule(System.Security.AccessControl.RegistryAccessRule)
   id: AddAccessRule(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -235,7 +225,7 @@ items:
   summary: "Searches for a matching access control with which the new rule can be merged. If none are found, adds the new rule."
   remarks: "The AddAccessRule method searches for rules with the same user or group and the same <xref:System.Security.AccessControl.AccessControlType> as `rule`. If none are found, `rule` is added. If a matching rule is found, the rights in `rule` are merged with the existing rule.       Rules cannot be merged if they have different inheritance flags. For example, if a user is allowed read access with no inheritance flags, and AddAccessRule is used to add a rule giving the user write access with inheritance for subkeys (<xref:System.Security.AccessControl.InheritanceFlags?displayProperty=fullName>), the two rules cannot be merged.       Rules with different <xref:System.Security.AccessControl.AccessControlType> values are never merged.       Rules express rights in the most economical way. For example, if a user has <xref:System.Security.AccessControl.RegistryRights>, <xref:System.Security.AccessControl.RegistryRights> and <xref:System.Security.AccessControl.RegistryRights> rights, and you add a rule allowing <xref:System.Security.AccessControl.RegistryRights> rights, the user has all the constituent parts of <xref:System.Security.AccessControl.RegistryRights> rights. If you query the user&quot;s rights, you will see a rule containing <xref:System.Security.AccessControl.RegistryRights> rights. Similarly, if you remove <xref:System.Security.AccessControl.RegistryRights> rights, the other constituents of <xref:System.Security.AccessControl.RegistryRights> rights will reappear."
   example:
-  - "The following code example creates registry access rules and adds them to a <xref:System.Security.AccessControl.RegistrySecurity> object, showing how rules that allow and deny rights remain separate, while compatible rules of the same kind are merged.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. Examples that attach security objects can be found in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> and <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n A code example that demonstrates inheritance and propagation flags can be found in the <xref:System.Security.AccessControl.RegistryAccessRule> class.  \n  \n [!code-cs[System.Security.AccessControl.RegistrySecurity.AddAccessRule#1](~/add/codesnippet/CSharp/0595520c-e456-4072-a959-_1.cs)]\n [!code-vb[System.Security.AccessControl.RegistrySecurity.AddAccessRule#1](~/add/codesnippet/VisualBasic/0595520c-e456-4072-a959-_1.vb)]"
+  - "The following code example creates registry access rules and adds them to a <xref:System.Security.AccessControl.RegistrySecurity> object, showing how rules that allow and deny rights remain separate, while compatible rules of the same kind are merged.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. Examples that attach security objects can be found in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> and <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n A code example that demonstrates inheritance and propagation flags can be found in the <xref:System.Security.AccessControl.RegistryAccessRule> class.  \n  \n [!code-cs[System.Security.AccessControl.RegistrySecurity.AddAccessRule#1](~/add/codesnippet/csharp/0595520c-e456-4072-a959-_1.cs)]\n [!code-vb[System.Security.AccessControl.RegistrySecurity.AddAccessRule#1](~/add/codesnippet/visualbasic/0595520c-e456-4072-a959-_1.vb)]"
   syntax:
     content: public void AddAccessRule (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
@@ -246,11 +236,9 @@ items:
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AddAuditRule(System.Security.AccessControl.RegistryAuditRule)
   id: AddAuditRule(System.Security.AccessControl.RegistryAuditRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -274,9 +262,7 @@ items:
   overload: System.Security.AccessControl.RegistrySecurity.AddAuditRule*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
   id: AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -296,40 +282,38 @@ items:
     parameters:
     - id: identityReference
       type: System.Security.Principal.IdentityReference
-      description: "An  that identifies the user or group the rule applies to."
+      description: "An <xref href=&quot;System.Security.Principal.IdentityReference&quot;></xref> that identifies the user or group the rule applies to."
     - id: accessMask
       type: System.Int32
-      description: "A bitwise combination of  values specifying the access rights to audit, cast to an integer."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.RegistryRights&quot;></xref> values specifying the access rights to audit, cast to an integer."
     - id: isInherited
       type: System.Boolean
       description: "A Boolean value specifying whether the rule is inherited."
     - id: inheritanceFlags
       type: System.Security.AccessControl.InheritanceFlags
-      description: "A bitwise combination of  values specifying how the rule is inherited by subkeys."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.InheritanceFlags&quot;></xref> values specifying how the rule is inherited by subkeys."
     - id: propagationFlags
       type: System.Security.AccessControl.PropagationFlags
-      description: "A bitwise combination of  values that modify the way the rule is inherited by subkeys. Meaningless if the value of `inheritanceFlags` is ."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.PropagationFlags&quot;></xref> values that modify the way the rule is inherited by subkeys. Meaningless if the value of `inheritanceFlags` is <xref href=&quot;System.Security.AccessControl.InheritanceFlags&quot;></xref>."
     - id: flags
       type: System.Security.AccessControl.AuditFlags
-      description: "A bitwise combination of  values specifying whether to audit successful access, failed access, or both."
+      description: "A bitwise combination of <xref href=&quot;System.Security.AccessControl.AuditFlags&quot;></xref> values specifying whether to audit successful access, failed access, or both."
     return:
       type: System.Security.AccessControl.AuditRule
-      description: "To be added."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> object representing the specified audit rule for the specified user, with the specified flags. The return type of the method is the base class, <xref href=&quot;System.Security.AccessControl.AuditRule&quot;></xref>, but the return value can be cast safely to the derived class."
   overload: System.Security.AccessControl.RegistrySecurity.AuditRuleFactory*
   exceptions:
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "\n    accessMask, inheritanceFlags, propagationFlags, or flags specifies an invalid value."
+    description: "<code>accessMask</code>, <code>inheritanceFlags</code>, <code>propagationFlags</code>, or <code>flags</code> specifies an invalid value."
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    identityReference is .  \n  \n -or-  \n  \n accessMask is zero."
+    description: "<code>identityReference</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       <code>accessMask</code> is zero."
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "\n    identityReference is neither of type , nor of a type such as  that can be converted to type ."
+    description: "<code>identityReference</code> is neither of type <xref href=&quot;System.Security.Principal.SecurityIdentifier&quot;></xref>, nor of a type such as <xref href=&quot;System.Security.Principal.NTAccount&quot;></xref> that can be converted to type <xref href=&quot;System.Security.Principal.SecurityIdentifier&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.AuditRuleType
   id: AuditRuleType
   parent: System.Security.AccessControl.RegistrySecurity
@@ -342,19 +326,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Gets the type that the <see cref=&quot;T:System.Security.AccessControl.RegistrySecurity&quot;></see> class uses to represent audit rules."
+  summary: "Gets the type that the <xref href=&quot;System.Security.AccessControl.RegistrySecurity&quot;></xref> class uses to represent audit rules."
   remarks: "Classes that derive from the <xref:System.Security.AccessControl.ObjectSecurity> class override the <xref:System.Security.AccessControl.ObjectSecurity.AuditRuleType%2A> property and return the type they use to represent audit rights. When you work with arrays or collections that contain multiple types of security objects, use this property to determine the correct audit rule type to use with each security object."
   syntax:
     content: public override Type AuditRuleType { get; }
     return:
       type: System.Type
-      description: "A &lt;xref:System.Type&gt; object representing the <see cref=&quot;T:System.Security.AccessControl.RegistryAuditRule&quot;></see> class."
+      description: "A <xref:System.Type> object representing the <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> class."
   overload: System.Security.AccessControl.RegistrySecurity.AuditRuleType*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAccessRule(System.Security.AccessControl.RegistryAccessRule)
   id: RemoveAccessRule(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -367,28 +349,26 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Searches for an access control rule with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified access rule, and with compatible inheritance and propagation flags; if such a rule is found, the rights contained in the specified access rule are removed from it."
+  summary: "Searches for an access control rule with the same user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> (allow or deny) as the specified access rule, and with compatible inheritance and propagation flags; if such a rule is found, the rights contained in the specified access rule are removed from it."
   remarks: "The current <xref:System.Security.AccessControl.RegistrySecurity> is searched for a rule that has the same user and the same <xref:System.Security.AccessControl.AccessControlType> value as `rule`. If no such rule is found, no action is taken, and the method returns `false`. If matching rules are found, their inheritance and compatibility flags are checked for compatibility with the flags specified in `rule`. If no compatible rule is found, no action is taken, and the method returns `false`. If a rule with compatible flags is found, the rights specified in `rule` are removed from the compatible rule, and the method returns `true`. If `rule` specifies rights not contained in the compatible rule, no action is taken with respect to those rights. If all rights are removed from the compatible rule, the entire rule is removed from the current <xref:System.Security.AccessControl.RegistrySecurity> object."
   example:
-  - "The following code example shows how the RemoveAccessRule method removes rights from a compatible rule, and how the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method merges rights with compatible rules.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds a rule that allows the current user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName> rights. The example then creates a rule that grants the user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName>, with the same inheritance and propagation rights as the first rule, and uses the RemoveAccessRule method to remove this new rule from the <xref:System.Security.AccessControl.RegistrySecurity> object. <xref:System.Security.AccessControl.RegistryRights> is a constituent of <xref:System.Security.AccessControl.RegistryRights>, so it is removed from the compatible rule. The rules in the <xref:System.Security.AccessControl.RegistrySecurity> object are displayed, showing the remaining constituents of <xref:System.Security.AccessControl.RegistryRights>.  \n  \n The example code then calls the RemoveAccessRule method to merge the <xref:System.Security.AccessControl.RegistryRights> right back into the rule in the <xref:System.Security.AccessControl.RegistrySecurity> object.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. The second example in this section attaches a security object, and so do the examples in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName><xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/VisualBasic/797f5ef0-d4da-43dd-bbe9-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/CSharp/797f5ef0-d4da-43dd-bbe9-_1.cs)]"
+  - "The following code example shows how the RemoveAccessRule method removes rights from a compatible rule, and how the <xref:System.Security.AccessControl.RegistrySecurity.AddAccessRule%2A> method merges rights with compatible rules.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds a rule that allows the current user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName> rights. The example then creates a rule that grants the user <xref:System.Security.AccessControl.RegistryRights?displayProperty=fullName>, with the same inheritance and propagation rights as the first rule, and uses the RemoveAccessRule method to remove this new rule from the <xref:System.Security.AccessControl.RegistrySecurity> object. <xref:System.Security.AccessControl.RegistryRights> is a constituent of <xref:System.Security.AccessControl.RegistryRights>, so it is removed from the compatible rule. The rules in the <xref:System.Security.AccessControl.RegistrySecurity> object are displayed, showing the remaining constituents of <xref:System.Security.AccessControl.RegistryRights>.  \n  \n The example code then calls the RemoveAccessRule method to merge the <xref:System.Security.AccessControl.RegistryRights> right back into the rule in the <xref:System.Security.AccessControl.RegistrySecurity> object.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. The second example in this section attaches a security object, and so do the examples in <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName><xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName>.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/visualbasic/797f5ef0-d4da-43dd-bbe9-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRule#1](~/add/codesnippet/csharp/797f5ef0-d4da-43dd-bbe9-_1.cs)]"
   syntax:
     content: public bool RemoveAccessRule (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAccessRule
-      description: "A  that specifies the user and  to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> that specifies the user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
     return:
       type: System.Boolean
-      description: "To be added."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if a compatible rule is found; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAccessRule*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll(System.Security.AccessControl.RegistryAccessRule)
   id: RemoveAccessRuleAll(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -401,25 +381,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Searches for all access control rules with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified rule and, if found, removes them."
+  summary: "Searches for all access control rules with the same user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> (allow or deny) as the specified rule and, if found, removes them."
   remarks: "The current <xref:System.Security.AccessControl.RegistrySecurity> is searched for rules that have the same user and the same <xref:System.Security.AccessControl.AccessControlType> value as `rule`. Any rights, inheritance flags, or propagation flags specified by `rule` are ignored when performing this search. If no matching rules are found, no action is taken.       For example, if a user has multiple rules that allow various rights with different inheritance and propagation flags, you can remove all those rules by creating a <xref:System.Security.AccessControl.RegistryAccessRule> object that specifies the user and <xref:System.Security.AccessControl.AccessControlType?displayProperty=fullName>, with any arbitrary rights and flags, and passing that rule to the RemoveAccessRuleAll method."
   example:
-  - "The following code example shows that the RemoveAccessRuleAll method removes all rules that match user and <xref:System.Security.AccessControl.AccessControlType>, ignoring rights and flags.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user to take ownership, and passes that rule to the RemoveAccessRuleAll method to remove the two rules that allow access.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll#1](~/add/codesnippet/VisualBasic/2ba6e9de-1f41-4d05-af76-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll#1](~/add/codesnippet/CSharp/2ba6e9de-1f41-4d05-af76-_1.cs)]"
+  - "The following code example shows that the RemoveAccessRuleAll method removes all rules that match user and <xref:System.Security.AccessControl.AccessControlType>, ignoring rights and flags.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user to take ownership, and passes that rule to the RemoveAccessRuleAll method to remove the two rules that allow access.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll#1](~/add/codesnippet/visualbasic/2ba6e9de-1f41-4d05-af76-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll#1](~/add/codesnippet/csharp/2ba6e9de-1f41-4d05-af76-_1.cs)]"
   syntax:
     content: public void RemoveAccessRuleAll (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAccessRule
-      description: "A  that specifies the user and  to search for. Any rights, inheritance flags, or propagation flags specified by this rule are ignored."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> that specifies the user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> to search for. Any rights, inheritance flags, or propagation flags specified by this rule are ignored."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleAll*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific(System.Security.AccessControl.RegistryAccessRule)
   id: RemoveAccessRuleSpecific(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -435,22 +413,20 @@ items:
   summary: "Searches for an access control rule that exactly matches the specified rule and, if found, removes it."
   remarks: "The rule is removed only if it exactly matches `rule` in all details, including flags. Other rules with the same user and <xref:System.Security.AccessControl.AccessControlType> are not affected.      > [!IMPORTANT] >  A rule represents one or more underlying access control entries (ACE), and these entries are split or combined as necessary when you modify the access security rules for a user. Thus, a rule might no longer exist in the specific form it had when it was added, and in that case the RemoveAccessRuleSpecific method cannot remove it."
   example:
-  - "The following code example shows that the RemoveAccessRuleSpecific method removes a rule only if it matches exactly.  \n  \n The example creates two rules that allow different rights. The rules have compatible inheritance and propagation flags, so when the second rule is added it merges with the first. The example calls the RemoveAccessRuleSpecific method, specifying the first rule, but because the rules are merged there is no rule that matches. The example then calls the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method to the remove the second rule from the merged rule, and finally calls the RemoveAccessRuleSpecific method to remove the first rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/VisualBasic/9819c0cd-2b26-4472-a333-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/CSharp/9819c0cd-2b26-4472-a333-_1.cs)]"
+  - "The following code example shows that the RemoveAccessRuleSpecific method removes a rule only if it matches exactly.  \n  \n The example creates two rules that allow different rights. The rules have compatible inheritance and propagation flags, so when the second rule is added it merges with the first. The example calls the RemoveAccessRuleSpecific method, specifying the first rule, but because the rules are merged there is no rule that matches. The example then calls the <xref:System.Security.AccessControl.RegistrySecurity.RemoveAccessRule%2A> method to the remove the second rule from the merged rule, and finally calls the RemoveAccessRuleSpecific method to remove the first rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/visualbasic/9819c0cd-2b26-4472-a333-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific#1](~/add/codesnippet/csharp/9819c0cd-2b26-4472-a333-_1.cs)]"
   syntax:
     content: public void RemoveAccessRuleSpecific (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAccessRule
-      description: "The  to remove."
+      description: "The <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> to remove."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAccessRuleSpecific*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAuditRule(System.Security.AccessControl.RegistryAuditRule)
   id: RemoveAuditRule(System.Security.AccessControl.RegistryAuditRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -470,19 +446,17 @@ items:
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAuditRule
-      description: "A  that specifies the user to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> that specifies the user to search for, and a set of inheritance and propagation flags that a matching rule, if found, must be compatible with. Specifies the rights to remove from the compatible rule, if found."
     return:
       type: System.Boolean
-      description: "To be added."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if a compatible rule is found; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAuditRule*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAuditRuleAll(System.Security.AccessControl.RegistryAuditRule)
   id: RemoveAuditRuleAll(System.Security.AccessControl.RegistryAuditRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -502,16 +476,14 @@ items:
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAuditRule
-      description: "A  that specifies the user to search for. Any rights, inheritance flags, or propagation flags specified by this rule are ignored."
+      description: "A <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> that specifies the user to search for. Any rights, inheritance flags, or propagation flags specified by this rule are ignored."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAuditRuleAll*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.RemoveAuditRuleSpecific(System.Security.AccessControl.RegistryAuditRule)
   id: RemoveAuditRuleSpecific(System.Security.AccessControl.RegistryAuditRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -531,16 +503,14 @@ items:
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAuditRule
-      description: "The  to be removed."
+      description: "The <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> to be removed."
   overload: System.Security.AccessControl.RegistrySecurity.RemoveAuditRuleSpecific*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.ResetAccessRule(System.Security.AccessControl.RegistryAccessRule)
   id: ResetAccessRule(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -553,22 +523,20 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Removes all access control rules with the same user as the specified rule, regardless of <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see>, and then adds the specified rule."
+  summary: "Removes all access control rules with the same user as the specified rule, regardless of <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref>, and then adds the specified rule."
   remarks: "If there are no access rules whose user matches the specified rule, `rule` is added."
   example:
-  - "The following code example shows how the ResetAccessRule method replaces all rules for the matching user with the rule specified for the match.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user only to read the key, and uses the ResetAccessRule method to remove the all rules for the user and replace them with the new rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-cs[System.Security.AccessControl.RegistrySecurity.ResetAccessRule#1](~/add/codesnippet/CSharp/80c97a6c-33e0-43c8-8894-_1.cs)]\n [!code-vb[System.Security.AccessControl.RegistrySecurity.ResetAccessRule#1](~/add/codesnippet/VisualBasic/80c97a6c-33e0-43c8-8894-_1.vb)]"
+  - "The following code example shows how the ResetAccessRule method replaces all rules for the matching user with the rule specified for the match.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user only to read the key, and uses the ResetAccessRule method to remove the all rules for the user and replace them with the new rule.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-cs[System.Security.AccessControl.RegistrySecurity.ResetAccessRule#1](~/add/codesnippet/csharp/80c97a6c-33e0-43c8-8894-_1.cs)]\n [!code-vb[System.Security.AccessControl.RegistrySecurity.ResetAccessRule#1](~/add/codesnippet/visualbasic/80c97a6c-33e0-43c8-8894-_1.vb)]"
   syntax:
     content: public void ResetAccessRule (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAccessRule
-      description: "The  to add. The user specified by this rule determines the rules to remove before this rule is added."
+      description: "The <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> to add. The user specified by this rule determines the rules to remove before this rule is added."
   overload: System.Security.AccessControl.RegistrySecurity.ResetAccessRule*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.SetAccessRule(System.Security.AccessControl.RegistryAccessRule)
   id: SetAccessRule(System.Security.AccessControl.RegistryAccessRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -581,25 +549,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Removes all access control rules with the same user and <see cref=&quot;T:System.Security.AccessControl.AccessControlType&quot;></see> (allow or deny) as the specified rule, and then adds the specified rule."
+  summary: "Removes all access control rules with the same user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> (allow or deny) as the specified rule, and then adds the specified rule."
   remarks: "If the specified rule has <xref:System.Security.AccessControl.AccessControlType>, the effect of this method is to remove all <xref:System.Security.AccessControl.AccessControlType> rules for the specified user, replacing them with the specified rule. If the specified rule has <xref:System.Security.AccessControl.AccessControlType>, all <xref:System.Security.AccessControl.AccessControlType> rules for the specified user are replaced with the specified rule.       If there are no rules whose user and <xref:System.Security.AccessControl.AccessControlType> match the specified rule, `rule` is added."
   example:
-  - "The following code example shows that the SetAccessRule method removes all rules that match both the user and the <xref:System.Security.AccessControl.AccessControlType> of `rule`, ignoring rights and flags, and replaces them with `rule`.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user only to read the key, and uses the SetAccessRule method to remove the two rules that allow access and to replace them with the new rule. The rule that denies access is not affected.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.SetAccessRule#1](~/add/codesnippet/VisualBasic/908f14bb-fbc5-4e71-ac82-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.SetAccessRule#1](~/add/codesnippet/CSharp/908f14bb-fbc5-4e71-ac82-_1.cs)]"
+  - "The following code example shows that the SetAccessRule method removes all rules that match both the user and the <xref:System.Security.AccessControl.AccessControlType> of `rule`, ignoring rights and flags, and replaces them with `rule`.  \n  \n The example creates a <xref:System.Security.AccessControl.RegistrySecurity> object and adds rules that allow and deny various rights for the current user, with different inheritance and propagation flags. The example then creates a new rule that allows the current user only to read the key, and uses the SetAccessRule method to remove the two rules that allow access and to replace them with the new rule. The rule that denies access is not affected.  \n  \n> [!NOTE]\n>  This example does not attach the security object to a <xref:Microsoft.Win32.RegistryKey> object. See the <xref:Microsoft.Win32.RegistryKey.GetAccessControl%2A?displayProperty=fullName> method and the <xref:Microsoft.Win32.RegistryKey.SetAccessControl%2A?displayProperty=fullName> method.  \n  \n [!code-vb[System.Security.AccessControl.RegistrySecurity.SetAccessRule#1](~/add/codesnippet/visualbasic/908f14bb-fbc5-4e71-ac82-_1.vb)]\n [!code-cs[System.Security.AccessControl.RegistrySecurity.SetAccessRule#1](~/add/codesnippet/csharp/908f14bb-fbc5-4e71-ac82-_1.cs)]"
   syntax:
     content: public void SetAccessRule (System.Security.AccessControl.RegistryAccessRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAccessRule
-      description: "The  to add. The user and  of this rule determine the rules to remove before this rule is added."
+      description: "The <xref href=&quot;System.Security.AccessControl.RegistryAccessRule&quot;></xref> to add. The user and <xref href=&quot;System.Security.AccessControl.AccessControlType&quot;></xref> of this rule determine the rules to remove before this rule is added."
   overload: System.Security.AccessControl.RegistrySecurity.SetAccessRule*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Security.AccessControl.RegistrySecurity.SetAuditRule(System.Security.AccessControl.RegistryAuditRule)
   id: SetAuditRule(System.Security.AccessControl.RegistryAuditRule)
   parent: System.Security.AccessControl.RegistrySecurity
@@ -612,27 +578,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: "Removes all audit rules with the same user as the specified rule, regardless of the <see cref=&quot;T:System.Security.AccessControl.AuditFlags&quot;></see> value, and then adds the specified rule."
+  summary: "Removes all audit rules with the same user as the specified rule, regardless of the <xref href=&quot;System.Security.AccessControl.AuditFlags&quot;></xref> value, and then adds the specified rule."
   remarks: "If there are no audit rules whose user matches the specified rule, `rule` is added."
   syntax:
     content: public void SetAuditRule (System.Security.AccessControl.RegistryAuditRule rule);
     parameters:
     - id: rule
       type: System.Security.AccessControl.RegistryAuditRule
-      description: "The  to add. The user specified by this rule determines the rules to remove before this rule is added."
+      description: "The <xref href=&quot;System.Security.AccessControl.RegistryAuditRule&quot;></xref> to add. The user specified by this rule determines the rules to remove before this rule is added."
   overload: System.Security.AccessControl.RegistrySecurity.SetAuditRule*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    rule is ."
+    description: "<code>rule</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Security.AccessControl.NativeObjectSecurity
   isExternal: false
   name: System.Security.AccessControl.NativeObjectSecurity
+- uid: System.ArgumentOutOfRangeException
+  isExternal: true
+  name: System.ArgumentOutOfRangeException
+- uid: System.ArgumentNullException
+  isExternal: true
+  name: System.ArgumentNullException
+- uid: System.ArgumentException
+  isExternal: true
+  name: System.ArgumentException
 - uid: System.Security.AccessControl.RegistrySecurity.#ctor
   parent: System.Security.AccessControl.RegistrySecurity
   isExternal: false

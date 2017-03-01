@@ -10,7 +10,7 @@ items:
   nameWithType: LoadGrammarCompletedEventArgs
   fullName: System.Speech.Recognition.LoadGrammarCompletedEventArgs
   type: Class
-  summary: "Provides data for the <xref uid=&quot;langword_csharp_LoadGrammarCompleted&quot; name=&quot;LoadGrammarCompleted&quot; href=&quot;&quot;></xref> event of a <see cref=&quot;T:System.Speech.Recognition.SpeechRecognizer&quot;></see> or <see cref=&quot;T:System.Speech.Recognition.SpeechRecognitionEngine&quot;></see> object."
+  summary: "Provides data for the <xref uid=&quot;langword_csharp_LoadGrammarCompleted&quot; name=&quot;LoadGrammarCompleted&quot; href=&quot;&quot;></xref> event of a <xref href=&quot;System.Speech.Recognition.SpeechRecognizer&quot;></xref> or <xref href=&quot;System.Speech.Recognition.SpeechRecognitionEngine&quot;></xref> object."
   remarks: "An instance of `LoadGrammarCompletedEventArgs` is created when the <xref:System.Speech.Recognition.SpeechRecognitionEngine> object raises its <xref:System.Speech.Recognition.SpeechRecognitionEngine.LoadGrammarCompleted?displayProperty=fullName> or the <xref:System.Speech.Recognition.SpeechRecognizer> object raises its <xref:System.Speech.Recognition.SpeechRecognizer.LoadGrammarCompleted> event. The events are raised when calls to the `LoadGrammarAsync` methods complete.       To obtain information about the <xref:System.Speech.Recognition.Grammar> object that was loaded, access the <xref:System.Speech.Recognition.LoadGrammarCompletedEventArgs.Grammar%2A> property in the handler for the event.       If the recognizer encounters an exception during the operation, the <xref:System.ComponentModel.AsyncCompletedEventArgs.Error%2A> property is set to the exception and the <xref:System.Speech.Recognition.Grammar.Loaded%2A> property of the associated <xref:System.Speech.Recognition.Grammar> may be `false`."
   example:
   - "The following example creates a shared speech recognizer, and then creates two types of grammars for recognizing specific words and for accepting free dictation. The example asynchronously loads all the created grammars to the recognizer.  Handlers for the recognizer's <xref:System.Speech.Recognition.SpeechRecognizer.LoadGrammarCompleted> and <xref:System.Speech.Recognition.SpeechRecognizer.SpeechRecognized> events report the results of recognition and which grammar was used to perform the recognition.  \n  \n```c#  \nusing System;  \nusing System.Speech.Recognition;  \n  \nnamespace SampleRecognition  \n{  \n  class Program  \n  {  \n    private static SpeechRecognizer recognizer;  \n    public static void Main(string[] args)  \n    {  \n  \n      // Initialize a shared speech recognition engine.  \n      recognizer = new SpeechRecognizer();  \n  \n        // Add a handler for the LoadGrammarCompleted event.  \n        recognizer.LoadGrammarCompleted +=  \n          new EventHandler<LoadGrammarCompletedEventArgs>(recognizer_LoadGrammarCompleted);  \n  \n        // Add a handler for the SpeechRecognized event.  \n        recognizer.SpeechRecognized +=  \n          new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);  \n  \n        // Add a handler for the StateChanged event.  \n        recognizer.StateChanged +=  \n          new EventHandler<StateChangedEventArgs>(recognizer_StateChanged);  \n  \n        // Create the \"yesno\" grammar and build it into a Grammar object.  \n        Choices yesChoices = new Choices(new string[] { \"yes\", \"yup\", \"yah}\" });  \n        SemanticResultValue yesValue =  \n            new SemanticResultValue(yesChoices, (bool)true);  \n        Choices noChoices = new Choices(new string[] { \"no\", \"nope\", \"nah\" });  \n        SemanticResultValue noValue =  \n            new SemanticResultValue(noChoices, (bool)false);  \n        SemanticResultKey yesNoKey =  \n            new SemanticResultKey(\"yesno\", new Choices(new GrammarBuilder[] { yesValue, noValue }));  \n        Grammar yesnoGrammar = new Grammar(yesNoKey);  \n        yesnoGrammar.Name = \"yesNo\";  \n  \n        // Create the \"done\" grammar within the constructor of a Grammar object.  \n        Grammar doneGrammar =  \n        new Grammar(new GrammarBuilder(new Choices(new string[] { \"done\", \"exit\", \"quit\", \"stop\" })));  \n        doneGrammar.Name = \"Done\";  \n  \n        // Create a dictation grammar.  \n        Grammar dictation = new DictationGrammar();  \n        dictation.Name = \"Dictation\";  \n  \n        // Load grammars to the recognizer.  \n        recognizer.LoadGrammarAsync(yesnoGrammar);  \n        recognizer.LoadGrammarAsync(doneGrammar);  \n        recognizer.LoadGrammarAsync(dictation);  \n  \n        // Keep the console window open.  \n        Console.ReadLine();  \n      }  \n  \n    // Handle the SpeechRecognized event.  \n    static void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)  \n    {  \n      Console.WriteLine(\"Grammar({0}): {1}\", e.Result.Grammar.Name, e.Result.Text);  \n  \n      // Add event handler code here.  \n    }  \n  \n    // Handle the LoadGrammarCompleted event.   \n    static void recognizer_LoadGrammarCompleted(object sender, LoadGrammarCompletedEventArgs e)  \n    {  \n      string grammarName = e.Grammar.Name;  \n      bool grammarLoaded = e.Grammar.Loaded;  \n  \n      if (e.Error != null)  \n      {  \n  \n        Console.WriteLine(\"LoadGrammar for {0} failed with a {1}.\",  \n        grammarName, e.Error.GetType().Name);  \n  \n        // Add exception handling code here.  \n      }  \n  \n      Console.WriteLine(\"Grammar {0} {1} loaded.\",  \n      grammarName, (grammarLoaded) ? \"is\" : \"is not\");  \n    }  \n  \n    // Put the shared speech recognizer into \"listening\" mode.   \n    static void recognizer_StateChanged(object sender, StateChangedEventArgs e)  \n    {  \n      if (e.RecognizerState != RecognizerState.Stopped)  \n      {  \n        recognizer.EmulateRecognizeAsync(\"Start listening\");  \n      }  \n    }  \n  }  \n}  \n  \n```"
@@ -21,9 +21,7 @@ items:
   implements: []
   inheritedMembers: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.LoadGrammarCompletedEventArgs.Grammar
   id: Grammar
   parent: System.Speech.Recognition.LoadGrammarCompletedEventArgs
@@ -36,19 +34,17 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Recognition
-  summary: "The <see cref=&quot;T:System.Speech.Recognition.Grammar&quot;></see> object that has completed loading."
+  summary: "The <xref href=&quot;System.Speech.Recognition.Grammar&quot;></xref> object that has completed loading."
   remarks: "If the recognizer encounters an exception during the operation, the <xref:System.ComponentModel.AsyncCompletedEventArgs.Error%2A> property is set to the exception and the <xref:System.Speech.Recognition.Grammar.Loaded%2A> property of the associated <xref:System.Speech.Recognition.Grammar> may be `false`."
   syntax:
     content: public System.Speech.Recognition.Grammar Grammar { get; }
     return:
       type: System.Speech.Recognition.Grammar
-      description: "The <see cref=&quot;T:System.Speech.Recognition.Grammar&quot;></see> that was loaded by the recognizer."
+      description: "The <xref href=&quot;System.Speech.Recognition.Grammar&quot;></xref> that was loaded by the recognizer."
   overload: System.Speech.Recognition.LoadGrammarCompletedEventArgs.Grammar*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.ComponentModel.AsyncCompletedEventArgs
   isExternal: false

@@ -32,9 +32,7 @@ items:
   implements: []
   inheritedMembers: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Confidence
   id: Confidence
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -47,7 +45,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Recognition
-  summary: "Gets a value, assigned by the recognizer, that represents the likelihood that a <see cref=&quot;T:System.Speech.Recognition.RecognizedPhrase&quot;></see> matches a given input."
+  summary: "Gets a value, assigned by the recognizer, that represents the likelihood that a <xref href=&quot;System.Speech.Recognition.RecognizedPhrase&quot;></xref> matches a given input."
   remarks: "Confidence scores do not indicate the absolute likelihood that a phrase was recognized correctly. Instead, confidence scores provide a mechanism for comparing the relative accuracy of multiple recognition alternates for a given input. This facilitates returning the most accurate recognition result. For example, if a recognized phrase has a confidence score of 0.8, this does not mean that the phrase has an 80% chance of being the correct match for the input.  It means that the phrase is more likely to be the correct match for the input than other results that have confidence scores less than 0.8.       A confidence score on its own is not meaningful unless you have alternative results to compare against, either from the same recognition operation or from previous recognitions of the same input. The values are used to rank alternative candidate phrases returned by the <xref:System.Speech.Recognition.RecognitionResult.Alternates%2A> property on <xref:System.Speech.Recognition.RecognitionResult> objects.       Confidence values are relative and unique to each recognition engine. Confidence values returned by two different recognition engines cannot be meaningfully compared.       A speech recognition engine may assign a low confidence score to spoken input for various reasons, including background interference, inarticulate speech, or unanticipated words or word sequences. If your application is using a <xref:System.Speech.Recognition.SpeechRecognitionEngine> instance, you can modify the confidence level at which speech input is accepted or rejected with one of the <xref:System.Speech.Recognition.SpeechRecognitionEngine.UpdateRecognizerSetting%2A> methods. Confidence thresholds for the shared recognizer, managed by <xref:System.Speech.Recognition.SpeechRecognizer>, are associated with a user profile and stored in the Windows registry. Applications should not write changes to the registry for the properties of the shared recognizer.       The <xref:System.Speech.Recognition.RecognitionResult.Alternates%2A> property of the <xref:System.Speech.Recognition.RecognitionResult> object contains an ordered collection of <xref:System.Speech.Recognition.RecognizedPhrase> objects, each of which is a possible match for the input to the recognizer. The alternates are ordered from highest to lowest confidence."
   example:
   - "The following example shows a handler for a <xref:System.Speech.Recognition.SpeechRecognitionEngine.SpeechRecognized?displayProperty=fullName>, <xref:System.Speech.Recognition.SpeechRecognizer.SpeechRecognized?displayProperty=fullName>, or <xref:System.Speech.Recognition.Grammar.SpeechRecognized?displayProperty=fullName> event. The example shows information associated with the <xref:System.Speech.Recognition.RecognitionResult> object, some of which is derived from <xref:System.Speech.Recognition.RecognizedPhrase>. The handler displays confidence scores for a recognized phrase as well as for recognition alternates.  \n  \n```c#  \nvoid SpeechRecognizedHandler(object sender, SpeechRecognizedEventArgs e)  \n{  \n  if (e.Result == null) return;  \n  \n  // Add event handler code here.  \n  \n  // The following code illustrates some of the information available  \n  // in the recognition result.  \n  Console.WriteLine(\"Recognition result summary:\");  \n  Console.WriteLine(  \n    \"  Recognized phrase: {0}\\n\" +   \n    \"  Confidence score {1}\\n\" +   \n    \"  Grammar used: {2}\\n\",   \n    e.Result.Text, e.Result.Confidence, e.Result.Grammar.Name);  \n  \n  // Display the semantic values in the recognition result.  \n  Console.WriteLine(\"  Semantic results:\");  \n  foreach (KeyValuePair<String, SemanticValue> child in e.Result.Semantics)  \n  {  \n    Console.WriteLine(\"    The {0} city is {1}\",  \n      child.Key, child.Value.Value ?? \"null\");  \n  }  \n  Console.WriteLine();  \n  \n  // Display information about the words in the recognition result.  \n  Console.WriteLine(\"  Word summary: \");  \n  foreach (RecognizedWordUnit word in e.Result.Words)  \n  {  \n    Console.WriteLine(  \n      \"    Lexical form ({1})\" +  \n      \" Pronunciation ({0})\" +  \n      \" Display form ({2})\",  \n      word.Pronunciation, word.LexicalForm, word.DisplayAttributes);  \n  }  \n  \n  // Display information about the audio in the recognition result.  \n  Console.WriteLine(\"  Input audio summary:\\n\" +  \n    \"    Candidate Phrase at:       {0} mSec\\n\" +  \n    \"    Phrase Length:             {1} mSec\\n\" +  \n    \"    Input State Time:          {2}\\n\" +  \n    \"    Input Format:              {3}\\n\",  \n    e.Result.Audio.AudioPosition,  \n    e.Result.Audio.Duration,  \n    e.Result.Audio.StartTime,  \n    e.Result.Audio.Format.EncodingFormat);  \n  \n  // Display information about the alternate recognitions in the recognition result.  \n  Console.WriteLine(\"  Alternate phrase collection:\");  \n  foreach (RecognizedPhrase phrase in e.Result.Alternates)  \n  {  \n    Console.WriteLine(\"    Phrase: \" + phrase.Text);  \n    Console.WriteLine(\"    Confidence score: \" + phrase.Confidence);  \n  }  \n}  \n  \n```"
@@ -59,9 +57,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.Confidence*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.ConstructSmlFromSemantics
   id: ConstructSmlFromSemantics
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -74,7 +70,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Recognition
-  summary: "Returns a semantic markup language (SML) document for the semantic information in the <see cref=&quot;T:System.Speech.Recognition.RecognizedPhrase&quot;></see> object."
+  summary: "Returns a semantic markup language (SML) document for the semantic information in the <xref href=&quot;System.Speech.Recognition.RecognizedPhrase&quot;></xref> object."
   remarks: "For information about the semantic markup language (SML), see the [Semantic Markup Language Reference](http://msdn.microsoft.com/en-us/f9d83443-2cac-49bc-a447-210feda62f5d)."
   example:
   - "In the following example, a method returns a string that contains the SML for the semantics of a recognized phrase.  \n  \n```  \nprivate string GetSemanticsSML(RecognizedPhrase result)  \n{  \n  if (result.Semantics.Count > 0)  \n  {  \n    return result.ConstructSmlFromSemantics().CreateNavigator().OuterXml;  \n  }  \n  else  \n  {  \n    return null;  \n  }  \n}  \n```"
@@ -83,13 +79,11 @@ items:
     parameters: []
     return:
       type: System.Xml.XPath.IXPathNavigable
-      description: "To be added."
+      description: "Returns an SML description of the semantics of the <xref href=&quot;System.Speech.Recognition.RecognizedPhrase&quot;></xref> as an [XPath](http://msdn.microsoft.com/library/ms256115.aspx) navigable object."
   overload: System.Speech.Recognition.RecognizedPhrase.ConstructSmlFromSemantics*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Grammar
   id: Grammar
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -102,7 +96,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Recognition
-  summary: "Gets the <see cref=&quot;T:System.Speech.Recognition.Grammar&quot;></see> that the speech recognizer used to return the <see cref=&quot;T:System.Speech.Recognition.RecognizedPhrase&quot;></see>."
+  summary: "Gets the <xref href=&quot;System.Speech.Recognition.Grammar&quot;></xref> that the speech recognizer used to return the <xref href=&quot;System.Speech.Recognition.RecognizedPhrase&quot;></xref>."
   syntax:
     content: public System.Speech.Recognition.Grammar Grammar { get; }
     return:
@@ -111,9 +105,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.Grammar*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId
   id: HomophoneGroupId
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -136,9 +128,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Homophones
   id: Homophones
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -161,9 +151,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.Homophones*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits
   id: ReplacementWordUnits
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -182,13 +170,11 @@ items:
     content: public System.Collections.ObjectModel.Collection<System.Speech.Recognition.ReplacementText> ReplacementWordUnits { get; }
     return:
       type: System.Collections.ObjectModel.Collection{System.Speech.Recognition.ReplacementText}
-      description: "A collection of <see cref=&quot;T:System.Speech.Recognition.ReplacementText&quot;></see> objects that describe sections of text that the speech recognizer replaced when it normalized the recognized input."
+      description: "A collection of <xref href=&quot;System.Speech.Recognition.ReplacementText&quot;></xref> objects that describe sections of text that the speech recognizer replaced when it normalized the recognized input."
   overload: System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Semantics
   id: Semantics
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -213,9 +199,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.Semantics*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Text
   id: Text
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -238,9 +222,7 @@ items:
   overload: System.Speech.Recognition.RecognizedPhrase.Text*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.RecognizedPhrase.Words
   id: Words
   parent: System.Speech.Recognition.RecognizedPhrase
@@ -259,13 +241,11 @@ items:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Speech.Recognition.RecognizedWordUnit> Words { get; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Speech.Recognition.RecognizedWordUnit}
-      description: "The collection of <see cref=&quot;T:System.Speech.Recognition.RecognizedWordUnit&quot;></see> objects generated by a speech recognizer for recognized input."
+      description: "The collection of <xref href=&quot;System.Speech.Recognition.RecognizedWordUnit&quot;></xref> objects generated by a speech recognizer for recognized input."
   overload: System.Speech.Recognition.RecognizedPhrase.Words*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Object
   isExternal: false

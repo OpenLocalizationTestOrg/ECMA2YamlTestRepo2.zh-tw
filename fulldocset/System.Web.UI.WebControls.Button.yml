@@ -29,9 +29,9 @@ items:
   fullName: System.Web.UI.WebControls.Button
   type: Class
   summary: "Displays a push button control on the Web page."
-  remarks: "In this topic:      -   [Introduction](#Introduction)      -   [Button Postback Behavior and Server Events](#ButtonPostbackBehaviorandServerEvents)      -   [Handling Button Events in Client Script](#HandlingButtonEventsinClientScript)      -   [Button Controls and Validation](#ButtonControlsAndValidation)      -   [Buttons in Data Controls](#ButtonsInDataControls)      -   [Binding Data to the Controls](#BindingDataToTheControls)      -   [Using Buttons with UpdatePanel Controls](#UsingButtonsWithUpdatePanelControls)      -   [Declarative Syntax](#DeclarativeSyntax)      <a name=&quot;Introduction&quot;></a>    ## Introduction    Use the Button control to create a push button on the Web page that lets users to post a page to the server. The control triggers an event in server code that you can handle to respond to the postback. It can also raise an event in client script that you can handle before the page is posted or that can run and then cancel submission of the page.      > [!NOTE] >  ASP.NET includes several kinds of button controls, each of which appears differently on Web pages. They are the Button control, which renders as a push button; the <xref:System.Web.UI.WebControls.LinkButton> control, which renders as a link; and the <xref:System.Web.UI.WebControls.ImageButton> control, which renders as an image; and the <xref:System.Web.UI.WebControls.ImageMap> control, which lets you create a graphic that has hotspots that users can click. By default, all button controls submit the page when clicked. You can also use the <xref:System.Web.UI.HtmlControls.HtmlButton> and <xref:System.Web.UI.HtmlControls.HtmlInputButton> controls to create buttons on the page that are programmable in server code. For details about the differences between HTML and Web server controls, see [ASP.NET Web Server Controls Overview](../Topic/ASP.NET%20Web%20Server%20Controls%20Overview.md).       By default, a Button control is a Submit button. A Submit button does not have a command name (specified by the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property) associated with the button and simply posts the Web page back to the server. You can provide an event handler for the <xref:System.Web.UI.WebControls.Button.Click> event to programmatically control the actions performed when the Submit button is clicked.       A Command button has a command name associated with the button, such as `Sort`, by setting the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property. This allows you to create multiple Button controls on a Web page and programmatically determine which Button control is clicked. You can also use the <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property with a command button to provide additional information about the command to perform, such as `Ascending`. You can provide an event handler for the <xref:System.Web.UI.WebControls.Button.Command> event to programmatically control the actions performed when the Command button is clicked.      <a name=&quot;ButtonPostbackBehaviorandServerEvents&quot;></a>    ## Button Postback Behavior and Server Events    When a user clicks any Web server control button, the page is sent to the server. This causes the Web page to be processed and any pending events to be raised in server-based code. When all page and control processing has finished, the page renders itself to the browser again.       The buttons can raise their own <xref:System.Web.UI.WebControls.Button.Click> events or <xref:System.Web.UI.WebControls.Button.Command> event, which you can handle by using server-based code. This is different than events in traditional HTML pages or in client-based Web applications, where a button&quot;s `onclick` event is handled by using JavaScript that runs in the client. For more information, see [ASP.NET Web Forms Server Control Event Model](../Topic/ASP.NET%20Web%20Forms%20Server%20Control%20Event%20Model.md).       When users click a button control, the page is posted back to the server. By default, the page is posted back to itself,       You can configure buttons to post the current page to another page. This can be useful for creating multi-page forms. For details, see [Cross-Page Posting in ASP.NET Web Forms](../Topic/Cross-Page%20Posting%20in%20ASP.NET%20Web%20Forms.md).      <a name=&quot;HandlingButtonEventsinClientScript&quot;></a>    ## Handling Button Events in Client Script    Button controls can raise both server events and client events. Server events occur after postback, and they are handled in the server-side code that you write for the page. Client events are handled in client script, typically ECMAScript (JavaScript), and are raised before the page is submitted. By adding client-side events to ASP.NET button controls, you can perform tasks such as displaying confirmation dialog boxes before submitting the page, and potentially cancel the submission. For details, see [Client Script in ASP.NET Web Pages](../Topic/Client%20Script%20in%20ASP.NET%20Web%20Pages.md) and [How to: Respond to Button Web Server Control Events in Client Script](../Topic/How%20to:%20Respond%20to%20Button%20Web%20Server%20Control%20Events%20in%20Client%20Script.md).       You might also want the Button control to also use client script to perform the postback (instead of simply performing an HTTP POST operation). This can be useful if you want to programmatically manipulate the postback, such as attaching it to other elements on the page. You can set the Button control&quot;s <xref:System.Web.UI.WebControls.Button.UseSubmitBehavior%2A> property to `true` to cause the Button control to use client-script based postback.      <a name=&quot;ButtonControlsAndValidation&quot;></a>    ## Button Controls and Validation    If a page contains ASP.NET validator controls, by default, clicking a button control causes the validator control to perform its check. If client-side validation is enabled for a validator control, the page is not submitted if a validation check has failed.       The following table describes the properties supported by button controls that enable you to control the validation process more precisely.      |Property|Description|   |--------------|-----------------|   |<xref:System.Web.UI.WebControls.Button.CausesValidation%2A>|Specifies whether clicking the button also performs a validation check. Set this property to `false` to prevent a validation check.|   |<xref:System.Web.UI.WebControls.Button.ValidationGroup%2A>|Enables you to specify which validators on the page are called when the button is clicked. If no validation groups are established, a button click calls all of the validators that are on the page.|       For more information, see [Validating User Input in ASP.NET Web Pages](../Topic/Validating%20User%20Input%20in%20ASP.NET%20Web%20Pages.md).      <a name=&quot;ButtonsInDataControls&quot;></a>    ## Buttons in Data Controls    Button Web server controls are often used in data controls, such as in the <xref:System.Web.UI.WebControls.DataList>, <xref:System.Web.UI.WebControls.GridView>, and <xref:System.Web.UI.WebControls.Repeater> list controls. In those cases, you typically do not respond directly to the button click event. Instead, a button in a data control raises an event that is specific to the data control. For example, in the <xref:System.Web.UI.WebControls.DataList> control, a button might raise the <xref:System.Web.UI.WebControls.DataList> control&quot;s <xref:System.Web.UI.WebControls.DataList.ItemCommand> event instead of raising the Button control&quot;s <xref:System.Web.UI.WebControls.Button.Click> event.       Because data-bound list controls can contain many buttons, you can set the button&quot;s <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property to specify a value to pass as part of the event. You can then test for this argument to see which button was clicked.      <a name=&quot;BindingDataToTheControls&quot;></a>    ## Binding Data to the Controls    You can bind the button Web server controls to a data source in order to control their property settings dynamically. For example, you can set a button&quot;s <xref:System.Web.UI.WebControls.Button.Text%2A> property by using data binding.      <a name=&quot;UsingButtonsWithUpdatePanelControls&quot;></a>    ## Using Buttons with UpdatePanel Controls    Partial-page rendering makes it possible to refresh portions of a page without a postback. <xref:System.Web.UI.UpdatePanel> controls enable you to mark parts of the page that participate in partial-page rendering. By default, the behavior of controls inside an <xref:System.Web.UI.UpdatePanel> control, including Button controls, is to perform an asynchronous postback instead of a postback. This refreshes only the contents of the <xref:System.Web.UI.UpdatePanel> control from which the postback originates.       In addition to the scenario of a Button control that is inside an <xref:System.Web.UI.UpdatePanel> control, you can use Button controls with <xref:System.Web.UI.UpdatePanel> controls in the following scenarios:      -   Defining a Button control that is outside an <xref:System.Web.UI.UpdatePanel> control as an <xref:System.Web.UI.AsyncPostBackTrigger> control for that panel. When the button is clicked, it performs an asynchronous postback and refreshes the contents of the panel.      -   Defining a Button control that is inside an <xref:System.Web.UI.UpdatePanel> control as a <xref:System.Web.UI.PostBackTrigger> for the panel. When the button is clicked, it performs a postback even though it is inside an <xref:System.Web.UI.UpdatePanel> control.       For more information about partial-page rendering and using <xref:System.Web.UI.UpdatePanel> controls, see [UpdatePanel Control Overview](../Topic/UpdatePanel%20Control%20Overview.md) and [Partial-Page Rendering Overview](../Topic/Partial-Page%20Rendering%20Overview.md).      <a name=&quot;DeclarativeSyntax&quot;></a>    ## Declarative Syntax      ```   <asp:Button       AccessKey=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CausesValidation=&quot;True|False&quot;       CommandArgument=&quot;string&quot;       CommandName=&quot;string&quot;       CssClass=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       Font-Bold=&quot;True|False&quot;       Font-Italic=&quot;True|False&quot;       Font-Names=&quot;string&quot;       Font-Overline=&quot;True|False&quot;       Font-Size=&quot;string|Smaller|Larger|XX-Small|X-Small|Small|Medium|           Large|X-Large|XX-Large&quot;       Font-Strikeout=&quot;True|False&quot;       Font-Underline=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       OnClick=&quot;Click event handler&quot;       OnClientClick=&quot;string&quot;       OnCommand=&quot;Command event handler&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       PostBackUrl=&quot;uri&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       Text=&quot;string&quot;       ToolTip=&quot;string&quot;       UseSubmitBehavior=&quot;True|False&quot;       ValidationGroup=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   />   ```"
+  remarks: "In this topic:      -   [Introduction](#Introduction)      -   [Button Postback Behavior and Server Events](#ButtonPostbackBehaviorandServerEvents)      -   [Handling Button Events in Client Script](#HandlingButtonEventsinClientScript)      -   [Button Controls and Validation](#ButtonControlsAndValidation)      -   [Buttons in Data Controls](#ButtonsInDataControls)      -   [Binding Data to the Controls](#BindingDataToTheControls)      -   [Using Buttons with UpdatePanel Controls](#UsingButtonsWithUpdatePanelControls)      -   [Declarative Syntax](#DeclarativeSyntax)      <a name=&quot;Introduction&quot;></a>    ## Introduction    Use the Button control to create a push button on the Web page that lets users to post a page to the server. The control triggers an event in server code that you can handle to respond to the postback. It can also raise an event in client script that you can handle before the page is posted or that can run and then cancel submission of the page.      > [!NOTE] >  ASP.NET includes several kinds of button controls, each of which appears differently on Web pages. They are the Button control, which renders as a push button; the <xref:System.Web.UI.WebControls.LinkButton> control, which renders as a link; and the <xref:System.Web.UI.WebControls.ImageButton> control, which renders as an image; and the <xref:System.Web.UI.WebControls.ImageMap> control, which lets you create a graphic that has hotspots that users can click. By default, all button controls submit the page when clicked. You can also use the <xref:System.Web.UI.HtmlControls.HtmlButton> and <xref:System.Web.UI.HtmlControls.HtmlInputButton> controls to create buttons on the page that are programmable in server code. For details about the differences between HTML and Web server controls, see [ASP.NET Web Server Controls Overview](~/add/includes/ajax-current-ext-md.md).       By default, a Button control is a Submit button. A Submit button does not have a command name (specified by the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property) associated with the button and simply posts the Web page back to the server. You can provide an event handler for the <xref:System.Web.UI.WebControls.Button.Click> event to programmatically control the actions performed when the Submit button is clicked.       A Command button has a command name associated with the button, such as `Sort`, by setting the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property. This allows you to create multiple Button controls on a Web page and programmatically determine which Button control is clicked. You can also use the <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property with a command button to provide additional information about the command to perform, such as `Ascending`. You can provide an event handler for the <xref:System.Web.UI.WebControls.Button.Command> event to programmatically control the actions performed when the Command button is clicked.      <a name=&quot;ButtonPostbackBehaviorandServerEvents&quot;></a>    ## Button Postback Behavior and Server Events    When a user clicks any Web server control button, the page is sent to the server. This causes the Web page to be processed and any pending events to be raised in server-based code. When all page and control processing has finished, the page renders itself to the browser again.       The buttons can raise their own <xref:System.Web.UI.WebControls.Button.Click> events or <xref:System.Web.UI.WebControls.Button.Command> event, which you can handle by using server-based code. This is different than events in traditional HTML pages or in client-based Web applications, where a button&quot;s `onclick` event is handled by using JavaScript that runs in the client. For more information, see [ASP.NET Web Forms Server Control Event Model](~/add/includes/ajax-current-ext-md.md).       When users click a button control, the page is posted back to the server. By default, the page is posted back to itself,       You can configure buttons to post the current page to another page. This can be useful for creating multi-page forms. For details, see [Cross-Page Posting in ASP.NET Web Forms](~/add/includes/ajax-current-ext-md.md).      <a name=&quot;HandlingButtonEventsinClientScript&quot;></a>    ## Handling Button Events in Client Script    Button controls can raise both server events and client events. Server events occur after postback, and they are handled in the server-side code that you write for the page. Client events are handled in client script, typically ECMAScript (JavaScript), and are raised before the page is submitted. By adding client-side events to ASP.NET button controls, you can perform tasks such as displaying confirmation dialog boxes before submitting the page, and potentially cancel the submission. For details, see [Client Script in ASP.NET Web Pages](~/add/includes/ajax-current-ext-md.md) and [How to: Respond to Button Web Server Control Events in Client Script](~/add/includes/ajax-current-ext-md.md).       You might also want the Button control to also use client script to perform the postback (instead of simply performing an HTTP POST operation). This can be useful if you want to programmatically manipulate the postback, such as attaching it to other elements on the page. You can set the Button control&quot;s <xref:System.Web.UI.WebControls.Button.UseSubmitBehavior%2A> property to `true` to cause the Button control to use client-script based postback.      <a name=&quot;ButtonControlsAndValidation&quot;></a>    ## Button Controls and Validation    If a page contains ASP.NET validator controls, by default, clicking a button control causes the validator control to perform its check. If client-side validation is enabled for a validator control, the page is not submitted if a validation check has failed.       The following table describes the properties supported by button controls that enable you to control the validation process more precisely.      |Property|Description|   |--------------|-----------------|   |<xref:System.Web.UI.WebControls.Button.CausesValidation%2A>|Specifies whether clicking the button also performs a validation check. Set this property to `false` to prevent a validation check.|   |<xref:System.Web.UI.WebControls.Button.ValidationGroup%2A>|Enables you to specify which validators on the page are called when the button is clicked. If no validation groups are established, a button click calls all of the validators that are on the page.|       For more information, see [Validating User Input in ASP.NET Web Pages](~/add/includes/ajax-current-ext-md.md).      <a name=&quot;ButtonsInDataControls&quot;></a>    ## Buttons in Data Controls    Button Web server controls are often used in data controls, such as in the <xref:System.Web.UI.WebControls.DataList>, <xref:System.Web.UI.WebControls.GridView>, and <xref:System.Web.UI.WebControls.Repeater> list controls. In those cases, you typically do not respond directly to the button click event. Instead, a button in a data control raises an event that is specific to the data control. For example, in the <xref:System.Web.UI.WebControls.DataList> control, a button might raise the <xref:System.Web.UI.WebControls.DataList> control&quot;s <xref:System.Web.UI.WebControls.DataList.ItemCommand> event instead of raising the Button control&quot;s <xref:System.Web.UI.WebControls.Button.Click> event.       Because data-bound list controls can contain many buttons, you can set the button&quot;s <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property to specify a value to pass as part of the event. You can then test for this argument to see which button was clicked.      <a name=&quot;BindingDataToTheControls&quot;></a>    ## Binding Data to the Controls    You can bind the button Web server controls to a data source in order to control their property settings dynamically. For example, you can set a button&quot;s <xref:System.Web.UI.WebControls.Button.Text%2A> property by using data binding.      <a name=&quot;UsingButtonsWithUpdatePanelControls&quot;></a>    ## Using Buttons with UpdatePanel Controls    Partial-page rendering makes it possible to refresh portions of a page without a postback. <xref:System.Web.UI.UpdatePanel> controls enable you to mark parts of the page that participate in partial-page rendering. By default, the behavior of controls inside an <xref:System.Web.UI.UpdatePanel> control, including Button controls, is to perform an asynchronous postback instead of a postback. This refreshes only the contents of the <xref:System.Web.UI.UpdatePanel> control from which the postback originates.       In addition to the scenario of a Button control that is inside an <xref:System.Web.UI.UpdatePanel> control, you can use Button controls with <xref:System.Web.UI.UpdatePanel> controls in the following scenarios:      -   Defining a Button control that is outside an <xref:System.Web.UI.UpdatePanel> control as an <xref:System.Web.UI.AsyncPostBackTrigger> control for that panel. When the button is clicked, it performs an asynchronous postback and refreshes the contents of the panel.      -   Defining a Button control that is inside an <xref:System.Web.UI.UpdatePanel> control as a <xref:System.Web.UI.PostBackTrigger> for the panel. When the button is clicked, it performs a postback even though it is inside an <xref:System.Web.UI.UpdatePanel> control.       For more information about partial-page rendering and using <xref:System.Web.UI.UpdatePanel> controls, see [UpdatePanel Control Overview](~/add/includes/ajax-current-ext-md.md) and [Partial-Page Rendering Overview](~/add/includes/ajax-current-ext-md.md).      <a name=&quot;DeclarativeSyntax&quot;></a>    ## Declarative Syntax      ```   <asp:Button       AccessKey=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CausesValidation=&quot;True|False&quot;       CommandArgument=&quot;string&quot;       CommandName=&quot;string&quot;       CssClass=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       Font-Bold=&quot;True|False&quot;       Font-Italic=&quot;True|False&quot;       Font-Names=&quot;string&quot;       Font-Overline=&quot;True|False&quot;       Font-Size=&quot;string|Smaller|Larger|XX-Small|X-Small|Small|Medium|           Large|X-Large|XX-Large&quot;       Font-Strikeout=&quot;True|False&quot;       Font-Underline=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       OnClick=&quot;Click event handler&quot;       OnClientClick=&quot;string&quot;       OnCommand=&quot;Command event handler&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       PostBackUrl=&quot;uri&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       Text=&quot;string&quot;       ToolTip=&quot;string&quot;       UseSubmitBehavior=&quot;True|False&quot;       ValidationGroup=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   />   ```"
   example:
-  - "The following code example demonstrates how to create a Submit Button control that posts the Web page content back to the server.  \n  \n [!code-cs[Classic Button Example#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_42_1.aspx)]\n [!code-vb[Classic Button Example#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_42_1.aspx)]  \n  \n The following code example demonstrates how to create a Command Button control that sorts a list.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/VisualBasic/t-system.web.ui.webcontr_42_2.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/CSharp/t-system.web.ui.webcontr_42_2.aspx)]"
+  - "The following code example demonstrates how to create a Submit Button control that posts the Web page content back to the server.  \n  \n [!code-cs[Classic Button Example#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_42_1.aspx)]\n [!code-vb[Classic Button Example#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_42_1.aspx)]  \n  \n The following code example demonstrates how to create a Command Button control that sorts a list.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_42_2.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_42_2.aspx)]"
   syntax:
     content: >-
       [System.ComponentModel.DefaultEvent("Click")]
@@ -195,9 +195,7 @@ items:
   - System.Web.UI.WebControls.WebControl.TrackViewState
   - System.Web.UI.WebControls.WebControl.Width
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.#ctor
   id: '#ctor'
   parent: System.Web.UI.WebControls.Button
@@ -210,19 +208,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> class."
+  summary: "Initializes a new instance of the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> class."
   remarks: "Use this constructor to create and initialize a new instance of the <xref:System.Web.UI.WebControls.Button> class."
   example:
-  - "The following code example demonstrates how to create and initialize a new instance of the <xref:System.Web.UI.WebControls.Button> class.  \n  \n [!code-cs[ButtonCtor#1](~/add/codesnippet/CSharp/m-system.web.ui.webcontr_106_1.aspx)]\n [!code-vb[ButtonCtor#1](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_106_1.aspx)]"
+  - "The following code example demonstrates how to create and initialize a new instance of the <xref:System.Web.UI.WebControls.Button> class.  \n  \n [!code-cs[ButtonCtor#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_106_1.aspx)]\n [!code-vb[ButtonCtor#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_106_1.aspx)]"
   syntax:
     content: public Button ();
     parameters: []
   overload: System.Web.UI.WebControls.Button.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.AddAttributesToRender(System.Web.UI.HtmlTextWriter)
   id: AddAttributesToRender(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.Button
@@ -235,22 +231,20 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Adds the attributes of the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control to the output stream for rendering on the client."
+  summary: "Adds the attributes of the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control to the output stream for rendering on the client."
   remarks: ''
   example:
-  - "The following code example demonstrates how to override the AddAttributesToRender method in a custom server control, so that the <xref:System.Web.UI.WebControls.Button> text always displays in red.  \n  \n [!code-cs[CustomButtonAddAttributesToRender#1](~/add/codesnippet/CSharp/e2a4848c-bb88-4816-9064-_1.aspx)]\n [!code-vb[CustomButtonAddAttributesToRender#1](~/add/codesnippet/VisualBasic/e2a4848c-bb88-4816-9064-_1.aspx)]  \n[!code-cs[CustomButtonAddAttributesToRender#2](~/add/codesnippet/CSharp/e2a4848c-bb88-4816-9064-_2.cs)]\n[!code-vb[CustomButtonAddAttributesToRender#2](~/add/codesnippet/VisualBasic/e2a4848c-bb88-4816-9064-_2.vb)]"
+  - "The following code example demonstrates how to override the AddAttributesToRender method in a custom server control, so that the <xref:System.Web.UI.WebControls.Button> text always displays in red.  \n  \n [!code-cs[CustomButtonAddAttributesToRender#1](~/add/codesnippet/csharp/e2a4848c-bb88-4816-9064-_1.aspx)]\n [!code-vb[CustomButtonAddAttributesToRender#1](~/add/codesnippet/visualbasic/e2a4848c-bb88-4816-9064-_1.aspx)]  \n[!code-cs[CustomButtonAddAttributesToRender#2](~/add/codesnippet/csharp/e2a4848c-bb88-4816-9064-_2.cs)]\n[!code-vb[CustomButtonAddAttributesToRender#2](~/add/codesnippet/visualbasic/e2a4848c-bb88-4816-9064-_2.vb)]"
   syntax:
     content: protected override void AddAttributesToRender (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "An  that contains the output stream to render on the client."
+      description: "An <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> that contains the output stream to render on the client."
   overload: System.Web.UI.WebControls.Button.AddAttributesToRender*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.CausesValidation
   id: CausesValidation
   parent: System.Web.UI.WebControls.Button
@@ -263,21 +257,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a value indicating whether validation is performed when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked."
-  remarks: "By default, page validation is performed when a <xref:System.Web.UI.WebControls.Button> control is clicked. Page validation determines whether the input controls associated with a validation control on the page all pass the validation rules specified by the validation control.       You can specify or determine whether validation is performed on both the client and the server when a <xref:System.Web.UI.WebControls.Button> control is clicked by using the CausesValidation property. To prevent validation from being performed, set the CausesValidation property to `false`.      > [!NOTE] >  You should set the CausesValidation property to `false` when you are using the <xref:System.Web.UI.WebControls.Button.PostBackUrl%2A> property to post back to a different page. You should explicitly check validation when posting back to a different page. For an example, see the Remarks section of the <xref:System.Web.UI.WebControls.Button.PostBackUrl%2A> property.       This property is commonly set to `false` for a `reset` or `clear` button to prevent validation from being performed when the button is clicked.       When the value of the CausesValidation property is set to `true`, you can also use the <xref:System.Web.UI.WebControls.Button.ValidationGroup%2A> property to specify the name of the validation group for which the <xref:System.Web.UI.WebControls.Button> control causes validation.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets a value indicating whether validation is performed when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked."
+  remarks: "By default, page validation is performed when a <xref:System.Web.UI.WebControls.Button> control is clicked. Page validation determines whether the input controls associated with a validation control on the page all pass the validation rules specified by the validation control.       You can specify or determine whether validation is performed on both the client and the server when a <xref:System.Web.UI.WebControls.Button> control is clicked by using the CausesValidation property. To prevent validation from being performed, set the CausesValidation property to `false`.      > [!NOTE] >  You should set the CausesValidation property to `false` when you are using the <xref:System.Web.UI.WebControls.Button.PostBackUrl%2A> property to post back to a different page. You should explicitly check validation when posting back to a different page. For an example, see the Remarks section of the <xref:System.Web.UI.WebControls.Button.PostBackUrl%2A> property.       This property is commonly set to `false` for a `reset` or `clear` button to prevent validation from being performed when the button is clicked.       When the value of the CausesValidation property is set to `true`, you can also use the <xref:System.Web.UI.WebControls.Button.ValidationGroup%2A> property to specify the name of the validation group for which the <xref:System.Web.UI.WebControls.Button> control causes validation.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the CausesValidation property to prevent page validation from occurring. Note that the <xref:System.Web.UI.WebControls.BaseValidator.Validate%2A> method activates each validation control independently.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-vb[ButtonControlCausesValidation#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_269_1.aspx)]\n [!code-cs[ButtonControlCausesValidation#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_269_1.aspx)]"
+  - "The following code example demonstrates how to use the CausesValidation property to prevent page validation from occurring. Note that the <xref:System.Web.UI.WebControls.BaseValidator.Validate%2A> method activates each validation control independently.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-vb[ButtonControlCausesValidation#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_269_1.aspx)]\n [!code-cs[ButtonControlCausesValidation#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_269_1.aspx)]"
   syntax:
     content: public virtual bool CausesValidation { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if validation is performed when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if validation is performed when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
   overload: System.Web.UI.WebControls.Button.CausesValidation*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.Click
   id: Click
   parent: System.Web.UI.WebControls.Button
@@ -290,10 +282,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked."
+  summary: "Occurs when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked."
   remarks: "The Click event is raised when the <xref:System.Web.UI.WebControls.Button> control is clicked. This event is commonly used when no command name is associated with the <xref:System.Web.UI.WebControls.Button> control (for instance, with a Submit button).       For more information about handling events, see [NIB: Consuming Events](http://msdn.microsoft.com/en-us/01e4f1bc-e55e-413f-98c7-6588493e5f67)."
   example:
-  - "The following code example demonstrates how to specify and code an event handler for the Click event in order to display a message on the Web page when the <xref:System.Web.UI.WebControls.Button> control is clicked.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/VisualBasic/e-system.web.ui.webcontr_21_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/CSharp/e-system.web.ui.webcontr_21_1.aspx)]"
+  - "The following code example demonstrates how to specify and code an event handler for the Click event in order to display a message on the Web page when the <xref:System.Web.UI.WebControls.Button> control is clicked.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/visualbasic/e-system.web.ui.webcontr_21_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/csharp/e-system.web.ui.webcontr_21_1.aspx)]"
   syntax:
     content: public event EventHandler Click;
     return:
@@ -301,9 +293,7 @@ items:
       description: "To be added."
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.Command
   id: Command
   parent: System.Web.UI.WebControls.Button
@@ -316,10 +306,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked."
+  summary: "Occurs when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked."
   remarks: "The Command event is raised when the <xref:System.Web.UI.WebControls.Button> control is clicked. This event is commonly used when a command name, such as `Sort`, is associated with the <xref:System.Web.UI.WebControls.Button> control. This allows you to create multiple <xref:System.Web.UI.WebControls.Button> controls on a Web page and programmatically determine which <xref:System.Web.UI.WebControls.Button> control is clicked.      > [!NOTE] >  The Command event is raised through the control hierarchy in the form of the `BubbleEvent`.       For more information about handling events, see [NIB: Consuming Events](http://msdn.microsoft.com/en-us/01e4f1bc-e55e-413f-98c7-6588493e5f67)."
   example:
-  - "The following code example demonstrates how to specify and code an event handler for the Command event to sort a list when the <xref:System.Web.UI.WebControls.Button> control is clicked. This example specifies the event handler declaratively, using the <xref:System.Web.UI.WebControls.Button.OnClick%2A> property of the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/VisualBasic/e-system.web.ui.webcontr_140_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/CSharp/e-system.web.ui.webcontr_140_1.aspx)]  \n  \n The following code example demonstrates how to specify the event handler and programmatically add it to the event in the `Page_Load` method.  \n  \n [!code-cs[ButtonCommand#1](~/add/codesnippet/CSharp/e-system.web.ui.webcontr_140_2.aspx)]\n [!code-vb[ButtonCommand#1](~/add/codesnippet/VisualBasic/e-system.web.ui.webcontr_140_2.aspx)]"
+  - "The following code example demonstrates how to specify and code an event handler for the Command event to sort a list when the <xref:System.Web.UI.WebControls.Button> control is clicked. This example specifies the event handler declaratively, using the <xref:System.Web.UI.WebControls.Button.OnClick%2A> property of the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/visualbasic/e-system.web.ui.webcontr_140_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/csharp/e-system.web.ui.webcontr_140_1.aspx)]  \n  \n The following code example demonstrates how to specify the event handler and programmatically add it to the event in the `Page_Load` method.  \n  \n [!code-cs[ButtonCommand#1](~/add/codesnippet/csharp/e-system.web.ui.webcontr_140_2.aspx)]\n [!code-vb[ButtonCommand#1](~/add/codesnippet/visualbasic/e-system.web.ui.webcontr_140_2.aspx)]"
   syntax:
     content: public event System.Web.UI.WebControls.CommandEventHandler Command;
     return:
@@ -327,9 +317,7 @@ items:
       description: "To be added."
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.CommandArgument
   id: CommandArgument
   parent: System.Web.UI.WebControls.Button
@@ -342,21 +330,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets an optional parameter passed to the <see cref=&quot;E:System.Web.UI.WebControls.Button.Command&quot;></see> event along with the associated &lt;xref:System.Web.UI.WebControls.Button.CommandName%2A&gt;."
-  remarks: "Use the CommandArgument property to specify a parameter that compliments the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property.      > [!NOTE] >  Although you can set the CommandArgument property by itself, it is normally only used when the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property is also set.       The CommandArgument property complements the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property by allowing you to provide additional information about the command to perform. For example, if you set the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property to `Sort` and the CommandArgument property to `Ascending`, you specify a command to sort in ascending order.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets an optional parameter passed to the <xref href=&quot;System.Web.UI.WebControls.Button.Command&quot;></xref> event along with the associated <xref:System.Web.UI.WebControls.Button.CommandName*>."
+  remarks: "Use the CommandArgument property to specify a parameter that compliments the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property.      > [!NOTE] >  Although you can set the CommandArgument property by itself, it is normally only used when the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property is also set.       The CommandArgument property complements the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property by allowing you to provide additional information about the command to perform. For example, if you set the <xref:System.Web.UI.WebControls.Button.CommandName%2A> property to `Sort` and the CommandArgument property to `Ascending`, you specify a command to sort in ascending order.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the CommandArgument property to create a <xref:System.Web.UI.WebControls.Button> control that sorts a list in ascending order.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_977_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_977_1.aspx)]"
+  - "The following code example demonstrates how to use the CommandArgument property to create a <xref:System.Web.UI.WebControls.Button> control that sorts a list in ascending order.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_977_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_977_1.aspx)]"
   syntax:
     content: public string CommandArgument { get; set; }
     return:
       type: System.String
-      description: "An optional parameter passed to the <see cref=&quot;E:System.Web.UI.WebControls.Button.Command&quot;></see> event along with the associated &lt;xref:System.Web.UI.WebControls.Button.CommandName%2A&gt;. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
+      description: "An optional parameter passed to the <xref href=&quot;System.Web.UI.WebControls.Button.Command&quot;></xref> event along with the associated <xref:System.Web.UI.WebControls.Button.CommandName*>. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
   overload: System.Web.UI.WebControls.Button.CommandArgument*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.CommandName
   id: CommandName
   parent: System.Web.UI.WebControls.Button
@@ -369,21 +355,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the command name associated with the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control that is passed to the <see cref=&quot;E:System.Web.UI.WebControls.Button.Command&quot;></see> event."
-  remarks: "When you have multiple <xref:System.Web.UI.WebControls.Button> controls on a Web page, use the CommandName property to specify or determine the command name associated with each <xref:System.Web.UI.WebControls.Button> control. You can set the CommandName property with any string that identifies the command to perform. You can then programmatically determine the command name of the <xref:System.Web.UI.WebControls.Button> control and perform the appropriate actions.       Additional information about the command, such as `Ascending`, may be specified by using the <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets the command name associated with the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control that is passed to the <xref href=&quot;System.Web.UI.WebControls.Button.Command&quot;></xref> event."
+  remarks: "When you have multiple <xref:System.Web.UI.WebControls.Button> controls on a Web page, use the CommandName property to specify or determine the command name associated with each <xref:System.Web.UI.WebControls.Button> control. You can set the CommandName property with any string that identifies the command to perform. You can then programmatically determine the command name of the <xref:System.Web.UI.WebControls.Button> control and perform the appropriate actions.       Additional information about the command, such as `Ascending`, may be specified by using the <xref:System.Web.UI.WebControls.Button.CommandArgument%2A> property.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the CommandName property to create a <xref:System.Web.UI.WebControls.Button> control that sorts a list.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_955_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_955_1.aspx)]"
+  - "The following code example demonstrates how to use the CommandName property to create a <xref:System.Web.UI.WebControls.Button> control that sorts a list.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_955_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_955_1.aspx)]"
   syntax:
     content: public string CommandName { get; set; }
     return:
       type: System.String
-      description: "The command name of the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
+      description: "The command name of the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
   overload: System.Web.UI.WebControls.Button.CommandName*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.GetPostBackOptions
   id: GetPostBackOptions
   parent: System.Web.UI.WebControls.Button
@@ -396,20 +380,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Creates a <see cref=&quot;T:System.Web.UI.PostBackOptions&quot;></see> object that represents the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control&quot;s postback behavior."
+  summary: "Creates a <xref href=&quot;System.Web.UI.PostBackOptions&quot;></xref> object that represents the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control&quot;s postback behavior."
   remarks: "The GetPostBackOptions method creates a <xref:System.Web.UI.PostBackOptions> object that represents the <xref:System.Web.UI.WebControls.Button> control&quot;s postback behavior. The <xref:System.Web.UI.PostBackOptions> object is then typically passed to the <xref:System.Web.UI.ClientScriptManager.GetPostBackEventReference%28System.Web.UI.PostBackOptions%29?displayProperty=fullName> method, which is used to obtain a reference to a client-side script function that, when invoked, causes the server to post back to the page.       This method is used primarily by control developers when extending the <xref:System.Web.UI.WebControls.Button> class."
   syntax:
     content: protected virtual System.Web.UI.PostBackOptions GetPostBackOptions ();
     parameters: []
     return:
       type: System.Web.UI.PostBackOptions
-      description: "To be added."
+      description: "A <xref href=&quot;System.Web.UI.PostBackOptions&quot;></xref> that represents the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control&quot;s postback behavior."
   overload: System.Web.UI.WebControls.Button.GetPostBackOptions*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.OnClick(System.EventArgs)
   id: OnClick(System.EventArgs)
   parent: System.Web.UI.WebControls.Button
@@ -422,10 +404,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <see cref=&quot;E:System.Web.UI.WebControls.Button.Click&quot;></see> event of the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control."
+  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.Button.Click&quot;></xref> event of the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control."
   remarks: "The <xref:System.Web.UI.WebControls.Button.Click> event is raised when the <xref:System.Web.UI.WebControls.Button> control is clicked. This event is commonly used when no command name is associated with the <xref:System.Web.UI.WebControls.Button> control (for instance, with a Submit button).       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnClick method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
   example:
-  - "The following code example demonstrates how to specify and code an event handler for the <xref:System.Web.UI.WebControls.Button.Click> event in order to display a simple message on the Web page.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_232_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/CSharp/m-system.web.ui.webcontr_232_1.aspx)]"
+  - "The following code example demonstrates how to specify and code an event handler for the <xref:System.Web.UI.WebControls.Button.Click> event in order to display a simple message on the Web page.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_232_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_232_1.aspx)]"
   syntax:
     content: protected virtual void OnClick (EventArgs e);
     parameters:
@@ -435,9 +417,7 @@ items:
   overload: System.Web.UI.WebControls.Button.OnClick*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.OnClientClick
   id: OnClientClick
   parent: System.Web.UI.WebControls.Button
@@ -450,21 +430,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the client-side script that executes when a <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control&quot;s <see cref=&quot;E:System.Web.UI.WebControls.Button.Click&quot;></see> event is raised."
-  remarks: "Use the OnClientClick property to specify additional client-side script that executes when a <xref:System.Web.UI.WebControls.Button> control&quot;s <xref:System.Web.UI.WebControls.Button.Click> event is raised. The script that you specify for this property is rendered in the <xref:System.Web.UI.WebControls.Button> control&quot;s `OnClick` attribute in addition to the control&quot;s predefined client-side script.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets the client-side script that executes when a <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control&quot;s <xref href=&quot;System.Web.UI.WebControls.Button.Click&quot;></xref> event is raised."
+  remarks: "Use the OnClientClick property to specify additional client-side script that executes when a <xref:System.Web.UI.WebControls.Button> control&quot;s <xref:System.Web.UI.WebControls.Button.Click> event is raised. The script that you specify for this property is rendered in the <xref:System.Web.UI.WebControls.Button> control&quot;s `OnClick` attribute in addition to the control&quot;s predefined client-side script.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "A Visual Studio Web site project with source code is available to accompany this topic: [Download](http://go.microsoft.com/fwlink/?LinkId=192871).  \n  \n The following code example demonstrates how to use the OnClientClick property to specify additional client-side script that executes when a <xref:System.Web.UI.WebControls.Button> control is clicked.  \n  \n [!code-cs[Button.OnClientClick#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_1351_1.aspx)]\n [!code-vb[Button.OnClientClick#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_1351_1.aspx)]"
+  - "A Visual Studio Web site project with source code is available to accompany this topic: [Download](http://go.microsoft.com/fwlink/?LinkId=192871).  \n  \n The following code example demonstrates how to use the OnClientClick property to specify additional client-side script that executes when a <xref:System.Web.UI.WebControls.Button> control is clicked.  \n  \n [!code-cs[Button.OnClientClick#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_1351_1.aspx)]\n [!code-vb[Button.OnClientClick#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_1351_1.aspx)]"
   syntax:
     content: public virtual string OnClientClick { get; set; }
     return:
       type: System.String
-      description: "The client-side script that executes when a <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control&quot;s <see cref=&quot;E:System.Web.UI.WebControls.Button.Click&quot;></see> event is raised."
+      description: "The client-side script that executes when a <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control&quot;s <xref href=&quot;System.Web.UI.WebControls.Button.Click&quot;></xref> event is raised."
   overload: System.Web.UI.WebControls.Button.OnClientClick*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.OnCommand(System.Web.UI.WebControls.CommandEventArgs)
   id: OnCommand(System.Web.UI.WebControls.CommandEventArgs)
   parent: System.Web.UI.WebControls.Button
@@ -477,10 +455,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <see cref=&quot;E:System.Web.UI.WebControls.Button.Command&quot;></see> event of the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control."
+  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.Button.Command&quot;></xref> event of the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control."
   remarks: "The <xref:System.Web.UI.WebControls.Button.Command> event is raised when the <xref:System.Web.UI.WebControls.Button> control is clicked. This event is commonly used when a command name, such as `Sort`, is associated with the <xref:System.Web.UI.WebControls.Button> control. This allows you to create multiple <xref:System.Web.UI.WebControls.Button> controls on a Web page and programmatically determine which <xref:System.Web.UI.WebControls.Button> control is clicked.      > [!NOTE] >  The <xref:System.Web.UI.WebControls.Button.Command> event is raised through the control hierarchy in the form of the `BubbleEvent`.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnCommand method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
   example:
-  - "The following code example demonstrates how to specify and code an event handler for the <xref:System.Web.UI.WebControls.Button.Command> event to sort a list when the <xref:System.Web.UI.WebControls.Button> control is clicked. This example specifies the event handler declaratively, using the <xref:System.Web.UI.WebControls.Button.OnClick%2A> property of the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/VisualBasic/0fac6d1f-268b-4550-92d4-_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/CSharp/0fac6d1f-268b-4550-92d4-_1.aspx)]  \n  \n The following code example demonstrates how to specify the event handler and programmatically add it to the event in the `Page_Load` method.  \n  \n [!code-cs[ButtonCommand#1](~/add/codesnippet/CSharp/0fac6d1f-268b-4550-92d4-_2.aspx)]\n [!code-vb[ButtonCommand#1](~/add/codesnippet/VisualBasic/0fac6d1f-268b-4550-92d4-_2.aspx)]"
+  - "The following code example demonstrates how to specify and code an event handler for the <xref:System.Web.UI.WebControls.Button.Command> event to sort a list when the <xref:System.Web.UI.WebControls.Button> control is clicked. This example specifies the event handler declaratively, using the <xref:System.Web.UI.WebControls.Button.OnClick%2A> property of the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonCommandNameArgument#1](~/add/codesnippet/visualbasic/0fac6d1f-268b-4550-92d4-_1.aspx)]\n [!code-cs[ButtonCommandNameArgument#1](~/add/codesnippet/csharp/0fac6d1f-268b-4550-92d4-_1.aspx)]  \n  \n The following code example demonstrates how to specify the event handler and programmatically add it to the event in the `Page_Load` method.  \n  \n [!code-cs[ButtonCommand#1](~/add/codesnippet/csharp/0fac6d1f-268b-4550-92d4-_2.aspx)]\n [!code-vb[ButtonCommand#1](~/add/codesnippet/visualbasic/0fac6d1f-268b-4550-92d4-_2.aspx)]"
   syntax:
     content: protected virtual void OnCommand (System.Web.UI.WebControls.CommandEventArgs e);
     parameters:
@@ -490,9 +468,7 @@ items:
   overload: System.Web.UI.WebControls.Button.OnCommand*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.OnPreRender(System.EventArgs)
   id: OnPreRender(System.EventArgs)
   parent: System.Web.UI.WebControls.Button
@@ -516,9 +492,7 @@ items:
   overload: System.Web.UI.WebControls.Button.OnPreRender*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.PostBackUrl
   id: PostBackUrl
   parent: System.Web.UI.WebControls.Button
@@ -531,21 +505,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the URL of the page to post to from the current page when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked."
-  remarks: "The PostBackUrl property allows you to perform a cross-page post using the <xref:System.Web.UI.WebControls.Button> control.  \n  \n> [!NOTE]\n>  Only correctly specified paths work with this property. For example, relative paths (Test/default.aspx), absolute paths (https://localhost/WebApp/default.aspx) and virtual (~\\Test\\default.aspx) work correctly. Incorrectly formed paths such as \"/Test/default.aspx\" or \"\\Test\\default.aspx\" do not work. See [ASP.NET Web Project Paths](../Topic/ASP.NET%20Web%20Project%20Paths.md) for a discussion on creating correct paths.  \n  \n Set the PostBackUrl property to the URL of the Web page to post to when the <xref:System.Web.UI.WebControls.Button> control is clicked. For example, specifying `Page2.aspx` causes the page that contains the <xref:System.Web.UI.WebControls.Button> control to post to `Page2.aspx`. If you do not specify a value for the PostBackUrl property, the page posts back to itself.  \n  \n> [!IMPORTANT]\n>  When performing a cross-page postback with controls with server-side validation, you should check that the page's <xref:System.Web.UI.Page.IsValid%2A> property is `true` before processing the postback. In the case of a cross-page postback, the page to check is the <xref:System.Web.UI.Page.PreviousPage%2A>. The following VB code shows how this is done:  \n  \n```  \nSub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load  \n        If Page.PreviousPage.IsValid Then  \n            ' Handle the post back  \n        Else  \n            Response.Write(\"Invalid\")  \n        End If  \nEnd Sub  \n```  \n  \n For more information on cross-page posting techniques, see [Cross-Page Posting in ASP.NET Web Forms](../Topic/Cross-Page%20Posting%20in%20ASP.NET%20Web%20Forms.md).  \n  \n This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets the URL of the page to post to from the current page when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked."
+  remarks: "The PostBackUrl property allows you to perform a cross-page post using the <xref:System.Web.UI.WebControls.Button> control.  \n  \n> [!NOTE]\n>  Only correctly specified paths work with this property. For example, relative paths (Test/default.aspx), absolute paths (https://localhost/WebApp/default.aspx) and virtual (~\\Test\\default.aspx) work correctly. Incorrectly formed paths such as \"/Test/default.aspx\" or \"\\Test\\default.aspx\" do not work. See [ASP.NET Web Project Paths](~/add/includes/ajax-current-ext-md.md) for a discussion on creating correct paths.  \n  \n Set the PostBackUrl property to the URL of the Web page to post to when the <xref:System.Web.UI.WebControls.Button> control is clicked. For example, specifying `Page2.aspx` causes the page that contains the <xref:System.Web.UI.WebControls.Button> control to post to `Page2.aspx`. If you do not specify a value for the PostBackUrl property, the page posts back to itself.  \n  \n> [!IMPORTANT]\n>  When performing a cross-page postback with controls with server-side validation, you should check that the page's <xref:System.Web.UI.Page.IsValid%2A> property is `true` before processing the postback. In the case of a cross-page postback, the page to check is the <xref:System.Web.UI.Page.PreviousPage%2A>. The following VB code shows how this is done:  \n  \n```  \nSub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load  \n        If Page.PreviousPage.IsValid Then  \n            ' Handle the post back  \n        Else  \n            Response.Write(\"Invalid\")  \n        End If  \nEnd Sub  \n```  \n  \n For more information on cross-page posting techniques, see [Cross-Page Posting in ASP.NET Web Forms](~/add/includes/ajax-current-ext-md.md).  \n  \n This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the PostBackUrl property to perform a cross-page post. When the user clicks the <xref:System.Web.UI.WebControls.Button> control, the page posts the value entered in the text box to the target page specified by the PostBackUrl property. To run this sample, you must also create a file for the target page in the same directory as this code example. The code for target page is provided in the next example.  \n  \n [!code-vb[Button.PostBackUrlProperty#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_834_1.aspx)]\n [!code-cs[Button.PostBackUrlProperty#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_834_1.aspx)]  \n  \n The following code example demonstrates how to use the <xref:System.Web.UI.Page.PreviousPage%2A?displayProperty=fullName> property to access a value that was posted from another page using the PostBackUrl property. This page gets the string that was posted from the previous page and displays it to the user. If you attempt to run this code example directly, you will get an error because the value of the `text` field will be `null`. Instead, use this code to create a target page and place the file in the same directory as the code for the previous example. The name of the file must correspond to the value specified for the PostBackUrl property in the previous example. When you run the code for the previous example, this page will execute automatically when the cross page post occurs.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-cs[Button.PostBackUrlPage2#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_834_2.aspx)]\n [!code-vb[Button.PostBackUrlPage2#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_834_2.aspx)]"
+  - "The following code example demonstrates how to use the PostBackUrl property to perform a cross-page post. When the user clicks the <xref:System.Web.UI.WebControls.Button> control, the page posts the value entered in the text box to the target page specified by the PostBackUrl property. To run this sample, you must also create a file for the target page in the same directory as this code example. The code for target page is provided in the next example.  \n  \n [!code-vb[Button.PostBackUrlProperty#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_834_1.aspx)]\n [!code-cs[Button.PostBackUrlProperty#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_834_1.aspx)]  \n  \n The following code example demonstrates how to use the <xref:System.Web.UI.Page.PreviousPage%2A?displayProperty=fullName> property to access a value that was posted from another page using the PostBackUrl property. This page gets the string that was posted from the previous page and displays it to the user. If you attempt to run this code example directly, you will get an error because the value of the `text` field will be `null`. Instead, use this code to create a target page and place the file in the same directory as the code for the previous example. The name of the file must correspond to the value specified for the PostBackUrl property in the previous example. When you run the code for the previous example, this page will execute automatically when the cross page post occurs.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[Button.PostBackUrlPage2#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_834_2.aspx)]\n [!code-vb[Button.PostBackUrlPage2#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_834_2.aspx)]"
   syntax:
     content: public virtual string PostBackUrl { get; set; }
     return:
       type: System.String
-      description: "The URL of the Web page to post to from the current page when the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control is clicked. The default value is an empty string (&quot;&quot;), which causes the page to post back to itself."
+      description: "The URL of the Web page to post to from the current page when the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control is clicked. The default value is an empty string (&quot;&quot;), which causes the page to post back to itself."
   overload: System.Web.UI.WebControls.Button.PostBackUrl*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.RaisePostBackEvent(System.String)
   id: RaisePostBackEvent(System.String)
   parent: System.Web.UI.WebControls.Button
@@ -558,7 +530,7 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises events for the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control when it posts back to the server."
+  summary: "Raises events for the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control when it posts back to the server."
   remarks: "This event is used internally by the <xref:System.Web.UI.WebControls.Button> control, when it is clicked, to raise a <xref:System.Web.UI.WebControls.Button.Click> event, and if defined, a <xref:System.Web.UI.WebControls.Button.Command> event."
   syntax:
     content: protected virtual void RaisePostBackEvent (string eventArgument);
@@ -569,9 +541,7 @@ items:
   overload: System.Web.UI.WebControls.Button.RaisePostBackEvent*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.RenderContents(System.Web.UI.HtmlTextWriter)
   id: RenderContents(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.Button
@@ -587,19 +557,17 @@ items:
   summary: "Renders the contents of the control to the specified writer."
   remarks: ''
   example:
-  - "The following code example demonstrates how to override the RenderContents method in a custom server control so that it always displays text following a custom <xref:System.Web.UI.WebControls.Button> server control.  \n  \n [!code-cs[CustomButtonRenderContents#1](~/add/codesnippet/CSharp/m-system.web.ui.webcontr_178_1.aspx)]\n [!code-vb[CustomButtonRenderContents#1](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_178_1.aspx)]  \n[!code-cs[CustomButtonRenderContents#2](~/add/codesnippet/CSharp/m-system.web.ui.webcontr_178_2.cs)]\n[!code-vb[CustomButtonRenderContents#2](~/add/codesnippet/VisualBasic/m-system.web.ui.webcontr_178_2.vb)]"
+  - "The following code example demonstrates how to override the RenderContents method in a custom server control so that it always displays text following a custom <xref:System.Web.UI.WebControls.Button> server control.  \n  \n [!code-cs[CustomButtonRenderContents#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_178_1.aspx)]\n [!code-vb[CustomButtonRenderContents#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_178_1.aspx)]  \n[!code-cs[CustomButtonRenderContents#2](~/add/codesnippet/csharp/m-system.web.ui.webcontr_178_2.cs)]\n[!code-vb[CustomButtonRenderContents#2](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_178_2.vb)]"
   syntax:
     content: protected override void RenderContents (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "A  object that represents the output stream to render HTML content on the client."
+      description: "A <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> object that represents the output stream to render HTML content on the client."
   overload: System.Web.UI.WebControls.Button.RenderContents*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.System#Web#UI#IPostBackEventHandler#RaisePostBackEvent(System.String)
   id: System#Web#UI#IPostBackEventHandler#RaisePostBackEvent(System.String)
   isEii: true
@@ -613,10 +581,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises events for the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control when it posts back to the server."
+  summary: "Raises events for the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control when it posts back to the server."
   remarks: "This event is used internally by the <xref:System.Web.UI.WebControls.Button> control, when it is clicked, to raise a <xref:System.Web.UI.WebControls.Button.Click> event, and if defined, a <xref:System.Web.UI.WebControls.Button.Command> event."
   example:
-  - "The following code example demonstrates how to override the IPostBackEventHandler.RaisePostBackEvent method so that it always raises the <xref:System.Web.UI.WebControls.Button.OnClick%2A> event in a custom <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[CustomButtonRaisePostBackEvent#2](~/add/codesnippet/VisualBasic/78761a3c-3126-47e7-b48e-_1.vb)]\n [!code-cs[CustomButtonRaisePostBackEvent#2](~/add/codesnippet/CSharp/78761a3c-3126-47e7-b48e-_1.cs)]"
+  - "The following code example demonstrates how to override the IPostBackEventHandler.RaisePostBackEvent method so that it always raises the <xref:System.Web.UI.WebControls.Button.OnClick%2A> event in a custom <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[CustomButtonRaisePostBackEvent#2](~/add/codesnippet/visualbasic/78761a3c-3126-47e7-b48e-_1.vb)]\n [!code-cs[CustomButtonRaisePostBackEvent#2](~/add/codesnippet/csharp/78761a3c-3126-47e7-b48e-_1.cs)]"
   syntax:
     content: void IPostBackEventHandler.RaisePostBackEvent (string eventArgument);
     parameters:
@@ -626,9 +594,7 @@ items:
   overload: System.Web.UI.WebControls.Button.System#Web#UI#IPostBackEventHandler#RaisePostBackEvent*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.Text
   id: Text
   parent: System.Web.UI.WebControls.Button
@@ -641,21 +607,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the text caption displayed in the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control."
-  remarks: "Use the Text property to specify or determine the caption to display in the <xref:System.Web.UI.WebControls.Button> control.       The value of this property, when set, can be saved automatically to a resource file by using a designer tool. For more information, see <xref:System.ComponentModel.LocalizableAttribute> and [Globalization and Localization](../Topic/ASP.NET%20Globalization%20and%20Localization.md)."
+  summary: "Gets or sets the text caption displayed in the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control."
+  remarks: "Use the Text property to specify or determine the caption to display in the <xref:System.Web.UI.WebControls.Button> control.       The value of this property, when set, can be saved automatically to a resource file by using a designer tool. For more information, see <xref:System.ComponentModel.LocalizableAttribute> and [Globalization and Localization](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the Text property to specify the caption displayed in the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_1294_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_1294_1.aspx)]"
+  - "The following code example demonstrates how to use the Text property to specify the caption displayed in the <xref:System.Web.UI.WebControls.Button> control.  \n  \n [!code-vb[ButtonClickText#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_1294_1.aspx)]\n [!code-cs[ButtonClickText#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_1294_1.aspx)]"
   syntax:
     content: public string Text { get; set; }
     return:
       type: System.String
-      description: "The text caption displayed in the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
+      description: "The text caption displayed in the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control. The default value is &lt;xref:System.String.Empty?displayProperty=fullName&gt;."
   overload: System.Web.UI.WebControls.Button.Text*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.UseSubmitBehavior
   id: UseSubmitBehavior
   parent: System.Web.UI.WebControls.Button
@@ -668,10 +632,10 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a value indicating whether the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control uses the client browser&quot;s submit mechanism or the ASP.NET postback mechanism."
-  remarks: "Use the UseSubmitBehavior property to specify whether a <xref:System.Web.UI.WebControls.Button> control uses the client browser&quot;s submit mechanism or the ASP.NET postback mechanism. By default the value of this property is `true`, causing the <xref:System.Web.UI.WebControls.Button> control to use the browser&quot;s submit mechanism. If you specify `false`, the ASP.NET page framework adds client-side script to the page to post the form to the server.       When the UseSubmitBehavior property is `false`, control developers can use the <xref:System.Web.UI.ClientScriptManager.GetPostBackEventReference%2A> method to return the client postback event for the <xref:System.Web.UI.WebControls.Button>. The string returned by the <xref:System.Web.UI.ClientScriptManager.GetPostBackEventReference%2A> method contains the text of the client-side function call and can be inserted into a client-side event handler.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets a value indicating whether the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control uses the client browser&quot;s submit mechanism or the ASP.NET postback mechanism."
+  remarks: "Use the UseSubmitBehavior property to specify whether a <xref:System.Web.UI.WebControls.Button> control uses the client browser&quot;s submit mechanism or the ASP.NET postback mechanism. By default the value of this property is `true`, causing the <xref:System.Web.UI.WebControls.Button> control to use the browser&quot;s submit mechanism. If you specify `false`, the ASP.NET page framework adds client-side script to the page to post the form to the server.       When the UseSubmitBehavior property is `false`, control developers can use the <xref:System.Web.UI.ClientScriptManager.GetPostBackEventReference%2A> method to return the client postback event for the <xref:System.Web.UI.WebControls.Button>. The string returned by the <xref:System.Web.UI.ClientScriptManager.GetPostBackEventReference%2A> method contains the text of the client-side function call and can be inserted into a client-side event handler.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the UseSubmitBehavior property to specify the submit mechanism that a <xref:System.Web.UI.WebControls.Button> control uses when it posts back to the server. The UseSubmitBehavior property is set to `false`, causing the button to use the ASP.NET postback mechanism. If you view the source code for the rendered page using your browser's View Source command, you will see that client-side script has been added by the ASP.NET page framework to post the form to the server.  \n  \n [!code-vb[Button.UseSubmitBehavior#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_854_1.aspx)]\n [!code-cs[Button.UseSubmitBehavior#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_854_1.aspx)]"
+  - "The following code example demonstrates how to use the UseSubmitBehavior property to specify the submit mechanism that a <xref:System.Web.UI.WebControls.Button> control uses when it posts back to the server. The UseSubmitBehavior property is set to `false`, causing the button to use the ASP.NET postback mechanism. If you view the source code for the rendered page using your browser's View Source command, you will see that client-side script has been added by the ASP.NET page framework to post the form to the server.  \n  \n [!code-vb[Button.UseSubmitBehavior#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_854_1.aspx)]\n [!code-cs[Button.UseSubmitBehavior#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_854_1.aspx)]"
   syntax:
     content: public virtual bool UseSubmitBehavior { get; set; }
     return:
@@ -680,9 +644,7 @@ items:
   overload: System.Web.UI.WebControls.Button.UseSubmitBehavior*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Web.UI.WebControls.Button.ValidationGroup
   id: ValidationGroup
   parent: System.Web.UI.WebControls.Button
@@ -695,21 +657,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the group of controls for which the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control causes validation when it posts back to the server."
-  remarks: "Validation groups allow you to assign validation controls on a page to a specific category. Each validation group can be validated independently of other validation groups on the page. Use the ValidationGroup property to specify the name of the validation group for which the <xref:System.Web.UI.WebControls.Button> control causes validation when it posts back to the server.       This property has an effect only when the value of the <xref:System.Web.UI.WebControls.Button.CausesValidation%2A> property is set to `true`. When you specify a value for the ValidationGroup property, only the validation controls that are part of the specified group are validated when the <xref:System.Web.UI.WebControls.Button> control posts back to the server. If you do not specify a value for this property and the <xref:System.Web.UI.WebControls.Button.CausesValidation%2A> property is set to `true`, all validation controls on the page that are not assigned to a validation group are validated when the control posts back to the server.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](../Topic/ASP.NET%20Themes%20and%20Skins.md)."
+  summary: "Gets or sets the group of controls for which the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control causes validation when it posts back to the server."
+  remarks: "Validation groups allow you to assign validation controls on a page to a specific category. Each validation group can be validated independently of other validation groups on the page. Use the ValidationGroup property to specify the name of the validation group for which the <xref:System.Web.UI.WebControls.Button> control causes validation when it posts back to the server.       This property has an effect only when the value of the <xref:System.Web.UI.WebControls.Button.CausesValidation%2A> property is set to `true`. When you specify a value for the ValidationGroup property, only the validation controls that are part of the specified group are validated when the <xref:System.Web.UI.WebControls.Button> control posts back to the server. If you do not specify a value for this property and the <xref:System.Web.UI.WebControls.Button.CausesValidation%2A> property is set to `true`, all validation controls on the page that are not assigned to a validation group are validated when the control posts back to the server.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
   example:
-  - "The following code example demonstrates how to use the ValidationGroup property to specify the controls to validate when a <xref:System.Web.UI.WebControls.Button> control posts back to the server. The page contains three text boxes to capture data from the user and three <xref:System.Web.UI.WebControls.RequiredFieldValidator> controls to ensure that the user does not leave a text box blank. The <xref:System.Web.UI.WebControls.RequiredFieldValidator> controls for the first two text boxes are in the `PersonalInfoGroup` validation group and the <xref:System.Web.UI.WebControls.RequiredFieldValidator> control for the third text box is in the `LocationInfoGroup` validation group. When `Button1` is clicked, only the controls in validation group `PersonalInfoGroup` are validated. When `Button2` is clicked, only the control in validation group `LocationInfoGroup` is validated.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-cs[Button.ValidationGroup#1](~/add/codesnippet/CSharp/p-system.web.ui.webcontr_1224_1.aspx)]\n [!code-vb[Button.ValidationGroup#1](~/add/codesnippet/VisualBasic/p-system.web.ui.webcontr_1224_1.aspx)]"
+  - "The following code example demonstrates how to use the ValidationGroup property to specify the controls to validate when a <xref:System.Web.UI.WebControls.Button> control posts back to the server. The page contains three text boxes to capture data from the user and three <xref:System.Web.UI.WebControls.RequiredFieldValidator> controls to ensure that the user does not leave a text box blank. The <xref:System.Web.UI.WebControls.RequiredFieldValidator> controls for the first two text boxes are in the `PersonalInfoGroup` validation group and the <xref:System.Web.UI.WebControls.RequiredFieldValidator> control for the third text box is in the `LocationInfoGroup` validation group. When `Button1` is clicked, only the controls in validation group `PersonalInfoGroup` are validated. When `Button2` is clicked, only the control in validation group `LocationInfoGroup` is validated.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[Button.ValidationGroup#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_1224_1.aspx)]\n [!code-vb[Button.ValidationGroup#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_1224_1.aspx)]"
   syntax:
     content: public virtual string ValidationGroup { get; set; }
     return:
       type: System.String
-      description: "The group of controls for which the <see cref=&quot;T:System.Web.UI.WebControls.Button&quot;></see> control causes validation when it posts back to the server. The default value is an empty string (&quot;&quot;)."
+      description: "The group of controls for which the <xref href=&quot;System.Web.UI.WebControls.Button&quot;></xref> control causes validation when it posts back to the server. The default value is an empty string (&quot;&quot;)."
   overload: System.Web.UI.WebControls.Button.ValidationGroup*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Web.UI.WebControls.WebControl
   isExternal: false

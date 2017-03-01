@@ -29,10 +29,10 @@ items:
   nameWithType: BindingContext
   fullName: System.Windows.Forms.BindingContext
   type: Class
-  summary: "Manages the collection of <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> objects for any object that inherits from the <see cref=&quot;T:System.Windows.Forms.Control&quot;></see> class."
+  summary: "Manages the collection of <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> objects for any object that inherits from the <xref href=&quot;System.Windows.Forms.Control&quot;></xref> class."
   remarks: "Each Windows Form has at least one BindingContext object that manages the <xref:System.Windows.Forms.BindingManagerBase> objects for the form. Because the <xref:System.Windows.Forms.BindingManagerBase> class is abstract, the return type of the <xref:System.Windows.Forms.BindingContext.Item%2A> property is either a <xref:System.Windows.Forms.CurrencyManager> or a <xref:System.Windows.Forms.PropertyManager>. If the data source is an object that can return only a single property (instead of a list of objects), the <xref:System.Type> is a <xref:System.Windows.Forms.PropertyManager>. For example, if you specify a <xref:System.Windows.Forms.TextBox> as the data source, a <xref:System.Windows.Forms.PropertyManager> is returned. On the other hand, if the data source is an object that implements <xref:System.Collections.IList> or <xref:System.ComponentModel.IBindingList>, a <xref:System.Windows.Forms.CurrencyManager> is returned.       For each data source on a Windows Form, there is a single <xref:System.Windows.Forms.CurrencyManager> or <xref:System.Windows.Forms.PropertyManager>. Because there may be multiple data sources associated with a Windows Form, the BindingContext enables you to retrieve any particular <xref:System.Windows.Forms.CurrencyManager> associated with a data source.      > [!NOTE] >  When using the <xref:System.Windows.Forms.BindingContext.Item%2A> property, the BindingContext creates a new <xref:System.Windows.Forms.BindingManagerBase> if one does not already exist. This can lead to some confusion, as the returned object may not manage the list (or any list) that you intend. To prevent returning an invalid <xref:System.Windows.Forms.BindingManagerBase>, use the <xref:System.Windows.Forms.BindingContext.Contains%2A> method to determine if the intended <xref:System.Windows.Forms.BindingManagerBase> already exists.       If you use a container control, such as a <xref:System.Windows.Forms.GroupBox>, <xref:System.Windows.Forms.Panel>, or <xref:System.Windows.Forms.TabControl>, to contain data-bound controls, you can create a BindingContext for just that container control and its controls. Then, each part of your form can be managed by its own <xref:System.Windows.Forms.BindingManagerBase>. See the <xref:System.Windows.Forms.BindingContext.%23ctor%2A> constructor for more information about creating multiple <xref:System.Windows.Forms.BindingManagerBase> objects for the same data source.       If you add a <xref:System.Windows.Forms.TextBox> control to a form and bind it to a column of a table in a dataset, the control communicates with the BindingContext of that form. The BindingContext, in turn, talks to the specific <xref:System.Windows.Forms.CurrencyManager> for that data association. If you queried the `Position` property of the <xref:System.Windows.Forms.CurrencyManager>, it would report the current record for the binding of that <xref:System.Windows.Forms.TextBox> control. In the following code example, a <xref:System.Windows.Forms.TextBox> control is bound to the `FirstName` column of a `Customers` table on the `dataSet1` dataset through the BindingContext for the form it is on.      ```vb#   TextBox1.DataBindings.Add(&quot;Text&quot;, dataSet1, &quot;Customers.FirstName&quot;)      ```      ```c#   textBox1.DataBindings.Add(&quot;Text&quot;, dataSet1, &quot;Customers.FirstName&quot;);      ```      ```cpp   textBox1->DataBindings->Add(&quot;Text&quot;, dataSet1, &quot;Customers.FirstName&quot;);   ```       You can add a second <xref:System.Windows.Forms.TextBox> control (`TextBox2`) to the form and bind it to the `LastName` column of the `Customers` table in the same dataset. The BindingContext is aware of the first binding (`TextBox1` to `Customers.FirstName`), so it would use the same <xref:System.Windows.Forms.CurrencyManager>, as both text boxes are bound to the same dataset (`DataSet1`).      ```vb#   TextBox2.DataBindings.Add(&quot;Text&quot;, dataSet1, &quot;Customers.LastName&quot;)      ```      ```c#   textBox2.DataBindings.Add(&quot;Text&quot;, dataSet1, &quot;Customers.LastName&quot;);      ```      ```cpp   textBox2->DataBindings->Add(&quot;Text&quot;, dataSet1, &quot;Customers.LastName&quot;);   ```       If you bind `TextBox2` to a different dataset, the BindingContext creates and manages a second <xref:System.Windows.Forms.CurrencyManager>.       It is important to be consistent about how you set the <xref:System.Windows.Forms.ListControl.DataSource%2A> and <xref:System.Windows.Forms.ListControl.DisplayMember%2A> properties; otherwise, the BindingContext creates multiple currency managers for the same dataset, which results in errors. The following code example shows a few ways to set the properties and their associated BindingContext objects. You can set the properties using either of the following methods, as long as you are consistent throughout your code.      ```vb#   ComboBox1.DataSource = DataSet1   ComboBox1.DisplayMember = &quot;Customers.FirstName&quot;   Me.BindingContext(dataSet1, &quot;Customers&quot;).Position = 1      ```      ```c#   comboBox1.DataSource = DataSet1;   comboBox1.DisplayMember = &quot;Customers.FirstName&quot;;   this.BindingContext[dataSet1, &quot;Customers&quot;].Position = 1;      ```      ```cpp   comboBox1->DataSource = dataSet1;   comboBox1->DisplayMember = &quot;Customers.FirstName&quot;;   this->BindingContext->get_Item(dataSet1, &quot;Customers&quot;)->Position = 1;      ```      ```vb#   ComboBox1.DataSource = DataSet1.Customers   ComboBox1.DisplayMember = &quot;FirstName&quot;   Me.BindingContext(dataSet1.Customers).Position = 1      ```      ```c#   comboBox1.DataSource = DataSet1.Customers;   comboBox1.DisplayMember = &quot;FirstName&quot;;   this.BindingContext[dataSet1.Customers].Position = 1;      ```      ```cpp   comboBox1->DataSource = dataSet1->Customers;   comboBox1->DisplayMember = &quot;FirstName&quot;;   this->BindingContext->get_Item(dataSet1->Customers)->Position = 1;      ```      > [!NOTE] >  Most Windows Forms applications bind through a <xref:System.Windows.Forms.BindingSource>. The <xref:System.Windows.Forms.BindingSource> component encapsulates a <xref:System.Windows.Forms.CurrencyManager> and exposes the <xref:System.Windows.Forms.CurrencyManager> programming interface. When using a <xref:System.Windows.Forms.BindingSource> for binding, you should use the members exposed by the <xref:System.Windows.Forms.BindingSource> to manipulate &quot;currency&quot; (that is, `Position`) rather than go through the BindingContext."
   example:
-  - "The following code example creates four <xref:System.Windows.Forms.Binding> objects to bind five controls—a <xref:System.Windows.Forms.DateTimePicker> and four <xref:System.Windows.Forms.TextBox> controls—to several data sources. The BindingContext is then used to get the <xref:System.Windows.Forms.BindingManagerBase> for each data source.  \n  \n [!code-cpp[Classic BindingContext Example#1](~/add/codesnippet/CPP/t-system.windows.forms.b_7_1.cpp)]\n [!code-cs[Classic BindingContext Example#1](~/add/codesnippet/CSharp/t-system.windows.forms.b_7_1.cs)]\n [!code-vb[Classic BindingContext Example#1](~/add/codesnippet/VisualBasic/t-system.windows.forms.b_7_1.vb)]"
+  - "The following code example creates four <xref:System.Windows.Forms.Binding> objects to bind five controls—a <xref:System.Windows.Forms.DateTimePicker> and four <xref:System.Windows.Forms.TextBox> controls—to several data sources. The BindingContext is then used to get the <xref:System.Windows.Forms.BindingManagerBase> for each data source.  \n  \n [!code-cpp[Classic BindingContext Example#1](~/add/codesnippet/cpp/t-system.windows.forms.b_7_1.cpp)]\n [!code-cs[Classic BindingContext Example#1](~/add/codesnippet/csharp/t-system.windows.forms.b_7_1.cs)]\n [!code-vb[Classic BindingContext Example#1](~/add/codesnippet/visualbasic/t-system.windows.forms.b_7_1.vb)]"
   syntax:
     content: >-
       [System.ComponentModel.DefaultEvent("CollectionChanged")]
@@ -44,9 +44,7 @@ items:
   - System.Collections.ICollection
   inheritedMembers: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.#ctor
   id: '#ctor'
   parent: System.Windows.Forms.BindingContext
@@ -59,19 +57,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see> class."
+  summary: "Initializes a new instance of the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> class."
   remarks: "If you want to have multiple <xref:System.Windows.Forms.BindingManagerBase> instances for the same data source, create a new <xref:System.Windows.Forms.BindingContext> and set it to the <xref:System.Windows.Forms.Control.BindingContext%2A> property of an object that inherits from the <xref:System.Windows.Forms.Control> class. For example, if you have two <xref:System.Windows.Forms.BindingManagerBase> objects (from two different <xref:System.Windows.Forms.BindingContext> objects), you can set the <xref:System.Windows.Forms.BindingManagerBase.Position%2A> properties of each <xref:System.Windows.Forms.BindingManagerBase> to different values. This causes each set of data-bound controls to display different values from the same data source."
   example:
-  - "The following code example creates two new <xref:System.Windows.Forms.BindingContext> objects and assigns each object to the <xref:System.Windows.Forms.BindingContext> property of a <xref:System.Windows.Forms.GroupBox> control. `GroupBox1` contains `TextBox1`, and `GroupBox2` contains `TextBox2` (which is accomplished by using the <xref:System.Windows.Forms.Control.ControlCollection.AddRange%2A> method of the <xref:System.Windows.Forms.Control.ControlCollection> class). The example then adds <xref:System.Windows.Forms.Binding> objects to the two <xref:System.Windows.Forms.TextBox> controls, binding each to the same data source and data member. The example also shows two event handlers that use the <xref:System.Windows.Forms.BindingContext> from the <xref:System.Windows.Forms.GroupBox> controls to set the <xref:System.Windows.Forms.BindingManagerBase.Position%2A> property on different <xref:System.Windows.Forms.BindingManagerBase> objects.  \n  \n [!code-cs[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/CSharp/m-system.windows.forms.b_17_1.cs)]\n [!code-cpp[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/CPP/m-system.windows.forms.b_17_1.cpp)]\n [!code-vb[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.b_17_1.vb)]"
+  - "The following code example creates two new <xref:System.Windows.Forms.BindingContext> objects and assigns each object to the <xref:System.Windows.Forms.BindingContext> property of a <xref:System.Windows.Forms.GroupBox> control. `GroupBox1` contains `TextBox1`, and `GroupBox2` contains `TextBox2` (which is accomplished by using the <xref:System.Windows.Forms.Control.ControlCollection.AddRange%2A> method of the <xref:System.Windows.Forms.Control.ControlCollection> class). The example then adds <xref:System.Windows.Forms.Binding> objects to the two <xref:System.Windows.Forms.TextBox> controls, binding each to the same data source and data member. The example also shows two event handlers that use the <xref:System.Windows.Forms.BindingContext> from the <xref:System.Windows.Forms.GroupBox> controls to set the <xref:System.Windows.Forms.BindingManagerBase.Position%2A> property on different <xref:System.Windows.Forms.BindingManagerBase> objects.  \n  \n [!code-cs[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/csharp/m-system.windows.forms.b_17_1.cs)]\n [!code-cpp[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/cpp/m-system.windows.forms.b_17_1.cpp)]\n [!code-vb[Classic BindingContext.BindingContext Example#1](~/add/codesnippet/visualbasic/m-system.windows.forms.b_17_1.vb)]"
   syntax:
     content: public BindingContext ();
     parameters: []
   overload: System.Windows.Forms.BindingContext.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Add(System.Object,System.Windows.Forms.BindingManagerBase)
   id: Add(System.Object,System.Windows.Forms.BindingManagerBase)
   parent: System.Windows.Forms.BindingContext
@@ -84,22 +80,20 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Adds the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with a specific data source to the collection."
+  summary: "Adds the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with a specific data source to the collection."
   syntax:
     content: protected void Add (object dataSource, System.Windows.Forms.BindingManagerBase listManager);
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The <xref:System.Object> associated with the ."
+      description: "The <xref:System.Object> associated with the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     - id: listManager
       type: System.Windows.Forms.BindingManagerBase
-      description: "The  to add."
+      description: "The <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> to add."
   overload: System.Windows.Forms.BindingContext.Add*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.AddCore(System.Object,System.Windows.Forms.BindingManagerBase)
   id: AddCore(System.Object,System.Windows.Forms.BindingManagerBase)
   parent: System.Windows.Forms.BindingContext
@@ -112,25 +106,23 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Adds the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with a specific data source to the collection."
+  summary: "Adds the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with a specific data source to the collection."
   syntax:
     content: protected virtual void AddCore (object dataSource, System.Windows.Forms.BindingManagerBase listManager);
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The object associated with the ."
+      description: "The object associated with the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     - id: listManager
       type: System.Windows.Forms.BindingManagerBase
-      description: "The  to add."
+      description: "The <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> to add."
   overload: System.Windows.Forms.BindingContext.AddCore*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "\n    dataSource is .  \n  \n -or-  \n  \n listManager is ."
+    description: "<code>dataSource</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       <code>listManager</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Clear
   id: Clear
   parent: System.Windows.Forms.BindingContext
@@ -143,16 +135,14 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Clears the collection of any <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> objects."
+  summary: "Clears the collection of any <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> objects."
   syntax:
     content: protected void Clear ();
     parameters: []
   overload: System.Windows.Forms.BindingContext.Clear*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.ClearCore
   id: ClearCore
   parent: System.Windows.Forms.BindingContext
@@ -172,9 +162,7 @@ items:
   overload: System.Windows.Forms.BindingContext.ClearCore*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.CollectionChanged
   id: CollectionChanged
   parent: System.Windows.Forms.BindingContext
@@ -187,8 +175,8 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Always raises a &lt;xref:System.NotImplementedException&gt; when handled."
-  remarks: "The CollectionChanged event is obsolete and always raises a <xref:System.NotImplementedException> when handled. For more information about handling events, see [Handling and Raising Events](../Topic/Handling%20and%20Raising%20Events.md)."
+  summary: "Always raises a <xref:System.NotImplementedException> when handled."
+  remarks: "The CollectionChanged event is obsolete and always raises a <xref:System.NotImplementedException> when handled. For more information about handling events, see [Handling and Raising Events](~/add/includes/ajax-current-ext-md.md)."
   syntax:
     content: public event System.ComponentModel.CollectionChangeEventHandler CollectionChanged;
     return:
@@ -199,9 +187,7 @@ items:
     commentId: T:System.NotImplementedException
     description: "Occurs in all cases."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Contains(System.Object)
   id: Contains(System.Object)
   parent: System.Windows.Forms.BindingContext
@@ -214,10 +200,10 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Gets a value indicating whether the <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see> contains the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with the specified data source."
+  summary: "Gets a value indicating whether the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> contains the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with the specified data source."
   remarks: "See the <xref:System.Windows.Forms.Binding> class for a list of possible data sources and information about creating bindings between controls and data sources.       See the <xref:System.Windows.Forms.BindingContext.Item%2A> property for information about returning a <xref:System.Windows.Forms.BindingManagerBase> using only a data source."
   example:
-  - "The following code example uses the Contains method to determine whether a <xref:System.Windows.Forms.BindingManagerBase> exists for each control on a form. The example passes each <xref:System.Data.DataTable> in a <xref:System.Data.DataSet> to the method.  \n  \n [!code-vb[Classic BindingContext.Contains Example#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.b_9_1.vb)]\n [!code-cs[Classic BindingContext.Contains Example#1](~/add/codesnippet/CSharp/m-system.windows.forms.b_9_1.cs)]\n [!code-cpp[Classic BindingContext.Contains Example#1](~/add/codesnippet/CPP/m-system.windows.forms.b_9_1.cpp)]"
+  - "The following code example uses the Contains method to determine whether a <xref:System.Windows.Forms.BindingManagerBase> exists for each control on a form. The example passes each <xref:System.Data.DataTable> in a <xref:System.Data.DataSet> to the method.  \n  \n [!code-vb[Classic BindingContext.Contains Example#1](~/add/codesnippet/visualbasic/m-system.windows.forms.b_9_1.vb)]\n [!code-cs[Classic BindingContext.Contains Example#1](~/add/codesnippet/csharp/m-system.windows.forms.b_9_1.cs)]\n [!code-cpp[Classic BindingContext.Contains Example#1](~/add/codesnippet/cpp/m-system.windows.forms.b_9_1.cpp)]"
   syntax:
     content: public bool Contains (object dataSource);
     parameters:
@@ -226,13 +212,11 @@ items:
       description: "An <xref:System.Object> that represents the data source."
     return:
       type: System.Boolean
-      description: "To be added."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> contains the specified <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
   overload: System.Windows.Forms.BindingContext.Contains*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Contains(System.Object,System.String)
   id: Contains(System.Object,System.String)
   parent: System.Windows.Forms.BindingContext
@@ -245,10 +229,10 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Gets a value indicating whether the <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see> contains the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with the specified data source and data member."
+  summary: "Gets a value indicating whether the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> contains the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with the specified data source and data member."
   remarks: "See the <xref:System.Windows.Forms.Binding> class for a list of possible data sources and for information about creating bindings between controls and data sources.       See the <xref:System.Windows.Forms.BindingContext.Item%2A> property for information about returning a <xref:System.Windows.Forms.BindingManagerBase> using a data source and data member."
   example:
-  - "The following code example uses the <xref:System.Windows.Forms.BindingContext.Contains%2A> method to test whether a specific <xref:System.Windows.Forms.BindingManagerBase> exists before attempting to get it through the <xref:System.Windows.Forms.BindingContext.Item%2A> property.  \n  \n [!code-cs[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/CSharp/m-system.windows.forms.b_18_1.cs)]\n [!code-vb[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.b_18_1.vb)]\n [!code-cpp[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/CPP/m-system.windows.forms.b_18_1.cpp)]"
+  - "The following code example uses the <xref:System.Windows.Forms.BindingContext.Contains%2A> method to test whether a specific <xref:System.Windows.Forms.BindingManagerBase> exists before attempting to get it through the <xref:System.Windows.Forms.BindingContext.Item%2A> property.  \n  \n [!code-cs[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/csharp/m-system.windows.forms.b_18_1.cs)]\n [!code-vb[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/visualbasic/m-system.windows.forms.b_18_1.vb)]\n [!code-cpp[Classic BindingContext.Contains1 Example#1](~/add/codesnippet/cpp/m-system.windows.forms.b_18_1.cpp)]"
   syntax:
     content: public bool Contains (object dataSource, string dataMember);
     parameters:
@@ -257,16 +241,14 @@ items:
       description: "An <xref:System.Object> that represents the data source."
     - id: dataMember
       type: System.String
-      description: "The information needed to resolve to a specific ."
+      description: "The information needed to resolve to a specific <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     return:
       type: System.Boolean
-      description: "To be added."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> contains the specified <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
   overload: System.Windows.Forms.BindingContext.Contains*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.IsReadOnly
   id: IsReadOnly
   parent: System.Windows.Forms.BindingContext
@@ -289,9 +271,7 @@ items:
   overload: System.Windows.Forms.BindingContext.IsReadOnly*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Item(System.Object)
   id: Item(System.Object)
   parent: System.Windows.Forms.BindingContext
@@ -304,25 +284,23 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Gets the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> that is associated with the specified data source."
+  summary: "Gets the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> that is associated with the specified data source."
   remarks: "Use this overload if the <xref:System.Windows.Forms.BindingManagerBase> you want does not require a navigation path. For example, if the <xref:System.Windows.Forms.BindingManagerBase> manages a set of <xref:System.Windows.Forms.Binding> objects that use an <xref:System.Collections.ArrayList> or <xref:System.Data.DataTable> as the <xref:System.Windows.Forms.Binding.DataSource%2A>, no navigation path is required.      > [!NOTE] >  The Item property will always return a <xref:System.Windows.Forms.BindingManagerBase>, and never return `null`.       See the <xref:System.Windows.Forms.Binding> class for a list of possible data sources and for information about creating bindings between controls and data sources."
   example:
-  - "The following code example returns three <xref:System.Windows.Forms.BindingManagerBase> objects: one for a <xref:System.Data.DataView>, one for an <xref:System.Collections.ArrayList>, and one for the <xref:System.Windows.Forms.Binding.DataSource%2A> of a <xref:System.Windows.Forms.Binding> that belongs to a <xref:System.Windows.Forms.TextBox> control.  \n  \n [!code-cs[Classic BindingContext.this Example#1](~/add/codesnippet/CSharp/p-system.windows.forms.b_30_1.cs)]\n [!code-cpp[Classic BindingContext.this Example#1](~/add/codesnippet/CPP/p-system.windows.forms.b_30_1.cpp)]\n [!code-vb[Classic BindingContext.this Example#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.b_30_1.vb)]"
+  - "The following code example returns three <xref:System.Windows.Forms.BindingManagerBase> objects: one for a <xref:System.Data.DataView>, one for an <xref:System.Collections.ArrayList>, and one for the <xref:System.Windows.Forms.Binding.DataSource%2A> of a <xref:System.Windows.Forms.Binding> that belongs to a <xref:System.Windows.Forms.TextBox> control.  \n  \n [!code-cs[Classic BindingContext.this Example#1](~/add/codesnippet/csharp/p-system.windows.forms.b_30_1.cs)]\n [!code-cpp[Classic BindingContext.this Example#1](~/add/codesnippet/cpp/p-system.windows.forms.b_30_1.cpp)]\n [!code-vb[Classic BindingContext.this Example#1](~/add/codesnippet/visualbasic/p-system.windows.forms.b_30_1.vb)]"
   syntax:
     content: public System.Windows.Forms.BindingManagerBase this[object dataSource] { get; }
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The data source associated with a particular ."
+      description: "The data source associated with a particular <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     return:
       type: System.Windows.Forms.BindingManagerBase
-      description: "A <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> for the specified data source."
+      description: "A <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> for the specified data source."
   overload: System.Windows.Forms.BindingContext.Item*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Item(System.Object,System.String)
   id: Item(System.Object,System.String)
   parent: System.Windows.Forms.BindingContext
@@ -335,31 +313,29 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Gets a <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> that is associated with the specified data source and data member."
+  summary: "Gets a <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> that is associated with the specified data source and data member."
   remarks: "Use this overload when the <xref:System.Windows.Forms.BindingManagerBase> manages a set of <xref:System.Windows.Forms.Binding> objects for which the data source contains multiple objects. For example, a <xref:System.Data.DataSet> can contain several <xref:System.Data.DataTable> objects linked by <xref:System.Data.DataRelation> objects. In such a case, the navigation path is required to enable the <xref:System.Windows.Forms.BindingContext> to return the correct <xref:System.Windows.Forms.BindingManagerBase>.      > [!NOTE] >  The Item property will always return a <xref:System.Windows.Forms.BindingManagerBase>, when the `dataMember` parameter is valid. It will never return `null`.       See the <xref:System.Windows.Forms.Binding> class for a list of possible data sources and for information about creating bindings between controls and data sources.       If the desired <xref:System.Windows.Forms.BindingManagerBase> manages a list, the navigation path must also end with a list. For example, the following C# code binds a <xref:System.Windows.Forms.TextBox> control to the order date in a table of orders. The navigation path includes the <xref:System.Data.DataTable.TableName%2A>, the <xref:System.Data.DataRelation.RelationName%2A>, and the <xref:System.Data.DataColumn.ColumnName%2A>. However, the <xref:System.Windows.Forms.BindingManagerBase> must be retrieved using only the <xref:System.Data.DataTable.TableName%2A> and <xref:System.Data.DataRelation.RelationName%2A> (which resolves to a list).      ```   // The navigation path for a Binding ends with a property.   textBox1.DataBindings.Add   (&quot;Text&quot;, dataSet1, &quot;Customers.custToOrders.OrderDate&quot;);   // The navigation path for the BindingManagerBase ends with a list.   BindingManagerBase bmOrders = this.BindingContext   [dataSet1, &quot;Customers.custToOrders&quot;];   ```       When returning a <xref:System.Windows.Forms.BindingManagerBase>, you should use the same data source as the <xref:System.Windows.Forms.Binding> and modify only the navigation path.       Use the <xref:System.Windows.Forms.BindingContext.Contains%2A> method to determine if the desired <xref:System.Windows.Forms.BindingManagerBase> already exists."
   example:
-  - "The following code example demonstrates how to use the Item to retrieve the <xref:System.Windows.Forms.BindingManagerBase> for a particular binding. It also shows how to handle the <xref:System.Windows.Forms.BindingManagerBase.BindingComplete> event for the <xref:System.Windows.Forms.BindingManagerBase> to ensure multiple controls bound to the same data source remain synchronized when one of the control values is changed. To run this example, paste the code into a Windows Form and call the `InitializeControlsAndData` method from the form's constructor or <xref:System.Windows.Forms.Form.Load> event-handling method.  \n  \n [!code-vb[System.Windows.Forms.BindingSourceMultipleControls#11](~/add/codesnippet/VisualBasic/p-system.windows.forms.b_17_1.vb)]\n [!code-cs[System.Windows.Forms.BindingSourceMultipleControls#11](~/add/codesnippet/CSharp/p-system.windows.forms.b_17_1.cs)]"
+  - "The following code example demonstrates how to use the Item to retrieve the <xref:System.Windows.Forms.BindingManagerBase> for a particular binding. It also shows how to handle the <xref:System.Windows.Forms.BindingManagerBase.BindingComplete> event for the <xref:System.Windows.Forms.BindingManagerBase> to ensure multiple controls bound to the same data source remain synchronized when one of the control values is changed. To run this example, paste the code into a Windows Form and call the `InitializeControlsAndData` method from the form's constructor or <xref:System.Windows.Forms.Form.Load> event-handling method.  \n  \n [!code-vb[System.Windows.Forms.BindingSourceMultipleControls#11](~/add/codesnippet/visualbasic/p-system.windows.forms.b_17_1.vb)]\n [!code-cs[System.Windows.Forms.BindingSourceMultipleControls#11](~/add/codesnippet/csharp/p-system.windows.forms.b_17_1.cs)]"
   syntax:
     content: public System.Windows.Forms.BindingManagerBase this[object dataSource, string dataMember] { get; }
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The data source associated with a particular ."
+      description: "The data source associated with a particular <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     - id: dataMember
       type: System.String
-      description: "A navigation path containing the information that resolves to a specific ."
+      description: "A navigation path containing the information that resolves to a specific <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref>."
     return:
       type: System.Windows.Forms.BindingManagerBase
-      description: "The <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> for the specified data source and data member."
+      description: "The <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> for the specified data source and data member."
   overload: System.Windows.Forms.BindingContext.Item*
   exceptions:
   - type: System.Exception
     commentId: T:System.Exception
-    description: "The specified dataMember does not exist within the data source."
+    description: "The specified <code>dataMember</code> does not exist within the data source."
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs)
   id: OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs)
   parent: System.Windows.Forms.BindingContext
@@ -372,20 +348,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Raises the <see cref=&quot;E:System.Windows.Forms.BindingContext.CollectionChanged&quot;></see> event."
-  remarks: "Raising an event invokes the event handler through a delegate. For more information, see [Handling and Raising Events](../Topic/Handling%20and%20Raising%20Events.md).       The OnCollectionChanged method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "Raises the <xref href=&quot;System.Windows.Forms.BindingContext.CollectionChanged&quot;></xref> event."
+  remarks: "Raising an event invokes the event handler through a delegate. For more information, see [Handling and Raising Events](~/add/includes/ajax-current-ext-md.md).       The OnCollectionChanged method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
   syntax:
     content: protected virtual void OnCollectionChanged (System.ComponentModel.CollectionChangeEventArgs ccevent);
     parameters:
     - id: ccevent
       type: System.ComponentModel.CollectionChangeEventArgs
-      description: "A  that contains the event data."
+      description: "A <xref href=&quot;System.ComponentModel.CollectionChangeEventArgs&quot;></xref> that contains the event data."
   overload: System.Windows.Forms.BindingContext.OnCollectionChanged*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.Remove(System.Object)
   id: Remove(System.Object)
   parent: System.Windows.Forms.BindingContext
@@ -398,19 +372,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Deletes the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with the specified data source."
+  summary: "Deletes the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with the specified data source."
   syntax:
     content: protected void Remove (object dataSource);
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The data source associated with the  to remove."
+      description: "The data source associated with the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> to remove."
   overload: System.Windows.Forms.BindingContext.Remove*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.RemoveCore(System.Object)
   id: RemoveCore(System.Object)
   parent: System.Windows.Forms.BindingContext
@@ -423,19 +395,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Removes the <see cref=&quot;T:System.Windows.Forms.BindingManagerBase&quot;></see> associated with the specified data source."
+  summary: "Removes the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> associated with the specified data source."
   syntax:
     content: protected virtual void RemoveCore (object dataSource);
     parameters:
     - id: dataSource
       type: System.Object
-      description: "The data source associated with the  to remove."
+      description: "The data source associated with the <xref href=&quot;System.Windows.Forms.BindingManagerBase&quot;></xref> to remove."
   overload: System.Windows.Forms.BindingContext.RemoveCore*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.System#Collections#ICollection#CopyTo(System.Array,System.Int32)
   id: System#Collections#ICollection#CopyTo(System.Array,System.Int32)
   isEii: true
@@ -453,9 +423,9 @@ items:
   remarks: ''
   example:
   - >-
-    [!code-cs[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/CSharp/030fb284-4e33-401e-88b7-_1.cs)]
-     [!code-cpp[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/CPP/030fb284-4e33-401e-88b7-_1.cpp)]
-     [!code-vb[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/VisualBasic/030fb284-4e33-401e-88b7-_1.vb)]
+    [!code-cs[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/csharp/030fb284-4e33-401e-88b7-_1.cs)]
+     [!code-cpp[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/cpp/030fb284-4e33-401e-88b7-_1.cpp)]
+     [!code-vb[Classic BindingContext.ICollection.CopyTo Example#1](~/add/codesnippet/visualbasic/030fb284-4e33-401e-88b7-_1.vb)]
   syntax:
     content: void ICollection.CopyTo (Array ar, int index);
     parameters:
@@ -468,9 +438,7 @@ items:
   overload: System.Windows.Forms.BindingContext.System#Collections#ICollection#CopyTo*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.System#Collections#ICollection#Count
   id: System#Collections#ICollection#Count
   isEii: true
@@ -484,21 +452,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Gets the total number of <see cref=&quot;T:System.Windows.Forms.CurrencyManager&quot;></see> objects managed by the <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see>."
+  summary: "Gets the total number of <xref href=&quot;System.Windows.Forms.CurrencyManager&quot;></xref> objects managed by the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref>."
   remarks: ''
   example:
-  - "The following code example returns the number of <xref:System.Windows.Forms.CurrencyManager> objects managed by the <xref:System.Windows.Forms.BindingContext>.  \n  \n [!code-vb[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/VisualBasic/24e4ccaa-040d-4b41-b443-_1.vb)]\n [!code-cpp[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/CPP/24e4ccaa-040d-4b41-b443-_1.cpp)]\n [!code-cs[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/CSharp/24e4ccaa-040d-4b41-b443-_1.cs)]"
+  - "The following code example returns the number of <xref:System.Windows.Forms.CurrencyManager> objects managed by the <xref:System.Windows.Forms.BindingContext>.  \n  \n [!code-vb[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/visualbasic/24e4ccaa-040d-4b41-b443-_1.vb)]\n [!code-cpp[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/cpp/24e4ccaa-040d-4b41-b443-_1.cpp)]\n [!code-cs[Classic BindingContext.ICollection.Count Example#1](~/add/codesnippet/csharp/24e4ccaa-040d-4b41-b443-_1.cs)]"
   syntax:
     content: int System.Collections.ICollection.Count { get; }
     return:
       type: System.Int32
-      description: "The number of data sources managed by the <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see>."
+      description: "The number of data sources managed by the <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref>."
   overload: System.Windows.Forms.BindingContext.System#Collections#ICollection#Count*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.System#Collections#ICollection#IsSynchronized
   id: System#Collections#ICollection#IsSynchronized
   isEii: true
@@ -522,9 +488,7 @@ items:
   overload: System.Windows.Forms.BindingContext.System#Collections#ICollection#IsSynchronized*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.System#Collections#ICollection#SyncRoot
   id: System#Collections#ICollection#SyncRoot
   isEii: true
@@ -543,13 +507,11 @@ items:
     content: object System.Collections.ICollection.SyncRoot { get; }
     return:
       type: System.Object
-      description: "This property is derived from &lt;xref:System.Collections.ICollection&gt;, and is overridden to always return <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "This property is derived from <xref:System.Collections.ICollection>, and is overridden to always return <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   overload: System.Windows.Forms.BindingContext.System#Collections#ICollection#SyncRoot*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.System#Collections#IEnumerable#GetEnumerator
   id: System#Collections#IEnumerable#GetEnumerator
   isEii: true
@@ -566,19 +528,17 @@ items:
   summary: "Gets an enumerator for the collection."
   remarks: "The <xref:System.Collections.IEnumerator> returned by the IEnumerable.GetEnumerator method allows you to iterate over the collection managed by the <xref:System.Windows.Forms.BindingContext>."
   example:
-  - "The following code example uses the IEnumerable.GetEnumerator method to return an <xref:System.Collections.IEnumerator> for the <xref:System.Windows.Forms.BindingContext>.  \n  \n [!code-cs[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/CSharp/dec1c1ce-5dab-481d-86dd-_1.cs)]\n [!code-cpp[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/CPP/dec1c1ce-5dab-481d-86dd-_1.cpp)]\n [!code-vb[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/VisualBasic/dec1c1ce-5dab-481d-86dd-_1.vb)]"
+  - "The following code example uses the IEnumerable.GetEnumerator method to return an <xref:System.Collections.IEnumerator> for the <xref:System.Windows.Forms.BindingContext>.  \n  \n [!code-cs[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/csharp/dec1c1ce-5dab-481d-86dd-_1.cs)]\n [!code-cpp[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/cpp/dec1c1ce-5dab-481d-86dd-_1.cpp)]\n [!code-vb[Classic BindingContext.IEnumerable.GetEnumerator Example#1](~/add/codesnippet/visualbasic/dec1c1ce-5dab-481d-86dd-_1.vb)]"
   syntax:
     content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: "To be added."
+      description: "An <xref:System.Collections.IEnumerator> for the collection."
   overload: System.Windows.Forms.BindingContext.System#Collections#IEnumerable#GetEnumerator*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext,System.Windows.Forms.Binding)
   id: UpdateBinding(System.Windows.Forms.BindingContext,System.Windows.Forms.Binding)
   parent: System.Windows.Forms.BindingContext
@@ -591,27 +551,34 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: "Associates a <see cref=&quot;T:System.Windows.Forms.Binding&quot;></see> with a new <see cref=&quot;T:System.Windows.Forms.BindingContext&quot;></see>."
+  summary: "Associates a <xref href=&quot;System.Windows.Forms.Binding&quot;></xref> with a new <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref>."
   remarks: "This method is intended update the bindings of components that implement <xref:System.Windows.Forms.IBindableComponent>, when their <xref:System.Windows.Forms.BindingContext> changes."
   syntax:
     content: public static void UpdateBinding (System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding);
     parameters:
     - id: newBindingContext
       type: System.Windows.Forms.BindingContext
-      description: "The new  to associate with the ."
+      description: "The new <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref> to associate with the <xref href=&quot;System.Windows.Forms.Binding&quot;></xref>."
     - id: binding
       type: System.Windows.Forms.Binding
-      description: "The  to associate with the new ."
+      description: "The <xref href=&quot;System.Windows.Forms.Binding&quot;></xref> to associate with the new <xref href=&quot;System.Windows.Forms.BindingContext&quot;></xref>."
   overload: System.Windows.Forms.BindingContext.UpdateBinding*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Object
   isExternal: false
   name: System.Object
+- uid: System.ArgumentNullException
+  isExternal: true
+  name: System.ArgumentNullException
+- uid: System.NotImplementedException
+  isExternal: true
+  name: System.NotImplementedException
+- uid: System.Exception
+  isExternal: true
+  name: System.Exception
 - uid: System.Windows.Forms.BindingContext.#ctor
   parent: System.Windows.Forms.BindingContext
   isExternal: false

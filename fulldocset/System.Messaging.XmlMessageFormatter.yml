@@ -1,0 +1,427 @@
+### YamlMime:ManagedReference
+items:
+- uid: System.Messaging.XmlMessageFormatter
+  id: XmlMessageFormatter
+  children:
+  - System.Messaging.XmlMessageFormatter.#ctor
+  - System.Messaging.XmlMessageFormatter.#ctor(System.String[])
+  - System.Messaging.XmlMessageFormatter.#ctor(System.Type[])
+  - System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)
+  - System.Messaging.XmlMessageFormatter.Clone
+  - System.Messaging.XmlMessageFormatter.Read(System.Messaging.Message)
+  - System.Messaging.XmlMessageFormatter.TargetTypeNames
+  - System.Messaging.XmlMessageFormatter.TargetTypes
+  - System.Messaging.XmlMessageFormatter.Write(System.Messaging.Message,System.Object)
+  langs:
+  - csharp
+  name: XmlMessageFormatter
+  nameWithType: XmlMessageFormatter
+  fullName: System.Messaging.XmlMessageFormatter
+  type: Class
+  summary: "Serializes and deserializes objects to or from the body of a message, using the XML format based on the XSD schema definition."
+  remarks: "The XmlMessageFormatter is the default formatter that an instance of <xref:System.Messaging.MessageQueue> uses to serialize messages written to the queue. When you create an instance of <xref:System.Messaging.MessageQueue>, an instance of XmlMessageFormatter is created for you and associated with the <xref:System.Messaging.MessageQueue>. You can specify a different formatter by creating it in your code and assigning it to the <xref:System.Messaging.MessageQueue.Formatter%2A> property of your <xref:System.Messaging.MessageQueue>.       A queue&quot;s default XmlMessageFormatter instance can be used to write to the queue, but it cannot be used to read from the queue until you set either the <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> property on the formatter. You can either set one or both of these values on the default formatter instance, or you can create a new instance of the formatter and set the values automatically by passing them as arguments into the appropriate <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor.       When specifying <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error. <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> requires every entry to be fully qualified, specifying its assembly name. Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.       The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message. This allows the formatter to interpret the message body.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       Only one of the two properties needs to be set when reading from the queue, but you can set both. The set of types is the combined set from the two properties. The decision of which property to use is specific to your application. If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.       The XmlMessageFormatter is a crucial component of loosely coupled XML-based messaging. The XSD.exe utility uses the XML format is used to generate XML schema, such as when you use the utility to serialize a class used by your application. The class must have a default constructor.       The format is used again in the reverse process when the utility generates a class based on the schema you distribute to describe your class data. The use of the utility and the XML schema it generates enables you to avoid redistributing.dll files every time you recompile a class after the implementation of your class has changed. As long as the schema does not change on the client or the server, other changes on either side do not affect the other."
+  example:
+  - "The following code example includes three pieces of code: a server component, an order class, and client code. The order class can be used by the XSD.exe utility to generate schema that the server recognizes within incoming messages. The schema is an XML formatted file that describes the \"shape\" of the class. This schema can then be used on the client side to generate a client-specific order class that shares the same schema as the server class.  \n  \n The following code example represents a server component that receives orders through a message queue. The body of the message should be an order object whose schema matches the Order.cs class below. The server process or application deserializes the order.  \n  \n [!code-vb[Classic XmlMessageFormatter Example#1](~/add/codesnippet/visualbasic/t-system.messaging.xmlme_1.vb)]\n [!code-cpp[Classic XmlMessageFormatter Example#1](~/add/codesnippet/cpp/t-system.messaging.xmlme_1.cpp)]\n [!code-cs[Classic XmlMessageFormatter Example#1](~/add/codesnippet/csharp/t-system.messaging.xmlme_1.cs)]  \n  \n The following code example represents the order class that provides a schema for the order objects that the application on the server receives and deserializes.  \n  \n [!code-vb[Classic XmlMessageFormatter Example#2](~/add/codesnippet/visualbasic/t-system.messaging.xmlme_2.vb)]\n [!code-cs[Classic XmlMessageFormatter Example#2](~/add/codesnippet/csharp/t-system.messaging.xmlme_2.cs)]\n [!code-cpp[Classic XmlMessageFormatter Example#2](~/add/codesnippet/cpp/t-system.messaging.xmlme_2.cpp)]  \n  \n Any client application that interacts with the application on the server must send messages to the server by serializing information in a locally defined order class into the message body. The locally defined order class must have the same schema as the server-defined order class into which the application on the server will attempt to deserialize the message body. The XSD.exe utility lets the manager of the application on the server create and distribute the schema the client must use to serialize messages going to the server.  \n  \n When the manager of the client application receives the schema for the order class, the XSD.exe utility is used again to generate a client-specific order class from the schema. It is this class that is used in the client code example below, not the server's order class (the XSD.exe utility causes the schema-generated class to have the same name as the original class). This new order class is used to serialize the order into the message body.  \n  \n The following code example is the client-side processing, used to serialize an order and send the information associated with the order to a queue. The code associates Item, Quantity, and Address information with elements of the schema that were generated for the Order.cs class by the XSD.exe utility. An order is sent to the Orders queue on the local computer.  \n  \n [!code-vb[Classic XmlMessageFormatter Example#3](~/add/codesnippet/visualbasic/t-system.messaging.xmlme_3.vb)]\n [!code-cpp[Classic XmlMessageFormatter Example#3](~/add/codesnippet/cpp/t-system.messaging.xmlme_3.cpp)]\n [!code-cs[Classic XmlMessageFormatter Example#3](~/add/codesnippet/csharp/t-system.messaging.xmlme_3.cs)]  \n  \n After the schema is generated from the order class on the server, you can modify the class. Unless the schema changes, you do not need to redistribute the schema. After you have distributed the schema and generated a client-side order class, that client class can also be modified independently of the server's order class, as long as the schema itself is not modified. The two classes have become loosely coupled."
+  syntax:
+    content: 'public class XmlMessageFormatter : ICloneable, System.Messaging.IMessageFormatter'
+  inheritance:
+  - System.Object
+  implements:
+  - System.ICloneable
+  - System.Messaging.IMessageFormatter
+  inheritedMembers: []
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.#ctor
+  id: '#ctor'
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: XmlMessageFormatter()
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter()
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter()
+  type: Constructor
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Initializes a new instance of the <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> class, without target types set."
+  remarks: "This overload of the constructor is used most frequently when writing to the queue, as target types are not required when writing.       To read a message from a queue using an instance of <xref:System.Messaging.XmlMessageFormatter> created using this constructor, you must set the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties so the formatter knows what types to attempt to deserialize.       When you create a new <xref:System.Messaging.MessageQueue>, a default <xref:System.Messaging.XmlMessageFormatter> instance is created, without the target types set. As with a formatter created using this constructor, you must set target types for that formatter instance if you want to read from the queue."
+  syntax:
+    content: public XmlMessageFormatter ();
+    parameters: []
+  overload: System.Messaging.XmlMessageFormatter.#ctor*
+  exceptions: []
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.#ctor(System.String[])
+  id: '#ctor(System.String[])'
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: XmlMessageFormatter(String[])
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter(String[])
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter(String[])
+  type: Constructor
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Initializes a new instance of the <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> class, setting target types passed in as an array of (fully qualified) string values."
+  remarks: "The constructors with target type parameters are most frequently used when reading from the queue. When writing, it is not necessary to specify target types.       This overload of the <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor sets the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> property to the array values passed in through the `targetTypeNames` parameter. Setting this property enables a <xref:System.Messaging.MessageQueue> using this <xref:System.Messaging.XmlMessageFormatter> instance to read messages containing objects of given types.       Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message. This allows the formatter to interpret the message body.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       Only one of the two properties needs to be set when reading from the queue, but you can set both. The set of types is the combined set from the two properties. The decision of which one to use is specific to your application. If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown at read time."
+  example:
+  - >-
+    [!code-cpp[Message.Body#1](~/add/codesnippet/cpp/m-system.messaging.xmlme_1.cpp)]
+     [!code-cs[Message.Body#1](~/add/codesnippet/csharp/m-system.messaging.xmlme_1.cs)]
+     [!code-vb[Message.Body#1](~/add/codesnippet/visualbasic/m-system.messaging.xmlme_1.vb)]
+  syntax:
+    content: public XmlMessageFormatter (string[] targetTypeNames);
+    parameters:
+    - id: targetTypeNames
+      type: System.String[]
+      description: "An array of type <xref:System.String> that specifies the set of possible types that will be deserialized by the formatter from the message provided. These values must be fully qualified, for example, &quot;MyNamespace.MyOrders, MyOrdersAssemblyName&quot;."
+  overload: System.Messaging.XmlMessageFormatter.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The <code>targetTypeNames</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.#ctor(System.Type[])
+  id: '#ctor(System.Type[])'
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: XmlMessageFormatter(Type[])
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter(Type[])
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter(Type[])
+  type: Constructor
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Initializes a new instance of the <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> class, setting target types passed in as an array of object types."
+  remarks: "The constructors with target type parameters are most frequently used when reading from the queue. When writing, it is not necessary to specify target types.       This overload of the <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor sets the <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property to the array values passed in through the `targetTypes` parameter. Setting this property enables a <xref:System.Messaging.MessageQueue> using this <xref:System.Messaging.XmlMessageFormatter> instance to read messages containing objects of the given types.       Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message. This allows the formatter to interpret the message body.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       Only one of the two properties needs to be set when reading from the queue, but you can set both. The set of types is the combined set from the two properties. The decision of which one to use is specific to your application. If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown at read time.       When specifying <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error. <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> requires every entry to be fully qualified, specifying its assembly name. Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.       When using <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>, you can add each object (for example, `MyClass`) to the list in a way demonstrated by the following C# code.      ```   TargetTypes = new Type[]{typeof(MyClass)}   ```"
+  syntax:
+    content: public XmlMessageFormatter (Type[] targetTypes);
+    parameters:
+    - id: targetTypes
+      type: System.Type[]
+      description: "An array of type <xref:System.Type> that specifies the set of possible types that will be deserialized by the formatter from the message provided."
+  overload: System.Messaging.XmlMessageFormatter.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The <code>targetTypes</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)
+  id: CanRead(System.Messaging.Message)
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: CanRead(Message)
+  nameWithType: XmlMessageFormatter.CanRead(Message)
+  fullName: System.Messaging.XmlMessageFormatter.CanRead(Message)
+  type: Method
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Determines whether the formatter can deserialize the message."
+  remarks: "When CanRead is called, the formatter attempts to determine if the contents of the message are something it can deserialize. The formatter can only deserialize the message if the type in the message body has the same schema as one of the types in the array represented by the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties. CanRead returns `false` under the following two circumstances:      -   The message was not formatted using the <xref:System.Messaging.XmlMessageFormatter>.      -   The schema of the message body is not among those listed in either the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property.       The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what types of objects it must be able to deserialize. If any type is missing from the list, yet is found within the message, CanRead returns `false`."
+  syntax:
+    content: public bool CanRead (System.Messaging.Message message);
+    parameters:
+    - id: message
+      type: System.Messaging.Message
+      description: "The <xref href=&quot;System.Messaging.Message&quot;></xref> to inspect."
+    return:
+      type: System.Boolean
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the XML formatter can deserialize the message; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+  overload: System.Messaging.XmlMessageFormatter.CanRead*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Neither the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames*> nor <xref:System.Messaging.XmlMessageFormatter.TargetTypes*> property has been set."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The <code>message</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.Clone
+  id: Clone
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: Clone()
+  nameWithType: XmlMessageFormatter.Clone()
+  fullName: System.Messaging.XmlMessageFormatter.Clone()
+  type: Method
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Creates an instance of the <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> class whose read/write properties (the sets of target types) are the same as the current <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> instance."
+  remarks: "This method creates a copy of the formatter and initializes all its properties to the values of this <xref:System.Messaging.XmlMessageFormatter> object."
+  syntax:
+    content: public object Clone ();
+    parameters: []
+    return:
+      type: System.Object
+      description: "An object whose properties are identical to those of this <xref href=&quot;System.Messaging.XmlMessageFormatter&quot;></xref> instance, but whose metadata does not specify it to be a formatter class instance."
+  overload: System.Messaging.XmlMessageFormatter.Clone*
+  exceptions: []
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.Read(System.Messaging.Message)
+  id: Read(System.Messaging.Message)
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: Read(Message)
+  nameWithType: XmlMessageFormatter.Read(Message)
+  fullName: System.Messaging.XmlMessageFormatter.Read(Message)
+  type: Method
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Reads the contents from the given message and creates an object that contains the deserialized message."
+  remarks: "Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message. One of these properties must be set before the message can be deserialized.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       The target types do not have to be specified in order to write to the queue."
+  syntax:
+    content: public object Read (System.Messaging.Message message);
+    parameters:
+    - id: message
+      type: System.Messaging.Message
+      description: "The <xref href=&quot;System.Messaging.Message&quot;></xref>, in XML format, to deserialize."
+    return:
+      type: System.Object
+      description: "The deserialized message."
+  overload: System.Messaging.XmlMessageFormatter.Read*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "Neither the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames*> nor <xref:System.Messaging.XmlMessageFormatter.TargetTypes*> property has been set.       -or-       The instance serialized in the message body does not comply with any of the schemas represented by the types in the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames*> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes*> properties."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The <code>message</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.TargetTypeNames
+  id: TargetTypeNames
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: TargetTypeNames
+  nameWithType: XmlMessageFormatter.TargetTypeNames
+  fullName: System.Messaging.XmlMessageFormatter.TargetTypeNames
+  type: Property
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Specifies the set of possible types that will be deserialized by the formatter from the message provided."
+  remarks: "Both the TargetTypeNames and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message. This allows the formatter to interpret the message body.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       Only one of the two properties needs to be set when reading from the queue, but you can set both. The set of types is the combined set from the two properties. The decision of which property to use is specific to your application. If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.       TargetTypeNames requires every entry to be fully qualified, specifying its assembly name. Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.       The target types are only required when reading from the queue. The TargetTypeNames and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties do not need to be set to write to the queue."
+  syntax:
+    content: public string[] TargetTypeNames { get; set; }
+    return:
+      type: System.String[]
+      description: "An array of type <xref:System.String> that specifies the types of objects to deserialize from the message body when reading the message."
+  overload: System.Messaging.XmlMessageFormatter.TargetTypeNames*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The TargetTypeNames property is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.TargetTypes
+  id: TargetTypes
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: TargetTypes
+  nameWithType: XmlMessageFormatter.TargetTypes
+  fullName: System.Messaging.XmlMessageFormatter.TargetTypes
+  type: Property
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Specifies the set of possible types that will be deserialized by the formatter from the message provided."
+  remarks: "Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and TargetTypes properties tell the formatter what schemas to attempt to match when deserializing a message. This allows the formatter to interpret the message body.       The instance serialized in the message body must comply with one of the schemas represented in the type array. When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.       Only one of the two properties needs to be set when reading from the queue, but you can set both. The set of types is the combined set from the two properties. The decision of which property to use is specific to your application. If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.       The target types are only required when reading from the queue. The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and TargetTypes properties do not need to be set to write to the queue.       When specifying TargetTypes rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error.       When using TargetTypes, you can add each object (for example, `MyClass`) to the list in a way demonstrated by the C# code `TargetTypes = new Type[]{typeof(MyClass), typeof (MyOtherClass)};`."
+  example:
+  - "The following code example sends and receives a message that contains an order to and from a queue.  \n  \n [!code-cpp[Message.Body#1](~/add/codesnippet/cpp/p-system.messaging.xmlme_1.cpp)]\n [!code-cs[Message.Body#1](~/add/codesnippet/csharp/p-system.messaging.xmlme_1.cs)]\n [!code-vb[Message.Body#1](~/add/codesnippet/visualbasic/p-system.messaging.xmlme_1.vb)]"
+  syntax:
+    content: public Type[] TargetTypes { get; set; }
+    return:
+      type: System.Type[]
+      description: "An array of type <xref:System.Type> that specifies the types of objects to deserialize from the message body when reading the message."
+  overload: System.Messaging.XmlMessageFormatter.TargetTypes*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The TargetTypes property is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+- uid: System.Messaging.XmlMessageFormatter.Write(System.Messaging.Message,System.Object)
+  id: Write(System.Messaging.Message,System.Object)
+  parent: System.Messaging.XmlMessageFormatter
+  langs:
+  - csharp
+  name: Write(Message,Object)
+  nameWithType: XmlMessageFormatter.Write(Message,Object)
+  fullName: System.Messaging.XmlMessageFormatter.Write(Message,Object)
+  type: Method
+  assemblies:
+  - System.Messaging
+  namespace: System.Messaging
+  summary: "Serializes an object into the body of the message."
+  remarks: "The target types need not be specified to write to the queue as they must be when reading. The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property is used by the formatter only when deserializing a message.       The <xref:System.Messaging.XmlMessageFormatter> makes use of the <xref:System.Xml.Serialization.XmlSerializer> class, which defines what can be serialized. Only public fields and public properties can be serialized. Structures, structures with arrays, and arrays of structures are all serializable, as long as they do not use the encoded style with the SOAP protocol."
+  syntax:
+    content: public void Write (System.Messaging.Message message, object obj);
+    parameters:
+    - id: message
+      type: System.Messaging.Message
+      description: "The <xref href=&quot;System.Messaging.Message&quot;></xref> whose <xref:System.Messaging.Message.Body*> property will contain the serialized object."
+    - id: obj
+      type: System.Object
+      description: "The <xref:System.Object> to be serialized into the message body."
+  overload: System.Messaging.XmlMessageFormatter.Write*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The <code>message</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       The <code>obj</code> parameter is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+  platform:
+  - net462
+references:
+- uid: System.Object
+  isExternal: false
+  name: System.Object
+- uid: System.ArgumentNullException
+  isExternal: true
+  name: System.ArgumentNullException
+- uid: System.InvalidOperationException
+  isExternal: true
+  name: System.InvalidOperationException
+- uid: System.Messaging.XmlMessageFormatter.#ctor
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: XmlMessageFormatter()
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter()
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter()
+- uid: System.Messaging.XmlMessageFormatter.#ctor(System.String[])
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: XmlMessageFormatter(String[])
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter(String[])
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter(String[])
+- uid: System.String[]
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Messaging.XmlMessageFormatter.#ctor(System.Type[])
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: XmlMessageFormatter(Type[])
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter(Type[])
+  fullName: System.Messaging.XmlMessageFormatter.XmlMessageFormatter(Type[])
+- uid: System.Type[]
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type[]
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    nameWithType: Type
+    fullName: Type[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: CanRead(Message)
+  nameWithType: XmlMessageFormatter.CanRead(Message)
+  fullName: System.Messaging.XmlMessageFormatter.CanRead(Message)
+- uid: System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.Messaging.Message
+  parent: System.Messaging
+  isExternal: false
+  name: Message
+  nameWithType: Message
+  fullName: System.Messaging.Message
+- uid: System.Messaging.XmlMessageFormatter.Clone
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Clone()
+  nameWithType: XmlMessageFormatter.Clone()
+  fullName: System.Messaging.XmlMessageFormatter.Clone()
+- uid: System.Messaging.XmlMessageFormatter.Read(System.Messaging.Message)
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Read(Message)
+  nameWithType: XmlMessageFormatter.Read(Message)
+  fullName: System.Messaging.XmlMessageFormatter.Read(Message)
+- uid: System.Messaging.XmlMessageFormatter.TargetTypeNames
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: TargetTypeNames
+  nameWithType: XmlMessageFormatter.TargetTypeNames
+  fullName: System.Messaging.XmlMessageFormatter.TargetTypeNames
+- uid: System.Messaging.XmlMessageFormatter.TargetTypes
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: TargetTypes
+  nameWithType: XmlMessageFormatter.TargetTypes
+  fullName: System.Messaging.XmlMessageFormatter.TargetTypes
+- uid: System.Messaging.XmlMessageFormatter.Write(System.Messaging.Message,System.Object)
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Write(Message,Object)
+  nameWithType: XmlMessageFormatter.Write(Message,Object)
+  fullName: System.Messaging.XmlMessageFormatter.Write(Message,Object)
+- uid: System.Messaging.XmlMessageFormatter.#ctor*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: XmlMessageFormatter
+  nameWithType: XmlMessageFormatter.XmlMessageFormatter
+- uid: System.Messaging.XmlMessageFormatter.CanRead*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: CanRead
+  nameWithType: XmlMessageFormatter.CanRead
+- uid: System.Messaging.XmlMessageFormatter.Clone*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Clone
+  nameWithType: XmlMessageFormatter.Clone
+- uid: System.Messaging.XmlMessageFormatter.Read*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Read
+  nameWithType: XmlMessageFormatter.Read
+- uid: System.Messaging.XmlMessageFormatter.TargetTypeNames*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: TargetTypeNames
+  nameWithType: XmlMessageFormatter.TargetTypeNames
+- uid: System.Messaging.XmlMessageFormatter.TargetTypes*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: TargetTypes
+  nameWithType: XmlMessageFormatter.TargetTypes
+- uid: System.Messaging.XmlMessageFormatter.Write*
+  parent: System.Messaging.XmlMessageFormatter
+  isExternal: false
+  name: Write
+  nameWithType: XmlMessageFormatter.Write

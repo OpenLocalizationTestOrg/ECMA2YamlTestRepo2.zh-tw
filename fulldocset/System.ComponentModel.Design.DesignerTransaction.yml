@@ -24,7 +24,7 @@ items:
   summary: "Provides a way to group a series of design-time actions to improve performance and enable most types of changes to be undone."
   remarks: "Transactions can track actions that can be undone later. Changes made during a transaction can be reversed by canceling a transaction, which automatically attempts to reverse each change by setting each changed property to its pre-change value. Transactions can also improve performance during a series of operations by deferring updates to the display until the completion of the transaction.       When a transaction is in progress, some components defer their processing until the transaction has completed by listening to the <xref:System.ComponentModel.Design.IDesignerHost.TransactionOpening> and <xref:System.ComponentModel.Design.IDesignerHost.TransactionClosed> events. The Properties window, for example, does not update its display after a transaction has opened until the transaction has closed.       To use transactions for reversible or multiple operations, have your designer create a DesignerTransaction for each operation or series of operations which should be reversible. Be careful not to perform actions outside the transactions that might prevent a sequence of undo events from completing successfully.       You can obtain a new DesignerTransaction by calling the <xref:System.ComponentModel.Design.IDesignerHost.CreateTransaction%2A> method of an <xref:System.ComponentModel.Design.IDesignerHost>. Be sure to obtain each DesignerTransaction from the active <xref:System.ComponentModel.Design.IDesignerHost> in order to correctly integrate with the designer transaction processing mechanism, rather than creating a new DesignerTransaction directly.       To perform an action within a transaction, you must first create a transaction. Then you must call the <xref:System.ComponentModel.Design.IComponentChangeService.OnComponentChanging%2A> method before each change or set of changes occurs, and the <xref:System.ComponentModel.Design.IComponentChangeService.OnComponentChanged%2A> method after each change or set of changes occur. Finally, complete and close the transaction by calling the <xref:System.ComponentModel.Design.DesignerTransaction.Commit%2A> method.      > [!NOTE] >  When making changes to property values, use the <xref:System.ComponentModel.PropertyDescriptor.SetValue%2A> method of a <xref:System.ComponentModel.PropertyDescriptor>, which calls the component change methods of the <xref:System.ComponentModel.Design.IComponentChangeService> and creates a DesignerTransaction representing the change automatically.       To perform a transaction, complete the following steps:      1.  Call <xref:System.ComponentModel.Design.IDesignerHost.CreateTransaction%2A> to obtain a DesignerTransaction that can be used to control the transaction.      2.  Within a `try` block, for each action that you want to track with a DesignerTransaction, call the <xref:System.ComponentModel.Design.IComponentChangeService.OnComponentChanging%2A> method, make the change or changes, then call the <xref:System.ComponentModel.Design.IComponentChangeService.OnComponentChanged%2A> method to signal that the change or changes have been made.      3.  To complete the transaction, call <xref:System.ComponentModel.Design.DesignerTransaction.Commit%2A> from within a `finally` block.       In C#, you can use the `using` statement rather than a `try/finally` block, such as in the following example.      ```   using (host.CreateTransaction() {   // Insert your code here.   }   ```       To cancel and attempt to roll back a transaction before it has been committed, call the <xref:System.ComponentModel.Design.DesignerTransaction.Cancel%2A> method. When the <xref:System.ComponentModel.Design.DesignerTransaction.Cancel%2A> method is invoked, the actions tracked by the DesignerTransaction are reversed to attempt to roll back the changes. To undo actions that occurred as part of earlier transactions, you must use the undo command provided by the development environment."
   example:
-  - "The following code example program demonstrates how to create a DesignerTransaction from a designer. To run this sample, compile the source code into a class library. You must add a reference to the System.Design assembly. In a new project, add a reference to the compiled DLL and add the component in the library to the **Toolbox**.  \n  \n There is extensive support for this feature in Visual Studio.  \n  \n Also see [Walkthrough: Automatically Populating the Toolbox with Custom Components](http://msdn.microsoft.com/library/fw694kde\\(v=vs.110\\).aspx).  \n  \n The designer can optionally display notifications about designer transaction events. If you add an instance of the `DTComponent` to a form while in design mode, a message box appears asking whether you would like to receive designer transaction event notifications. You may toggle these notifications using the shortcut menu that appears when you right-click an instance of the `DTComponent`. Transactions are created when you change values using the Properties window. You can also have the designer perform a transaction by clicking **Perform Example Transaction** on the shortcut menu for the component.  \n  \n [!code-cpp[DesignerTransaction Sample#1](~/add/codesnippet/CPP/t-system.componentmodel._6_1.cpp)]\n [!code-vb[DesignerTransaction Sample#1](~/add/codesnippet/VisualBasic/t-system.componentmodel._6_1.vb)]\n [!code-cs[DesignerTransaction Sample#1](~/add/codesnippet/CSharp/t-system.componentmodel._6_1.cs)]"
+  - "The following code example program demonstrates how to create a DesignerTransaction from a designer. To run this sample, compile the source code into a class library. You must add a reference to the System.Design assembly. In a new project, add a reference to the compiled DLL and add the component in the library to the **Toolbox**.  \n  \n There is extensive support for this feature in Visual Studio.  \n  \n Also see [Walkthrough: Automatically Populating the Toolbox with Custom Components](http://msdn.microsoft.com/library/fw694kde\\(v=vs.110\\).aspx).  \n  \n The designer can optionally display notifications about designer transaction events. If you add an instance of the `DTComponent` to a form while in design mode, a message box appears asking whether you would like to receive designer transaction event notifications. You may toggle these notifications using the shortcut menu that appears when you right-click an instance of the `DTComponent`. Transactions are created when you change values using the Properties window. You can also have the designer perform a transaction by clicking **Perform Example Transaction** on the shortcut menu for the component.  \n  \n [!code-cpp[DesignerTransaction Sample#1](~/add/codesnippet/cpp/t-system.componentmodel._6_1.cpp)]\n [!code-vb[DesignerTransaction Sample#1](~/add/codesnippet/visualbasic/t-system.componentmodel._6_1.vb)]\n [!code-cs[DesignerTransaction Sample#1](~/add/codesnippet/csharp/t-system.componentmodel._6_1.cs)]"
   syntax:
     content: 'public abstract class DesignerTransaction : IDisposable'
   inheritance:
@@ -33,9 +33,7 @@ items:
   - System.IDisposable
   inheritedMembers: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.#ctor
   id: '#ctor'
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -48,16 +46,14 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.ComponentModel.Design.DesignerTransaction&quot;></see> class with no description."
+  summary: "Initializes a new instance of the <xref href=&quot;System.ComponentModel.Design.DesignerTransaction&quot;></xref> class with no description."
   syntax:
     content: protected DesignerTransaction ();
     parameters: []
   overload: System.ComponentModel.Design.DesignerTransaction.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.#ctor(System.String)
   id: '#ctor(System.String)'
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -70,7 +66,7 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: "Initializes a new instance of the <see cref=&quot;T:System.ComponentModel.Design.DesignerTransaction&quot;></see> class using the specified transaction description."
+  summary: "Initializes a new instance of the <xref href=&quot;System.ComponentModel.Design.DesignerTransaction&quot;></xref> class using the specified transaction description."
   remarks: "This constructor initializes the transaction with the specified description."
   syntax:
     content: protected DesignerTransaction (string description);
@@ -81,9 +77,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Cancel
   id: Cancel
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -103,9 +97,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.Cancel*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Canceled
   id: Canceled
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -128,9 +120,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.Canceled*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Commit
   id: Commit
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -151,9 +141,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.Commit*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Committed
   id: Committed
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -176,9 +164,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.Committed*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Description
   id: Description
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -201,9 +187,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.Description*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Dispose(System.Boolean)
   id: Dispose(System.Boolean)
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -216,20 +200,18 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: "Releases the unmanaged resources used by the <see cref=&quot;T:System.ComponentModel.Design.DesignerTransaction&quot;></see> and optionally releases the managed resources."
+  summary: "Releases the unmanaged resources used by the <xref href=&quot;System.ComponentModel.Design.DesignerTransaction&quot;></xref> and optionally releases the managed resources."
   remarks: "This method is called by the public `Dispose()` method and the <xref:System.Object.Finalize%2A> method. `Dispose()` invokes the protected `Dispose(Boolean)` method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.       When the `disposing` parameter is `true`, this method releases all resources held by any managed objects that this <xref:System.ComponentModel.Design.DesignerTransaction> references. This method invokes the `Dispose()` method of each referenced object."
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to release both managed and unmanaged resources; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> to release only unmanaged resources."
   overload: System.ComponentModel.Design.DesignerTransaction.Dispose*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.Finalize
   id: Finalize
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -243,16 +225,14 @@ items:
   - System
   namespace: System.ComponentModel.Design
   summary: "Releases the resources associated with this object. This override commits this transaction if it was not already committed."
-  remarks: "This method overrides <xref:System.Object.Finalize%2A?displayProperty=fullName> and cleans up resources by calling `Dispose(false)`. Override `Dispose(Boolean)` to customize the cleanup.       Application code should not call this method; an object&quot;s `Finalize` method is automatically invoked during garbage collection, unless finalization by the garbage collector has been disabled by a call to the <xref:System.GC.SuppressFinalize%2A?displayProperty=fullName> method.       For more information, see [Finalize Methods and Destructors](http://msdn.microsoft.com/en-us/fd376774-1643-499b-869e-9546a3aeea70), [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md), and [Overriding the Finalize Method](http://msdn.microsoft.com/en-us/8026cb68-fe93-43fc-96c1-c09ad7d64cd3)."
+  remarks: "This method overrides <xref:System.Object.Finalize%2A?displayProperty=fullName> and cleans up resources by calling `Dispose(false)`. Override `Dispose(Boolean)` to customize the cleanup.       Application code should not call this method; an object&quot;s `Finalize` method is automatically invoked during garbage collection, unless finalization by the garbage collector has been disabled by a call to the <xref:System.GC.SuppressFinalize%2A?displayProperty=fullName> method.       For more information, see [Finalize Methods and Destructors](http://msdn.microsoft.com/en-us/fd376774-1643-499b-869e-9546a3aeea70), [Cleaning Up Unmanaged Resources](~/add/includes/ajax-current-ext-md.md), and [Overriding the Finalize Method](http://msdn.microsoft.com/en-us/8026cb68-fe93-43fc-96c1-c09ad7d64cd3)."
   syntax:
     content: ~DesignerTransaction ();
     parameters: []
   overload: System.ComponentModel.Design.DesignerTransaction.Finalize*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.OnCancel
   id: OnCancel
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -273,9 +253,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.OnCancel*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.OnCommit
   id: OnCommit
   parent: System.ComponentModel.Design.DesignerTransaction
@@ -296,9 +274,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.OnCommit*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.ComponentModel.Design.DesignerTransaction.System#IDisposable#Dispose
   id: System#IDisposable#Dispose
   isEii: true
@@ -312,7 +288,7 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: "Releases all resources used by the <see cref=&quot;T:System.ComponentModel.Design.DesignerTransaction&quot;></see>."
+  summary: "Releases all resources used by the <xref href=&quot;System.ComponentModel.Design.DesignerTransaction&quot;></xref>."
   remarks: "When a transaction is disposed, it is committed."
   syntax:
     content: void IDisposable.Dispose ();
@@ -320,9 +296,7 @@ items:
   overload: System.ComponentModel.Design.DesignerTransaction.System#IDisposable#Dispose*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Object
   isExternal: false

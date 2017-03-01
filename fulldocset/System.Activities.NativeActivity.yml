@@ -21,10 +21,10 @@ items:
   nameWithType: NativeActivity
   fullName: System.Activities.NativeActivity
   type: Class
-  summary: "Abstract base class for custom activities that implement execution logic using the &lt;xref:System.Activities.NativeActivity.Execute%2A&gt; method, which has full access to the runtime’s features."
+  summary: "Abstract base class for custom activities that implement execution logic using the <xref:System.Activities.NativeActivity.Execute*> method, which has full access to the runtime’s features."
   remarks: ''
   example:
-  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n```  \npublic sealed class MySequence : NativeActivity  \n{  \n    Collection<Activity> children;  \n    Collection<Variable> variables;  \n    Variable<int> currentIndex;  \n    CompletionCallback onChildComplete;  \n  \n    public MySequence()  \n        : base()  \n    {  \n        this.children = new Collection<Activity>();  \n        this.variables = new Collection<Variable>();  \n        this.currentIndex = new Variable<int>();  \n    }  \n  \n    public Collection<Activity> Activities  \n    {  \n        get  \n        {  \n            return this.children;  \n        }  \n    }  \n    public Collection<Variable> Variables  \n    {  \n        get  \n        {  \n            return this.variables;  \n        }  \n    }  \n    protected override void CacheMetadata(NativeActivityMetadata metadata)  \n    {  \n        //call base.CacheMetadata to add the Activities and Variables to this activity's metadata  \n        base.CacheMetadata(metadata);  \n        //add the private implementation variable: currentIndex   \n        metadata.AddImplementationVariable(this.currentIndex);  \n    }                     \n  \n    protected override void Execute(NativeActivityContext context)  \n    {  \n        InternalExecute(context, null);  \n    }  \n    void InternalExecute(NativeActivityContext context, ActivityInstance instance)  \n    {  \n        //grab the index of the current Activity  \n        int currentActivityIndex = this.currentIndex.Get(context);  \n        if (currentActivityIndex == Activities.Count)  \n        {  \n            //if the currentActivityIndex is equal to the count of MySequence's Activities  \n            //MySequence is complete  \n            return;  \n        }  \n  \n        if (this.onChildComplete == null)  \n        {  \n            //on completion of the current child, have the runtime call back on this method  \n            this.onChildComplete = new CompletionCallback(InternalExecute);  \n        }  \n        //grab the next Activity in MySequence.Activities and schedule it  \n        Activity nextChild = Activities[currentActivityIndex];  \n        context.ScheduleActivity(nextChild, this.onChildComplete);  \n  \n        //increment the currentIndex  \n        this.currentIndex.Set(context, ++currentActivityIndex);  \n    }  \n}  \n```"
+  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](~/add/includes/ajax-current-ext-md.md) sample.  \n  \n```  \npublic sealed class MySequence : NativeActivity  \n{  \n    Collection<Activity> children;  \n    Collection<Variable> variables;  \n    Variable<int> currentIndex;  \n    CompletionCallback onChildComplete;  \n  \n    public MySequence()  \n        : base()  \n    {  \n        this.children = new Collection<Activity>();  \n        this.variables = new Collection<Variable>();  \n        this.currentIndex = new Variable<int>();  \n    }  \n  \n    public Collection<Activity> Activities  \n    {  \n        get  \n        {  \n            return this.children;  \n        }  \n    }  \n    public Collection<Variable> Variables  \n    {  \n        get  \n        {  \n            return this.variables;  \n        }  \n    }  \n    protected override void CacheMetadata(NativeActivityMetadata metadata)  \n    {  \n        //call base.CacheMetadata to add the Activities and Variables to this activity's metadata  \n        base.CacheMetadata(metadata);  \n        //add the private implementation variable: currentIndex   \n        metadata.AddImplementationVariable(this.currentIndex);  \n    }                     \n  \n    protected override void Execute(NativeActivityContext context)  \n    {  \n        InternalExecute(context, null);  \n    }  \n    void InternalExecute(NativeActivityContext context, ActivityInstance instance)  \n    {  \n        //grab the index of the current Activity  \n        int currentActivityIndex = this.currentIndex.Get(context);  \n        if (currentActivityIndex == Activities.Count)  \n        {  \n            //if the currentActivityIndex is equal to the count of MySequence's Activities  \n            //MySequence is complete  \n            return;  \n        }  \n  \n        if (this.onChildComplete == null)  \n        {  \n            //on completion of the current child, have the runtime call back on this method  \n            this.onChildComplete = new CompletionCallback(InternalExecute);  \n        }  \n        //grab the next Activity in MySequence.Activities and schedule it  \n        Activity nextChild = Activities[currentActivityIndex];  \n        context.ScheduleActivity(nextChild, this.onChildComplete);  \n  \n        //increment the currentIndex  \n        this.currentIndex.Set(context, ++currentActivityIndex);  \n    }  \n}  \n```"
   syntax:
     content: 'public abstract class NativeActivity : System.Activities.Activity'
   inheritance:
@@ -39,9 +39,7 @@ items:
   - System.Activities.Activity.ShouldSerializeDisplayName
   - System.Activities.Activity.ToString
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.#ctor
   id: '#ctor'
   parent: System.Activities.NativeActivity
@@ -57,16 +55,14 @@ items:
   summary: "When implemented in a derived class, creates a new instance of the derived class."
   remarks: ''
   example:
-  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#1](~/add/codesnippet/CSharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#1)]"
+  - "The following code sample demonstrates creating a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](~/add/includes/ajax-current-ext-md.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#1](~/add/codesnippet/csharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#1)]"
   syntax:
     content: protected NativeActivity ();
     parameters: []
   overload: System.Activities.NativeActivity.#ctor*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.Abort(System.Activities.NativeActivityAbortContext)
   id: Abort(System.Activities.NativeActivityAbortContext)
   parent: System.Activities.NativeActivity
@@ -89,9 +85,7 @@ items:
   overload: System.Activities.NativeActivity.Abort*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.ActivityMetadata)
   id: CacheMetadata(System.Activities.ActivityMetadata)
   parent: System.Activities.NativeActivity
@@ -104,7 +98,7 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: "Not implemented. Use the &lt;xref:System.Activities.NativeActivity.CacheMetadata%2A&gt; method instead."
+  summary: "Not implemented. Use the <xref:System.Activities.NativeActivity.CacheMetadata*> method instead."
   remarks: "Custom activity authors can provide validation logic in an activity&quot;s <xref:System.Activities.NativeActivity.CacheMetadata%2A> override. Any exceptions that are thrown from <xref:System.Activities.NativeActivity.CacheMetadata%2A> are not treated as validation errors. These exceptions will escape from the call to <xref:System.Activities.Validation.ActivityValidationServices.Validate%2A> and must be handled by the caller."
   syntax:
     content: protected override sealed void CacheMetadata (System.Activities.ActivityMetadata metadata);
@@ -115,9 +109,7 @@ items:
   overload: System.Activities.NativeActivity.CacheMetadata*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.CacheMetadata(System.Activities.NativeActivityMetadata)
   id: CacheMetadata(System.Activities.NativeActivityMetadata)
   parent: System.Activities.NativeActivity
@@ -131,9 +123,9 @@ items:
   - System.Activities
   namespace: System.Activities
   summary: "Creates and validates a description of the activity’s arguments, variables, child activities, and activity delegates."
-  remarks: "The workflow runtime uses the default implementation of CacheMetadata to ensure correct construction of a workflow as well as to manage run-time relationships and lifetime rules. The default implementation of CacheMetadata examines the public members of the activity type using the type’s <xref:System.ComponentModel.TypeDescriptor>. These public members are of type <xref:System.Activities.Argument>, <xref:System.Activities.Variable>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Variable>](assetId:///T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Variable>?qualifyHint=False&amp;autoUpgrade=True), <xref:System.Activities.Activity>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Activity>](assetId:///T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Activity>?qualifyHint=False&amp;autoUpgrade=True), or <xref:System.Activities.ActivityDelegate>. You can override this method to customize the building of the activity’s run-time description and to provide custom validation logic. Any exceptions that are thrown from CacheMetadata are not treated as validation errors. These exceptions will escape from the call to <xref:System.Activities.Validation.ActivityValidationServices.Validate%2A> and must be handled by the caller."
+  remarks: "The workflow runtime uses the default implementation of CacheMetadata to ensure correct construction of a workflow as well as to manage run-time relationships and lifetime rules. The default implementation of CacheMetadata examines the public members of the activity type using the type’s <xref:System.ComponentModel.TypeDescriptor>. These public members are of type <xref:System.Activities.Argument>, <xref:System.Activities.Variable>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Variable>](~/add/includes/ajax-current-ext-md.md), <xref:System.Activities.Activity>, [T:System.Collections.Generic.IEnumerable\\<T:System.Activities.Activity>](~/add/includes/ajax-current-ext-md.md), or <xref:System.Activities.ActivityDelegate>. You can override this method to customize the building of the activity’s run-time description and to provide custom validation logic. Any exceptions that are thrown from CacheMetadata are not treated as validation errors. These exceptions will escape from the call to <xref:System.Activities.Validation.ActivityValidationServices.Validate%2A> and must be handled by the caller."
   example:
-  - "The following code sample demonstrates using CacheMetadata in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](../Topic/Custom%20Composite%20using%20Native%20Activity.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#2](~/add/codesnippet/CSharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#2)]"
+  - "The following code sample demonstrates using CacheMetadata in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Custom Composite using Native Activity](~/add/includes/ajax-current-ext-md.md) sample.  \n  \n [!code-cs[wfs_CustomCompositeNativeActivity#2](~/add/codesnippet/csharp/wfs_customcompositenativeactivity.workflow/mysequence.cs#2)]"
   syntax:
     content: protected virtual void CacheMetadata (System.Activities.NativeActivityMetadata metadata);
     parameters:
@@ -143,9 +135,7 @@ items:
   overload: System.Activities.NativeActivity.CacheMetadata*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.Cancel(System.Activities.NativeActivityContext)
   id: Cancel(System.Activities.NativeActivityContext)
   parent: System.Activities.NativeActivity
@@ -161,7 +151,7 @@ items:
   summary: "When implemented in a derived class, runs logic to cause graceful early completion of the activity."
   remarks: ''
   example:
-  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](../Topic/Non-Generic%20ParallelForEach.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/CSharp/nongenericparallelforeach/parallelforeach.cs#2)]"
+  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](~/add/includes/ajax-current-ext-md.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/csharp/nongenericparallelforeach/parallelforeach.cs#2)]"
   syntax:
     content: protected virtual void Cancel (System.Activities.NativeActivityContext context);
     parameters:
@@ -171,9 +161,7 @@ items:
   overload: System.Activities.NativeActivity.Cancel*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.CanInduceIdle
   id: CanInduceIdle
   parent: System.Activities.NativeActivity
@@ -195,9 +183,7 @@ items:
   overload: System.Activities.NativeActivity.CanInduceIdle*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.Execute(System.Activities.NativeActivityContext)
   id: Execute(System.Activities.NativeActivityContext)
   parent: System.Activities.NativeActivity
@@ -213,7 +199,7 @@ items:
   summary: "When implemented in a derived class, runs the activity’s execution logic."
   remarks: ''
   example:
-  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](../Topic/Non-Generic%20ParallelForEach.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/CSharp/nongenericparallelforeach/parallelforeach.cs#2)]"
+  - "The following code sample demonstrates using Cancel in a class that inherits from <xref:System.Activities.NativeActivity%601>. This example is from the [Non-Generic ParallelForEach](~/add/includes/ajax-current-ext-md.md) sample.  \n  \n [!code-cs[wfs_NonGenericParallelForEach#2](~/add/codesnippet/csharp/nongenericparallelforeach/parallelforeach.cs#2)]"
   syntax:
     content: protected abstract void Execute (System.Activities.NativeActivityContext context);
     parameters:
@@ -223,9 +209,7 @@ items:
   overload: System.Activities.NativeActivity.Execute*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.Implementation
   id: Implementation
   parent: System.Activities.NativeActivity
@@ -247,9 +231,7 @@ items:
   overload: System.Activities.NativeActivity.Implementation*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.ImplementationVersion
   id: ImplementationVersion
   parent: System.Activities.NativeActivity
@@ -271,9 +253,7 @@ items:
   overload: System.Activities.NativeActivity.ImplementationVersion*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
   id: OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.NativeActivityUpdateMapMetadata,System.Activities.Activity)
   parent: System.Activities.NativeActivity
@@ -299,9 +279,7 @@ items:
   overload: System.Activities.NativeActivity.OnCreateDynamicUpdateMap*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
   id: OnCreateDynamicUpdateMap(System.Activities.DynamicUpdate.UpdateMapMetadata,System.Activities.Activity)
   parent: System.Activities.NativeActivity
@@ -327,9 +305,7 @@ items:
   overload: System.Activities.NativeActivity.OnCreateDynamicUpdateMap*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Activities.NativeActivity.UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
   id: UpdateInstance(System.Activities.DynamicUpdate.NativeActivityUpdateContext)
   parent: System.Activities.NativeActivity
@@ -342,7 +318,7 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: "Updates the instance of <see cref=&quot;T:System.Activities.NativeActivity&quot;></see>."
+  summary: "Updates the instance of <xref href=&quot;System.Activities.NativeActivity&quot;></xref>."
   syntax:
     content: protected virtual void UpdateInstance (System.Activities.DynamicUpdate.NativeActivityUpdateContext updateContext);
     parameters:
@@ -352,9 +328,7 @@ items:
   overload: System.Activities.NativeActivity.UpdateInstance*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.Activities.Activity
   isExternal: false

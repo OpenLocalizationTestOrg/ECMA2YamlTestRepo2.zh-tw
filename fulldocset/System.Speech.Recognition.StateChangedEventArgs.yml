@@ -10,7 +10,7 @@ items:
   nameWithType: StateChangedEventArgs
   fullName: System.Speech.Recognition.StateChangedEventArgs
   type: Class
-  summary: "Returns data from the <see cref=&quot;E:System.Speech.Recognition.SpeechRecognizer.StateChanged&quot;></see> event."
+  summary: "Returns data from the <xref href=&quot;System.Speech.Recognition.SpeechRecognizer.StateChanged&quot;></xref> event."
   remarks: "The <xref:System.Speech.Recognition.SpeechRecognizer.StateChanged> event is raised by the <xref:System.Speech.Recognition.SpeechRecognizer> class. StateChangedEventArgs derives from <xref:System.EventArgs> and is passed to handlers for <xref:System.Speech.Recognition.SpeechRecognizer.StateChanged> events.       <xref:System.Speech.Recognition.SpeechRecognizer.State%2A> is a read-only property. A shared speech recognizer&quot;s state cannot be changed programmatically. Users can change a shared speech recognizer&quot;s state using the Speech Recognition user interface (UI) or through the **Speech Recognition** member of the Windows **Control Panel**.       Both the **On** and **Sleep** settings in the Speech Recognition UI correspond to the `Listening` state. The **Off** setting in the Speech Recognition UI corresponds to <xref:System.Speech.Recognition.RecognizerState>."
   example:
   - "The following example creates a shared speech recognizer, and then creates two types of grammars for recognizing specific words and for accepting free dictation. The example asynchronously loads all the created grammars to the recognizer.  A handler for the <xref:System.Speech.Recognition.SpeechRecognizer.StateChanged> event uses the <xref:System.Speech.Recognition.SpeechRecognizer.EmulateRecognizeAsync%2A> method to put Windows Recognition in \"listening\" mode.  \n  \n```  \nusing System;  \nusing System.Speech.Recognition;  \n  \nnamespace SampleRecognition  \n{  \n  class Program  \n  {  \n    private static SpeechRecognizer recognizer;  \n    public static void Main(string[] args)  \n    {  \n  \n      // Initialize a shared speech recognition engine.  \n      recognizer = new SpeechRecognizer();  \n  \n      // Add a handler for the LoadGrammarCompleted event.  \n      recognizer.LoadGrammarCompleted += new EventHandler<LoadGrammarCompletedEventArgs>(recognizer_LoadGrammarCompleted);  \n  \n      // Add a handler for the SpeechRecognized event.  \n      recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);  \n  \n      // Add a handler for the StateChanged event.  \n      recognizer.StateChanged += new EventHandler<StateChangedEventArgs>(recognizer_StateChanged);  \n  \n      // Create \"yesno\" grammar.  \n      Choices yesChoices = new Choices(new string[] { \"yes\", \"yup\", \"yah}\" });  \n      SemanticResultValue yesValue =  \n          new SemanticResultValue(yesChoices, (bool)true);  \n      Choices noChoices = new Choices(new string[] { \"no\", \"nope\", \"nah\" });  \n      SemanticResultValue noValue = new SemanticResultValue(noChoices, (bool)false);  \n      SemanticResultKey yesNoKey =  \n          new SemanticResultKey(\"yesno\", new Choices(new GrammarBuilder[] { yesValue, noValue }));  \n      Grammar yesnoGrammar = new Grammar(yesNoKey);  \n      yesnoGrammar.Name = \"yesNo\";  \n  \n      // Create \"done\" grammar.  \n      Grammar doneGrammar =  \n        new Grammar(new Choices(new string[] { \"done\", \"exit\", \"quit\", \"stop\" }));  \n      doneGrammar.Name = \"Done\";  \n  \n      // Create dictation grammar.  \n      Grammar dictation = new DictationGrammar();  \n      dictation.Name = \"Dictation\";  \n  \n      // Load grammars to the recognizer.  \n      recognizer.LoadGrammarAsync(yesnoGrammar);  \n      recognizer.LoadGrammarAsync(doneGrammar);  \n      recognizer.LoadGrammarAsync(dictation);  \n  \n      // Keep the console window open.  \n      Console.ReadLine();  \n    }  \n  \n    // Put the shared speech recognizer into \"listening\" mode.  \n    static void  recognizer_StateChanged(object sender, StateChangedEventArgs e)  \n    {  \n     if (e.RecognizerState != RecognizerState.Stopped)  \n      {  \n        recognizer.EmulateRecognizeAsync(\"Start listening\");  \n      }  \n    }  \n  \n    // Write the grammar name and the text of the recognized phrase to the console.  \n    static void  recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)  \n    {  \n     Console.WriteLine(\"Grammar({0}): {1}\", e.Result.Grammar.Name, e.Result.Text);  \n  \n      // Add event handler code here.  \n    }  \n  \n    // Handle the LoadGrammarCompleted event.  \n    static void  recognizer_LoadGrammarCompleted(object sender, LoadGrammarCompletedEventArgs e)  \n    {  \n     string grammarName = e.Grammar.Name;  \n      bool grammarLoaded = e.Grammar.Loaded;  \n      if (e.Error != null)  \n      {  \n        Console.WriteLine(\"LoadGrammar for {0} failed with a {1}.\",  \n        grammarName, e.Error.GetType().Name);  \n      }  \n  \n      // Add exception handling code here.  \n      Console.WriteLine(\"Grammar {0} {1} loaded.\",  \n      grammarName, (grammarLoaded) ? \"is\" : \"is not\");  \n    }  \n  }  \n}  \n  \n```"
@@ -21,9 +21,7 @@ items:
   implements: []
   inheritedMembers: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 - uid: System.Speech.Recognition.StateChangedEventArgs.RecognizerState
   id: RecognizerState
   parent: System.Speech.Recognition.StateChangedEventArgs
@@ -44,13 +42,11 @@ items:
     content: public System.Speech.Recognition.RecognizerState RecognizerState { get; }
     return:
       type: System.Speech.Recognition.RecognizerState
-      description: "A <see cref=&quot;T:System.Speech.Recognition.RecognizerState&quot;></see> instance that indicates whether the state of a shared speech recognition engine is <xref uid=&quot;langword_csharp_Listening&quot; name=&quot;Listening&quot; href=&quot;&quot;></xref> or <xref uid=&quot;langword_csharp_Stopped&quot; name=&quot;Stopped&quot; href=&quot;&quot;></xref>."
+      description: "A <xref href=&quot;System.Speech.Recognition.RecognizerState&quot;></xref> instance that indicates whether the state of a shared speech recognition engine is <xref uid=&quot;langword_csharp_Listening&quot; name=&quot;Listening&quot; href=&quot;&quot;></xref> or <xref uid=&quot;langword_csharp_Stopped&quot; name=&quot;Stopped&quot; href=&quot;&quot;></xref>."
   overload: System.Speech.Recognition.StateChangedEventArgs.RecognizerState*
   exceptions: []
   platform:
-  - net-11
-  - net-20
-  - netcore-10
+  - net462
 references:
 - uid: System.EventArgs
   isExternal: false
