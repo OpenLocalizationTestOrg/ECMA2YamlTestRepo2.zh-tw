@@ -15,8 +15,8 @@ items:
   nameWithType: TransactionFlowAttribute
   fullName: System.ServiceModel.TransactionFlowAttribute
   type: Class
-  summary: "Specifies whether a service operation accepts incoming transactions from a client."
-  remarks: "The TransactionFlowAttribute is an attribute used declaratively to associate a specific transaction flow policy with a service operation. The <xref:System.ServiceModel.TransactionFlowOption> property of this attribute specifies whether the respective operation accepts a transaction flowed from the client, or if the operation requires the client to always flow a transaction. The TransactionFlowAttribute can also be used as an operation behavior to programmatically associate a transaction flow policy with a specific operation. In this case, it should be added to the `Behaviors` collection on the operation’s description.      > [!NOTE] >  The `OperationContract` for each method that uses the TransactionFlowAttribute must provide a fully-qualified `Action` string. A value of &quot;*&quot; is not supported."
+  summary: "指定服務作業是否接受來自用戶端的傳入交易。"
+  remarks: "TransactionFlowAttribute 是以宣告方式用來將特定交易流程原則和服務作業產生關聯的屬性。 <xref:System.ServiceModel.TransactionFlowOption>此屬性的屬性會指定個別作業是否接受來自用戶端流動異動，或如果作業需要用戶端一律流動交易。</xref:System.ServiceModel.TransactionFlowOption> TransactionFlowAttribute 要以程式設計方式關聯特定作業的異動流程原則也使用當成作業行為。 在此情況下，應新增至`Behaviors`作業描述上的集合。      > [!NOTE] >`OperationContract`針對每個方法都使用 TransactionFlowAttribute 必須提供完整`Action`字串。 值為&quot;*&quot;不支援。"
   example:
   - "The following code example shows the use of this enumeration together with the <xref:System.ServiceModel.TransactionFlowOption> class at the operation level.  \n  \n```  \nusing System;  \nusing System.ServiceModel;  \nusing System.Transactions;  \n  \nnamespace Microsoft.WCF.Documentation  \n{  \n  [ServiceContract(  \n    Namespace=\"http://microsoft.wcf.documentation\",   \n    SessionMode=SessionMode.Required  \n  )]  \n  public interface IBehaviorService  \n  {  \n    [OperationContract]  \n    [TransactionFlow(TransactionFlowOption.Mandatory)]  \n    string TxWork(string message);  \n  }  \n  \n  // Note: To use the TransactionIsolationLevel property, you   \n  // must add a reference to the System.Transactions.dll assembly.  \n  /* The following service implementation:  \n   *   -- Processes messages on one thread at a time  \n   *   -- Creates one service object per session  \n   *   -- Releases the service object when the transaction commits  \n   */  \n  [ServiceBehavior(  \n    ConcurrencyMode=ConcurrencyMode.Single,  \n    InstanceContextMode=InstanceContextMode.PerSession,  \n    ReleaseServiceInstanceOnTransactionComplete=true  \n  )]  \n  public class BehaviorService : IBehaviorService, IDisposable  \n  {  \n    Guid myID;  \n  \n    public BehaviorService()  \n    {  \n      myID = Guid.NewGuid();  \n      Console.WriteLine(  \n        \"Object \"  \n        + myID.ToString()  \n        + \" created.\");  \n    }  \n  \n    /*  \n    / * The following operation-level behaviors are specified:  \n    / * Always executes under a transaction scope.  \n    / * The transaction scope is completed when the operation  \n    / * terminates without an unhandled exception.  \n    /*  \n    [OperationBehavior(  \n      TransactionAutoComplete = true,  \n      TransactionScopeRequired = true  \n    )]  \n    public string TxWork(string message)  \n    {  \n      // Do some transactable work.  \n      Console.WriteLine(\"TxWork called with: \" + message);  \n      // Display transaction information.  \n  \n      TransactionInformation info = Transaction.Current.TransactionInformation;  \n      Console.WriteLine(\"The distributed tx ID: {0}.\", info.DistributedIdentifier);  \n      Console.WriteLine(\"The tx status: {0}.\", info.Status);  \n      return String.Format(\"Hello. This was object {0}.\",myID.ToString()) ;  \n    }  \n  \n    public void Dispose()  \n    {  \n      Console.WriteLine(  \n        \"Service \"  \n        + myID.ToString()  \n        + \" is being recycled.\"  \n      );  \n    }  \n  }  \n}  \n```"
   syntax:
@@ -43,7 +43,7 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Initializes a new instance of the <xref href=&quot;System.ServiceModel.TransactionFlowAttribute&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.ServiceModel.TransactionFlowAttribute&quot;></xref>類別。"
   remarks: ''
   example:
   - "The following code example shows the use of this enumeration together with the <xref:System.ServiceModel.TransactionFlowOption> class at the operation level.  \n  \n [!code-cs[OperationBehaviorAttribute1#2](~/add/codesnippet/csharp/operationbehaviorattribute1.client/services.cs#2)]\n [!code-vb[OperationBehaviorAttribute1#2](~/add/codesnippet/visualbasic/operationbehaviorattribute1.client/services.vb#2)]"
@@ -70,17 +70,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Adds extra parameters (settings) to the binding context to support this operation’s behavior. This method cannot be inherited."
-  remarks: "This method provides a binding context with the extra parameters (settings) to support the required behavior for this operation. It is called internally by the infrastructure when a service is created."
+  summary: "將額外參數 （設定） 新增至繫結內容以支援這個作業行為。 這個方法無法被繼承。"
+  remarks: "這個方法提供額外的參數 （設定），以支援這項作業的必要的行為的繫結內容。 它是由內部呼叫基礎結構服務建立時。"
   syntax:
     content: void IOperationBehavior.AddBindingParameters (System.ServiceModel.Description.OperationDescription description, System.ServiceModel.Channels.BindingParameterCollection parameters);
     parameters:
     - id: description
       type: System.ServiceModel.Description.OperationDescription
-      description: "The operation description for which the attribute adds extra functionality."
+      description: "作業描述的屬性新增額外的功能。"
     - id: parameters
       type: System.ServiceModel.Channels.BindingParameterCollection
-      description: "The collection of parameter objects on the binding context."
+      description: "繫結內容上的參數物件集合。"
   overload: System.ServiceModel.TransactionFlowAttribute.System#ServiceModel#Description#IOperationBehavior#AddBindingParameters*
   exceptions: []
   platform:
@@ -98,17 +98,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Attaches the attribute functionality to the <xref uid=&quot;langword_csharp_ProxyOperation&quot; name=&quot;ProxyOperation&quot; href=&quot;&quot;></xref> object for the method that the attribute marks. This method cannot be inherited."
-  remarks: "This method allows you to view, modify, or add custom extensions to the client runtime across all messages, or for a specific operation. Note that in the case of the <xref:System.ServiceModel.TransactionFlowAttribute>, the implementation of this method is empty. This method is called internally by the infrastructure when a service proxy is created."
+  summary: "附加屬性功能至<xref uid=&quot;langword_csharp_ProxyOperation&quot; name=&quot;ProxyOperation&quot; href=&quot;&quot;></xref>屬性標記的方法的物件。 這個方法無法被繼承。"
+  remarks: "這個方法可讓您檢視、 修改或加入自訂延伸至用戶端執行階段，所有的訊息，或針對特定作業。 請注意，如果是<xref:System.ServiceModel.TransactionFlowAttribute>，這個方法的實作是空的。</xref:System.ServiceModel.TransactionFlowAttribute> 建立服務 proxy 時，這個方法會在內部呼叫由基礎結構。"
   syntax:
     content: void IOperationBehavior.ApplyClientBehavior (System.ServiceModel.Description.OperationDescription description, System.ServiceModel.Dispatcher.ClientOperation proxy);
     parameters:
     - id: description
       type: System.ServiceModel.Description.OperationDescription
-      description: "The operation to which the attribute attaches functionality."
+      description: "作業屬性附加上功能。"
     - id: proxy
       type: System.ServiceModel.Dispatcher.ClientOperation
-      description: "The <xref:System.ServiceModel.Dispatcher.ClientOperation> object that represents the current operation."
+      description: "<xref:System.ServiceModel.Dispatcher.ClientOperation>物件，代表目前的作業。</xref:System.ServiceModel.Dispatcher.ClientOperation>"
   overload: System.ServiceModel.TransactionFlowAttribute.System#ServiceModel#Description#IOperationBehavior#ApplyClientBehavior*
   exceptions: []
   platform:
@@ -126,17 +126,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Attaches the attribute functionality to the <xref:System.ServiceModel.Dispatcher.DispatchOperation> object for the method that the attribute marks. This method cannot be inherited."
-  remarks: "This method allows you to view, modify, or add custom extensions to the client runtime across all messages, or for a specific operation. Note that in the case of the <xref:System.ServiceModel.TransactionFlowAttribute>, the implementation of this method is empty. This method is called internally by the infrastructure when a service is created."
+  summary: "附加屬性功能至<xref:System.ServiceModel.Dispatcher.DispatchOperation>屬性標記的方法的物件。</xref:System.ServiceModel.Dispatcher.DispatchOperation> 這個方法無法被繼承。"
+  remarks: "這個方法可讓您檢視、 修改或加入自訂延伸至用戶端執行階段，所有的訊息，或針對特定作業。 請注意，如果是<xref:System.ServiceModel.TransactionFlowAttribute>，這個方法的實作是空的。</xref:System.ServiceModel.TransactionFlowAttribute> 建立服務時，這個方法會在內部呼叫由基礎結構。"
   syntax:
     content: void IOperationBehavior.ApplyDispatchBehavior (System.ServiceModel.Description.OperationDescription description, System.ServiceModel.Dispatcher.DispatchOperation dispatch);
     parameters:
     - id: description
       type: System.ServiceModel.Description.OperationDescription
-      description: "The description for this operation."
+      description: "此作業的描述。"
     - id: dispatch
       type: System.ServiceModel.Dispatcher.DispatchOperation
-      description: "The <xref:System.ServiceModel.Dispatcher.DispatchOperation> object for this operation."
+      description: "<xref:System.ServiceModel.Dispatcher.DispatchOperation>這項作業的物件。</xref:System.ServiceModel.Dispatcher.DispatchOperation>"
   overload: System.ServiceModel.TransactionFlowAttribute.System#ServiceModel#Description#IOperationBehavior#ApplyDispatchBehavior*
   exceptions: []
   platform:
@@ -154,14 +154,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Verifies that the operation can support this behavior. This method cannot be inherited."
-  remarks: "This method verifies whether the operation description is sufficient to support the transaction flow behavior. Note that in the case of the <xref:System.ServiceModel.TransactionFlowAttribute>, the implementation of this method is empty. This method is called internally by the infrastructure when a service is created."
+  summary: "確認作業可支援此行為。 這個方法無法被繼承。"
+  remarks: "這個方法會驗證作業描述是否足以支援交易流程行為。 請注意，如果是<xref:System.ServiceModel.TransactionFlowAttribute>，這個方法的實作是空的。</xref:System.ServiceModel.TransactionFlowAttribute> 建立服務時，這個方法會在內部呼叫由基礎結構。"
   syntax:
     content: void IOperationBehavior.Validate (System.ServiceModel.Description.OperationDescription description);
     parameters:
     - id: description
       type: System.ServiceModel.Description.OperationDescription
-      description: "The operation to validate."
+      description: "要驗證的作業。"
   overload: System.ServiceModel.TransactionFlowAttribute.System#ServiceModel#Description#IOperationBehavior#Validate*
   exceptions: []
   platform:
@@ -178,12 +178,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: "Gets a value that indicates whether the incoming transaction is supported."
+  summary: "取得值，指出是否支援傳入交易。"
   syntax:
     content: public System.ServiceModel.TransactionFlowOption Transactions { get; }
     return:
       type: System.ServiceModel.TransactionFlowOption
-      description: "A <xref href=&quot;System.ServiceModel.TransactionFlowOption&quot;></xref> that indicates whether the incoming transaction is supported."
+      description: "A <xref href=&quot;System.ServiceModel.TransactionFlowOption&quot;> </xref> ，指出是否支援傳入交易。"
   overload: System.ServiceModel.TransactionFlowAttribute.Transactions*
   exceptions: []
   platform:
