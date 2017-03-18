@@ -19,7 +19,7 @@ items:
   nameWithType: ClaimsPrincipalPermission
   fullName: System.IdentityModel.Services.ClaimsPrincipalPermission
   type: Class
-  summary: "Represents a permission that uses a <xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref> implementation to determine if access to a resource should be granted to the active principal. This class cannot be inherited."
+  summary: "代表使用的權限<xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref>實作，以判斷是否資源的存取權應該授與使用中的主體。 這個類別無法被繼承。"
   remarks: "The ClaimsPrincipalPermission class provides the capability to perform imperative access checks by using the <xref:System.Security.Claims.ClaimsAuthorizationManager> that is configured for an application. By invoking the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> method or the static <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.CheckAccess%2A> method, you can provide protection to resources from within the execution path of your code according to the authorization policy defined for your claims authentication manager. Declarative access checks can be performed by using the <xref:System.IdentityModel.Services.ClaimsPrincipalPermissionAttribute> class.  \n  \n> [!IMPORTANT]\n>  The ClaimsPrincipalPermission class uses the claims authorization manager configured by the <xref:System.IdentityModel.Configuration.IdentityConfiguration> that is set under the <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=fullName> property. This is true in all cases, even in scenarios where WS-Federation is not used; for example, active (WCF) Web applications and Console applications. You can specify the claims authorization manager either in configuration or programmatically. To specify the claims authorization manager in a configuration file, set the [\\&lt;claimsAuthorizationManager\\&gt;](../Topic/%3CclaimsAuthorizationManager%3E.md) element under an [\\&lt;identityConfiguration\\&gt;](../Topic/%3CidentityConfiguration%3E.md) element and ensure that this identity configuration is referenced by the [\\&lt;federationConfiguration\\&gt;](../Topic/%3CfederationConfiguration%3E.md) element that is loaded by the runtime (for example, by setting the `identityConfigurationName` attribute). To set the claims authorization manager programmatically, provide a handler for the <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfigurationCreated?displayProperty=fullName> event.  \n  \n On one level, the functionality provided by ClaimsPrincipalPermission is similar to the role-based access checks (RBAC) provided through the <xref:System.Security.Permissions.PrincipalPermission> class; however, the <xref:System.Security.Claims.ClaimsAuthorizationManager> class performs checks based on the claims presented by the active principal. This enables far more granularity than is available through pure RBAC, where many permissions are typically collected under a single role. Perhaps, more importantly, claims-based authorization enables better separation of business logic and authorization policy because permission can be demanded for a specific action on a resource in code and back-end policy can be used to configure which claims the presenting entity must possess in order to satisfy the demand. Like RBAC, ClaimsPrincipalPermission performs a user-based access check, that is, unlike code access security implemented by classes that derive from the <xref:System.Security.CodeAccessPermission> class and use a stack walk to ensure that all callers of the code have been granted a permission, ClaimsPrincipalPermission performs its check only on the current principal.  \n  \n The static <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.CheckAccess%2A> method checks access for a specified action on a specified resource. The resource and action are both strings and are typically URIs. You can also initialize an instance of ClaimsPrincipalPermission with an action and a resource and call the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> method. Although the constructor only takes a single resource and action, ClaimsPrincipalPermission objects can be combined through the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A> and <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A> methods. A permission created by using these methods may contain multiple resource-action pairs.  \n  \n Both methods determine access by invoking the <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName> method of the configured claims authorization manager with an <xref:System.Security.Claims.AuthorizationContext> composed of the active principal (<xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName>), the resource, and the action. They throw a <xref:System.Security.SecurityException> if the current principal is not authorized to perform the action on the resource; otherwise, execution proceeds.  \n  \n In the case of a ClaimsPrincipalPermission that contains multiple resource-action pairs, the <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName> method is invoked for each of the resource-action pairs contained in the permission.  For the call to <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> to succeed, the active principal must be authorized for all of the resource-action pairs contained in the permission."
   example:
   - "The following example shows how to protect a resource by using the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> method, the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.CheckAccess%2A> method, or a <xref:System.IdentityModel.Services.ClaimsPrincipalPermissionAttribute> declaration. In each case, the configured <xref:System.Security.Claims.ClaimsAuthorizationManager> is invoked to evaluate the current principal against the specified resource and action. If the current principal is not authorized for the specified action on the specified resource, a <xref:System.Security.SecurityException> is thrown; otherwise, execution proceeds.  \n  \n [!code-cs[WifCppWithCam#1](~/add/codesnippet/csharp/wifcppwithcam/program.cs#1)]  \n  \n The following XML shows the minimum configuration required to use a custom claims authorization manager with the ClaimsPrincipalPermission class. You must, at a minimum, declare both the `system.identityModel` and the `system.identityModel.services` sections in the `<configSection>` element and then specify your authorization manager in a [\\&lt;claimsAuthorizationManager\\&gt;](../Topic/%3CclaimsAuthorizationManager%3E.md) element under the default identity configuration. This will ensure that your authorization manager is referenced from the default federation configuration. Alternatively, you can specify the name of the identity configuration under which your authorization manager is specified in the `identityConfigurationName` attribute of the [\\&lt;federationConfiguration\\&gt;](../Topic/%3CfederationConfiguration%3E.md) element.  \n  \n```xml  \n<?xml version=\"1.0\" encoding=\"utf-8\" ?>  \n<configuration>  \n  <configSections>  \n    <!-- WIF configuration sections -->  \n    <section name=\"system.identityModel\" type=\"System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089\"/>  \n    <section name=\"system.identityModel.services\" type=\"System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089\"/>  \n  </configSections>  \n  \n  <startup>  \n    <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5\" />  \n  </startup>  \n  \n  <system.identityModel>  \n    <identityConfiguration>  \n      <claimsAuthorizationManager type =\"MyClaimsAuthorizationManager.MyClaimsAuthorizationManager, MyClaimsAuthorizationManager\"/>  \n    </identityConfiguration>  \n  </system.identityModel>  \n  \n</configuration>  \n```"
@@ -45,25 +45,25 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Creates a new instance of the <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> class."
-  remarks: "The <xref:System.IdentityModel.Services.ClaimsPrincipalPermission> object is initialized with the specified resource-action pair. You can call the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> method to perform an access check.       Although the constructor only takes a single resource and action, <xref:System.IdentityModel.Services.ClaimsPrincipalPermission> objects can be combined through the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A> and <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A> methods. The permission created through these methods may contain multiple resource-action pairs."
+  summary: "建立的新執行個體<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>類別。"
+  remarks: "<xref:System.IdentityModel.Services.ClaimsPrincipalPermission>物件使用指定的資源動作組初始化。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission> 您可以呼叫<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>方法，以執行存取檢查。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>       雖然建構函式只接受單一資源和動作、<xref:System.IdentityModel.Services.ClaimsPrincipalPermission>物件可以透過結合<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A>和<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A>方法。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A> </xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A> </xref:System.IdentityModel.Services.ClaimsPrincipalPermission> 透過這些方法建立的權限可能包含多個資源動作配對。"
   syntax:
     content: public ClaimsPrincipalPermission (string resource, string action);
     parameters:
     - id: resource
       type: System.String
-      description: "The resource on which the principal should be authorized."
+      description: "資源應該在其授權的主體。"
     - id: action
       type: System.String
-      description: "The action for which the principal should be authorized."
+      description: "主體要授權的動作。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.#ctor*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "<code>resource</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> or an empty string."
+    description: "<code>resource</code>是<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>或空字串。"
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>action</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>action</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
   - net462
 - uid: System.IdentityModel.Services.ClaimsPrincipalPermission.CheckAccess(System.String,System.String)
@@ -78,8 +78,8 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Checks if the current principal is authorized to perform the specified action on the specified resource."
-  remarks: "The principal must be authorized for the specified action on the specified resource or the <xref:System.Security.SecurityException> exception is thrown.       The <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName> method of the configured claims authorization manager is invoked with an <xref:System.Security.Claims.AuthorizationContext> composed of the active principal (<xref:System.Threading.Thread.CurrentPrincipal%2A>), the resource, and the action."
+  summary: "檢查是否目前的主體已獲授權在指定的資源上執行指定的動作。"
+  remarks: "主體必須經過授權，針對指定的資源上指定的動作或<xref:System.Security.SecurityException>擲回例外狀況。</xref:System.Security.SecurityException>       <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName>設定的 claims authorization manager 授權的方法用來叫用<xref:System.Security.Claims.AuthorizationContext>作用中的主體所組成 (<xref:System.Threading.Thread.CurrentPrincipal%2A>)、 資源和動作。</xref:System.Threading.Thread.CurrentPrincipal%2A> </xref:System.Security.Claims.AuthorizationContext> </xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName>"
   example:
   - "The following example shows how to protect a resource by using the CheckAccess method. The configured claims authorization manager is invoked to evaluate the current principal against the specified resource and action. If the current principal is not authorized for the specified action on the specified resource, a <xref:System.Security.SecurityException> is thrown; otherwise, execution proceeds.  \n  \n [!code-cs[WifCppWithCam#2](~/add/codesnippet/csharp/wifcppwithcam/program.cs#2)]"
   syntax:
@@ -87,18 +87,18 @@ items:
     parameters:
     - id: resource
       type: System.String
-      description: "The resource on which the principal should be authorized."
+      description: "資源應該在其授權的主體。"
     - id: action
       type: System.String
-      description: "The action for which the principal should be authorized."
+      description: "主體要授權的動作。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.CheckAccess*
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "The current principal is not assignable from <xref href=&quot;System.Security.Claims.ClaimsPrincipal&quot;></xref>.       -or-       There is no <xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref> configured."
+    description: "目前的主體不是可從<xref href=&quot;System.Security.Claims.ClaimsPrincipal&quot;> </xref>。       -或-沒有任何<xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref>設定。"
   - type: System.Security.SecurityException
     commentId: T:System.Security.SecurityException
-    description: "The authorization check failed."
+    description: "授權檢查失敗。"
   platform:
   - net462
 - uid: System.IdentityModel.Services.ClaimsPrincipalPermission.Copy
@@ -113,13 +113,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns a copy of the current <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> instance."
+  summary: "傳回目前的複本<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>執行個體。"
   syntax:
     content: public System.Security.IPermission Copy ();
     parameters: []
     return:
       type: System.Security.IPermission
-      description: "A <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> copied from the current instance."
+      description: "A <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>複製目前的執行個體。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.Copy*
   exceptions: []
   platform:
@@ -136,8 +136,8 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Checks if the current principal is authorized for the resource-action pairs associated with the current instance."
-  remarks: "The current principal must be authorized for all of the resource-action pairs associated with this instance or the <xref:System.Security.SecurityException> exception is thrown.       Although the constructor only takes a single resource and action, <xref:System.IdentityModel.Services.ClaimsPrincipalPermission> objects can be combined through the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A> and <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A> methods. The permission created through these methods may contain multiple resource-action pairs.       The Demand method invokes the <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName> method of the configured claims authorization manager with an <xref:System.Security.Claims.AuthorizationContext> composed of the active principal (<xref:System.Threading.Thread.CurrentPrincipal%2A>), the resource, and the action for each of the resource-action pairs contained in the permission. For the Demand to succeed the active principal must be authorized for all of the resource-action pairs that are contained in the permission."
+  summary: "會檢查目前的主體已獲授權的目前執行個體相關聯的資源動作組。"
+  remarks: "目前的主體必須經過授權，所有與這個執行個體相關聯的資源動作組或<xref:System.Security.SecurityException>擲回例外狀況。</xref:System.Security.SecurityException>       雖然建構函式只接受單一資源和動作、<xref:System.IdentityModel.Services.ClaimsPrincipalPermission>物件可以透過結合<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A>和<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A>方法。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect%2A> </xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Union%2A> </xref:System.IdentityModel.Services.ClaimsPrincipalPermission> 透過這些方法建立的權限可能包含多個資源動作配對。       要求方法會叫用<xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName>方法設定的 claims authorization manager 授權與<xref:System.Security.Claims.AuthorizationContext>作用中的主體所組成 (<xref:System.Threading.Thread.CurrentPrincipal%2A>)，資源，並針對每個資源動作組所包含的權限中的動作。</xref:System.Threading.Thread.CurrentPrincipal%2A> </xref:System.Security.Claims.AuthorizationContext> </xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A?displayProperty=fullName> 必須為所有包含的權限中的資源動作組成功作用中的主體指定授權。"
   example:
   - "The following example shows how to protect a resource by using the Demand method. The configured claims authorization manager is invoked to evaluate the current principal against the specified resource and action. If the current principal is not authorized for the specified action on the specified resource, a <xref:System.Security.SecurityException> is thrown; otherwise, execution proceeds.  \n  \n [!code-cs[WifCppWithCam#3](~/add/codesnippet/csharp/wifcppwithcam/program.cs#3)]"
   syntax:
@@ -147,10 +147,10 @@ items:
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "The current principal is not assignable from <xref href=&quot;System.Security.Claims.ClaimsPrincipal&quot;></xref>.       -or-       There is no <xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref> configured."
+    description: "目前的主體不是可從<xref href=&quot;System.Security.Claims.ClaimsPrincipal&quot;> </xref>。       -或-沒有任何<xref href=&quot;System.Security.Claims.ClaimsAuthorizationManager&quot;></xref>設定。"
   - type: System.Security.SecurityException
     commentId: T:System.Security.SecurityException
-    description: "The authorization check failed."
+    description: "授權檢查失敗。"
   platform:
   - net462
 - uid: System.IdentityModel.Services.ClaimsPrincipalPermission.FromXml(System.Security.SecurityElement)
@@ -165,22 +165,22 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Reconstructs the current permission and its state from the specified XML encoding."
-  remarks: "Reconstructs a permission from the XML encoding created by a call to the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.ToXml%2A> method."
+  summary: "目前的權限與指定的 XML 編碼方式的狀態，重新建構。"
+  remarks: "重新建構權限的呼叫所建立的 XML 編碼<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.ToXml%2A>方法。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.ToXml%2A>"
   syntax:
     content: public void FromXml (System.Security.SecurityElement element);
     parameters:
     - id: element
       type: System.Security.SecurityElement
-      description: "The XML encoding to use to reconstruct the permission."
+      description: "XML 編碼用來重新建構權限。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.FromXml*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>element</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>element</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "The encoding contains unrecognized elements or attributes or improperly formed XML."
+    description: "編碼方式包含無法辨識的項目或屬性或格式不正確的 XML。"
   platform:
   - net462
 - uid: System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect(System.Security.IPermission)
@@ -195,17 +195,17 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns a permission that is the intersection of the current permission and the specified permission."
-  remarks: "The permission that is returned has only the resource-action pairs that were present both in the current permission and in the specified permission. Resource-action pairs that existed in only one or the other of the permissions are not included. For a <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> to succeed on the new permission, the current principal only needs to be authorized for the resource-action pairs that were common to the current permission and the specified permission."
+  summary: "傳回目前權限和指定的權限交集的權限。"
+  remarks: "傳回的權限有只出現在目前的權限和指定的權限中的資源動作組。 存在於其中之一或其他的權限的資源動作組不包含。 如<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>成功新權限，目前的主體只需要獲得目前權限與指定權限的共用資源動作組。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>"
   syntax:
     content: public System.Security.IPermission Intersect (System.Security.IPermission target);
     parameters:
     - id: target
       type: System.Security.IPermission
-      description: "The permission to intersect with the current permission. It must be an instance of <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>."
+      description: "若要與目前權限產生交集的權限。 它必須是執行個體<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>。"
     return:
       type: System.Security.IPermission
-      description: "A new <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> that represents the intersection of the current permission and the specified permission; or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if <code>target</code> is <code>null</code> or is not an instance of <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>."
+      description: "新<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref> ，代表目前權限和指定的權限; 交集或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>如果<code> target </code>是<code> null </code>或不是執行個體的<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.Intersect*
   exceptions: []
   platform:
@@ -222,17 +222,17 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns a value that indicates whether current permission is a subset of the specified permission."
-  remarks: "The current permission is a subset of the specified permission if all of the resource-action pairs contained in the current permission are also present in the specified permission. If `target` is `null` or is not an instance of <xref:System.IdentityModel.Services.ClaimsPrincipalPermission>, the IsSubsetOf returns `false`."
+  summary: "傳回值，指出目前的權限是否為指定的權限的子集。"
+  remarks: "如果所有包含在目前的權限的資源動作組也會出現在指定的權限，目前的權限會是所指定權限的子集。 如果`target`是`null`或不是執行個體的<xref:System.IdentityModel.Services.ClaimsPrincipalPermission>，IsSubsetOf 傳回`false`。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission>"
   syntax:
     content: public bool IsSubsetOf (System.Security.IPermission target);
     parameters:
     - id: target
       type: System.Security.IPermission
-      description: "The permission to be tested for the subset relationship. It must be an instance of <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>."
+      description: "要測試子集關聯性的權限。 它必須是執行個體<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if current permission is a subset of the specified permission; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果目前權限是指定的權限的子集否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.IsSubsetOf*
   exceptions: []
   platform:
@@ -249,13 +249,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns a value that indicates whether the permission is unrestricted."
+  summary: "傳回值，指出是否不受限制的權限。"
   syntax:
     content: public bool IsUnrestricted ();
     parameters: []
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the permission is unrestricted; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. Always returns <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> indicating that permission is unrestricted."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果權限不受限制;否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 一律傳回<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>指出權限不受限制。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.IsUnrestricted*
   exceptions: []
   platform:
@@ -272,14 +272,14 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns the XML encoded form of the current permission and its state."
-  remarks: "The principal can be reconstructed from its XML encoded form by calling the <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.FromXml%2A> method."
+  summary: "傳回 XML 編碼格式目前權限和其狀態。"
+  remarks: "主體就可以重新建構的 XML 編碼格式藉由呼叫<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.FromXml%2A>方法。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.FromXml%2A>"
   syntax:
     content: public System.Security.SecurityElement ToXml ();
     parameters: []
     return:
       type: System.Security.SecurityElement
-      description: "The XML encoded form of the current permission and its state."
+      description: "XML 編碼格式目前權限和其狀態。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.ToXml*
   exceptions: []
   platform:
@@ -296,17 +296,17 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: "Returns a new permission that is the union of the current permission and the specified permission. <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> object that has all of the resource-action pairs that are present in the current instance and the target instance."
-  remarks: "The permission that is returned has all of the resource-action pairs that are present in the current permission and all of the resource-action pairs that are present the specified permission. For a <xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A> to succeed on the new permission, the current principal must be authorized for all of the resource-action pairs that existed in the current permission and all of the resource-action pairs that existed in the specified permission."
+  summary: "傳回目前的權限與指定權限的聯集的新權限。 <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>物件，其中包含所有目前的執行個體與目標執行個體中的資源動作組。"
+  remarks: "傳回的權限都具有所有會在目前的權限的資源動作組和所有的資源動作組指定的權限。 如<xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>成功新權限，目前的主體必須經過授權，為存在於目前的權限的資源動作組與所有存在於指定的權限的資源動作組。</xref:System.IdentityModel.Services.ClaimsPrincipalPermission.Demand%2A>"
   syntax:
     content: public System.Security.IPermission Union (System.Security.IPermission target);
     parameters:
     - id: target
       type: System.Security.IPermission
-      description: "The permission to combine with current permission. It must be of type <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>."
+      description: "要與目前權限結合的權限。 它必須是型別<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>。"
     return:
       type: System.Security.IPermission
-      description: "A new <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref> that represents the union of the current permission and the specified permission; or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if <code>target</code> is <code>null</code> or is not an instance of <xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;></xref>."
+      description: "新<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref> ，代表目前的權限與指定的權限的聯集或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>如果<code> target </code>是<code> null </code>或不是執行個體的<xref href=&quot;System.IdentityModel.Services.ClaimsPrincipalPermission&quot;> </xref>。"
   overload: System.IdentityModel.Services.ClaimsPrincipalPermission.Union*
   exceptions: []
   platform:
