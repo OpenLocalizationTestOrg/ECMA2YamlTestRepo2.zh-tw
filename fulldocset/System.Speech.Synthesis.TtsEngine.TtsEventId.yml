@@ -18,8 +18,8 @@ items:
   nameWithType: TtsEventId
   fullName: System.Speech.Synthesis.TtsEngine.TtsEventId
   type: Enum
-  summary: "Enumerates types of speech synthesis events."
-  remarks: "Custom speech synthesis engines define the types of events submitted to the Speech platform synthesizer infrastructure with the TtsEventId.       Specification is performed by setting the <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo.EventId%2A> property of <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo> instances passed to the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.AddEvents%2A> member of the class implementing the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite> interface passed to the <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A> method on a custom speech engine&quot;s implementation of <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>.       The Speech platform infrastructure indicates the type of events it is currently handling through the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> property on the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite> passed to the speak implementation.       The value of <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> is a bitmask, where the members of TtsEventId define the location of the bit corresponding to the event type. For example, WordBoundary has a value of five (5), meaning the fifth bit in the value returned by <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> indicates if the site supports the event type."
+  summary: "列舉語音合成事件的類型。"
+  remarks: "自訂的語音合成引擎定義事件提交至語音平台合成器基礎結構與 TtsEventId 的類型。       藉由設定<xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo.EventId%2A>屬性的<xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo>執行個體會傳遞至<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.AddEvents%2A>類別實作的<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite>介面傳遞給<xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A><xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>.</xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>自訂語音引擎的實作上方法</xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A></xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite>的成員</xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.AddEvents%2A></xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo></xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo.EventId%2A>執行規格       語音平台基礎結構表示的目前透過處理的事件類型<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>屬性<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite>傳遞至 speak 實作。</xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite> </xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>       值<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>是位元遮罩，TtsEventId 成員用來定義事件類型對應的位元的位置。</xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> 例如，WordBoundary 具有值為五 （5），這表示所傳回的值中的第五個位元<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>指示站台是否支援事件類型。</xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>"
   example:
   - "The example below is part of a custom speech synthesis implementation inheriting from <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>, and using the use of <xref:System.Speech.Synthesis.TtsEngine.TextFragment>, <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo>, <xref:System.Speech.Synthesis.TtsEngine.FragmentState>, and TtsEventId  \n  \n The implementation of <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A>  \n  \n1.  Receives an array of <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances and creates a new array of <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances to be passed to the `Speak` method on an underlying synthesis engine.  \n  \n2.  If the <xref:System.Speech.Synthesis.TtsEngine.TtsEngineAction> enumeration value by found from the <xref:System.Speech.Synthesis.TtsEngine.FragmentState.Action%2A> property on the <xref:System.Speech.Synthesis.TtsEngine.FragmentState> returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property of each <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instance is <xref:System.Speech.Synthesis.TtsEngine.TtsEngineAction>, the implementation  \n  \n    -   Translates Americanism to Britishisms in the text to be spoken.  \n  \n    -   If the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> property on the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite> interfaces provided to the implementation support the WordBoundary event type, a <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo> instance is used to create an event to drive a synthesizer progress meter is created.  \n  \n3.  A speech rendering engine is then called with the modified <xref:System.Speech.Synthesis.TtsEngine.TextFragment> array.  \n  \n```  \nprivate const int WordBoundaryFlag = 1 << (int)TtsEventId.WordBoundary;  \nprivate readonly char[] spaces = new char[] { ' ', '\\t', '\\r', '\\n' };  \ninternal struct UsVsUk  \n{  \n  internal string UK;  \n  internal string US;  \n}  \n  \noverride public void Speak (TextFragment [] frags, IntPtr wfx, ITtsEngineSite site)  \n{  \n  TextFragment [] newFrags=new TextFragment[frags.Length];  \n  \n  for (int i=0;i<frags.Length;i++){  \n    newFrags[i].State=frags[i].State;  \n    //truncate  \n    newFrags[i].TextToSpeak = frags[i].TextToSpeak.Substring(frags[i].TextOffset,  \n                               frags[i].TextLength);  \n    newFrags[i].TextLength = newFrags[i].TextToSpeak.Length;  \n    newFrags[i].TextOffset = 0;  \n    if (newFrags[i].State.Action == TtsEngineAction.Speak) {  \n      //Us to UK conversion  \n      foreach (UsVsUk term in TransList) {  \n      newFrags[i].TextToSpeak.Replace(term.US, term.UK);  \n      }  \n      //Generate progress meter events if supported  \n      if ((site.EventInterest & WordBoundaryFlag) != 0) {  \n      string[] subs = newFrags[i].TextToSpeak.Split(spaces);  \n  \n      foreach (string s in subs) {  \n        int offset = newFrags[i].TextOffset;  \n        SpeechEventInfo spEvent = new SpeechEventInfo((Int16)TtsEventId.WordBoundary,   \n                (Int16)EventParameterType.Undefined,   \n                 s.Length, new IntPtr(offset));  \n        offset += s.Length;  \n        if (s.Trim().Length > 0) {  \n          SpeechEventInfo[] events = new SpeechEventInfo[1];  \n          events[0] = spEvent;  \n          site.AddEvents(events, 1);  \n        }  \n      }  \n      }  \n    }  \n  }  \n  \n  _baseSynthesize.Speak(newFrags, wfx, site);  \n  \n}  \n```"
   syntax:
@@ -40,12 +40,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine completes an audio level change while speaking."
+  summary: "識別產生事件時的語音合成引擎完成音訊的層級變更時。"
   syntax:
     content: AudioLevel
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -61,12 +61,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine encounters a bookmark while speaking."
+  summary: "識別產生事件時的語音合成引擎所遇到的書籤時。"
   syntax:
     content: Bookmark
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -82,12 +82,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine encounters the end of its input stream while speaking."
+  summary: "識別產生事件時的語音合成引擎講話時所遇到其輸入資料流的結尾。"
   syntax:
     content: EndInputStream
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -103,12 +103,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine completes a phoneme while speaking."
+  summary: "識別產生事件時的語音合成引擎完成音素的講話時。"
   syntax:
     content: Phoneme
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -124,12 +124,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine completes a sentence while speaking."
+  summary: "識別產生事件時語音合成引擎就會完成句子講話時。"
   syntax:
     content: SentenceBoundary
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -145,12 +145,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine a begins speaking a stream."
+  summary: "識別產生事件時的語音合成引擎開始就資料流。"
   syntax:
     content: StartInputStream
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -166,12 +166,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine completes a viseme while speaking."
+  summary: "識別產生事件時的語音合成引擎就會完成 viseme 講話時。"
   syntax:
     content: Viseme
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -187,12 +187,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine encounters a change of Voice while speaking."
+  summary: "識別產生事件時的語音合成引擎所遇到的聲音變更時。"
   syntax:
     content: VoiceChange
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -208,12 +208,12 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: "Identifies events generated when a speech synthesize engine completes a word while speaking."
+  summary: "識別產生事件時的語音合成引擎就會完成 word 講話時。"
   syntax:
     content: WordBoundary
     return:
       type: System.Speech.Synthesis.TtsEngine.TtsEventId
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
