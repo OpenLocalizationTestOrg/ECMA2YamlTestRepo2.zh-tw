@@ -34,7 +34,7 @@ items:
   nameWithType: SecurityTokenHandler
   fullName: System.IdentityModel.Tokens.SecurityTokenHandler
   type: Class
-  summary: "The abstract base class for security token handlers."
+  summary: "安全性權杖處理常式的抽象基底類別。"
   remarks: "The SecurityTokenHandler class is the base class from which all security token handlers derive. A security token handler is responsible for:  \n  \n-   Validating security tokens (<xref:System.IdentityModel.Tokens.SecurityToken>) of the type it is designed to process and packaging the claims contained in the token into a <xref:System.Security.Claims.ClaimsIdentity> object.  \n  \n-   Serializing and deserializing security tokens of the type it is designed to process.  \n  \n-   Serializing and deserializing key identifier clauses (<xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause>) that refer to tokens of the type it is designed to process to and from `<wsse:SecurityTokenReference>` elements.  \n  \n-   Creating security tokens from a <xref:System.IdentityModel.Tokens.SecurityTokenDescriptor> object passed by implementations of the <xref:System.IdentityModel.SecurityTokenService> class.  \n  \n-   Creating key identifier clauses from a security token for implementations of the <xref:System.IdentityModel.SecurityTokenService> class.  \n  \n Windows Identity Foundation (WIF) ships the following security token handlers out of the box:  \n  \n-   <xref:System.IdentityModel.Tokens.EncryptedSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.KerberosSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Services.Tokens.MachineKeySessionSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Services.Tokens.MembershipUserNameSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.RsaSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.Saml2SecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.SamlSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.UserNameSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.WindowsUserNameSecurityTokenHandler>  \n  \n-   <xref:System.IdentityModel.Tokens.X509SecurityTokenHandler>  \n  \n Most of these classes expose additional members that implement functionality that is specific to the processing of the tokens for which the class is designed. In many cases it may be better to derive from one of these classes rather than directly from the SecurityTokenHandler class.  \n  \n A security token handler can be added or removed from  a token handler collection by specifying the [\\&lt;add\\&gt;](../Topic/%3Cadd%3E.md), [\\&lt;remove\\&gt;](../Topic/%3Cremove%3E.md), or [\\&lt;clear\\&gt;](../Topic/%3Cclear%3E.md) elements under the [\\&lt;securityTokenHandlers\\&gt;](../Topic/%3CsecurityTokenHandlers%3E.md) element in a configuration file. The <xref:System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration> object that contains the configuration settings for the handler collection can be accessed through the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.Configuration%2A> property and the handler collection that the token handler is a member of can be accessed from the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ContainingCollection%2A> property. You can override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.LoadCustomConfiguration%2A> method to process any custom configuration elements that your handler takes.  \n  \n The SecurityTokenHandler class exposes several other properties and methods. Depending on the functionality that you choose to implement, you may override some or all of these members.  \n  \n You must override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.TokenType%2A> property and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.GetTokenTypeIdentifiers%2A> method to provide the WIF infrastructure with information about the type of security token that your class is designed to process.  \n  \n Validation, serialization, and deserialization functionality is exposed through properties or methods that indicate whether the handler can perform a specific function combined with the method or methods that implement the functionality. The following list pairs the properties or methods that indicate functionality with the methods that implement that functionality:  \n  \n-   The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanValidateToken%2A> property and  the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A> method: Validates a token and packages the claims contained in the token into a <xref:System.Security.Claims.ClaimsIdentity>.  \n  \n-   The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A> property and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken%2A> methods: Token serialization.  \n  \n-   The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A> methods and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A> methods: Token deserialization.  \n  \n-   The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A> method and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause%2A> method: Deserializing key identifier clauses.  \n  \n-   The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteKeyIdentifierClause%2A> method and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteKeyIdentifierClause%2A> method: Serializing key identifier clauses.  \n  \n The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CreateToken%2A> and the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CreateSecurityTokenReference%2A> methods are called from the pipeline in implementations of the <xref:System.IdentityModel.SecurityTokenService> class.  \n  \n The <xref:System.IdentityModel.Tokens.SecurityTokenHandler.DetectReplayedToken%2A> method is called by the WIF infrastructure to determine whether the specified token has already been received. By default this method returns `false`, which indicates that the token has not already been received. You can override the method and provide logic to detect replayed tokens."
   example:
   - "The code examples in all of the SecurityTokenHandler topics are taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md). The following XML shows how to add the SWT token handler to the token handlers collection.  \n  \n```xml  \n<system.identityModel>  \n  <identityConfiguration saveBootstrapContext=\"true\">  \n    <issuerTokenResolver type=\"SimpleWebToken.CustomIssuerTokenResolver, SimpleWebToken\">  \n      <AddAudienceKeyPair  symmetricKey=\"wAVkldQiFypTQ+kdNdGWCYCHRcee8XmXxOvgmak8vSY=\" audience=\"http://localhost:19851/\" />  \n    </issuerTokenResolver>  \n    <issuerNameRegistry type=\"RelyingParty.TrustedIssuerNameRegistry, RelyingParty\"/>  \n    <audienceUris>  \n      <add value=\"http://localhost:19851/\"/>  \n    </audienceUris>  \n    <securityTokenHandlers>  \n      <add type=\"SimpleWebToken.SimpleWebTokenHandler, SimpleWebToken\" />  \n    </securityTokenHandlers>  \n  </identityConfiguration>  \n</system.identityModel>  \n```"
@@ -59,7 +59,7 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Called from constructors in derived classes to initialize the <xref href=&quot;System.IdentityModel.Tokens.SecurityTokenHandler&quot;></xref> class."
+  summary: "從建構函式以初始化衍生類別中呼叫<xref href=&quot;System.IdentityModel.Tokens.SecurityTokenHandler&quot;></xref>類別。"
   syntax:
     content: protected SecurityTokenHandler ();
     parameters: []
@@ -79,17 +79,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Returns a value that indicates whether the XML element referred to by the specified XML reader is a key identifier clause that can be deserialized by this instance."
-  remarks: "The default implementation returns `false` to indicate that the key identifier clause cannot be read.       A derived class checks the element that the reader is referring to in order to determine whether the instance can deserialize a key identifier clause. This is typically accomplished through a call to the <xref:System.Xml.XmlReader.IsStartElement%2A?displayProperty=fullName> method with the appropriate element and namespace strings specified. If you override CanReadKeyIdentifierClause, you must also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause%2A> method to provide the logic to deserialize the key identifier clause."
+  summary: "傳回值，指出所參考的 XML 項目指定的 XML 讀取器是否可以還原序列化的這個執行個體的金鑰識別碼子句。"
+  remarks: "預設實作會傳回`false`來指示將無法讀取金鑰識別碼子句。       在衍生的類別會檢查讀取器以判斷執行個體是否可以還原序列化金鑰識別碼子句所參考的項目。 通常這是透過呼叫<xref:System.Xml.XmlReader.IsStartElement%2A?displayProperty=fullName>方法與指定的適當項目和命名空間字串。</xref:System.Xml.XmlReader.IsStartElement%2A?displayProperty=fullName> 如果您覆寫 CanReadKeyIdentifierClause，您也必須覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause%2A>方法以提供還原序列化金鑰識別碼子句的邏輯。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause%2A>"
   syntax:
     content: public virtual bool CanReadKeyIdentifierClause (System.Xml.XmlReader reader);
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An XML reader positioned at the start element. The reader should not be advanced by this method."
+      description: "XML 讀取器位於開始項目。 這個方法不應該進階讀取器。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause*> method can read the element; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause*>方法可以讀取項目，否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause*> 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause*
   exceptions: []
   platform:
@@ -106,17 +106,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Returns a value that indicates whether the specified string can be deserialized as a token of the type processed by this instance."
-  remarks: "The default implementation always returns `false`.       If you override this method, you must also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> method to provide the logic to deserialize the token."
+  summary: "傳回值，指出指定的字串是否可以還原序列化為的這個執行個體所處理的類型語彙基元。"
+  remarks: "預設實作一定會傳回`false`。       如果您覆寫這個方法，您也必須覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>方法，以提供邏輯以還原序列化語彙基元。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>"
   syntax:
     content: public virtual bool CanReadToken (string tokenString);
     parameters:
     - id: tokenString
       type: System.String
-      description: "The token string to read."
+      description: "要讀取的語彙基元字串。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the &lt;xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName&gt; method can read the element; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果&lt;xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName&gt;方法可以讀取項目，否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken*
   exceptions: []
   platform:
@@ -133,8 +133,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Returns a value that indicates whether the XML element referenced by the specified XML reader can be read as a token of the type processed by this instance."
-  remarks: "The default implementation always returns `false`.       A derived class checks the element that the reader is referring to in order to determine whether the instance can deserialize a security token. This is typically accomplished through a call to the <xref:System.Xml.XmlReader.IsStartElement%2A> method with the appropriate element and namespace strings specified. If you override <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A>, you must also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> method or the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> method to provide the logic to deserialize the key identifier clause."
+  summary: "傳回值，指出是否可以做為這個執行個體所處理之型別的權杖中讀取指定的 XML 讀取器所參考的 XML 項目。"
+  remarks: "預設實作一定會傳回`false`。       在衍生的類別會檢查讀取器以判斷執行個體是否可以還原序列化的安全性語彙基元所參考的項目。 通常這是透過呼叫<xref:System.Xml.XmlReader.IsStartElement%2A>方法與指定的適當項目和命名空間字串。</xref:System.Xml.XmlReader.IsStartElement%2A> 如果您覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A>，您也必須覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>方法或<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>方法以提供還原序列化金鑰識別碼子句的邏輯。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> </xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> </xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A>"
   example:
   - "The following code shows how to override the CanReadToken method to determine whether a token can be read by a handler. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#1](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#1)]"
   syntax:
@@ -142,10 +142,10 @@ items:
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An XML reader positioned at a start element. The reader should not be advanced by this method."
+      description: "XML 讀取器位於開始項目。 這個方法不應該進階讀取器。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the &lt;xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName&gt; method can read the element; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果&lt;xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName&gt;方法可以讀取項目，否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken*
   exceptions: []
   platform:
@@ -162,15 +162,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Gets a value that indicates whether the handler supports validation of security tokens."
-  remarks: "To implement validation in a derived class, override this property to return `true` and override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A> method to implement the validation logic."
+  summary: "取得值，指出處理常式是否支援驗證安全性權杖。"
+  remarks: "若要在衍生類別中實作驗證，請覆寫此屬性以傳回`true`並覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>方法來實作驗證邏輯。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>"
   example:
   - "The following code shows how to override the CanValidateToken property to indicate that a custom handler can validate tokens. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#2](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#2)]"
   syntax:
     content: public virtual bool CanValidateToken { get; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the class is capable of validating security tokens; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果類別是能夠驗證安全性權杖。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanValidateToken*
   exceptions: []
   platform:
@@ -187,17 +187,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Returns a value that indicates whether the specified key identifier clause can be serialized by this instance."
-  remarks: "The default implementation always returns `false`.       If you override CanWriteKeyIdentifierClause, you must also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteKeyIdentifierClause%2A> method to provide the logic to serialize the key identifier clause."
+  summary: "傳回值，指出這個執行個體是否可序列化指定的金鑰識別碼子句。"
+  remarks: "預設實作一定會傳回`false`。       如果您覆寫 CanWriteKeyIdentifierClause，您也必須覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteKeyIdentifierClause%2A>方法以提供序列化金鑰識別碼子句的邏輯。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteKeyIdentifierClause%2A>"
   syntax:
     content: public virtual bool CanWriteKeyIdentifierClause (System.IdentityModel.Tokens.SecurityKeyIdentifierClause securityKeyIdentifierClause);
     parameters:
     - id: securityKeyIdentifierClause
       type: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-      description: "The key identifier clause to be checked."
+      description: "要檢查的金鑰識別碼子句。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the key identifier clause can be serialized; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果可以序列化金鑰識別碼子句。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteKeyIdentifierClause*
   exceptions: []
   platform:
@@ -214,15 +214,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Gets a value that indicates whether the handler can serialize security tokens."
-  remarks: "To implement serialization in a derived class, override this property to return `true` and override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken%2A> methods to implement the serialization logic."
+  summary: "取得值，指出此處理常式是否可以序列化安全性權杖。"
+  remarks: "若要在衍生類別中實作序列化，覆寫此屬性以傳回`true`並覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken%2A>方法來實作序列化邏輯。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken%2A>"
   example:
   - "The following code shows how to override the CanWriteToken property to indicate that a custom handler can serialize tokens. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#3](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#3)]"
   syntax:
     content: public virtual bool CanWriteToken { get; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the class is capable of serializing tokens; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果類別是能夠序列化語彙基元。否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken*
   exceptions: []
   platform:
@@ -239,13 +239,13 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Gets or sets the <xref href=&quot;System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration&quot;></xref> object that provides configuration for the current instance."
+  summary: "取得或設定<xref href=&quot;System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration&quot;></xref>物件，提供目前的執行個體的組態。"
   remarks: "The Configuration property is typically set by the configuration infrastructure from the [\\&lt;securityTokenHandlerConfiguration\\&gt;](../Topic/%3CsecurityTokenHandlerConfiguration%3E.md) element in the configuration file during application start up.  \n  \n In derived classes, you use the Configuration property to access configuration settings; for example, the issuer name registry to use in the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A> method can be accessed from the <xref:System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration.IssuerNameRegistry%2A?displayProperty=fullName> property of the configuration object."
   syntax:
     content: public System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration Configuration { get; set; }
     return:
       type: System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration
-      description: "The configuration object for the current instance."
+      description: "目前的執行個體的組態物件。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.Configuration*
   exceptions: []
   platform:
@@ -262,13 +262,13 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Gets the token handler collection that contains the current instance."
-  remarks: "When the token handler is added to a <xref:System.IdentityModel.Tokens.SecurityTokenHandlerCollection> instance, this property is automatically set."
+  summary: "取得包含目前執行個體的語彙基元處理常式集合。"
+  remarks: "當權杖處理常式加入<xref:System.IdentityModel.Tokens.SecurityTokenHandlerCollection>執行個體，這個屬性會自動設定。</xref:System.IdentityModel.Tokens.SecurityTokenHandlerCollection>"
   syntax:
     content: public System.IdentityModel.Tokens.SecurityTokenHandlerCollection ContainingCollection { get; }
     return:
       type: System.IdentityModel.Tokens.SecurityTokenHandlerCollection
-      description: "The token handler collection that contains the current instance."
+      description: "包含目前執行個體的語彙基元處理常式集合。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ContainingCollection*
   exceptions: []
   platform:
@@ -285,8 +285,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, creates the security token reference for tokens processed by that class. This method is typically called by a security token service (STS)."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Derived classes override this method to return a key identifier clause (<xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause>) that can be used to create a `<wsse:SecurityTokenReference>` element for the specified token.       Called from implementations of the <xref:System.IdentityModel.SecurityTokenService> class.       Typically, a <xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause> does not need to be used, other than when a custom security token service is created. When a security token service returns a security token, the issued security token contains references to attached and unattached security tokens. Attached references refer to security tokens that are contained within the security header of a SOAP message and unattached references reference security tokens that are not included within the security header of a SOAP message. These references typically affirm the authenticity of the issued security token."
+  summary: "當在衍生類別中覆寫時，會建立該類別所處理的語彙基元的安全性權杖參考。 這個方法通常會呼叫安全性權杖服務 (STS)。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       在衍生的類別覆寫此方法以傳回金鑰識別碼子句 (<xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause>) 可以用來建立`<wsse:SecurityTokenReference>`指定語彙基元的項目。</xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause>       從<xref:System.IdentityModel.SecurityTokenService>類別</xref:System.IdentityModel.SecurityTokenService>的實作呼叫       一般而言，<xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause>不需要使用，除了在建立自訂安全性權杖服務時。</xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause> 當安全性權杖服務傳回安全性權杖時，所發出的安全性權杖會包含已附加及未附加之安全性權杖的參考。 附加的參考會參考包含在 SOAP 訊息之安全性標頭內的安全性權杖，且未附加的參考參考不會包含在 SOAP 訊息之安全性標頭中的安全性權杖。 這些參考通常會證明這些發出的安全性權杖的真實性。"
   example:
   - "The following code shows how to override the CreateSecurityTokenReference method to create a key identifier clause from the specified token. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#5](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#5)]"
   syntax:
@@ -294,13 +294,13 @@ items:
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token for which the reference is to be created."
+      description: "若要建立參考的語彙基元。"
     - id: attached
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if an attached reference should be created; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> if an unattached reference should be created."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果應該建立附加的參考。<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>如果應該要建立未附加的參考。"
     return:
       type: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-      description: "A key identifier clause that references the specified token."
+      description: "金鑰識別碼子句與指定語彙基元的參考。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CreateSecurityTokenReference*
   exceptions: []
   platform:
@@ -317,8 +317,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, creates a security token using the specified token descriptor. This method is called by a security token service (STS)."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Called from implementations of the <xref:System.IdentityModel.SecurityTokenService> class."
+  summary: "當在衍生類別中覆寫時，會建立使用指定的語彙基元描述元的安全性權杖。 這個方法會呼叫安全性權杖服務 (STS)。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       從<xref:System.IdentityModel.SecurityTokenService>類別</xref:System.IdentityModel.SecurityTokenService>的實作呼叫"
   example:
   - "The following code shows how to override the CreateToken method to create and return a token from a token descriptor. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#4](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#4)]"
   syntax:
@@ -326,10 +326,10 @@ items:
     parameters:
     - id: tokenDescriptor
       type: System.IdentityModel.Tokens.SecurityTokenDescriptor
-      description: "The security token descriptor from which the token is to be created. Properties of the token descriptor are set before this method is called."
+      description: "從中語彙基元，是要建立安全性權杖描述元。 呼叫這個方法之前，會設定語彙基元的描述元的屬性。"
     return:
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "A security token that matches the properties of the token descriptor."
+      description: "安全性權杖符合語彙基元的描述元的屬性。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.CreateToken*
   exceptions: []
   platform:
@@ -346,14 +346,14 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, throws an exception if the specified token is detected as being replayed."
+  summary: "當在衍生類別中覆寫時，擲回例外狀況，如果所重新執行偵測到指定的語彙基元。"
   remarks: "The default implementation does nothing.  \n  \n Derived classes should throw a <xref:System.IdentityModel.Tokens.SecurityTokenReplayDetectedException> if the token has already been used.  \n  \n Windows Identity Foundation (WIF) provides the <xref:System.IdentityModel.Tokens.TokenReplayCache> class from which replay caches may be derived and the [\\&lt;tokenReplayCache\\&gt;](../Topic/%3CtokenReplayCache%3E.md) configuration element, which can be used to configure the replay cache used by token handlers in an application; however, the exact implementation of the DetectReplayedToken method is up to the designer of the derived class."
   syntax:
     content: protected virtual void DetectReplayedToken (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token to check for replay."
+      description: "若要重新執行檢查語彙基元。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.DetectReplayedToken*
   exceptions: []
   platform:
@@ -370,8 +370,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, returns the set of URIs that are used in requests to identify a token of the type processed by the derived class."
-  remarks: "The <xref:System.Type> of the token processed by the current instance is accessed through the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.TokenType%2A> property. The GetTokenTypeIdentifiers method returns the set of acceptable identifiers that can be used in messages to refer to the token type. For example, the URI value used in the `<wst:TokenType>` element under the `<wst:RequestSecurityToken>` element to request a specific kind of token (represented by the <xref:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.TokenType%2A?displayProperty=fullName> property in the object model)."
+  summary: "當在衍生類別中覆寫時，傳回所使用的 Uri 集合來識別由衍生類別中處理類型的權杖要求中。"
+  remarks: "<xref:System.Type>處理的目前執行個體的語彙基元存取透過<xref:System.IdentityModel.Tokens.SecurityTokenHandler.TokenType%2A>屬性。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.TokenType%2A> </xref:System.Type> GetTokenTypeIdentifiers 方法會傳回一組可用的可接受識別碼來參考語彙基元類型的訊息中。 URI 值中的使用，例如`<wst:TokenType>`項目底下`<wst:RequestSecurityToken>`要求特定種類的語彙基元的項目 (由<xref:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.TokenType%2A?displayProperty=fullName>物件模型中的屬性)。</xref:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.TokenType%2A?displayProperty=fullName>"
   example:
   - "The following code shows how to override the GetTokenTypeIdentifiers method to return the token type identifiers for a custom token. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#17](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#17)]  \n[!code-cs[WifRcCustomToken#6](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#6)]"
   syntax:
@@ -379,7 +379,7 @@ items:
     parameters: []
     return:
       type: System.String[]
-      description: "The set of URIs that identify the token type that this handler supports."
+      description: "用來識別此處理常式支援的權杖型別 Uri 集合。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.GetTokenTypeIdentifiers*
   exceptions: []
   platform:
@@ -396,14 +396,14 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, loads custom configuration from XML."
+  summary: "在衍生類別中覆寫，請從 XML 載入自訂組態。"
   remarks: "The LoadCustomConfiguration method is called by the configuration infrastructure. When this method is called, the `nodelist` will contain the top-level child elements of the token handler’s [\\&lt;add\\&gt;](../Topic/%3Cadd%3E.md) element from the configuration file. Each of these may, in turn, contain attributes or child elements depending on the configuration schema you define for your derived class.  \n  \n The default implementation throws a <xref:System.NotImplementedException>. Override this method in your derived class to enable initialization of your security token handler from a configuration file."
   syntax:
     content: public virtual void LoadCustomConfiguration (System.Xml.XmlNodeList nodelist);
     parameters:
     - id: nodelist
       type: System.Xml.XmlNodeList
-      description: "The configuration XML elements. Each node in the list is of type <xref href=&quot;System.Xml.XmlElement&quot;></xref>."
+      description: "組態 XML 項目。 在清單中的每個節點屬於型別<xref href=&quot;System.Xml.XmlElement&quot;> </xref>。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.LoadCustomConfiguration*
   exceptions: []
   platform:
@@ -420,17 +420,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, deserializes the XML referenced by the specified XML reader to a key identifier clause that references a token processed by the derived class."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide the logic to deserialize a key identifier clause from XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A?displayProperty=fullName> method."
+  summary: "當在衍生類別中覆寫時，還原序列化金鑰識別碼子句所參考的衍生類別中處理的語彙基元的指定 XML 讀取器所參考的 XML。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供的金鑰識別碼子句，從 XML 還原序列化邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A?displayProperty=fullName>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadKeyIdentifierClause%2A?displayProperty=fullName>"
   syntax:
     content: public virtual System.IdentityModel.Tokens.SecurityKeyIdentifierClause ReadKeyIdentifierClause (System.Xml.XmlReader reader);
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An XML reader positioned at the start element of the XML to be deserialized into the key identifier clause."
+      description: "XML 讀取器位於要還原序列化金鑰識別碼子句至 XML 的開始項目。"
     return:
       type: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-      description: "The key identifier clause that was deserialized from the XML."
+      description: "從 XML 還原序列化金鑰識別碼子句。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ReadKeyIdentifierClause*
   exceptions: []
   platform:
@@ -447,17 +447,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, deserializes the specified string to a token of the type processed by the derived class."
-  remarks: "> [!IMPORTANT] >  Calling this method with untrusted data is a security risk. Call this method only with trusted data. For more information, see [Untrusted Data Security Risks](http://go.microsoft.com/fwlink/?LinkId=330378).       By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide functionality that can deserialize a security token from a string. If you override, this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName> method."
+  summary: "當在衍生類別中覆寫時，還原序列化的型別所衍生的類別處理語彙基元指定的字串。"
+  remarks: "> [!IMPORTANT]> 呼叫此方法不受信任的資料時，會造成安全性風險。 呼叫這個方法僅使用信任的資料。 如需詳細資訊，請參閱[不受信任的資料安全性風險](http://go.microsoft.com/fwlink/?LinkId=330378)。       依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供可還原序列化安全性權杖從字串的功能。 如果您覆寫，此方法中，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName>"
   syntax:
     content: public virtual System.IdentityModel.Tokens.SecurityToken ReadToken (string tokenString);
     parameters:
     - id: tokenString
       type: System.String
-      description: "The string to be deserialized."
+      description: "要還原序列化的字串。"
     return:
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The security token that was deserialized from the specified string."
+      description: "從指定的字串還原序列化安全性權杖。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken*
   exceptions: []
   platform:
@@ -474,8 +474,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, deserializes the XML referenced by the specified XML reader to a token of the type processed by the derived class."
-  remarks: "> [!IMPORTANT] >  Calling this method with untrusted data is a security risk. Call this method only with trusted data. For more information, see [Untrusted Data Security Risks](http://go.microsoft.com/fwlink/?LinkId=330378).       By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide the logic to deserialize a security token from XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName> method. Typically, in derived classes, if the method cannot deserialize the token from the referenced XML, it throws an <xref:System.Xml.XmlException>."
+  summary: "當在衍生類別中覆寫時，還原序列化的型別所衍生的類別處理語彙基元的指定 XML 讀取器所參考的 XML。"
+  remarks: "> [!IMPORTANT]> 呼叫此方法不受信任的資料時，會造成安全性風險。 呼叫這個方法僅使用信任的資料。 如需詳細資訊，請參閱[不受信任的資料安全性風險](http://go.microsoft.com/fwlink/?LinkId=330378)。       依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供安全性權杖從 XML 還原序列化邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName> 一般而言，在衍生類別中，如果方法無法還原序列化的語彙基元從參考的 XML，它會擲回<xref:System.Xml.XmlException>.</xref:System.Xml.XmlException>"
   example:
   - "The following code shows how to override the ReadToken method to read a custom token from the specified XML reader. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#7](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#7)]  \n[!code-cs[WifRcCustomToken#8](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#8)]  \n[!code-cs[WifRcCustomToken#14](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#14)]"
   syntax:
@@ -483,10 +483,10 @@ items:
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An XML reader positioned at the start element of the token."
+      description: "XML 讀取器位於權杖的開始項目。"
     return:
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The security token that was deserialized from the XML."
+      description: "從 XML 還原序列化安全性權杖。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken*
   exceptions: []
   platform:
@@ -503,20 +503,20 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, deserializes the XML referenced by the specified XML reader to a token of the type processed by the derived class by using the specified token resolver."
-  remarks: "> [!IMPORTANT] >  Calling this method with untrusted data is a security risk. Call this method only with trusted data. For more information, see [Untrusted Data Security Risks](http://go.microsoft.com/fwlink/?LinkId=330378).       The default implementation ignores the `tokenResolver` parameter and delegates the call to the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName> method.       Override this method to provide the logic to deserialize a security token from XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName> method. Typically, in derived classes, if the method cannot deserialize the token from the referenced XML, it throws an <xref:System.Xml.XmlException>."
+  summary: "當在衍生類別中覆寫時，還原序列化指定的 XML 讀取器，使用指定的語彙基元解析程式在衍生類別來處理類型的語彙基元所參考的 XML。"
+  remarks: "> [!IMPORTANT]> 呼叫此方法不受信任的資料時，會造成安全性風險。 呼叫這個方法僅使用信任的資料。 如需詳細資訊，請參閱[不受信任的資料安全性風險](http://go.microsoft.com/fwlink/?LinkId=330378)。       預設實作會忽略`tokenResolver`參數和委派呼叫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken%2A?displayProperty=fullName>       覆寫這個方法以提供安全性權杖從 XML 還原序列化邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanReadToken%2A?displayProperty=fullName> 一般而言，在衍生類別中，如果方法無法還原序列化的語彙基元從參考的 XML，它會擲回<xref:System.Xml.XmlException>.</xref:System.Xml.XmlException>"
   syntax:
     content: public virtual System.IdentityModel.Tokens.SecurityToken ReadToken (System.Xml.XmlReader reader, System.IdentityModel.Selectors.SecurityTokenResolver tokenResolver);
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An XML reader positioned at the start element of the token."
+      description: "XML 讀取器位於權杖的開始項目。"
     - id: tokenResolver
       type: System.IdentityModel.Selectors.SecurityTokenResolver
-      description: "A token resolver that contains out-of-band and cached tokens."
+      description: "語彙基元解析程式，其中包含的頻外和快取權杖。"
     return:
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The security token that was deserialized from the XML."
+      description: "從 XML 還原序列化安全性權杖。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ReadToken*
   exceptions: []
   platform:
@@ -533,15 +533,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, gets the type of the security token that is processed by this instance."
-  remarks: "You must override this property in derived classes and return the <xref:System.Type> of the security token (<xref:System.IdentityModel.Tokens.SecurityToken>) that is processed by the derived class."
+  summary: "當在衍生類別中覆寫時，取得安全性權杖會由這個執行個體所處理的類型。"
+  remarks: "您必須覆寫衍生類別中的這個屬性，並傳回<xref:System.Type>的安全性權杖 (<xref:System.IdentityModel.Tokens.SecurityToken>) 衍生類別處理的</xref:System.IdentityModel.Tokens.SecurityToken></xref:System.Type>"
   example:
   - "The following code shows how to override the TokenType property to return the <xref:System.Type> of the security tokens that are processed by a custom handler. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#18](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#18)]"
   syntax:
     content: public abstract Type TokenType { get; }
     return:
       type: System.Type
-      description: "The type of the security token that is processed by this instance."
+      description: "安全性權杖是由這個執行個體所處理的類型。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.TokenType*
   exceptions: []
   platform:
@@ -558,17 +558,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Traces the failure event during the validation of security tokens when tracing is enabled."
-  remarks: "This method should be called from the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A> method when validation of the token fails."
+  summary: "當啟用追蹤時，追蹤失敗事件期間的安全性權杖驗證。"
+  remarks: "這個方法應從呼叫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>方法語彙基元的驗證失敗時。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>"
   syntax:
     content: protected void TraceTokenValidationFailure (System.IdentityModel.Tokens.SecurityToken token, string errorMessage);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The security token that is being validated."
+      description: "正在驗證安全性權杖。"
     - id: errorMessage
       type: System.String
-      description: "The message to write to the trace."
+      description: "要寫入至追蹤的訊息。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.TraceTokenValidationFailure*
   exceptions: []
   platform:
@@ -585,14 +585,14 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "Traces the successful validation of security tokens event when tracing is enabled."
-  remarks: "This method should be called from the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A> method after the token has been successfully validated."
+  summary: "追蹤成功驗證的安全性語彙基元事件追蹤功能啟用時。"
+  remarks: "這個方法應從呼叫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>後權杖已成功驗證的方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken%2A>"
   syntax:
     content: protected void TraceTokenValidationSuccess (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token that was validated."
+      description: "已驗證的語彙基元。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.TraceTokenValidationSuccess*
   exceptions: []
   platform:
@@ -609,7 +609,7 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, validates the specified security token. The token must be of the type processed by the derived class."
+  summary: "當在衍生類別中覆寫時，會驗證指定的安全性權杖。 語彙基元必須是型別所衍生的類別處理。"
   remarks: "By default this method throws a <xref:System.NotImplementedException> exception.  \n  \n The ValidateToken method is called by the infrastructure to validate and extract the claims from the deserialized security token. These claims are returned in the collection of <xref:System.Security.Claims.ClaimsIdentity> objects returned by the method. In the typical case, this collection will contain a single identity.  \n  \n In derived classes, validation typically includes validating the intended audience specified in the token against the audience URIs specified in the <xref:System.IdentityModel.Tokens.SecurityTokenHandlerConfiguration.AudienceRestriction%2A?displayProperty=fullName> property of the token handler configuration object specified on the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.Configuration%2A> property. These URIs are typically set in the configuration file under the [\\&lt;audienceUris\\&gt;](../Topic/%3CaudienceUris%3E.md) element. If the audience cannot be validated, an <xref:System.IdentityModel.Tokens.AudienceUriValidationFailedException> exception should be thrown.  \n  \n When processing the token, the issuer is typically validated by passing the issuer token to one of the <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%2A> methods on the <xref:System.IdentityModel.Tokens.IssuerNameRegistry> object that is configured for the handler through the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.Configuration%2A> property. The issuer name registry is typically configured through the [\\&lt;issuerNameRegistry\\&gt;](../Topic/%3CissuerNameRegistry%3E.md) element in the configuration file. The <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%2A> returns the name of the issuer. This name should be used to set the <xref:System.Security.Claims.Claim.Issuer%2A?displayProperty=fullName> property in claims contained in the token. If the issuer name registry does not contain an entry for the issuer token, <xref:System.IdentityModel.Tokens.IssuerNameRegistry.GetIssuerName%2A> returns `null`. In this case a <xref:System.IdentityModel.Tokens.SecurityTokenException> is typically thrown in derived classes, but this behavior is up to the designer of the class."
   example:
   - "The following code shows an override of the ValidateToken method for a security token handler that processes simple web tokens (SWT). The code is taken from the `CustomToken` sample. For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#9](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#9)]  \n  \n The following code shows `CreateClaims` method that is invoked from the override of the ValidateToken method in the previous example. This method returns a <xref:System.Security.Claims.ClaimsIdentity> object that is created from the claims in the token. The code is taken from the `CustomToken` sample. For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md).  \n  \n [!code-cs[WifRcCustomToken#15](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#15)]  \n  \n The following code shows `ValidateSignature` method that is invoked from the override of the ValidateToken method in the simple web token handler. This method validates the signature on the token by using the configured <xref:System.IdentityModel.Tokens.IssuerTokenResolver>. The code is taken from the `CustomToken` sample. For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md).  \n  \n [!code-cs[WifRcCustomToken#12](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#12)]  \n[!code-cs[WifRcCustomToken#11](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#11)]  \n  \n The following code shows `ValidateAudience` method that is invoked from the override of the ValidateToken method in the simple web token handler. This method validates the audience contained in the token against the audience URIs that were specified in configuration. The code is taken from the `CustomToken` sample. For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md).  \n  \n [!code-cs[WifRcCustomToken#13](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#13)]"
@@ -618,10 +618,10 @@ items:
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token to validate."
+      description: "若要驗證語彙基元。"
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Security.Claims.ClaimsIdentity}
-      description: "The identities contained in the token."
+      description: "在權杖中包含的識別。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.ValidateToken*
   exceptions: []
   platform:
@@ -638,17 +638,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, serializes the specified key identifier clause to XML. The key identifier clause must be of the type supported by the derived class."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide the logic to serialize a key identifier clause to XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteKeyIdentifierClause%2A> method."
+  summary: "在衍生類別中覆寫，將序列化為 XML 的指定之金鑰識別碼子句。 在衍生類別所支援必須是類型的金鑰識別碼子句。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供要序列化成 XML 的金鑰識別碼子句的邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteKeyIdentifierClause%2A>方法。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteKeyIdentifierClause%2A>"
   syntax:
     content: public virtual void WriteKeyIdentifierClause (System.Xml.XmlWriter writer, System.IdentityModel.Tokens.SecurityKeyIdentifierClause securityKeyIdentifierClause);
     parameters:
     - id: writer
       type: System.Xml.XmlWriter
-      description: "The XML writer."
+      description: "XML 寫入器。"
     - id: securityKeyIdentifierClause
       type: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-      description: "The key identifier clause to serialize."
+      description: "序列化金鑰識別碼子句。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.WriteKeyIdentifierClause*
   exceptions: []
   platform:
@@ -665,17 +665,17 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, serializes the specified security token to a string. The token must be of the type processed by the derived class."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide the logic to serialize a security token to XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A> property."
+  summary: "在衍生類別中覆寫，將序列化為字串指定的安全性權杖。 語彙基元必須是型別所衍生的類別處理。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供要序列化成 XML 的安全性權杖的邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A>屬性。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A>"
   syntax:
     content: public virtual string WriteToken (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token to serialize."
+      description: "要序列化的語彙基元。"
     return:
       type: System.String
-      description: "The serialized token."
+      description: "序列化的權杖。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken*
   exceptions: []
   platform:
@@ -692,8 +692,8 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: "When overridden in a derived class, serializes the specified security token to XML. The token must be of the type processed by the derived class."
-  remarks: "By default this method throws a <xref:System.NotImplementedException> exception.       Override this method to provide the logic to serialize a security token to XML. If you override this method, you should also override the <xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A> property."
+  summary: "當在衍生類別中覆寫時，序列化至 XML 指定的安全性權杖。 語彙基元必須是型別所衍生的類別處理。"
+  remarks: "依預設這個方法會擲回<xref:System.NotImplementedException>例外狀況。</xref:System.NotImplementedException>       覆寫這個方法以提供要序列化成 XML 的安全性權杖的邏輯。 如果您覆寫這個方法，您也應該覆寫<xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A>屬性。</xref:System.IdentityModel.Tokens.SecurityTokenHandler.CanWriteToken%2A>"
   example:
   - "The following code shows how to override the WriteToken method to serialize a custom token. The code is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT). For information about this sample and other samples available for WIF and where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[WifRcCustomToken#10](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#10)]  \n[!code-cs[WifRcCustomToken#11](~/add/codesnippet/csharp/wifrccustomtoken.simplewebtoken/simplewebtokenhandler.cs#11)]"
   syntax:
@@ -701,10 +701,10 @@ items:
     parameters:
     - id: writer
       type: System.Xml.XmlWriter
-      description: "The XML writer."
+      description: "XML 寫入器。"
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: "The token to serialize."
+      description: "要序列化的語彙基元。"
   overload: System.IdentityModel.Tokens.SecurityTokenHandler.WriteToken*
   exceptions: []
   platform:
