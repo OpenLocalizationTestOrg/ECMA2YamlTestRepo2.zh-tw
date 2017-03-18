@@ -40,8 +40,8 @@ items:
   nameWithType: SiteMapPath
   fullName: System.Web.UI.WebControls.SiteMapPath
   type: Class
-  summary: "Displays a set of text or image hyperlinks that enable users to more easily navigate a Web site, while taking a minimal amount of page space."
-  remarks: "In this topic:      -   [Introduction](#introduction)      -   [Nodes](#nodes)      -   [Node Appearance](#node_appearance)      -   [Events](#events)      -   [Customizing the SiteMapPath Control](#customizing_the_sitemappath_control)      -   [Accessibility](#accessibility)      -   [Declarative Syntax](#declarative_syntax)      <a name=&quot;introduction&quot;></a>    ## Introduction    The SiteMapPath control is a site navigation control that reflects data provided by the <xref:System.Web.SiteMap> object. It provides a space-saving way to easily navigate a site and serves as a point of reference for where the currently displayed page is within a site. This type of control is commonly called a breadcrumb, or eyebrow, because it displays a hierarchical path of hyperlinked page names that provides an escape up the hierarchy of pages from the current location. <xref:System.Web.UI.WebControls.SiteMapDataSource>. The SiteMapPath is useful for sites that have deep hierarchical page structures, but where a <xref:System.Web.UI.WebControls.TreeView> or <xref:System.Web.UI.WebControls.Menu> might require too much space on a page.       The SiteMapPath control works directly with your Web site&quot;s site map data. If you use it on a page that is not represented in your site map, it will not be displayed. For more information about site maps, see [ASP.NET Site Navigation](~/add/includes/ajax-current-ext-md.md).      <a name=&quot;nodes&quot;></a>    ## Nodes    The SiteMapPath is made up of nodes. Each element in the path is called a node and is represented by a <xref:System.Web.UI.WebControls.SiteMapNodeItem> object. The node that anchors the path and represents the base of the hierarchical tree is called the root node. The node that represents the currently displayed page is the current node. Any other node between the current node and root node is a parent node. The following table describes the three different node types.      |Node type|Description|   |---------------|-----------------|   |root|A node that anchors a hierarchical set of nodes.|   |parent|A node that has one or more child nodes, but is not the current node.|   |current|A node that represents the currently displayed page.|      <a name=&quot;node_appearance&quot;></a>    ## Node Appearance    Each node displayed by a SiteMapPath is a <xref:System.Web.UI.WebControls.HyperLink> or <xref:System.Web.UI.WebControls.Literal> control that you can apply a template or style to. The templates and styles are applied to nodes according to two rules of precedence:      -   If a template is defined for a node, it overrides any style defined for the node.      -   Templates and styles that are specific to types of nodes override general templates and styles defined for all nodes.       The <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> properties are applied to all nodes, regardless of their node type. If both these properties are defined, the <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> takes precedence.       The <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> properties are applied to nodes that represent the currently displayed page. If a <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> is defined in addition to the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>, it is ignored. If a <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> is defined in addition to the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>, it is merged with the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> to create a merged style. This merged style uses all the elements of the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>, plus any additional elements of the <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> that do not conflict with the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.       The <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> properties are applied to the node that represents the root of the site navigation hierarchy. If a <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> is defined in addition to the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>, it is ignored. If a <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> is defined in addition to the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>, it is merged with the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> to create a merged style. This merged style uses all the elements of the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>, plus any additional elements of the <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> that did not conflict with the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>. Finally, if the currently displayed page is the root page of the site, the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> are used instead of the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> or <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.       The SiteMapPath control uses the site map provider identified by the <xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A> property as its data source for site navigation information. If no provider is specified, it uses the default provider for the site, identified in the <xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName> property. Typically, this is an instance of the default site map provider for ASP.NET, the <xref:System.Web.XmlSiteMapProvider>. If the SiteMapPath control is used within a site but no site map provider is configured, the control throws an <xref:System.Web.HttpException> exception.      <a name=&quot;events&quot;></a>    ## Events    The SiteMapPath control also provides events that you can program against. This allows you to run a custom routine whenever an event occurs. The following table lists the events supported by the SiteMapPath control.      |Event|Description|   |-----------|-----------------|   |<xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated>|Occurs when the SiteMapPath control first creates a <xref:System.Web.UI.WebControls.SiteMapNodeItem> and associates it with a <xref:System.Web.SiteMapNode>.|   |<xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound>|Occurs when a <xref:System.Web.UI.WebControls.SiteMapNodeItem> is bound to site map data contained by the <xref:System.Web.SiteMapNode>.|      <a name=&quot;customizing_the_sitemappath_control&quot;></a>    ## Customizing the SiteMapPath Control    Classes that derive from SiteMapPath override the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method to customize the <xref:System.Web.UI.WebControls.SiteMapNodeItem> controls contained by the navigation control. For complete control over the way <xref:System.Web.UI.WebControls.SiteMapNodeItem> objects are created and added to the SiteMapPath, derived classes override the <xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A> method.      <a name=&quot;accessibility&quot;></a>    ## Accessibility    For information about how to configure this control so that it generates markup that conforms to accessibility standards, see [Accessibility in Visual Studio and ASP.NET](~/add/includes/ajax-current-ext-md.md) and [ASP.NET Controls and Accessibility](~/add/includes/ajax-current-ext-md.md).      <a name=&quot;declarative_syntax&quot;></a>    ## Declarative Syntax      ```   <asp:SiteMapPath       AccessKey=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CssClass=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       Font-Bold=&quot;True|False&quot;       Font-Italic=&quot;True|False&quot;       Font-Names=&quot;string&quot;       Font-Overline=&quot;True|False&quot;       Font-Size=&quot;string|Smaller|Larger|XX-Small|X-Small|Small|Medium|           Large|X-Large|XX-Large&quot;       Font-Strikeout=&quot;True|False&quot;       Font-Underline=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnItemCreated=&quot;ItemCreated event handler&quot;       OnItemDataBound=&quot;ItemDataBound event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       ParentLevelsDisplayed=&quot;integer&quot;       PathDirection=&quot;RootToCurrent|CurrentToRoot&quot;       PathSeparator=&quot;string&quot;       RenderCurrentNodeAsLink=&quot;True|False&quot;       runat=&quot;server&quot;       ShowToolTips=&quot;True|False&quot;       SiteMapProvider=&quot;string&quot;       SkinID=&quot;string&quot;       SkipLinkText=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       ToolTip=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   >           <CurrentNodeStyle />           <CurrentNodeTemplate>               <!-- child controls -->           </CurrentNodeTemplate>           <NodeStyle />           <NodeTemplate>               <!-- child controls -->           </NodeTemplate>           <PathSeparatorStyle />           <PathSeparatorTemplate>               <!-- child controls -->           </PathSeparatorTemplate>           <RootNodeStyle />           <RootNodeTemplate>               <!-- child controls -->           </RootNodeTemplate>   </asp:SiteMapPath>   ```"
+  summary: "顯示一組文字或影像的超連結可讓使用者更輕鬆地巡覽網站，而且需要最少的分頁空間。"
+  remarks: "本主題內容:-[簡介](#introduction)      -   [節點](#nodes)      -   [節點外觀](#node_appearance)      -   [事件](#events)      -   [自訂 SiteMapPath 控制項](#customizing_the_sitemappath_control)      -   [協助工具](#accessibility)      -   [宣告式語法](#declarative_syntax)<a name=&quot;introduction&quot;> </a> # # 簡介 SiteMapPath 控制項是站台瀏覽控制項，以反映所提供的資料<xref:System.Web.SiteMap>物件。</xref:System.Web.SiteMap>       它提供節省空間的方式，輕鬆地瀏覽的網站，並做為參考目前顯示的網頁所在站台內的點。 這種類型的控制項通常稱為階層連結或置頂，因為它會顯示提供的逸出的頁面階層中往上從目前位置的階層式路徑超連結的頁面名稱。 <xref:System.Web.UI.WebControls.SiteMapDataSource>.</xref:System.Web.UI.WebControls.SiteMapDataSource> SiteMapPath 適用於站台具有深度階層式頁面結構，但<xref:System.Web.UI.WebControls.TreeView>或<xref:System.Web.UI.WebControls.Menu>可能需要在頁面上的空間過多。</xref:System.Web.UI.WebControls.Menu> </xref:System.Web.UI.WebControls.TreeView>       SiteMapPath 控制項直接搭配您的網站的站台對應資料。 如果您在使用它在頁面上，不會呈現您的站台對應，它將不會顯示。 如需站台對應的詳細資訊，請參閱[ASP.NET 網站巡覽](~/add/includes/ajax-current-ext-md.md)。      <a name=&quot;nodes&quot;></a># # SiteMapPath 所組成的節點的節點。 在路徑中的每個項目稱為一個節點，而由<xref:System.Web.UI.WebControls.SiteMapNodeItem>物件。</xref:System.Web.UI.WebControls.SiteMapNodeItem> 錨定路徑，並代表階層樹狀結構的基底的節點稱為根節點。 代表目前顯示的頁面節點是目前的節點。 目前節點和根節點之間的任何其他節點會是父節點。 下表描述三種不同的節點類型。      |節點類型 |描述 |  |---------------|-----------------|  | 根 |錨定的一組階層式節點。 |  | 父 |節點的一個或多個子節點，但不是目前的節點。 |  | 目前 |表示在目前顯示的頁面節點。 |     <a name=&quot;node_appearance&quot;> </a> # # SiteMapPath 所顯示的節點外觀每個節點是<xref:System.Web.UI.WebControls.HyperLink>或<xref:System.Web.UI.WebControls.Literal>您可以套用範本或樣式至控制項。</xref:System.Web.UI.WebControls.Literal> </xref:System.Web.UI.WebControls.HyperLink> 範本和樣式會套用至節點，根據兩個規則的優先順序:-如果節點定義範本，它會覆寫為節點所定義的所有樣式。      -範本和樣式的節點類型專屬的覆寫一般範本和樣式定義的所有節點。       <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>屬性會套用到所有節點，不論其節點型別。</xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> 如果這些屬性定義，<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>優先。</xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>       <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>屬性會套用到代表目前顯示的頁面節點。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> 如果<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>定義除了<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>，則會忽略它。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> 如果<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>定義除了<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>，與合併<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>建立合併的樣式。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> 這個合併的樣式會使用的所有項目<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>，再加上任何其他元素<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>，不會衝突<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>       <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>屬性會套用到代表站台瀏覽階層的根節點。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> 如果<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>定義除了<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>，則會忽略它。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> 如果<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>定義除了<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>，與合併<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>建立合併的樣式。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> 這個合併的樣式會使用的所有項目<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>，再加上<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>沒有不衝突的<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A></xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>的任何其他元素</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> 最後，如果在目前顯示的頁面是的<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>，<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>而不是<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>或<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A></xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>可用</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A></xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>站台的根頁面       SiteMapPath 控制項使用所識別的站台對應提供者<xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>當成資料來源的站台瀏覽資訊的屬性。</xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A> 如果未不指定任何提供者，它會使用預設提供者站台中識別<xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName>屬性。</xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName> 一般而言，這是 asp.net、 <xref:System.Web.XmlSiteMapProvider>.</xref:System.Web.XmlSiteMapProvider>預設站台對應提供者執行個體 如果 SiteMapPath 控制項在站台內使用，但沒有站台對應提供者的設定，會擲回控制項<xref:System.Web.HttpException>例外狀況。</xref:System.Web.HttpException>      <a name=&quot;events&quot;></a># # 事件 SiteMapPath 控制項也會提供您可以程式設計的事件。 這可讓您在事件發生時執行自訂的常式。 下表列出支援 SiteMapPath 控制項的事件。      |事件 |描述 |  |-----------|-----------------|  |<xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated>|SiteMapPath 控制項初次建立<xref:System.Web.UI.WebControls.SiteMapNodeItem>，並將它與<xref:System.Web.SiteMapNode>關聯時，就會發生。 |  |<xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound>|發生於<xref:System.Web.UI.WebControls.SiteMapNodeItem>繫結至網站導覽資料包含<xref:System.Web.SiteMapNode>。 |     <a name=&quot;customizing_the_sitemappath_control&quot;> </a> # # 自訂 SiteMapPath 控制項類別衍生自 SiteMapPath 覆寫<xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>方法，以自訂<xref:System.Web.UI.WebControls.SiteMapNodeItem>導覽控制項所包含的控制項。</xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated> 完整控制的方式如<xref:System.Web.UI.WebControls.SiteMapNodeItem>物件會建立並新增到 SiteMapPath，衍生的類別覆寫<xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A>方法。</xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A> </xref:System.Web.UI.WebControls.SiteMapNodeItem>      <a name=&quot;accessibility&quot;></a># # 有關如何設定這個控制項，使其產生標記，並符合協助工具標準，協助工具的資訊，請參閱[Visual Studio 和 ASP.NET 中的協助工具](~/add/includes/ajax-current-ext-md.md)和[ASP.NET 控制項和協助工具](~/add/includes/ajax-current-ext-md.md)。      <a name=&quot;declarative_syntax&quot;></a># # 宣告式語法```   <asp:SiteMapPath       AccessKey=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CssClass=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       Font-Bold=&quot;True|False&quot;       Font-Italic=&quot;True|False&quot;       Font-Names=&quot;string&quot;       Font-Overline=&quot;True|False&quot;       Font-Size=&quot;string|Smaller|Larger|XX-Small|X-Small|Small|Medium|           Large|X-Large|XX-Large&quot;       Font-Strikeout=&quot;True|False&quot;       Font-Underline=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnItemCreated=&quot;ItemCreated event handler&quot;       OnItemDataBound=&quot;ItemDataBound event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       ParentLevelsDisplayed=&quot;integer&quot;       PathDirection=&quot;RootToCurrent|CurrentToRoot&quot;       PathSeparator=&quot;string&quot;       RenderCurrentNodeAsLink=&quot;True|False&quot;       runat=&quot;server&quot;       ShowToolTips=&quot;True|False&quot;       SiteMapProvider=&quot;string&quot;       SkinID=&quot;string&quot;       SkipLinkText=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       ToolTip=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   >           <CurrentNodeStyle />           <CurrentNodeTemplate>               <!-- child controls -->           </CurrentNodeTemplate>           <NodeStyle />           <NodeTemplate>               <!-- child controls -->           </NodeTemplate>           <PathSeparatorStyle />           <PathSeparatorTemplate>               <!-- child controls -->           </PathSeparatorTemplate>           <RootNodeStyle />           <RootNodeTemplate>               <!-- child controls -->           </RootNodeTemplate>   </asp:SiteMapPath>   ```"
   example:
   - "The following code example uses a SiteMapPath control declaratively in a Web Forms page. This example demonstrates some of the rules of precedence that govern the order with which templates and styles are applied to SiteMapPath nodes.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_394_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_394_1.aspx)]  \n  \n The previous example uses the default site map provider and a Web.sitemap file with the following structure.  \n  \n```  \n<siteMap>  \n  <siteMapNode title=\"WebForm1\" description=\"WebForm1\" url=\"WebForm1.aspx\" >  \n    <siteMapNode title=\"WebForm2\" description=\"WebForm2\" url=\"WebForm2.aspx\"/>  \n  </siteMapNode>  \n</siteMap>  \n```  \n  \n The following code example demonstrates extends the SiteMapPath control and adds new functionality to it by overriding the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method. The `DropDownSiteMapPath` control adds a <xref:System.Web.UI.WebControls.DropDownList> after the current node, to enable easy navigation to pages that are child nodes of the current page. This example demonstrates how to work with <xref:System.Web.UI.WebControls.SiteMapNodeItem> objects, including checking their <xref:System.Web.UI.WebControls.SiteMapNodeItemType> and calling the <xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated%2A> method after the items are created.  \n  \n [!code-vb[Urtue.Samples.Alexkr.DropDownNavigationPath_1#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_394_2.vb)]\n [!code-cs[Urtue.Samples.Alexkr.DropDownNavigationPath_1#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_394_2.cs)]"
   syntax:
@@ -206,8 +206,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Initializes a new instance of the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> class."
-  remarks: "Use this constructor to create and initialize a new instance of the <xref:System.Web.UI.WebControls.SiteMapPath> class. To dynamically add a <xref:System.Web.UI.WebControls.SiteMapPath> control to a page, create a new <xref:System.Web.UI.WebControls.SiteMapPath> object, set its properties, and then add it to the <xref:System.Web.UI.Control.Controls%2A?displayProperty=fullName> collection of a container control such as <xref:System.Web.UI.WebControls.PlaceHolder>."
+  summary: "初始化的新執行個體<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>類別。"
+  remarks: "建立和初始化<xref:System.Web.UI.WebControls.SiteMapPath>類別</xref:System.Web.UI.WebControls.SiteMapPath>的新執行個體使用這個建構函式 若要以動態方式將<xref:System.Web.UI.WebControls.SiteMapPath>控制項加入頁面，請建立新<xref:System.Web.UI.WebControls.SiteMapPath>物件、 設定其屬性，並再將它加入<xref:System.Web.UI.Control.Controls%2A?displayProperty=fullName>集合的容器控制項，例如<xref:System.Web.UI.WebControls.PlaceHolder>.</xref:System.Web.UI.WebControls.PlaceHolder> </xref:System.Web.UI.Control.Controls%2A?displayProperty=fullName> </xref:System.Web.UI.WebControls.SiteMapPath> </xref:System.Web.UI.WebControls.SiteMapPath>"
   example:
   - "The following code example demonstrates how to use the SiteMapPath constructor to add a <xref:System.Web.UI.WebControls.SiteMapPath> control to a page. For the example to work, you need to add an image to your root directory and change the image name in the example code from \"myimage.jpg\" to the name of your image file.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_223_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_223_1.aspx)]"
   syntax:
@@ -229,8 +229,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Clears the current child controls collection, and rebuilds it by calling the <xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy*> method."
-  remarks: "This method is called by the ASP.NET infrastructure to notify any controls that use composition-based implementation, including controls that derive from <xref:System.Web.UI.WebControls.CompositeDataBoundControl> and <xref:System.Web.UI.WebControls.CompositeControl> to create any child controls they contain in preparation for postback or rendering."
+  summary: "清除目前的子控制項集合，並藉由呼叫重建<xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy*>方法。</xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy*>"
+  remarks: "會呼叫這個方法由 ASP.NET 基礎結構，以通知使用組合為基礎的實作，包括衍生自控制項的任何控制項<xref:System.Web.UI.WebControls.CompositeDataBoundControl>和<xref:System.Web.UI.WebControls.CompositeControl>來建立任何子系所包含的控制項，以準備回傳或呈現。</xref:System.Web.UI.WebControls.CompositeControl> </xref:System.Web.UI.WebControls.CompositeDataBoundControl>"
   syntax:
     content: protected override void CreateChildControls ();
     parameters: []
@@ -250,8 +250,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Examines the site map structure provided by the <xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*> and builds a child controls collection based on the styles and templates defined for the functional nodes."
-  remarks: "The CreateControlHierarchy method creates <xref:System.Web.UI.WebControls.SiteMapNodeItem> controls, associates them with the corresponding <xref:System.Web.SiteMapNode> objects from the current site map provider, and adds the nodes to the <xref:System.Web.UI.Control.Controls%2A> collection.       The method begins by finding the <xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName>, and then walks up the hierarchical tree of <xref:System.Web.SiteMapNode> objects, creating a <xref:System.Web.UI.WebControls.SiteMapNodeItem> for each one until the <xref:System.Web.SiteMap.RootNode%2A> is reached. After each <xref:System.Web.UI.WebControls.SiteMapNodeItem> is created, but before it is bound to its corresponding <xref:System.Web.SiteMapNode>, the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method is called. The <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method applies any templates or styles defined for a particular node type and creates and initializes any child controls that the <xref:System.Web.UI.WebControls.SiteMapNodeItem> contains. Finally, the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method adds the child controls of the <xref:System.Web.UI.WebControls.SiteMapNodeItem> to the <xref:System.Web.UI.Control.Controls%2A> collection.       After each <xref:System.Web.UI.WebControls.SiteMapNodeItem> is initialized, the <xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated%2A> method is called. Then the <xref:System.Web.UI.WebControls.SiteMapNodeItem> is bound to its corresponding <xref:System.Web.SiteMapNode>, and <xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A> is called.       The CreateControlHierarchy method is called from the <xref:System.Web.UI.WebControls.SiteMapPath.CreateChildControls%2A> method.       Classes that extend the <xref:System.Web.UI.WebControls.SiteMapPath> control override the CreateControlHierarchy method to alter how the <xref:System.Web.UI.WebControls.SiteMapNodeItem> controls are created or added to the <xref:System.Web.UI.WebControls.SiteMapPath> control. The manipulation of individual node items is performed in the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method, and most classes that extend <xref:System.Web.UI.WebControls.SiteMapPath> override that method only."
+  summary: "會檢查所提供的站台對應結構<xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*>並根據樣式的控制項集合和功能的節點所定義的範本建立子系。</xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*>"
+  remarks: "CreateControlHierarchy 方法會建立<xref:System.Web.UI.WebControls.SiteMapNodeItem>控制，將其與對應相關聯<xref:System.Web.SiteMapNode>物件從目前的站台對應提供者，並新增至節點<xref:System.Web.UI.Control.Controls%2A>集合。</xref:System.Web.UI.Control.Controls%2A> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem>       方法會先尋找<xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName>，再一一查核的階層式樹狀結構向上<xref:System.Web.SiteMapNode>物件，建立<xref:System.Web.UI.WebControls.SiteMapNodeItem>直到每個<xref:System.Web.SiteMap.RootNode%2A>為止。</xref:System.Web.SiteMap.RootNode%2A> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.SiteMapNode> </xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName> 個之後<xref:System.Web.UI.WebControls.SiteMapNodeItem>建立時之前它已繫結至其相對應,，但<xref:System.Web.SiteMapNode>、<xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>方法呼叫。</xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem> <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>方法適用於任何範本或樣式為特定節點型別定義和建立並初始化任何子控制項的<xref:System.Web.UI.WebControls.SiteMapNodeItem>含有。</xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> 最後，<xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>方法會將子控制項的<xref:System.Web.UI.WebControls.SiteMapNodeItem>至<xref:System.Web.UI.Control.Controls%2A>集合。</xref:System.Web.UI.Control.Controls%2A> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>       在每個之後<xref:System.Web.UI.WebControls.SiteMapNodeItem>初始化時，<xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated%2A>方法呼叫。</xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated%2A> </xref:System.Web.UI.WebControls.SiteMapNodeItem> 然後在<xref:System.Web.UI.WebControls.SiteMapNodeItem>繫結至其相對應<xref:System.Web.SiteMapNode>，和<xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A>稱為。</xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem>       CreateControlHierarchy 方法從呼叫<xref:System.Web.UI.WebControls.SiteMapPath.CreateChildControls%2A>方法。</xref:System.Web.UI.WebControls.SiteMapPath.CreateChildControls%2A>       擴充的類別<xref:System.Web.UI.WebControls.SiteMapPath>控制項覆寫 CreateControlHierarchy 方法，以改變如何<xref:System.Web.UI.WebControls.SiteMapNodeItem>建立或加入至控制項<xref:System.Web.UI.WebControls.SiteMapPath>控制項。</xref:System.Web.UI.WebControls.SiteMapPath> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath> 會在中執行的個別節點的項目操作<xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>方法，以及大部分的類別擴充<xref:System.Web.UI.WebControls.SiteMapPath>覆寫這個方法只。</xref:System.Web.UI.WebControls.SiteMapPath> </xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A>"
   syntax:
     content: protected virtual void CreateControlHierarchy ();
     parameters: []
@@ -259,7 +259,7 @@ items:
   exceptions:
   - type: System.Web.HttpException
     commentId: T:System.Web.HttpException
-    description: "No <xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*> is available to the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
+    description: "否<xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*>可<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。</xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*>"
   platform:
   - net462
 - uid: System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle
@@ -274,15 +274,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the style used for the display text for the current node."
-  remarks: "Use the CurrentNodeStyle property to control the appearance of the display text for the navigation path node that represents the currently displayed page. By default, the display text is that specified in the <xref:System.Web.SiteMapNode.Title%2A> property of the <xref:System.Web.SiteMapNode> that represents the page. Common style settings include custom background color, foreground color, font properties, and node spacing.       For <xref:System.Web.UI.WebControls.SiteMapPath> nodes, style properties are merged into a single style, in the following order:      1.  <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>      2.  CurrentNodeStyle or, if the currently displayed page is the root node, <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>.      > [!NOTE] >  If you set the node font style to a strikeout or overline style, the default underline style of the node is not displayed unless it is explicitly set to `true`.       If a <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> property is defined, the CurrentNodeStyle property is ignored."
+  summary: "取得目前節點的顯示文字所使用的樣式。"
+  remarks: "您可以使用 CurrentNodeStyle 屬性來控制，代表目前顯示的網頁瀏覽路徑節點的顯示文字的外觀。 根據預設，顯示的文字是指定<xref:System.Web.SiteMapNode.Title%2A>屬性<xref:System.Web.SiteMapNode>代表頁。</xref:System.Web.SiteMapNode> </xref:System.Web.SiteMapNode.Title%2A> 一般樣式設定包含自訂背景色彩、 前景色彩、 字型屬性和節點間距。       如<xref:System.Web.UI.WebControls.SiteMapPath>樣式屬性的節點會合併成單一的樣式，順序如下︰ 1。</xref:System.Web.UI.WebControls.SiteMapPath>  <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>2。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>  CurrentNodeStyle 或，如果目前所顯示的頁面是根節點， <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>      > [!NOTE] > 除非明確設定為，如果您刪除線或頂線的樣式設定節點的字型樣式，不顯示節點的預設底線樣式`true`。       如果<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>屬性定義，CurrentNodeStyle 屬性會被忽略。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>"
   example:
   - "The following code example demonstrates how to declaratively set the CurrentNodeStyle of a <xref:System.Web.UI.WebControls.SiteMapPath> control in a Web Forms page.  \n  \n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_1#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_328_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_1#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_328_1.aspx)]"
   syntax:
     content: public System.Web.UI.WebControls.Style CurrentNodeStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: "The <xref href=&quot;System.Web.UI.WebControls.Style&quot;></xref> that contains the style settings for the display text for the current node of the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
+      description: "<xref href=&quot;System.Web.UI.WebControls.Style&quot;> </xref> ，其中包含目前節點的顯示文字的樣式設定<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
   overload: System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle*
   exceptions: []
   platform:
@@ -299,15 +299,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a control template to use for the node of a site navigation path that represents the currently displayed page."
-  remarks: "Set the CurrentNodeTemplate to an <xref:System.Web.UI.ITemplate> object to use an <xref:System.Web.UI.WebControls.Image> control or some other control, such as a <xref:System.Web.UI.WebControls.Label>, as the current node&quot;s user interface element instead of a string.       If the CurrentNodeTemplate property is set, the template overrides both the current navigation node text displayed and any <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> applied to it. If the currently displayed page corresponds to the root node, however, the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> or <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> is used.       You can declaratively set the CurrentNodeTemplate property to any Web server control, and the ASP.NET infrastructure performs the necessary steps to wrap the Web server control as an <xref:System.Web.UI.ITemplate> object. However, Web server controls do not implement the <xref:System.Web.UI.ITemplate> interface; therefore, when you work with the <xref:System.Web.UI.ITemplate> properties programmatically, you must write an <xref:System.Web.UI.ITemplate> wrapper for any template code. Then, the CurrentNodeTemplate property is set to an instance of the <xref:System.Web.UI.ITemplate> wrapper."
+  summary: "取得或設定控制項範本用於網站的導覽路徑，代表目前顯示的頁面節點。"
+  remarks: "設為 CurrentNodeTemplate<xref:System.Web.UI.ITemplate>物件以使用<xref:System.Web.UI.WebControls.Image>控制項或其他控制項，例如<xref:System.Web.UI.WebControls.Label>，做為目前節點的使用者介面項目，而非字串。</xref:System.Web.UI.WebControls.Label> </xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.ITemplate>       如果 CurrentNodeTemplate 屬性設定，範本會覆寫目前的瀏覽節點文字顯示和任何<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>套用至它。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> 如果目前顯示的頁面對應於根節點，不過，<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>或<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>用。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>       您可以以宣告方式 CurrentNodeTemplate 屬性至任何 Web 伺服器控制項，及 ASP.NET 基礎結構會執行必要的步驟，將 Web 伺服器控制項，做為<xref:System.Web.UI.ITemplate>物件。</xref:System.Web.UI.ITemplate> 不過，Web 伺服器控制項不會實作<xref:System.Web.UI.ITemplate>介面; 因此，當您使用<xref:System.Web.UI.ITemplate>屬性以程式設計的方式，您必須撰寫<xref:System.Web.UI.ITemplate>範本中的任何程式碼包裝函式。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> 然後，CurrentNodeTemplate 屬性設定為執行個體<xref:System.Web.UI.ITemplate>包裝函式。</xref:System.Web.UI.ITemplate>"
   example:
   - "The following code example declaratively defines a CurrentNodeTemplate and overrides a defined <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_538_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_538_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate CurrentNodeTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "An <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> object that implements the <xref:System.Web.UI.ITemplate.InstantiateIn*> method, to render custom content for the navigation path node that represents the currently displayed page."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>實作物件<xref:System.Web.UI.ITemplate.InstantiateIn*>方法，以呈現表示目前所顯示的頁面導覽路徑節點的自訂內容。</xref:System.Web.UI.ITemplate.InstantiateIn*>"
   overload: System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate*
   exceptions: []
   platform:
@@ -324,8 +324,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Binds a data source to the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control and its child controls."
-  remarks: "The <xref:System.Web.UI.WebControls.SiteMapPath> control is designed to retrieve its data directly from a site map provider by using the <xref:System.Web.UI.WebControls.SiteMapPath.Provider%2A> property. Do not use the <xref:System.Web.UI.WebControls.SiteMapPath> control to bind to ASP.NET data source controls, and do not call the DataBind method explicitly."
+  summary: "將繫結至資料來源<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項及其子控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.SiteMapPath>控制項用來擷取其資料直接從站台地圖提供者，使用<xref:System.Web.UI.WebControls.SiteMapPath.Provider%2A>屬性。</xref:System.Web.UI.WebControls.SiteMapPath.Provider%2A> </xref:System.Web.UI.WebControls.SiteMapPath> 請勿使用<xref:System.Web.UI.WebControls.SiteMapPath>控制繫結至 ASP.NET 資料來源控制項，並沒有明確呼叫進行資料繫結方法。</xref:System.Web.UI.WebControls.SiteMapPath>"
   syntax:
     content: public override void DataBind ();
     parameters: []
@@ -345,8 +345,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Populates a <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref>, which is a Web server control that represents a <xref href=&quot;System.Web.SiteMapNode&quot;></xref>, with a set of child controls based on the node&quot;s function and the specified templates and styles for the node."
-  remarks: "The InitializeItem method determines the functional type of node that the item represents by checking the <xref:System.Web.UI.WebControls.SiteMapNodeItemType>, and applies any templates or styles that are defined for that kind of node.       If the <xref:System.Web.UI.WebControls.SiteMapNodeItem> has a <xref:System.Web.UI.WebControls.SiteMapNodeItemType> item type, a <xref:System.Web.UI.WebControls.HyperLink> child control is created, and the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> may be applied. If the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> is set, its <xref:System.Web.UI.ITemplate> is applied to the node. In instead the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> is set, it is merged with any defined <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> and applied. Finally, if no templates or styles are defined, a basic <xref:System.Web.UI.WebControls.HyperLink> control is created and initialized with values from the node.       If the <xref:System.Web.UI.WebControls.SiteMapNodeItem> has a <xref:System.Web.UI.WebControls.SiteMapNodeItemType> item type, either a <xref:System.Web.UI.WebControls.Literal> or <xref:System.Web.UI.WebControls.HyperLink> child control is created, depending on the return value of <xref:System.Web.UI.WebControls.SiteMapPath.RenderCurrentNodeAsLink%2A>. Then either the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> or <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> may be applied. If the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> is set, its <xref:System.Web.UI.ITemplate> is applied to the node. If instead the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> is set, it is merged with any defined <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> and applied.       If the <xref:System.Web.UI.WebControls.SiteMapNodeItem> has a <xref:System.Web.UI.WebControls.SiteMapNodeItemType> item type, a <xref:System.Web.UI.WebControls.HyperLink> child control is created and the <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> may be applied. If the <xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> is set, its <xref:System.Web.UI.ITemplate> is applied to the node. If instead the <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> is set, it is applied.       Finally, if the <xref:System.Web.UI.WebControls.SiteMapNodeItem> has a <xref:System.Web.UI.WebControls.SiteMapNodeItemType> item type, a <xref:System.Web.UI.WebControls.Literal> child control is created and the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> are applied according to the same general rules defined for a <xref:System.Web.UI.WebControls.SiteMapNodeItemType> node type.       Override the InitializeItem method to manipulate individual <xref:System.Web.UI.WebControls.SiteMapNodeItem> objects. If the design of the class requires more extensive control over how the <xref:System.Web.UI.WebControls.SiteMapNodeItem> objects are created and added to the <xref:System.Web.UI.WebControls.SiteMapPath> control, override the <xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A> method."
+  summary: "於其中填入<xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;> </xref>，這是 Web 伺服器控制項代表<xref href=&quot;System.Web.SiteMapNode&quot;> </xref>，與一組根據節點的函式和指定的範本和樣式節點的子控制項。"
+  remarks: "InitializeItem 方法判斷項目代表藉由檢查節點的功能類型<xref:System.Web.UI.WebControls.SiteMapNodeItemType>，並套用任何範本或定義為該類型節點的樣式。</xref:System.Web.UI.WebControls.SiteMapNodeItemType>       如果<xref:System.Web.UI.WebControls.SiteMapNodeItem>具有<xref:System.Web.UI.WebControls.SiteMapNodeItemType>項目類型，<xref:System.Web.UI.WebControls.HyperLink>建立子控制項，而<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>可能會套用。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> </xref:System.Web.UI.WebControls.HyperLink> </xref:System.Web.UI.WebControls.SiteMapNodeItemType> </xref:System.Web.UI.WebControls.SiteMapNodeItem> 如果<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>設定，其<xref:System.Web.UI.ITemplate>套用至節點。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> 中改用<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>已經設定，與任何定義合併<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>並套用。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> 最後，如果沒有定義任何範本或樣式，基本<xref:System.Web.UI.WebControls.HyperLink>控制建立和初始化使用中節點的值。</xref:System.Web.UI.WebControls.HyperLink>       如果<xref:System.Web.UI.WebControls.SiteMapNodeItem>有<xref:System.Web.UI.WebControls.SiteMapNodeItemType>項目類型，<xref:System.Web.UI.WebControls.Literal>或<xref:System.Web.UI.WebControls.HyperLink>建立子控制項時，根據<xref:System.Web.UI.WebControls.SiteMapPath.RenderCurrentNodeAsLink%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.RenderCurrentNodeAsLink%2A>傳回值</xref:System.Web.UI.WebControls.HyperLink></xref:System.Web.UI.WebControls.Literal></xref:System.Web.UI.WebControls.SiteMapNodeItemType></xref:System.Web.UI.WebControls.SiteMapNodeItem> 然後任一<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>或<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>可能會套用。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> 如果<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>設定，其<xref:System.Web.UI.ITemplate>套用至節點。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> 如果改用<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>已經設定，與任何定義合併<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>並套用。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>       如果<xref:System.Web.UI.WebControls.SiteMapNodeItem>具有<xref:System.Web.UI.WebControls.SiteMapNodeItemType>項目類型，<xref:System.Web.UI.WebControls.HyperLink>建立子控制項和<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>可能會套用。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> </xref:System.Web.UI.WebControls.HyperLink> </xref:System.Web.UI.WebControls.SiteMapNodeItemType> </xref:System.Web.UI.WebControls.SiteMapNodeItem> 如果<xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A>設定，其<xref:System.Web.UI.ITemplate>套用至節點。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.WebControls.SiteMapPath.NodeTemplate%2A> 如果改用<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>已經設定，它會套用。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>       最後，如果<xref:System.Web.UI.WebControls.SiteMapNodeItem>具有<xref:System.Web.UI.WebControls.SiteMapNodeItemType>項目類型，<xref:System.Web.UI.WebControls.Literal>建立子控制項和<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A>會根據針對定義相同的一般規則套用<xref:System.Web.UI.WebControls.SiteMapNodeItemType>節點型別。</xref:System.Web.UI.WebControls.SiteMapNodeItemType> </xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A> </xref:System.Web.UI.WebControls.Literal> </xref:System.Web.UI.WebControls.SiteMapNodeItemType> </xref:System.Web.UI.WebControls.SiteMapNodeItem>       覆寫 InitializeItem 方法來操作個別<xref:System.Web.UI.WebControls.SiteMapNodeItem>物件。</xref:System.Web.UI.WebControls.SiteMapNodeItem> 如果類別的設計需要更多控制方式<xref:System.Web.UI.WebControls.SiteMapNodeItem>物件會建立並新增到<xref:System.Web.UI.WebControls.SiteMapPath>控制，請覆寫<xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A>方法。</xref:System.Web.UI.WebControls.SiteMapPath.CreateControlHierarchy%2A> </xref:System.Web.UI.WebControls.SiteMapPath> </xref:System.Web.UI.WebControls.SiteMapNodeItem>"
   example:
   - "The following code example demonstrates how to override the InitializeItem method to add functionality to a control that derives from <xref:System.Web.UI.WebControls.SiteMapPath>. This code example is part of a larger example provided for the <xref:System.Web.UI.WebControls.SiteMapPath> class.  \n  \n [!code-vb[Urtue.Samples.Alexkr.DropDownNavigationPath_1#2](~/add/codesnippet/visualbasic/707d474c-b96f-4b62-8a92-_1.vb)]\n [!code-cs[Urtue.Samples.Alexkr.DropDownNavigationPath_1#2](~/add/codesnippet/csharp/707d474c-b96f-4b62-8a92-_1.cs)]"
   syntax:
@@ -354,7 +354,7 @@ items:
     parameters:
     - id: item
       type: System.Web.UI.WebControls.SiteMapNodeItem
-      description: "The <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref> to initialize."
+      description: "<xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;> </xref>初始化。"
   overload: System.Web.UI.WebControls.SiteMapPath.InitializeItem*
   exceptions: []
   platform:
@@ -371,13 +371,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs when a <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref> is created by the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> and is associated with its corresponding <xref href=&quot;System.Web.SiteMapNode&quot;></xref>. This event is raised by the <xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated*> method."
-  remarks: "For more information about handling events, see [Events](~/add/includes/ajax-current-ext-md.md)."
+  summary: "發生時<xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref>由<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>和其對應的相關聯<xref href=&quot;System.Web.SiteMapNode&quot;> </xref>。 會引發這個事件<xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated*>方法。</xref:System.Web.UI.WebControls.SiteMapPath.OnItemCreated*>"
+  remarks: "如需處理事件的詳細資訊，請參閱[事件](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public event System.Web.UI.WebControls.SiteMapNodeItemEventHandler ItemCreated;
     return:
       type: System.Web.UI.WebControls.SiteMapNodeItemEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -393,13 +393,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs after a <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref> has been bound to its underlying <xref href=&quot;System.Web.SiteMapNode&quot;></xref> data by the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>. This event is raised by the <xref:System.Web.UI.WebControls.SiteMapPath.OnItemDataBound*> method."
-  remarks: "For more information about handling events, see [Events](~/add/includes/ajax-current-ext-md.md)."
+  summary: "之後，就會發生<xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItem&quot;></xref>已經繫結至其基礎<xref href=&quot;System.Web.SiteMapNode&quot;></xref>資料<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;> </xref>。 會引發這個事件<xref:System.Web.UI.WebControls.SiteMapPath.OnItemDataBound*>方法。</xref:System.Web.UI.WebControls.SiteMapPath.OnItemDataBound*>"
+  remarks: "如需處理事件的詳細資訊，請參閱[事件](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public event System.Web.UI.WebControls.SiteMapNodeItemEventHandler ItemDataBound;
     return:
       type: System.Web.UI.WebControls.SiteMapNodeItemEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -415,14 +415,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Restores view-state information from a previous request that was saved with the <xref:System.Web.UI.WebControls.SiteMapPath.SaveViewState*> method."
-  remarks: "This method is used primarily by the .NET Framework infrastructure and is not intended to be used directly from your code. However, control developers can override this method to specify how a custom server control restores its view state. For more information, see [ASP.NET State Management Overview](~/add/includes/ajax-current-ext-md.md).       The <xref:System.Web.UI.WebControls.Login.LoadViewState%2A> method restores the view-state information saved during a previous request."
+  summary: "從具有已儲存的先前要求還原檢視狀態資訊<xref:System.Web.UI.WebControls.SiteMapPath.SaveViewState*>方法。</xref:System.Web.UI.WebControls.SiteMapPath.SaveViewState*>"
+  remarks: "這個方法主要供.NET Framework 基礎結構，並不是直接從您的程式碼使用。 不過，控制項開發人員可以覆寫這個方法，以指定自訂的伺服器控制項如何還原其檢視狀態。 如需詳細資訊，請參閱[ASP.NET 狀態管理概觀](~/add/includes/ajax-current-ext-md.md)。       <xref:System.Web.UI.WebControls.Login.LoadViewState%2A>方法還原前一個要求的過程中儲存的檢視狀態資訊。</xref:System.Web.UI.WebControls.Login.LoadViewState%2A>"
   syntax:
     content: protected override void LoadViewState (object savedState);
     parameters:
     - id: savedState
       type: System.Object
-      description: "An <xref:System.Object> that represents the control state to be restored."
+      description: "<xref:System.Object>，代表要還原的控制項狀態。</xref:System.Object>"
   overload: System.Web.UI.WebControls.SiteMapPath.LoadViewState*
   exceptions: []
   platform:
@@ -439,15 +439,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the style used for the display text for all nodes in the site navigation path."
-  remarks: "Use the NodeStyle property to control the appearance of the display text for all navigation path nodes rendered by the control. By default, the display text is that specified in the <xref:System.Web.SiteMapNode.Title%2A> property of the <xref:System.Web.SiteMapNode> that represents the page. Common style settings include custom background color, foreground color, font properties, and node spacing.       For <xref:System.Web.UI.WebControls.SiteMapPath> nodes, style properties are merged into a single style, in the following order:      1.  NodeStyle      2.  <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> or <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>, depending on the node type.      > [!NOTE] >  If you set the node font style to a strikeout or overline style, the default underline style of the node is not displayed unless it is explicitly set to `true`.       If the NodeStyle is defined, it is initially applied to each node. If an additional style is defined for a particular type of node, such as the root node or current node, this style supersedes the general style specified in the NodeStyle property. If a template is defined for a particular type of node, it supersedes all defined styles for that node."
+  summary: "取得用於網站的導覽路徑中的所有節點的顯示文字的樣式。"
+  remarks: "您可以使用有屬性來控制控制項所呈現的所有導覽路徑節點的顯示文字的外觀。 根據預設，顯示的文字是指定<xref:System.Web.SiteMapNode.Title%2A>屬性<xref:System.Web.SiteMapNode>代表頁。</xref:System.Web.SiteMapNode> </xref:System.Web.SiteMapNode.Title%2A> 一般樣式設定包含自訂背景色彩、 前景色彩、 字型屬性和節點間距。       如<xref:System.Web.UI.WebControls.SiteMapPath>樣式屬性的節點會合併成單一的樣式，順序如下︰ 1。</xref:System.Web.UI.WebControls.SiteMapPath>  有 2。  <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>或<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>，取決於節點類型。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A></xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>      > [!NOTE] > 除非明確設定為，如果您刪除線或頂線的樣式設定節點的字型樣式，不顯示節點的預設底線樣式`true`。       如果有定義，它一開始會套用至每個節點。 如果其他的樣式定義的特定類型的節點，例如根節點或目前的節點，此樣式會取代有屬性中指定的一般樣式。 如果範本會定義特定類型的節點，它會取代該節點的所有已定義的樣式。"
   example:
   - "The following code example demonstrates how to define a NodeStyle that is merged with a <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> to demonstrate the order of style precedence for the <xref:System.Web.UI.WebControls.SiteMapPath> nodes.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_510_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_5#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_510_1.aspx)]"
   syntax:
     content: public System.Web.UI.WebControls.Style NodeStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: "The <xref href=&quot;System.Web.UI.WebControls.Style&quot;></xref> that contains the style settings for the display text in the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
+      description: "<xref href=&quot;System.Web.UI.WebControls.Style&quot;> </xref>包含中的顯示文字的樣式設定<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
   overload: System.Web.UI.WebControls.SiteMapPath.NodeStyle*
   exceptions: []
   platform:
@@ -464,15 +464,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a control template to use for all functional nodes of a site navigation path."
-  remarks: "Set the NodeTemplate to an <xref:System.Web.UI.ITemplate> object to use an <xref:System.Web.UI.WebControls.Image> or some other control, such as a <xref:System.Web.UI.WebControls.Label>, as a user interface element for all navigation path nodes.       If the NodeTemplate property is set, the template overrides both the navigation node text displayed and any <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> applied to it. For the current and root nodes, if a <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> or <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> is set, these templates override the NodeTemplate.       You can declaratively set the NodeTemplate property to any Web server control, and the ASP.NET infrastructure performs the necessary steps to wrap the Web server control as an <xref:System.Web.UI.ITemplate> object. However, Web server controls do not implement the <xref:System.Web.UI.ITemplate> interface; therefore, when you work with the <xref:System.Web.UI.ITemplate> properties programmatically, you must write an <xref:System.Web.UI.ITemplate> wrapper for any template code. Then, the <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> property is set to an instance of the <xref:System.Web.UI.ITemplate> wrapper."
+  summary: "取得或設定要用於網站的導覽路徑的所有功能節點的控制項範本。"
+  remarks: "設 NodeTemplate<xref:System.Web.UI.ITemplate>物件以使用<xref:System.Web.UI.WebControls.Image>或其他一些控制項，例如<xref:System.Web.UI.WebControls.Label>，為所有導覽路徑節點的使用者介面項目。</xref:System.Web.UI.WebControls.Label> </xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.ITemplate>       如果 NodeTemplate 屬性設定，範本會覆寫顯示在瀏覽節點文字和任何<xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>套用至它。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A> 在目前和根節點，如果<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>或<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>已經設定，這些範本會覆寫 NodeTemplate。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>       您可以以宣告方式 NodeTemplate 屬性至任何 Web 伺服器控制項，及 ASP.NET 基礎結構會執行必要的步驟，將 Web 伺服器控制項，做為<xref:System.Web.UI.ITemplate>物件。</xref:System.Web.UI.ITemplate> 不過，Web 伺服器控制項不會實作<xref:System.Web.UI.ITemplate>介面; 因此，當您使用<xref:System.Web.UI.ITemplate>屬性以程式設計的方式，您必須撰寫<xref:System.Web.UI.ITemplate>範本中的任何程式碼包裝函式。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> 然後，<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>屬性設定為執行個體<xref:System.Web.UI.ITemplate>包裝函式。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>"
   example:
   - "The following code example demonstrates how a NodeTemplate, when one is specified, overrides styles defined for all nodes, including special styles for the root node and current node.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_6#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_615_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_6#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_615_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate NodeTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "An <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> object that implements the <xref:System.Web.UI.ITemplate.InstantiateIn*> method, to render custom content for each node of a navigation path."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>物件會實作的<xref:System.Web.UI.ITemplate.InstantiateIn*>方法，以呈現自訂內容的每個節點的導覽路徑。</xref:System.Web.UI.ITemplate.InstantiateIn*>"
   overload: System.Web.UI.WebControls.SiteMapPath.NodeTemplate*
   exceptions: []
   platform:
@@ -489,13 +489,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Overrides the <xref:System.Web.UI.Control.OnDataBinding*> method of the <xref href=&quot;System.Web.UI.WebControls.CompositeControl&quot;></xref> class and raises the <xref href=&quot;System.Web.UI.Control.DataBinding&quot;></xref> event."
+  summary: "覆寫<xref:System.Web.UI.Control.OnDataBinding*>方法<xref href=&quot;System.Web.UI.WebControls.CompositeControl&quot;></xref>類別並引發<xref href=&quot;System.Web.UI.Control.DataBinding&quot;></xref>事件。</xref:System.Web.UI.Control.OnDataBinding*>"
   syntax:
     content: protected override void OnDataBinding (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> that contains event data."
+      description: "<xref:System.EventArgs>包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.SiteMapPath.OnDataBinding*
   exceptions: []
   platform:
@@ -512,8 +512,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath.ItemCreated&quot;></xref> event of the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
-  remarks: "The <xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated> event is raised after the <xref:System.Web.UI.WebControls.SiteMapPath> control creates a <xref:System.Web.UI.WebControls.SiteMapNodeItem>, which is a Web server control that represents a <xref:System.Web.SiteMapNode>, and associates it to a <xref:System.Web.SiteMapNode>. The OnItemCreated method is called before the created node item is bound to its data. This allows you to provide an event-handling method that performs a custom routine whenever a <xref:System.Web.UI.WebControls.SiteMapNodeItem> is created.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnItemCreated method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "引發<xref href=&quot;System.Web.UI.WebControls.SiteMapPath.ItemCreated&quot;></xref>事件<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated>之後引發事件<xref:System.Web.UI.WebControls.SiteMapPath>控制項建立<xref:System.Web.UI.WebControls.SiteMapNodeItem>，這是 Web 伺服器控制項代表<xref:System.Web.SiteMapNode>，並將它關聯至<xref:System.Web.SiteMapNode>。</xref:System.Web.SiteMapNode> </xref:System.Web.SiteMapNode> </xref:System.Web.UI.WebControls.SiteMapNodeItem> </xref:System.Web.UI.WebControls.SiteMapPath> </xref:System.Web.UI.WebControls.SiteMapPath.ItemCreated> OnItemCreated 方法呼叫之前建立的節點項目繫結至其資料。 這可讓您提供事件處理方法執行自訂的常式，每當<xref:System.Web.UI.WebControls.SiteMapNodeItem>建立。</xref:System.Web.UI.WebControls.SiteMapNodeItem>       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnItemCreated 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   example:
   - "The following code example demonstrates how to call the OnItemCreated method after creating a <xref:System.Web.UI.WebControls.SiteMapNodeItem> within the <xref:System.Web.UI.WebControls.SiteMapPath.InitializeItem%2A> method. This code example is part of a larger example provided for the <xref:System.Web.UI.WebControls.SiteMapPath> class.  \n  \n [!code-vb[Urtue.Samples.Alexkr.DropDownNavigationPath_1#3](~/add/codesnippet/visualbasic/75986b20-78b2-4533-871b-_1.vb)]\n [!code-cs[Urtue.Samples.Alexkr.DropDownNavigationPath_1#3](~/add/codesnippet/csharp/75986b20-78b2-4533-871b-_1.cs)]"
   syntax:
@@ -521,7 +521,7 @@ items:
     parameters:
     - id: e
       type: System.Web.UI.WebControls.SiteMapNodeItemEventArgs
-      description: "A <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItemEventArgs&quot;></xref> that contains event data."
+      description: "A <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItemEventArgs&quot;> </xref>包含事件資料。"
   overload: System.Web.UI.WebControls.SiteMapPath.OnItemCreated*
   exceptions: []
   platform:
@@ -538,14 +538,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath.ItemDataBound&quot;></xref> event of the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
-  remarks: "The <xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound> event is raised when the <xref:System.Web.UI.WebControls.SiteMapPath> control binds to the data provided by its <xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>. This allows you to provide an event-handling method that performs a custom routine, such as updating a database or the displayed content, whenever this event occurs.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnItemDataBound method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "引發<xref href=&quot;System.Web.UI.WebControls.SiteMapPath.ItemDataBound&quot;></xref>事件<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound>就會引發事件時的<xref:System.Web.UI.WebControls.SiteMapPath>控制項繫結至其<xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>.</xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>所提供的資料</xref:System.Web.UI.WebControls.SiteMapPath></xref:System.Web.UI.WebControls.SiteMapPath.ItemDataBound> 這可讓您提供執行自訂的常式，例如更新資料庫或顯示的內容時就會發生此事件的事件處理方法。       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnItemDataBound 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   syntax:
     content: protected virtual void OnItemDataBound (System.Web.UI.WebControls.SiteMapNodeItemEventArgs e);
     parameters:
     - id: e
       type: System.Web.UI.WebControls.SiteMapNodeItemEventArgs
-      description: "A <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItemEventArgs&quot;></xref> that contains event data."
+      description: "A <xref href=&quot;System.Web.UI.WebControls.SiteMapNodeItemEventArgs&quot;> </xref>包含事件資料。"
   overload: System.Web.UI.WebControls.SiteMapPath.OnItemDataBound*
   exceptions: []
   platform:
@@ -562,18 +562,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the number of levels of parent nodes the control displays, relative to the currently displayed node."
-  remarks: "The ParentLevelsDisplayed property governs how many levels of parent nodes are displayed by the <xref:System.Web.UI.WebControls.SiteMapPath> control above the current context node. By default, all parent and ancestor nodes above the current context node are displayed.       The value of this property is stored in view state.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定控制項顯示，相對於目前所顯示的節點的父節點的層級數目。"
+  remarks: "ParentLevelsDisplayed 屬性可控制多少層的父節點會顯示<xref:System.Web.UI.WebControls.SiteMapPath>高於目前的內容節點的控制項。</xref:System.Web.UI.WebControls.SiteMapPath> 根據預設，會顯示目前內容節點上方的所有父系及祖系節點。       這個屬性的值會儲存檢視狀態中。       無法設定這個屬性的主題或樣式表主題。 如需詳細資訊，請參閱<xref:System.Web.UI.ThemeableAttribute>和[ASP.NET 佈景主題和面板](~/add/includes/ajax-current-ext-md.md)。</xref:System.Web.UI.ThemeableAttribute>"
   syntax:
     content: public virtual int ParentLevelsDisplayed { get; set; }
     return:
       type: System.Int32
-      description: "An integer that specifies the number of levels of parent nodes displayed, relative to the current context node. The default value is -1, which indicates no restriction on the number of parent levels that the control displays."
+      description: "指定的顯示，相對於目前的內容節點的父節點的層級數目的整數。 預設值是-1，表示控制項顯示的父層級的數目沒有限制。"
   overload: System.Web.UI.WebControls.SiteMapPath.ParentLevelsDisplayed*
   exceptions:
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "The value for ParentLevelsDisplayed is less than -1."
+    description: "ParentLevelsDisplayed 值為小於-1。"
   platform:
   - net462
 - uid: System.Web.UI.WebControls.SiteMapPath.PathDirection
@@ -588,20 +588,20 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the order that the navigation path nodes are rendered in."
-  remarks: "Set PathDirection to <xref:System.Web.UI.WebControls.PathDirection> if you want to display the navigation path from left to right; the navigation path appears as a progression from left to right of site map nodes. In other words, the root node is at the leftmost position, each subsequent node is in the next position to the right, and the current node is in the rightmost position.       Set PathDirection to <xref:System.Web.UI.WebControls.PathDirection> if you want to display the navigation path from right to left. In other words, the node order is reversed so that the root node displays at the rightmost position and the current node displays at the leftmost position. While not as common, this ordering can be used for localizing Web Forms pages and the <xref:System.Web.UI.WebControls.SiteMapPath> control for languages that read from right to left.       The value of this property is stored in view state."
+  summary: "取得或設定導覽路徑節點呈現的順序。"
+  remarks: "設定為 PathDirection<xref:System.Web.UI.WebControls.PathDirection>如果您想要顯示的導覽路徑從左到右; 瀏覽路徑會顯示進度從左到右的站台對應的節點。</xref:System.Web.UI.WebControls.PathDirection> 換句話說，根節點位於最左邊的位置、 每個後續節點處於到右方時下, 一個位置，以及目前節點處於最右邊的位置。       設定為 PathDirection<xref:System.Web.UI.WebControls.PathDirection>如果您想要顯示的導覽路徑，由右至左。</xref:System.Web.UI.WebControls.PathDirection> 換句話說，節點順序會顛倒，因此根節點會顯示在右邊的位置和目前的節點會顯示在左邊的位置。 不是公用，而這種排序可用於當地語系化 Web Form 頁面和<xref:System.Web.UI.WebControls.SiteMapPath>控制項由右至左讀取的語言。</xref:System.Web.UI.WebControls.SiteMapPath>       這個屬性的值會儲存檢視狀態中。"
   example:
   - "The following code example demonstrates how to declaratively set the PathDirection property of a <xref:System.Web.UI.WebControls.SiteMapPath> in a Web Forms page.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_37_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_37_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.WebControls.PathDirection PathDirection { get; set; }
     return:
       type: System.Web.UI.WebControls.PathDirection
-      description: "A <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref> that indicates the hierarchical order that navigation nodes are rendered in. The default is <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref>, which indicates that the nodes are rendered in hierarchical order from the top-most node to the current node, from left to right."
+      description: "A <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;> </xref> ，指出瀏覽節點會呈現在階層式順序。 預設值是<xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;> </xref>，表示節點會呈現給目前節點中，從最上層節點的階層順序，從左到右。"
   overload: System.Web.UI.WebControls.SiteMapPath.PathDirection*
   exceptions:
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "The value for PathDirection is not one of the base <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref> enumerations."
+    description: "PathDirection 的值不是其中一個基底<xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref>列舉型別。"
   platform:
   - net462
 - uid: System.Web.UI.WebControls.SiteMapPath.PathSeparator
@@ -616,15 +616,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the string that delimits <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> nodes in the rendered navigation path."
-  remarks: "If the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> is defined, it is applied to the PathSeparator property. However, if a <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A> property is defined, both the PathSeparator and <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> properties are ignored.       The value of this property is stored in view state.       The value of this property, when set, can be saved automatically to a resource file by using a designer tool. For more information, see <xref:System.ComponentModel.LocalizableAttribute> and [Globalization and Localization](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定用來分隔字串<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>在轉譯的導覽路徑中的節點。"
+  remarks: "如果<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A>是定義，它會套用到 PathSeparator 屬性。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> 不過，如果<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A>屬性定義，這兩個 PathSeparator 和<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A>屬性會被忽略。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A>       這個屬性的值會儲存檢視狀態中。       這個屬性的值設定時，可以自動儲存到資源檔使用設計工具。 如需詳細資訊，請參閱<xref:System.ComponentModel.LocalizableAttribute>和[全球化和當地語系化](~/add/includes/ajax-current-ext-md.md)。</xref:System.ComponentModel.LocalizableAttribute>"
   example:
   - "The following example demonstrates how to set the PathSeparator property of a <xref:System.Web.UI.WebControls.SiteMapPath> to a string other than the default.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_604_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_604_1.aspx)]"
   syntax:
     content: public virtual string PathSeparator { get; set; }
     return:
       type: System.String
-      description: "A string that represents the delimiter for the nodes in a navigation path. The default is &quot; &gt; &quot;, which is a character pointing from left to right, and corresponds to the default <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref>, which is set to <xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;></xref>."
+      description: "表示導覽路徑中節點的分隔符號的字串。 預設值是&quot; &gt; &quot;，這是指從左到右，字元，而且對應至預設<xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;> </xref>，會設定為<xref href=&quot;System.Web.UI.WebControls.PathDirection&quot;> </xref>。"
   overload: System.Web.UI.WebControls.SiteMapPath.PathSeparator*
   exceptions: []
   platform:
@@ -641,13 +641,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the style used for the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*> string."
-  remarks: "Use the PathSeparatorStyle property to control the appearance of the path separator that appears between navigation path nodes. Common style settings include font properties and a foreground color for the font used by the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> property.       If a <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A> property is defined, both the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> and PathSeparatorStyle properties are ignored."
+  summary: "取得用於樣式<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*>字串。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*>"
+  remarks: "使用 PathSeparatorStyle 屬性來控制出現在瀏覽路徑節點之間的路徑分隔符號的外觀。 一般樣式設定包含字型屬性的前景色彩和所使用的字型<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>屬性。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>       如果<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A>屬性定義，這兩個<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>PathSeparatorStyle 屬性也會被忽略。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> </xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate%2A>"
   syntax:
     content: public System.Web.UI.WebControls.Style PathSeparatorStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: "The <xref href=&quot;System.Web.UI.WebControls.Style&quot;></xref> that contains the style settings of the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control&quot;s <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*> text."
+      description: "<xref href=&quot;System.Web.UI.WebControls.Style&quot;> </xref> ，其中包含的樣式設定<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項的<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*>文字。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator*>"
   overload: System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle*
   exceptions: []
   platform:
@@ -664,15 +664,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a control template to use for the path delimiter of a site navigation path."
-  remarks: "Set the PathSeparatorTemplate to an <xref:System.Web.UI.ITemplate> object to use an <xref:System.Web.UI.WebControls.Image> or some other control, such as a <xref:System.Web.UI.WebControls.Label>, as the path delimiter between navigation nodes instead of the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> string.       If the PathSeparatorTemplate property is set, the template overrides both the <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> text displayed and any <xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> applied to it.       You can declaratively set the PathSeparatorTemplate property to any Web server control, and the ASP.NET infrastructure performs the necessary steps to wrap the Web server control as an <xref:System.Web.UI.ITemplate>. However, Web server controls do not implement the <xref:System.Web.UI.ITemplate> interface; therefore, when you work with the <xref:System.Web.UI.ITemplate> properties programmatically, you must write an <xref:System.Web.UI.ITemplate> wrapper for any template code. Then, the PathSeparatorTemplate property is set to an instance of the <xref:System.Web.UI.ITemplate> wrapper."
+  summary: "取得或設定要用於網站的導覽路徑的路徑分隔符號控制項範本。"
+  remarks: "設定為 PathSeparatorTemplate<xref:System.Web.UI.ITemplate>物件以使用<xref:System.Web.UI.WebControls.Image>或其他一些控制項，例如<xref:System.Web.UI.WebControls.Label>，做為路徑分隔符號之間瀏覽節點，而不是<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>字串。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A> </xref:System.Web.UI.WebControls.Label> </xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.ITemplate>       如果 PathSeparatorTemplate 屬性設定，範本會覆寫這兩個<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>顯示的文字和任何<xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A>套用至它。</xref:System.Web.UI.WebControls.SiteMapPath.PathSeparatorStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.PathSeparator%2A>       您可以以宣告方式 PathSeparatorTemplate 屬性至任何 Web 伺服器控制項，及 ASP.NET 基礎結構會執行必要的步驟，以包裝為<xref:System.Web.UI.ITemplate>.</xref:System.Web.UI.ITemplate> Web 伺服器控制項 不過，Web 伺服器控制項不會實作<xref:System.Web.UI.ITemplate>介面; 因此，當您使用<xref:System.Web.UI.ITemplate>屬性以程式設計的方式，您必須撰寫<xref:System.Web.UI.ITemplate>範本中的任何程式碼包裝函式。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> 然後，PathSeparatorTemplate 屬性設定為執行個體<xref:System.Web.UI.ITemplate>包裝函式。</xref:System.Web.UI.ITemplate>"
   example:
   - "The following code example demonstrates how to define an <xref:System.Web.UI.WebControls.Image> as a PathSeparatorTemplate declaratively in a Web Form.  \n  \n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_2#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_835_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_2#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_835_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate PathSeparatorTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "An <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> object that implements the <xref:System.Web.UI.ITemplate.InstantiateIn*> method, to render custom content for the path delimiter of a navigation path."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>實作<xref:System.Web.UI.ITemplate.InstantiateIn*>方法，以呈現的導覽路徑。 路徑分隔符號的自訂內容</xref:System.Web.UI.ITemplate.InstantiateIn*>的物件"
   overload: System.Web.UI.WebControls.SiteMapPath.PathSeparatorTemplate*
   exceptions: []
   platform:
@@ -689,13 +689,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a <xref href=&quot;System.Web.SiteMapProvider&quot;></xref> that is associated with the Web server control."
-  remarks: "The Provider property specifies an instance of a site map provider to use with the control. This provider may be different from the provider identified by the <xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A> property, if set."
+  summary: "取得或設定<xref href=&quot;System.Web.SiteMapProvider&quot;></xref>與 Web 伺服器控制項相關聯。"
+  remarks: "提供者屬性指定站台地圖提供者來搭配控制項使用的執行的個體。 此提供者可能會從識別提供者不同<xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>屬性，如果設定。</xref:System.Web.UI.WebControls.SiteMapPath.SiteMapProvider%2A>"
   syntax:
     content: public System.Web.SiteMapProvider Provider { get; set; }
     return:
       type: System.Web.SiteMapProvider
-      description: "A <xref href=&quot;System.Web.SiteMapProvider&quot;></xref> instance that is associated with the control. If no provider is explicitly set, the default site map provider is used."
+      description: "A <xref href=&quot;System.Web.SiteMapProvider&quot;> </xref>與控制項相關聯的執行個體。 如果沒有提供者已明確設定，則會使用預設站台地圖提供者。"
   overload: System.Web.UI.WebControls.SiteMapPath.Provider*
   exceptions:
   - type: System.Web.HttpException
@@ -715,13 +715,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Writes the <xref href=&quot;System.Web.UI.WebControls.CompositeControl&quot;></xref> content to the specified <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> object, for display on the client."
+  summary: "寫入<xref href=&quot;System.Web.UI.WebControls.CompositeControl&quot;></xref>內容寫入指定<xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref>物件，以顯示在用戶端上。"
   syntax:
     content: protected override void Render (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "The <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> that receives the rendered output."
+      description: "<xref href=&quot;System.Web.UI.HtmlTextWriter&quot;> </xref>接收轉譯的輸出。"
   overload: System.Web.UI.WebControls.SiteMapPath.Render*
   exceptions: []
   platform:
@@ -738,14 +738,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Renders the nodes in the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
-  remarks: "The <xref:System.Web.UI.WebControls.SiteMapPath> control overrides the RenderContents method to perform its accessibility rendering, if the <xref:System.Web.UI.WebControls.SiteMapPath.SkipLinkText%2A> property is not set to <xref:System.String.Empty?displayProperty=fullName>."
+  summary: "中的節點會呈現<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.SiteMapPath>Control 覆寫 RenderContents 方法，以執行其存取範圍轉譯時，如果<xref:System.Web.UI.WebControls.SiteMapPath.SkipLinkText%2A>屬性未設定至<xref:System.String.Empty?displayProperty=fullName>。</xref:System.String.Empty?displayProperty=fullName> </xref:System.Web.UI.WebControls.SiteMapPath.SkipLinkText%2A> </xref:System.Web.UI.WebControls.SiteMapPath>"
   syntax:
     content: protected override void RenderContents (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "The <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> that represents the output stream used to write content to a Web page."
+      description: "<xref href=&quot;System.Web.UI.HtmlTextWriter&quot;> </xref> ，代表用來寫入網頁內容的輸出資料流。"
   overload: System.Web.UI.WebControls.SiteMapPath.RenderContents*
   exceptions: []
   platform:
@@ -762,15 +762,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Indicates whether the site navigation node that represents the currently displayed page is rendered as a hyperlink."
-  remarks: "The node that represents the currently displayed page is the <xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName>. Its <xref:System.Web.SiteMapNode.Title%2A> property specifies the text to display for the current node, and its <xref:System.Web.SiteMapNode.Url%2A> property is used to create a hyperlink. By default, no hyperlink is rendered for the current page to prevent erroneous form posts.       The value of this property is stored in view state."
+  summary: "指出是否要將站台瀏覽節點，代表目前顯示的頁面呈現為超連結。"
+  remarks: "表示目前所顯示的頁面節點是<xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName>.</xref:System.Web.SiteMap.CurrentNode%2A?displayProperty=fullName> 其<xref:System.Web.SiteMapNode.Title%2A>屬性會指定目前的節點，顯示的文字和其<xref:System.Web.SiteMapNode.Url%2A>屬性用來建立超連結。</xref:System.Web.SiteMapNode.Url%2A> </xref:System.Web.SiteMapNode.Title%2A> 根據預設，目前的頁面，即可避免錯誤表單張貼呈現沒有超連結。       這個屬性的值會儲存檢視狀態中。"
   example:
   - "The following code example demonstrates how to set the RenderCurrentNodeAsLink property to `true` to make the current node a hyperlink when the <xref:System.Web.UI.WebControls.SiteMapPath> control renders its content.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_212_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_212_1.aspx)]"
   syntax:
     content: public virtual bool RenderCurrentNodeAsLink { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the node that represents the current page is rendered as a hyperlink; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果代表目前頁面的節點會呈現為超連結。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Web.UI.WebControls.SiteMapPath.RenderCurrentNodeAsLink*
   exceptions: []
   platform:
@@ -787,15 +787,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the style for the root node display text."
-  remarks: "Use the RootNodeStyle property to control the appearance of the display text for the root node of the navigation path. By default, the display text is that specified in the <xref:System.Web.SiteMapNode.Title%2A> property of the <xref:System.Web.SiteMapNode> that represents the page. Common style settings include custom background color, foreground color, font properties, and node spacing.       For <xref:System.Web.UI.WebControls.SiteMapPath> nodes, style properties are merged into a single style, in the following order:      1.  <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>      2.  <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> or RootNodeStyle, depending on the node type.      > [!NOTE] >  If you set the node font style to a strikeout or overline style, the default underline style of the node is not displayed unless it is explicitly set to `true`.       If a <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A> property is defined, the RootNodeStyle property is ignored."
+  summary: "取得根節點的顯示文字的樣式。"
+  remarks: "您可以使用文字左邊屬性來控制導覽路徑的根節點的顯示文字的外觀。 根據預設，顯示的文字是指定<xref:System.Web.SiteMapNode.Title%2A>屬性<xref:System.Web.SiteMapNode>代表頁。</xref:System.Web.SiteMapNode> </xref:System.Web.SiteMapNode.Title%2A> 一般樣式設定包含自訂背景色彩、 前景色彩、 字型屬性和節點間距。       如<xref:System.Web.UI.WebControls.SiteMapPath>樣式屬性的節點會合併成單一的樣式，順序如下︰ 1。</xref:System.Web.UI.WebControls.SiteMapPath>  <xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>2。</xref:System.Web.UI.WebControls.SiteMapPath.NodeStyle%2A>  <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>或文字的左邊，取決於節點類型。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>      > [!NOTE] > 除非明確設定為，如果您刪除線或頂線的樣式設定節點的字型樣式，不顯示節點的預設底線樣式`true`。       如果<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>屬性定義，則會忽略文字左邊屬性。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate%2A>"
   example:
   - "The following code example demonstrates how to declaratively set the RootNodeStyle attributes on a <xref:System.Web.UI.WebControls.SiteMapPath> control.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_1#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_696_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_1#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_696_1.aspx)]"
   syntax:
     content: public System.Web.UI.WebControls.Style RootNodeStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: "The <xref href=&quot;System.Web.UI.WebControls.Style&quot;></xref> that contains the style settings for the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control root node display text."
+      description: "<xref href=&quot;System.Web.UI.WebControls.Style&quot;> </xref> ，其中包含樣式設定<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制根節點顯示文字。"
   overload: System.Web.UI.WebControls.SiteMapPath.RootNodeStyle*
   exceptions: []
   platform:
@@ -812,15 +812,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a control template to use for the root node of a site navigation path."
-  remarks: "Set the RootNodeTemplate to an <xref:System.Web.UI.ITemplate> object to use an <xref:System.Web.UI.WebControls.Image> control or some other control, such as a <xref:System.Web.UI.WebControls.Label> as the root node&quot;s user interface element instead of a string.       If the RootNodeTemplate property is set, the template overrides both the root navigation node text displayed and any <xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> applied to it. The template also overrides the <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A> and <xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> properties if the root page is the currently displayed page.       You can declaratively set the RootNodeTemplate property to any Web server control, and the ASP.NET infrastructure performs the necessary steps to wrap the Web server control as an <xref:System.Web.UI.ITemplate>. However, Web server controls do not implement the <xref:System.Web.UI.ITemplate> interface; therefore, when you work with the <xref:System.Web.UI.ITemplate> properties programmatically, you must write an <xref:System.Web.UI.ITemplate> wrapper for any template code. Then, the RootNodeTemplate property is set to an instance of the <xref:System.Web.UI.ITemplate> wrapper."
+  summary: "取得或設定控制項範本，以用於網站的導覽路徑的根節點。"
+  remarks: "設為 RootNodeTemplate<xref:System.Web.UI.ITemplate>物件以使用<xref:System.Web.UI.WebControls.Image>控制項或其他控制項，例如<xref:System.Web.UI.WebControls.Label>當做根節點的使用者介面項目，而非字串。</xref:System.Web.UI.WebControls.Label> </xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.ITemplate>       如果 RootNodeTemplate 屬性設定，範本會覆寫所顯示的根瀏覽節點文字和任何<xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A>套用至它。</xref:System.Web.UI.WebControls.SiteMapPath.RootNodeStyle%2A> 範本也會覆寫<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>和<xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A>屬性如果根頁面是在目前顯示的頁面。</xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeStyle%2A> </xref:System.Web.UI.WebControls.SiteMapPath.CurrentNodeTemplate%2A>       您可以以宣告方式 RootNodeTemplate 屬性至任何 Web 伺服器控制項，及 ASP.NET 基礎結構會執行必要的步驟，以包裝為<xref:System.Web.UI.ITemplate>.</xref:System.Web.UI.ITemplate> Web 伺服器控制項 不過，Web 伺服器控制項不會實作<xref:System.Web.UI.ITemplate>介面; 因此，當您使用<xref:System.Web.UI.ITemplate>屬性以程式設計的方式，您必須撰寫<xref:System.Web.UI.ITemplate>範本中的任何程式碼包裝函式。</xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> </xref:System.Web.UI.ITemplate> 然後，RootNodeTemplate 屬性設定為執行個體<xref:System.Web.UI.ITemplate>包裝函式。</xref:System.Web.UI.ITemplate>"
   example:
   - "The following code example demonstrates how to programmatically define a class that implements the <xref:System.Web.UI.ITemplate> interface to wrap an <xref:System.Web.UI.WebControls.Image> control. Then, the RootNodeTemplate property is set to an instance of the class.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_178_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_3#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_178_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate RootNodeTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "An <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> object that implements the <xref:System.Web.UI.ITemplate.InstantiateIn*> method, to render custom content for the root node of a navigation path."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>物件會實作的<xref:System.Web.UI.ITemplate.InstantiateIn*>方法，以呈現自訂內容的根節點的導覽路徑。</xref:System.Web.UI.ITemplate.InstantiateIn*>"
   overload: System.Web.UI.WebControls.SiteMapPath.RootNodeTemplate*
   exceptions: []
   platform:
@@ -837,14 +837,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Saves changes to view state for the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control."
-  remarks: "View state is the accumulation of the values of a server control&quot;s properties. These values are automatically placed in the server control&quot;s <xref:System.Web.UI.Control.ViewState%2A> property, which is an instance of the <xref:System.Web.UI.StateBag> class. The value of this property is then persisted to a string object after the save state stage of the server control life cycle.       When view state is saved, this string object is returned to the client as a variable that is stored in an `Hidden` HTML element. When you author custom server controls, you can improve efficiency by overriding this method and modifying your server control&quot;s <xref:System.Web.UI.Control.ViewState%2A> property."
+  summary: "儲存檢視狀態變更<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項。"
+  remarks: "檢視狀態是伺服器控制項的屬性值的累積。 這些值會自動放入伺服器控制項的<xref:System.Web.UI.Control.ViewState%2A>屬性，這是執行個體的<xref:System.Web.UI.StateBag>類別。</xref:System.Web.UI.StateBag> </xref:System.Web.UI.Control.ViewState%2A> 儲存狀態的伺服器控制項的生命週期的階段之後，這個屬性的值然後會保存到字串物件。       這個字串物件儲存檢視狀態時，會為儲存在變數傳回給用戶端`Hidden`HTML 項目。 當您撰寫自訂的伺服器控制項時，您可以透過覆寫這個方法，並修改您的伺服器控制項來改善效率<xref:System.Web.UI.Control.ViewState%2A>屬性。</xref:System.Web.UI.Control.ViewState%2A>"
   syntax:
     content: protected override object SaveViewState ();
     parameters: []
     return:
       type: System.Object
-      description: "Returns the server control&quot;s current view state. If there is no view state associated with the control, this method returns <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "傳回伺服器控制項目前檢視狀態。 如果沒有與控制項關聯的檢視狀態，則這個方法會傳回<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。"
   overload: System.Web.UI.WebControls.SiteMapPath.SaveViewState*
   exceptions: []
   platform:
@@ -861,15 +861,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a value indicating whether the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control writes an additional hyperlink attribute for hyperlinked navigation nodes. Depending on client support, when a mouse hovers over a hyperlink that has the additional attribute set, a ToolTip is displayed."
-  remarks: "The most common scenario is when a `Title` HTML attribute exists for an HTML `A Href` hyperlink. For example, Microsoft Internet Explorer 4.0 and later and Netscape 6.0 and later implement the `Title` attribute as a hovering ToolTip, while Opera 3.0 and later implements the `Title` attribute as both a ToolTip and a caption in Opera&quot;s toolbar area. Not all clients display ToolTips for additional hyperlink attributes.       The value of this property is stored in view state.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定值，指出是否<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制寫入其他的超連結屬性的超連結瀏覽節點。 取決於用戶端支援，當滑鼠停留在有其他的屬性集的超連結會顯示工具提示。"
+  remarks: "最常見的案例是當`Title`HTML 屬性的 HTML 存在`A Href`超連結。 比方說，Microsoft Internet Explorer 4.0 和更新版本及 Netscape 6.0 和更新版本的實作`Title`屬性做為暫留工具提示中，同時 Opera 3.0 和更新版本的實作`Title`屬性做為工具提示和 Opera 的工具列區域中的標題。 並非所有的用戶端會顯示工具提示其他超連結屬性。       這個屬性的值會儲存檢視狀態中。       無法設定這個屬性的主題或樣式表主題。 如需詳細資訊，請參閱<xref:System.Web.UI.ThemeableAttribute>和[ASP.NET 佈景主題和面板](~/add/includes/ajax-current-ext-md.md)。</xref:System.Web.UI.ThemeableAttribute>"
   example:
   - "The following code example demonstrates how to declaratively set the ShowToolTips property to `false` in a Web Forms page.  \n  \n [!code-vb[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_861_1.aspx)]\n [!code-cs[System.Web.UI.WebControls.NavigationPath_decl_4#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_861_1.aspx)]"
   syntax:
     content: public virtual bool ShowToolTips { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if alternate text should be written for hyperlinked navigation nodes; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default value is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果應該寫入替代文字的超連結瀏覽節點。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;> </xref>。"
   overload: System.Web.UI.WebControls.SiteMapPath.ShowToolTips*
   exceptions: []
   platform:
@@ -886,13 +886,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the name of the <xref href=&quot;System.Web.SiteMapProvider&quot;></xref> used to render the site navigation control."
-  remarks: "The <xref:System.Web.UI.WebControls.SiteMapPath> control uses a <xref:System.Web.SiteMapProvider> as a source for the site map data it renders. If the SiteMapProvider property is not set, the <xref:System.Web.UI.WebControls.SiteMapPath> control uses the provider identified by the <xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName> property, which is the default <xref:System.Web.SiteMapProvider> defined for the site in the configuration hierarchy, typically the <xref:System.Web.XmlSiteMapProvider>. Setting the SiteMapProvider property directs the <xref:System.Web.UI.WebControls.SiteMapPath> control to render the site map data that the provider defines.       The <xref:System.Web.UI.WebControls.SiteMapPath> control works directly with a <xref:System.Web.SiteMapProvider> and its <xref:System.Web.SiteMapNode> objects to display site map information. Other controls, such as <xref:System.Web.UI.WebControls.Menu> and <xref:System.Web.UI.WebControls.TreeView>, require a data abstraction, provided by the <xref:System.Web.UI.WebControls.SiteMapDataSource> class, to display the same site navigation information.       The value of this property is stored in view state.       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定名稱<xref href=&quot;System.Web.SiteMapProvider&quot;></xref>用來呈現的站台瀏覽控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.SiteMapPath>控制使用<xref:System.Web.SiteMapProvider>做為呈現網站導覽資料來源。</xref:System.Web.SiteMapProvider> </xref:System.Web.UI.WebControls.SiteMapPath> 如果 SiteMapProvider 屬性未設定，<xref:System.Web.UI.WebControls.SiteMapPath>控制使用的<xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName>屬性，這是預設<xref:System.Web.SiteMapProvider>定義的組態階層架構，通常<xref:System.Web.XmlSiteMapProvider>.</xref:System.Web.XmlSiteMapProvider>中的站台</xref:System.Web.SiteMapProvider></xref:System.Web.SiteMap.Provider%2A?displayProperty=fullName>所識別的提供者</xref:System.Web.UI.WebControls.SiteMapPath> 設定 SiteMapProvider 屬性會指示<xref:System.Web.UI.WebControls.SiteMapPath>控制項呈現網站導覽資料提供者定義。</xref:System.Web.UI.WebControls.SiteMapPath>       <xref:System.Web.UI.WebControls.SiteMapPath>直接搭配運作的控制項<xref:System.Web.SiteMapProvider>及其<xref:System.Web.SiteMapNode>要顯示站台對應資訊的物件。</xref:System.Web.SiteMapNode> </xref:System.Web.SiteMapProvider> </xref:System.Web.UI.WebControls.SiteMapPath> 其他控制項，例如<xref:System.Web.UI.WebControls.Menu>和<xref:System.Web.UI.WebControls.TreeView>，需要所提供的資料抽象概念<xref:System.Web.UI.WebControls.SiteMapDataSource>類別，以顯示相同的站台瀏覽資訊。</xref:System.Web.UI.WebControls.SiteMapDataSource> </xref:System.Web.UI.WebControls.TreeView> </xref:System.Web.UI.WebControls.Menu>       這個屬性的值會儲存檢視狀態中。       無法設定這個屬性的主題或樣式表主題。 如需詳細資訊，請參閱<xref:System.Web.UI.ThemeableAttribute>和[ASP.NET 佈景主題和面板](~/add/includes/ajax-current-ext-md.md)。</xref:System.Web.UI.ThemeableAttribute>"
   syntax:
     content: public virtual string SiteMapProvider { get; set; }
     return:
       type: System.String
-      description: "The name of a <xref href=&quot;System.Web.SiteMapProvider&quot;></xref> that defines the navigation structure for the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> to display. All available providers are contained in the &lt;xref:System.Web.SiteMap.Providers%2A?displayProperty=fullName&gt; collection, and can be enumerated and retrieved by name using the <xref:System.Web.SiteMapProviderCollection.Item*> property."
+      description: "名稱<xref href=&quot;System.Web.SiteMapProvider&quot;></xref>定義的瀏覽結構<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>顯示。 中所包含的所有可用的提供者&lt;xref:System.Web.SiteMap.Providers%2A?displayProperty=fullName&gt;集合，和可列舉，並使用名稱來擷取<xref:System.Web.SiteMapProviderCollection.Item*>屬性。</xref:System.Web.SiteMapProviderCollection.Item*>"
   overload: System.Web.UI.WebControls.SiteMapPath.SiteMapProvider*
   exceptions: []
   platform:
@@ -909,13 +909,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a value that is used to render alternate text for screen readers to skip the control&quot;s content."
-  remarks: "SkipLinkText is a property that you can set to make a Web page more or less accessible to users of screen readers. Web sites that contain content that repeats on multiple pages, such as controls that display site map data, can provide a mechanism that allows users of screen readers to skip the repeated content so that it is not read aloud.       The <xref:System.Web.UI.WebControls.SiteMapPath> control provides the SkipLinkText property as a way for the entire control to be skipped by screen readers.  If the SkipLinkText property is set, an invisible image with alternate text is rendered, giving the user the option to jump to the end of the content. Screen readers read the alternate text aloud but the image does not disturb the visual flow of the page. The property is set to &quot;Skip Navigation Links&quot; by default, which makes screen readers skip the control. If you want to disable this behavior, set the property to <xref:System.String.Empty?displayProperty=fullName>.       The value of this property is stored in view state.       The value of this property, when set, can be saved automatically to a resource file by using a designer tool. For more information, see <xref:System.ComponentModel.LocalizableAttribute> and [Globalization and Localization](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定值，用來呈現替代文字，讓螢幕助讀員略過控制項的內容。"
+  remarks: "SkipLinkText 是您可以設定讓網頁更多或更少的螢幕助讀程式的使用者都能存取的屬性。 包含多個頁面，例如顯示網站導覽資料的控制項的重複內容的網站可以提供一套機制，可讓螢幕助讀員略過重複的內容，以便不大聲閱讀的使用者。       <xref:System.Web.UI.WebControls.SiteMapPath>控制項提供 SkipLinkText 屬性做為螢幕助讀程式所要略過整個控制項的方式。</xref:System.Web.UI.WebControls.SiteMapPath>  如果 SkipLinkText 屬性設定，會轉譯不可見的影像的替代文字，讓使用者選擇跳到內容的結尾。 螢幕助讀程式會大聲閱讀的替代文字，但映像不會干擾視覺網頁流程中的。 屬性設定為 「 略過巡覽連結 」 上，依預設，讓螢幕助讀員略過控制項。 如果您想要停用此行為，將屬性設定為<xref:System.String.Empty?displayProperty=fullName>.</xref:System.String.Empty?displayProperty=fullName>       這個屬性的值會儲存檢視狀態中。       這個屬性的值設定時，可以自動儲存到資源檔使用設計工具。 如需詳細資訊，請參閱<xref:System.ComponentModel.LocalizableAttribute>和[全球化和當地語系化](~/add/includes/ajax-current-ext-md.md)。</xref:System.ComponentModel.LocalizableAttribute>"
   syntax:
     content: public virtual string SkipLinkText { get; set; }
     return:
       type: System.String
-      description: "A string that the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control renders as alternate text with an invisible image, as a hint to screen readers. The default value is &quot;Skip Navigation Links&quot;."
+      description: "字串<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項呈現為替代文字不可見的影像，做為螢幕助讀程式的提示。 預設值是 「 略過巡覽連結 」。"
   overload: System.Web.UI.WebControls.SiteMapPath.SkipLinkText*
   exceptions: []
   platform:
@@ -932,7 +932,7 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Tracks changes to the <xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref> control&quot;s view state."
+  summary: "追蹤變更<xref href=&quot;System.Web.UI.WebControls.SiteMapPath&quot;></xref>控制項的檢視狀態。"
   syntax:
     content: protected override void TrackViewState ();
     parameters: []
