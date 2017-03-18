@@ -29,8 +29,8 @@ items:
   nameWithType: LoginView
   fullName: System.Web.UI.WebControls.LoginView
   type: Class
-  summary: "Displays the appropriate content template for a given user, based on the user&quot;s authentication status and role membership."
-  remarks: "In this topic:      -   [Introduction](#introduction)      -   [Declarative Syntax](#declarative_syntax)      <a name=&quot;introduction&quot;></a>    ## Introduction    The LoginView control displays different Web site content templates (or &quot;views&quot;) for different users, based on whether the user is authenticated and, if so, which Web site roles he or she belongs to.      > [!NOTE] >  If you are not familiar with the set of login controls available in ASP.NET, see [ASP.NET Login Controls Overview](~/add/includes/ajax-current-ext-md.md) before continuing. For a list of other topics related to login controls and membership, see [Managing Users by Using Membership](~/add/includes/ajax-current-ext-md.md).       The template stored in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property is displayed to any visitor to the Web site who has not logged in. Once a user is logged in, the site displays either a template associated with one of the user&quot;s roles in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> property or the default template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property.       The LoginView control manages switching among the various templates once you assign templates to any of the three template properties of the LoginView class:      -   <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> - Specifies the template to display to users who are not logged in to the Web site. Users who are logged in will never see this template.      -   <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> - Specifies the default template to display to users who are logged in to the Web site but do not belong to any role groups with defined templates.      -   <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> - Specifies the template to display to logged-in users who are members of roles with defined role-group templates. Content templates are associated with particular sets of roles in <xref:System.Web.UI.WebControls.RoleGroup> instances.       Role-group templates are searched in the order they are defined in the source. The first matching role-group template is displayed to the user. If a user is a member of more than one role, the first role-group template that matches any of the user&quot;s roles is used. If more than one template is associated with a single role, only the first defined template is used.       The following table describes the behavior of the LoginView control when various combinations of templates are used.      |LoggedIn Template Property|Anonymous Template Property|RoleGroups Property|LoginView behavior|   |--------------------------------|---------------------------------|-------------------------|------------------------|   |Not set|Not set|Not set|Displays no content.|   |Set|Not set|Not set|Displays content only when the user is logged in.|   |Not set|Set|Not set|Displays content only when the user is not logged in.|   |Not set|Not set|Set|Displays the first template in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> collection that matches one of the user&quot;s roles. If no match is found, displays no content.|   |Set|Set|Not set|If the user is logged in, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property. If the user in not logged in, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property.|   |Set|Set|Set|If the user is logged in, displays the first template in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> collection that matches one of the user&quot;s roles. If no match is found, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property. If the user is not logged in, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property.|   |Set|Not set|Set|If the user is logged in, displays the first template in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> collection that matches one of the user&quot;s roles. If no match is found, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property. If the user is not logged in, nothing is displayed.|   |Not set|Set|Set|If the user is logged in, displays the first template in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> collection that matches one of the user&quot;s roles. If no match is found, nothing is displayed. If the user is not logged in, displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property.|       The <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> and <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> can be used with any authentication scheme that sets the <xref:System.Security.Principal.IIdentity.Name%2A> property of the <xref:System.Web.UI.Page> object&quot;s <xref:System.Web.UI.Page.User%2A> property. You must configure role management to use the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> property to define templates base on the user&quot;s role on the Web site. For more information, see [Understanding Role Management](~/add/includes/ajax-current-ext-md.md).       The <xref:System.Web.UI.Control.Focus%2A> method does not set the initial focus of the Web page to the LoginView control, or any of its child controls. Controls contained in the LoginView control are created after the <xref:System.Web.UI.Control.PreRender> event. To set the focus to a child control contained by the LoginView, handle the `On_PreRender` and call its <xref:System.Web.UI.Control.Focus%2A> method.  You can also use the <xref:System.Web.UI.WebControls.LoginView.ViewChanging> and <xref:System.Web.UI.WebControls.LoginView.ViewChanged> events to programmatically access the controls in the LoginView control templates.      <a name=&quot;declarative_syntax&quot;></a>    ## Declarative Syntax      ```   <asp:LoginView       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       OnViewChanged=&quot;ViewChanged event handler&quot;       OnViewChanging=&quot;ViewChanging event handler&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Visible=&quot;True|False&quot;   >           <AnonymousTemplate>               <!-- child controls -->           </AnonymousTemplate>           <LoggedInTemplate>               <!-- child controls -->           </LoggedInTemplate>           <RoleGroups>                   <asp:RoleGroup                       Roles=&quot;string&quot;                   >                           <ContentTemplate>                               <!-- child controls -->                           </ContentTemplate>                   </asp:RoleGroup>           </RoleGroups>   </asp:LoginView>   ```"
+  summary: "顯示針對指定的使用者，根據使用者的驗證狀態和角色成員資格適當內容的範本。"
+  remarks: "本主題內容:-[簡介](#introduction)      -   [宣告式語法](#declarative_syntax)<a name=&quot;introduction&quot;> </a> # # 簡介 LoginView 控制項會顯示不同的網站內容範本 （或 「 檢視 」） 針對不同的使用者，根據使用者是否已驗證，且如果 Web 站台角色，他或她屬於。            > [!NOTE] > 如果您不熟悉 ASP.NET 中可用的登入控制項組，請參閱[ASP.NET 登入控制項概觀](~/add/includes/ajax-current-ext-md.md)才能繼續。 如需登入控制項及成員資格相關的其他主題的清單，請參閱[使用成員資格管理使用者](~/add/includes/ajax-current-ext-md.md)。       儲存在中<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>顯示屬性，以任何使用者尚未登入的網站訪客</xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>的範本 使用者已登入之後，網站會顯示與使用者的角色中的其中一個相關聯的其中一個範本<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>屬性或在指定的預設範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> </xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>       LoginView 控制項可讓您管理切換不同的範本，一旦您將範本指派給任何 LoginView 類別的三個範本內容:- <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>-指定要顯示使用者無法登入的網站範本。</xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> 登入使用者永遠不會看到此範本。      - <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>-指定要顯示給使用者登入的網站，但不是屬於任何角色群組，與定義範本的預設範本。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>      - <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>-指定的範本，來登入的使用者顯示角色範本定義的角色群組的成員。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> 內容範本相關聯的角色中的特定集<xref:System.Web.UI.WebControls.RoleGroup>執行個體。</xref:System.Web.UI.WebControls.RoleGroup>       角色群組範本會在來源中定義的順序進行搜尋。 比對的第一個角色群組範本會顯示給使用者。 如果使用者是多個角色的成員，則會使用第一個符合任何使用者角色的角色群組範本。 如果多個範本都與單一角色，會使用只有第一個定義的範本。       使用範本的各種組合時下, 表將描述 LoginView 控制項的行為。      |LoggedIn 樣板屬性 |匿名樣板屬性 |RoleGroups 屬性 |LoginView 行為 |  |--------------------------------|---------------------------------|-------------------------|------------------------|  |未設定 |未設定 |未設定 |不顯示任何內容。 |  |設定 |未設定 |未設定 |只有當使用者登入顯示內容。 |  |未設定 |設定 |未設定 |只有當使用者未登入顯示內容。 |  |未設定 |未設定 |設定 |顯示的第一個範本<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>集合中符合其中一個使用者角色。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> 如果找到相符項目，就會顯示任何內容。 |  |設定 |設定 |未設定 |如果使用者登入，就會顯示在指定的範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> 如果在使用者未登入，就會顯示<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>屬性中指定的範本。 |  |設定 |設定 |設定 |如果使用者登入，就會顯示的第一個範本<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>集合中符合其中一個使用者角色。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> </xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> 如果找到相符項目，就會顯示在指定的範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> 如果使用者尚未登入中，會顯示在<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>屬性中指定的範本。 |  |設定 |未設定 |設定 |如果使用者登入，就會顯示的第一個範本<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>集合中符合其中一個使用者角色。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> </xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> 如果找到相符項目，就會顯示在指定的範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> 如果使用者尚未登入中，將不會顯示。 |  |未設定 |設定 |設定 |如果使用者登入，就會顯示的第一個範本<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>集合中符合其中一個使用者角色。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> 如果找到相符項目，就不會顯示。 如果使用者尚未登入中，會顯示在<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>屬性中指定的範本。 |      <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>和<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>可以搭配任何設定的驗證配置<xref:System.Security.Principal.IIdentity.Name%2A>屬性<xref:System.Web.UI.Page>物件的<xref:System.Web.UI.Page.User%2A>屬性。</xref:System.Web.UI.Page.User%2A> </xref:System.Web.UI.Page> </xref:System.Security.Principal.IIdentity.Name%2A> </xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> </xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> </xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> 您必須設定要使用的角色管理<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>屬性來定義範本基底的網站上的使用者的角色。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> 如需詳細資訊，請參閱[了解角色管理](~/add/includes/ajax-current-ext-md.md)。       <xref:System.Web.UI.Control.Focus%2A>方法才會將網頁上的初始焦點 LoginView 控制項，或其任何子控制項。</xref:System.Web.UI.Control.Focus%2A> LoginView 控制項所包含的控制項之後，會建立<xref:System.Web.UI.Control.PreRender>事件。</xref:System.Web.UI.Control.PreRender> 若要將焦點設定 LoginView 所包含的子控制項，處理`On_PreRender`並呼叫其<xref:System.Web.UI.Control.Focus%2A>方法。</xref:System.Web.UI.Control.Focus%2A>  您也可以使用<xref:System.Web.UI.WebControls.LoginView.ViewChanging>和<xref:System.Web.UI.WebControls.LoginView.ViewChanged>事件，以程式設計方式存取在 LoginView 控制項控制項範本。</xref:System.Web.UI.WebControls.LoginView.ViewChanged> </xref:System.Web.UI.WebControls.LoginView.ViewChanging>      <a name=&quot;declarative_syntax&quot;></a># # 宣告式語法```   <asp:LoginView       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ID=&quot;string&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       OnViewChanged=&quot;ViewChanged event handler&quot;       OnViewChanging=&quot;ViewChanging event handler&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Visible=&quot;True|False&quot;   >           <AnonymousTemplate>               <!-- child controls -->           </AnonymousTemplate>           <LoggedInTemplate>               <!-- child controls -->           </LoggedInTemplate>           <RoleGroups>                   <asp:RoleGroup                       Roles=&quot;string&quot;                   >                           <ContentTemplate>                               <!-- child controls -->                           </ContentTemplate>                   </asp:RoleGroup>           </RoleGroups>   </asp:LoginView>   ```"
   example:
   - "The following code example shows how to set templates for each of the three template types supported by the LoginView control.  \n  \n [!code-vb[LoginViewClass#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_335_1.aspx)]\n [!code-cs[LoginViewClass#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_335_1.aspx)]"
   syntax:
@@ -167,7 +167,7 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Initializes a new instance of the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
+  summary: "初始化的新執行個體<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
   syntax:
     content: public LoginView ();
     parameters: []
@@ -187,15 +187,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the template to display to users who are not logged in to the Web site."
-  remarks: "The AnonymousTemplate property specifies the content template to display to Web site users when they are not logged in to the Web site. This template is displayed when the <xref:System.Security.Principal.IIdentity.Name%2A> property of the <xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A> property is `null`.       The AnonymousTemplate template is never displayed to authenticated users. If the AnonymousTemplate property is empty, no content is displayed to users who are not logged in."
+  summary: "取得或設定要顯示給使用者未登入的網站範本。"
+  remarks: "AnonymousTemplate 屬性會指定當使用者未登入網站時，對網站使用者顯示的內容範本。 這個範本會顯示當<xref:System.Security.Principal.IIdentity.Name%2A>屬性<xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A>屬性是`null`。</xref:System.Web.UI.Page.User%2A></xref:System.Web.UI.Page> </xref:System.Security.Principal.IIdentity.Name%2A>       AnonymousTemplate 範本就會永遠不會顯示已驗證的使用者。 如果 AnonymousTemplate 屬性是空的不登入的使用者即會不顯示任何內容。"
   example:
   - "The following code example uses the template specified in the AnonymousTemplate template to display an invitation to sign up for personalized services.  \n  \n [!code-vb[LoginViewAnonymousTemplate#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_899_1.aspx)]\n [!code-cs[LoginViewAnonymousTemplate#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_899_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate AnonymousTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "The <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> to display."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>顯示。"
   overload: System.Web.UI.WebControls.LoginView.AnonymousTemplate*
   exceptions: []
   platform:
@@ -212,12 +212,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the <xref href=&quot;System.Web.UI.ControlCollection&quot;></xref> object that contains the child controls for the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
+  summary: "取得<xref href=&quot;System.Web.UI.ControlCollection&quot;></xref>含有子系的物件會控制<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
   syntax:
     content: public override System.Web.UI.ControlCollection Controls { get; }
     return:
       type: System.Web.UI.ControlCollection
-      description: "The collection of child controls for the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
+      description: "子控制項集合<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
   overload: System.Web.UI.WebControls.LoginView.Controls*
   exceptions: []
   platform:
@@ -234,8 +234,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Creates the child controls that make up the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
-  remarks: "The CreateChildControls method creates the individual controls that make up the <xref:System.Web.UI.WebControls.LoginView> control. The set of controls created varies according to the content template displayed for the user. For example, when a user is not logged in to the Web site, only the controls contained in the template specified in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property are created."
+  summary: "建立子控制項構成<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
+  remarks: "CreateChildControls 方法會建立個別控制項構成<xref:System.Web.UI.WebControls.LoginView>控制項。</xref:System.Web.UI.WebControls.LoginView> 建立的控制項集合，會根據使用者的顯示內容的範本而有所不同。 例如，當使用者未登入的網站，只將範本中包含的控制項中指定<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>建立屬性。</xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>"
   syntax:
     content: protected override void CreateChildControls ();
     parameters: []
@@ -255,8 +255,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Binds a data source to <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> and all its child controls."
-  remarks: "Use the DataBind method to bind data from a source to the <xref:System.Web.UI.WebControls.LoginView> control and its children. This method resolves all data-binding expressions in the <xref:System.Web.UI.WebControls.LoginView> control and any child controls in the active template."
+  summary: "將繫結至資料來源<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>及其所有子控制項。"
+  remarks: "使用資料繫結方法，將資料從一個來源繫結<xref:System.Web.UI.WebControls.LoginView>控制項和其子系。</xref:System.Web.UI.WebControls.LoginView> 這個方法會解析中的所有資料繫結運算式<xref:System.Web.UI.WebControls.LoginView>控制項和任何子控制項，在使用中的範本。</xref:System.Web.UI.WebControls.LoginView>"
   syntax:
     content: public override void DataBind ();
     parameters: []
@@ -276,13 +276,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a value indicating whether themes can be applied to the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
-  remarks: "The EnableTheming property indicates whether themes are enabled for the <xref:System.Web.UI.WebControls.LoginView> control. The EnableTheming property also affects whether themes are enabled for the controls contained in its <xref:System.Web.UI.WebControls.LoginView.Controls%2A> collection. When the EnableTheming property is `true`, the application&quot;s theme directory is searched for control skins to apply. If no skin for the particular control exists in the theme directory, a skin is not applied. When the EnableTheming property is `false`, the theme directory is not searched and the contents of the <xref:System.Web.UI.WebControls.LoginView.SkinID%2A> property are not used.       A control can override the EnableTheming value set by its parent control, or the containing page. For example, if a parent control has EnableTheming set to `false`, you can selectively apply themes to child controls contained within the parent by setting the EnableTheming property to `true` on the individual child controls."
+  summary: "取得或設定值，指出是否可以佈景主題套用至<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
+  remarks: "EnableTheming 屬性會指出是否啟用佈景主題，以供<xref:System.Web.UI.WebControls.LoginView>控制項。</xref:System.Web.UI.WebControls.LoginView> 是否啟用佈景主題中所包含的控制項，也會影響 EnableTheming 屬性其<xref:System.Web.UI.WebControls.LoginView.Controls%2A>集合。</xref:System.Web.UI.WebControls.LoginView.Controls%2A> 當 EnableTheming 屬性是`true`，要套用的控制項面板會搜尋應用程式的佈景主題目錄。 如果特定的控制項面板佈景主題目錄中，未套用面板。 EnableTheming 屬性時`false`，不會搜尋主題目錄的內容和<xref:System.Web.UI.WebControls.LoginView.SkinID%2A>屬性不會。</xref:System.Web.UI.WebControls.LoginView.SkinID%2A>       控制項可以覆寫其父控制項或包含頁面所設定的 EnableTheming 值。 例如，如果父控制項的 EnableTheming 設`false`，您可以選擇性地將佈景主題套用至 EnableTheming 屬性設定為包含在父系的子控制項`true`上個別子控制項。"
   syntax:
     content: public override bool EnableTheming { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to use themes; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>若要使用佈景主題。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;> </xref>。"
   overload: System.Web.UI.WebControls.LoginView.EnableTheming*
   exceptions: []
   platform:
@@ -299,8 +299,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Sets input focus to a control."
-  remarks: "The Focus method does not set the initial focus of the Web page to the <xref:System.Web.UI.WebControls.LoginView> control or to any of its child controls. Controls that are contained in the <xref:System.Web.UI.WebControls.LoginView> control are created after the <xref:System.Web.UI.Control.PreRender> event. To set the focus to a child control contained by the <xref:System.Web.UI.WebControls.LoginView>, handle the `On_PreRender` and call its <xref:System.Web.UI.Control.Focus%2A> method."
+  summary: "設定輸入焦點至控制項。"
+  remarks: "焦點方法不會設定網頁的初始焦點<xref:System.Web.UI.WebControls.LoginView>控制項或任何其子控制項。</xref:System.Web.UI.WebControls.LoginView> 控制項中所包含的<xref:System.Web.UI.WebControls.LoginView>控制項之後，會建立<xref:System.Web.UI.Control.PreRender>事件。</xref:System.Web.UI.Control.PreRender> </xref:System.Web.UI.WebControls.LoginView> 將焦點設定至所包含的子控制項<xref:System.Web.UI.WebControls.LoginView>，處理`On_PreRender`並呼叫其<xref:System.Web.UI.Control.Focus%2A>方法。</xref:System.Web.UI.Control.Focus%2A> </xref:System.Web.UI.WebControls.LoginView>"
   syntax:
     content: public override void Focus ();
     parameters: []
@@ -308,7 +308,7 @@ items:
   exceptions:
   - type: System.NotSupportedException
     commentId: T:System.NotSupportedException
-    description: "You call the Focus method."
+    description: "呼叫焦點方法。"
   platform:
   - net462
 - uid: System.Web.UI.WebControls.LoginView.LoadControlState(System.Object)
@@ -323,13 +323,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "This method implements <xref:System.Web.UI.Control.LoadControlState*>."
+  summary: "這個方法會實作<xref:System.Web.UI.Control.LoadControlState*>.</xref:System.Web.UI.Control.LoadControlState*>"
   syntax:
     content: protected override void LoadControlState (object savedState);
     parameters:
     - id: savedState
       type: System.Object
-      description: "An <xref:System.Object> that represents the control state to be restored."
+      description: "<xref:System.Object>，代表要還原的控制項狀態。</xref:System.Object>"
   overload: System.Web.UI.WebControls.LoginView.LoadControlState*
   exceptions: []
   platform:
@@ -346,15 +346,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the template to display to Web site users who are logged in to the Web site but are not members of one of the role groups specified in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups*> property."
-  remarks: "The LoggedInTemplate property is displayed to Web site users when both of the following conditions are met:      -   The <xref:System.Security.Principal.IIdentity.Name%2A> property of the <xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A> property is not `null`      -   The user does not belong to a role group defined in the <xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> property.       The LoggedInTemplate property specifies a default template for authenticated Web site users. If you have not configured role management, the LoggedInTemplate is the only template available for authenticated users. For more information about configuring role management, see [Understanding Role Management](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得或設定要顯示網站的使用者登入的網站，但不是其中一個角色群組中指定的成員樣板<xref:System.Web.UI.WebControls.LoginView.RoleGroups*>屬性。</xref:System.Web.UI.WebControls.LoginView.RoleGroups*>"
+  remarks: "這兩個下列條件符合時，將會顯示網站使用者的 LoggedInTemplate 屬性:-<xref:System.Security.Principal.IIdentity.Name%2A>屬性<xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A>屬性不是`null`-使用者不屬於定義的角色群組<xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.RoleGroups%2A> </xref:System.Web.UI.Page.User%2A></xref:System.Web.UI.Page> </xref:System.Security.Principal.IIdentity.Name%2A>       LoggedInTemplate 屬性指定已驗證的網站使用者的預設範本。 如果您未設定角色管理，LoggedInTemplate 是唯一的範本適用於已驗證的使用者。 如需設定 角色管理的詳細資訊，請參閱[了解角色管理](~/add/includes/ajax-current-ext-md.md)。"
   example:
   - "The following code example uses the LoggedInTemplate template to display links to personalized information for logged-in users.  \n  \n [!code-vb[LoginViewAnonymousTemplate#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_127_1.aspx)]\n [!code-cs[LoginViewAnonymousTemplate#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_127_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.ITemplate LoggedInTemplate { get; set; }
     return:
       type: System.Web.UI.ITemplate
-      description: "The <xref href=&quot;System.Web.UI.ITemplate&quot;></xref> to display."
+      description: "<xref href=&quot;System.Web.UI.ITemplate&quot;> </xref>顯示。"
   overload: System.Web.UI.WebControls.LoginView.LoggedInTemplate*
   exceptions: []
   platform:
@@ -371,14 +371,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.Control.Init&quot;></xref> event."
-  remarks: "The OnInit method performs initialization for the <xref:System.Web.UI.WebControls.LoginView> control.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnInit method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "引發<xref href=&quot;System.Web.UI.Control.Init&quot;></xref>事件。"
+  remarks: "OnInit 方法執行初始化<xref:System.Web.UI.WebControls.LoginView>控制項。</xref:System.Web.UI.WebControls.LoginView>       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnInit 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   syntax:
     content: protected override void OnInit (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> object that contains the event data."
+      description: "<xref:System.EventArgs>物件，其中包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.LoginView.OnInit*
   exceptions: []
   platform:
@@ -395,14 +395,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Determines which role-group template to display, based on the roles of the logged-in user."
-  remarks: "The OnPreRender method is called during the <xref:System.Web.UI.Control.PreRender> event to determine which content template to display to the user. If the <xref:System.Security.Principal.IIdentity.Name%2A> property of the <xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A> property is `null`, the template specified in the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> property is displayed; otherwise, the template associated with the user&quot;s role is displayed. If the user does not belong to a defined role group, or if you have not configured role management, the <xref:System.Web.UI.WebControls.LoginView> control displays the template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property. For more information about configuring role management, see [Role Management Providers](~/add/includes/ajax-current-ext-md.md).       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnPreRender method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "決定角色群組範本顯示，請登入之使用者的角色為基礎。"
+  remarks: "OnPreRender 方法呼叫期間<xref:System.Web.UI.Control.PreRender>事件，以判定要對使用者顯示的內容範本。</xref:System.Web.UI.Control.PreRender> 如果<xref:System.Security.Principal.IIdentity.Name%2A>屬性<xref:System.Web.UI.Page><xref:System.Web.UI.Page.User%2A>屬性是`null`，範本中指定<xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A>屬性會顯示; 否則就會顯示與使用者角色相關聯的範本。</xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> </xref:System.Web.UI.Page.User%2A></xref:System.Web.UI.Page> </xref:System.Security.Principal.IIdentity.Name%2A> 如果使用者不屬於已定義的角色群組，或如果您未設定角色管理<xref:System.Web.UI.WebControls.LoginView>控制項會顯示在指定的範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> </xref:System.Web.UI.WebControls.LoginView> 如需設定 角色管理的詳細資訊，請參閱[角色管理提供者](~/add/includes/ajax-current-ext-md.md)。       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnPreRender 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   syntax:
     content: protected override void OnPreRender (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> object that contains the event data."
+      description: "<xref:System.EventArgs>物件，其中包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.LoginView.OnPreRender*
   exceptions: []
   platform:
@@ -419,14 +419,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.LoginView.ViewChanged&quot;></xref> event after the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control switches views."
-  remarks: "When the <xref:System.Web.UI.WebControls.LoginView> control switches views, it removes the controls from the previous template and creates new child controls from the new template. The OnViewChanged method is called after the new child controls are created.       Use the OnViewChanged method to perform any processing, such as data binding, necessary to initialize the controls on the new view.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnViewChanged method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "引發<xref href=&quot;System.Web.UI.WebControls.LoginView.ViewChanged&quot;></xref>事件之後的<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項切換檢視。"
+  remarks: "當<xref:System.Web.UI.WebControls.LoginView>控制項切換檢視，從先前的範本移除控制項，並從新的範本建立新的子控制項。</xref:System.Web.UI.WebControls.LoginView> OnViewChanged 方法是在建立新的子控制項之後呼叫。       您可以使用 OnViewChanged 方法來執行任何處理，例如資料繫結，初始化新的檢視表的控制項所需。       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnViewChanged 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   syntax:
     content: protected virtual void OnViewChanged (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> object that contains the event data."
+      description: "<xref:System.EventArgs>物件，其中包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.LoginView.OnViewChanged*
   exceptions: []
   platform:
@@ -443,14 +443,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.LoginView.ViewChanging&quot;></xref> event before the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control switches views."
-  remarks: "When the <xref:System.Web.UI.WebControls.LoginView> controls switches views, it removes the controls from the previous template and creates new child controls from the new template. The OnViewChanging method is called before the previous controls are removed.       Use the OnViewChanging method to perform any necessary processing, such as saving control information, before the controls are removed.       Raising an event invokes the event handler through a delegate. For more information, see [NIB: Raising an Event](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2).       The OnViewChanging method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
+  summary: "引發<xref href=&quot;System.Web.UI.WebControls.LoginView.ViewChanging&quot;></xref>事件之前<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項切換檢視。"
+  remarks: "當<xref:System.Web.UI.WebControls.LoginView>控制項切換檢視，從先前的範本移除控制項，並從新的範本建立新的子控制項。</xref:System.Web.UI.WebControls.LoginView> 移除先前的控制項之前，會呼叫 OnViewChanging 方法。       若要執行任何所需的處理，例如儲存控制資訊，控制項會遭到移除之前使用 OnViewChanging 方法。       引發事件會透過委派事件處理常式叫用。 如需詳細資訊，請參閱[NIB︰ 引發事件](http://msdn.microsoft.com/en-us/f2adaf01-1ed1-42e1-8c31-8d467e7e0ee2)。       OnViewChanging 方法也允許衍生的類別處理事件，而不用附加委派。 這是處理衍生類別中的事件的慣用的技巧。"
   syntax:
     content: protected virtual void OnViewChanging (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> object that contains the event data."
+      description: "<xref:System.EventArgs>物件，其中包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.LoginView.OnViewChanging*
   exceptions: []
   platform:
@@ -467,14 +467,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Renders the Web server control content to the client&quot;s browser using the specified <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> object."
-  remarks: "The Render method is used to render the server control content to the client&quot;s browser using the specified <xref:System.Web.UI.HtmlTextWriter?displayProperty=fullName> object.       **Note** This method is used primarily by control developers to extend the <xref:System.Web.UI.WebControls.LoginView> control."
+  summary: "呈現使用指定的用戶端瀏覽器至 Web 伺服器控制項內容<xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref>物件。"
+  remarks: "Render 方法用來呈現伺服器控制項內容，以使用指定的用戶端瀏覽器<xref:System.Web.UI.HtmlTextWriter?displayProperty=fullName>物件。</xref:System.Web.UI.HtmlTextWriter?displayProperty=fullName>       **請注意**這個方法用於主要由控制項開發人員擴充<xref:System.Web.UI.WebControls.LoginView>控制項。</xref:System.Web.UI.WebControls.LoginView>"
   syntax:
     content: protected override void Render (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "The <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> used to render the server control content on the client&quot;s browser."
+      description: "<xref href=&quot;System.Web.UI.HtmlTextWriter&quot;> </xref>用來呈現伺服器控制項內容的用戶端瀏覽器上。"
   overload: System.Web.UI.WebControls.LoginView.Render*
   exceptions: []
   platform:
@@ -491,15 +491,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets a collection of role groups that associate content templates with particular roles."
-  remarks: "The RoleGroups property contains the content templates associated with various roles on the Web site. The collection in the RoleGroups property is searched in the order in which templates are defined in the source. The first matching role-group template is displayed to the user. If a user is a member of more than one role, the first role-group template that matches any of the user&quot;s roles is used. If more than one template is associated with a single role, only the first defined template will be used.       If a logged-in user does not belong to any role contained in the role-group collection, the site displays the content template specified in the <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> property. Anonymous users are never shown any template contained in the RoleGroups collection.       You must configure role management to use the RoleGroups property to define templates based on the user&quot;s role on the Web site. For more information, see [Understanding Role Management](~/add/includes/ajax-current-ext-md.md).       This property cannot be set by themes or style sheet themes. For more information, see <xref:System.Web.UI.ThemeableAttribute> and [ASP.NET Themes and Skins](~/add/includes/ajax-current-ext-md.md)."
+  summary: "取得與特定角色產生關聯範本內容的角色群組的集合。"
+  remarks: "RoleGroups 屬性包含在網站上的各種角色與相關聯的內容範本。 範本定義在來源中的順序搜尋 RoleGroups 屬性中的集合。 比對的第一個角色群組範本會顯示給使用者。 如果使用者是多個角色的成員，則會使用第一個符合任何使用者角色的角色群組範本。 如果多個範本是與單一角色相關聯，則將使用只有第一個定義的範本。       如果登入的使用者不屬於任何角色群組集合中包含的角色，網站會顯示內容中指定的範本<xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A>屬性。</xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> 匿名使用者永遠不會顯示任何 RoleGroups 集合中包含的範本。       您必須設定為使用 RoleGroups 屬性定義在網站上的使用者的角色為基礎的範本的角色管理。 如需詳細資訊，請參閱[了解角色管理](~/add/includes/ajax-current-ext-md.md)。       無法設定這個屬性的主題或樣式表主題。 如需詳細資訊，請參閱<xref:System.Web.UI.ThemeableAttribute>和[ASP.NET 佈景主題和面板](~/add/includes/ajax-current-ext-md.md)。</xref:System.Web.UI.ThemeableAttribute>"
   example:
   - "The following code example demonstrates using the RoleGroups collection. Because the <xref:System.Web.UI.WebControls.LoginView.AnonymousTemplate%2A> and <xref:System.Web.UI.WebControls.LoginView.LoggedInTemplate%2A> properties are not set, the content is displayed only to users who belong to roles with a defined content template.  \n  \n [!code-vb[LoginViewRoleGroups#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_566_1.aspx)]\n [!code-cs[LoginViewRoleGroups#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_566_1.aspx)]"
   syntax:
     content: public virtual System.Web.UI.WebControls.RoleGroupCollection RoleGroups { get; }
     return:
       type: System.Web.UI.WebControls.RoleGroupCollection
-      description: "A <xref href=&quot;System.Web.UI.WebControls.RoleGroupCollection&quot;></xref> object that contains the defined role-group templates."
+      description: "A <xref href=&quot;System.Web.UI.WebControls.RoleGroupCollection&quot;> </xref>物件，其中包含定義的角色群組範本。"
   overload: System.Web.UI.WebControls.LoginView.RoleGroups*
   exceptions: []
   platform:
@@ -516,13 +516,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Saves any server control state changes that have occurred since the time the page was posted back to the server."
+  summary: "儲存自頁面回傳至伺服器的時間後發生的狀態變更的任何伺服器控制項。"
   syntax:
     content: protected override object SaveControlState ();
     parameters: []
     return:
       type: System.Object
-      description: "Returns the server control&quot;s current state. If there is no state associated with the control, this method returns <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "傳回伺服器控制項的目前狀態。 如果沒有與控制項相關聯的狀態，則這個方法會傳回<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。"
   overload: System.Web.UI.WebControls.LoginView.SaveControlState*
   exceptions: []
   platform:
@@ -539,13 +539,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Sets design-time data for a control."
+  summary: "設定控制項的設計階段資料。"
   syntax:
     content: protected override void SetDesignModeState (System.Collections.IDictionary data);
     parameters:
     - id: data
       type: System.Collections.IDictionary
-      description: "An <xref:System.Collections.IDictionary> containing the design-time data for the control."
+      description: "<xref:System.Collections.IDictionary>包含控制項的設計階段資料。</xref:System.Collections.IDictionary>"
   overload: System.Web.UI.WebControls.LoginView.SetDesignModeState*
   exceptions: []
   platform:
@@ -562,18 +562,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the skin to apply to the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control."
-  remarks: "Skins available to a control are contained in one or more skin files in a theme directory. The SkinID property specifies which of these skins to apply to the control. A skin is specific to a particular control; you cannot share skin settings between controls of different types.       If you do not set the SkinID property, a control uses the default skin if one is defined. For example, if a skin without an ID is defined for an <xref:System.Web.UI.WebControls.Image> control, then that skin applies to all <xref:System.Web.UI.WebControls.Image> controls that do not explicitly reference a skin by ID and that are not set to disable theming. If a skin with an ID is defined for an <xref:System.Web.UI.WebControls.Image> control, then that skin applies only to <xref:System.Web.UI.WebControls.Image> controls whose <xref:System.Web.UI.WebControls.WebControl.SkinID%2A> is set to that ID.       If the skin files in a theme directory do not contain a skin with the specified SkinID, an <xref:System.ArgumentException> exception is thrown at run time."
+  summary: "取得或設定要套用至面板<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。"
+  remarks: "控制項可以使用的面板包含一或多個主題目錄中的面板檔案中。 SkinID 屬性會指定其中一個這些要套用至控制項的面板。 面板是控制項專屬的特定;您無法共用不同類型的控制項之間的外觀設定。       如果您未設定 SkinID 屬性，控制有已定義，就會使用預設面板。 例如，如果沒有面板識別碼定義為<xref:System.Web.UI.WebControls.Image>控制，則該面板適用於所有<xref:System.Web.UI.WebControls.Image>控制項，未明確參考識別碼的外觀和，未設定為停用主題設定。</xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.WebControls.Image> 如果識別碼的面板定義<xref:System.Web.UI.WebControls.Image>控制項，然後，面板只適用於<xref:System.Web.UI.WebControls.Image>控制<xref:System.Web.UI.WebControls.WebControl.SkinID%2A>設定為該 id。</xref:System.Web.UI.WebControls.WebControl.SkinID%2A> </xref:System.Web.UI.WebControls.Image> </xref:System.Web.UI.WebControls.Image>       如果主題目錄中的面板檔案未包含具有指定 SkinID，面板<xref:System.ArgumentException>在執行階段擲回例外狀況。</xref:System.ArgumentException>"
   syntax:
     content: public override string SkinID { get; set; }
     return:
       type: System.String
-      description: "The name of the skin to apply to the <xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref> control. The default value is an empty string (&quot;&quot;)."
+      description: "要套用至面板名稱<xref href=&quot;System.Web.UI.WebControls.LoginView&quot;></xref>控制項。 預設值為空字串 (&quot;&quot;)。"
   overload: System.Web.UI.WebControls.LoginView.SkinID*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The skin specified in the SkinID property does not exist in the theme."
+    description: "佈景主題中的面板 SkinID 屬性中指定不存在。"
   platform:
   - net462
 - uid: System.Web.UI.WebControls.LoginView.ViewChanged
@@ -588,13 +588,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs after the view is changed."
-  remarks: "When the <xref:System.Web.UI.WebControls.LoginView> control switches views, it removes the controls from the previous template and creates new child controls from the new template. The ViewChanged event is raised after the new child controls are created.       Use the ViewChanged event to perform any processing, such as data binding, necessary to initialize the controls on the new view.      > [!NOTE] >  The ViewChanged event is only raised if the login status for a user changes during a postback to the page. The ViewChanged event will not be raised if a user logs in using the <xref:System.Web.UI.WebControls.Login> control, or if the user logs out using the <xref:System.Web.UI.WebControls.LoginStatus> control. The ViewChanged event will also not occur if a user is logged in or out followed by a redirect. An example of when the ViewChanged event will occur is when a user is logged out by calling the <xref:System.Web.Security.FormsAuthentication.SignOut%2A> method without being redirected to another page. During the next postback to the page, the <xref:System.Web.UI.WebControls.LoginView> control will detect the change in the login status for the user, and then raise the ViewChanged event.       For more information about handling events, see [Events](~/add/includes/ajax-current-ext-md.md)."
+  summary: "在檢視表變更之後發生。"
+  remarks: "當<xref:System.Web.UI.WebControls.LoginView>控制項切換檢視，從先前的範本移除控制項，並從新的範本建立新的子控制項。</xref:System.Web.UI.WebControls.LoginView> 建立新的子控制項之後，會引發 ViewChanged 事件。       使用 ViewChanged 事件執行任何處理，例如資料繫結，才能初始化新的檢視表的控制項。      > [!NOTE] > ViewChanged 事件才會引發使用者的登入狀態變更期間回傳至頁面。 如果使用者登入使用，不會引發 ViewChanged 事件<xref:System.Web.UI.WebControls.Login>控制項，或如果使用者登出使用<xref:System.Web.UI.WebControls.LoginStatus>控制項。</xref:System.Web.UI.WebControls.LoginStatus> </xref:System.Web.UI.WebControls.Login> ViewChanged 事件也不會發生在使用者是登入或出後面接著重新導向。 舉例來說，ViewChanged 事件將會發生的時機是當使用者登出藉由呼叫<xref:System.Web.Security.FormsAuthentication.SignOut%2A>方法不會重新導向至另一個頁面。</xref:System.Web.Security.FormsAuthentication.SignOut%2A> 頁面上，以在下一步回傳期間<xref:System.Web.UI.WebControls.LoginView>控制項將會在使用者登入狀態中偵測到變更，然後再引發 ViewChanged 事件。</xref:System.Web.UI.WebControls.LoginView>       如需處理事件的詳細資訊，請參閱[事件](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public event EventHandler ViewChanged;
     return:
       type: System.EventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -610,13 +610,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs before the view is changed."
-  remarks: "When the <xref:System.Web.UI.WebControls.LoginView> control switches views, it removes the controls from the previous template and creates new child controls from the new template. The ViewChanging event is raised before the previous controls are removed.       Use the ViewChanging event to perform any processing, such as saving control information, necessary before the controls are removed.      > [!NOTE] >  The ViewChanging event is only raised if the login status for a user changes during a postback to the page. The ViewChanging event will not be raised if a user logs in using the <xref:System.Web.UI.WebControls.Login> control, or if the user logs out using the <xref:System.Web.UI.WebControls.LoginStatus> control. The ViewChanging event will also not occur if a user is logged in or out followed by a redirect. An example of when the ViewChanging event will occur is when a user is logged out by calling the <xref:System.Web.Security.FormsAuthentication.SignOut%2A> method without being redirected to another page. During the next postback to the page, the <xref:System.Web.UI.WebControls.LoginView> control will detect the change in the login status for the user, and then raise the ViewChanging event.       For more information about handling events, see [Events](~/add/includes/ajax-current-ext-md.md)."
+  summary: "在檢視表變更之前發生。"
+  remarks: "當<xref:System.Web.UI.WebControls.LoginView>控制項切換檢視，從先前的範本移除控制項，並從新的範本建立新的子控制項。</xref:System.Web.UI.WebControls.LoginView> 移除先前的控制項之前，會引發 ViewChanging 事件。       您可以使用 ViewChanging 事件執行任何處理，例如儲存所需的控制項資訊之前，控制項會遭到移除。      > [!NOTE] > ViewChanging 事件才會引發使用者的登入狀態變更期間回傳至頁面。 如果使用者登入使用，不會引發 ViewChanging 事件<xref:System.Web.UI.WebControls.Login>控制項，或如果使用者登出使用<xref:System.Web.UI.WebControls.LoginStatus>控制項。</xref:System.Web.UI.WebControls.LoginStatus> </xref:System.Web.UI.WebControls.Login> ViewChanging 事件也不會發生在使用者是登入或出後面接著重新導向。 舉例來說，ViewChanging 事件將會發生的時機是當使用者登出藉由呼叫<xref:System.Web.Security.FormsAuthentication.SignOut%2A>方法不會重新導向至另一個頁面。</xref:System.Web.Security.FormsAuthentication.SignOut%2A> 頁面上，以在下一步回傳期間<xref:System.Web.UI.WebControls.LoginView>控制項將會在使用者登入狀態中偵測到變更，然後再引發 ViewChanging 事件。</xref:System.Web.UI.WebControls.LoginView>       如需處理事件的詳細資訊，請參閱[事件](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public event EventHandler ViewChanging;
     return:
       type: System.EventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
