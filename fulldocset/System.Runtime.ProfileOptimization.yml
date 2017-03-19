@@ -11,8 +11,8 @@ items:
   nameWithType: ProfileOptimization
   fullName: System.Runtime.ProfileOptimization
   type: Class
-  summary: "Improves the startup performance of application domains in applications that require the just-in-time (JIT) compiler by performing background compilation of methods that are likely to be executed, based on profiles created during previous compilations."
-  remarks: "> [!IMPORTANT] >  Profile optimization requires a multicore computer. The methods are ignored on other computers.       Each time you initiate profile optimization in an application domain, the profile that was created during the previous use is read. The information in the profile is used to guide background compilation by identifying the methods that are most likely to be executed during startup. On multicore computers, this increases the chances that a method is already compiled by the time it is needed so that the main application thread does not have to call the JIT compiler.       The profile file is overwritten on each use, so it always contains the most recent information about which methods are used during startup.       Optimization profiles are not restricted to application domain startup. They can be used for any activity that will require heavy use of the JIT compiler. You can maintain multiple profiles for an application domain so that each such activity has its own profile.       To use optimization profiles in an application domain, you must call the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method and specify the folder where profiles are stored. The folder must already exist. To begin using a profile, call the <xref:System.Runtime.ProfileOptimization.StartProfile%2A> method and specify the file name of the profile. If the file was not recorded previously, it is created on first use. There is no performance benefit the first time a profile is created.       Profile optimization does not change the order in which methods are executed. Methods are not executed on the background thread; if a method is compiled but never called, it is simply not used. If a profile file is corrupt or cannot be written to the specified folder (for example, because the folder does not exist), program execution continues without optimization profiling."
+  summary: "改善應用程式網域，需要在 just-in-time (JIT) 編譯器所執行的方法來執行，可能在先前的編譯期間所建立設定檔為基礎的背景編譯的應用程式的啟動的效能。"
+  remarks: "> [!IMPORTANT]> 設定檔最佳化需要多核心電腦。 方法會忽略其他電腦上。       已建立在先前使用的設定檔會讀取每次啟動應用程式定義域中的設定檔最佳化。 設定檔中的資訊可用來引導背景編譯藉由識別最有可能在啟動期間執行的方法。 在多核心電腦上已經是一種方法的機會，這項提升編譯所需要的讓主應用程式執行緒並沒有呼叫 JIT 編譯器的時間。       讓它一律包含最新的資訊了解哪種方法可用來在啟動期間，在每個使用時，會覆寫的設定檔。       最佳化的設定檔不受限制應用程式定義域的啟動。 它們可以用於任何活動都將需要大量 JIT 編譯器使用。 您可以維護應用程式定義域的多個設定檔，使每個這類活動具有自己的設定檔。       若要使用最佳化的設定檔，應用程式定義域中，您必須呼叫<xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A>方法並指定儲存設定檔的資料夾。</xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> 該資料夾必須已經存在。 若要開始使用設定檔，請呼叫<xref:System.Runtime.ProfileOptimization.StartProfile%2A>方法並指定設定檔的檔案名稱。</xref:System.Runtime.ProfileOptimization.StartProfile%2A> 如果沒有先前記錄的檔案，它會建立第一次使用。 沒有效能優點第一個時間在建立設定檔。       設定檔最佳化不會變更的方法會執行的順序。 方法不會在背景執行緒上執行如果方法是編譯，但永遠不會呼叫，它就只是無法使用。 如果設定檔已損毀或無法寫入指定的資料夾 （例如，因為資料夾不存在），程式會繼續執行而不在最佳化程式碼剖析。"
   syntax:
     content: public static class ProfileOptimization
   inheritance:
@@ -33,14 +33,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime
-  summary: "Enables optimization profiling for the current application domain, and sets the folder where the optimization profile files are stored. On a single-core computer, the method is ignored."
-  remarks: "You must call this method before you call the <xref:System.Runtime.ProfileOptimization.StartProfile%2A> method for the first time in the current application domain. If you call SetProfileRoot more than once in the same application domain, all calls after the first are ignored.       The specified folder must already exist. If it does not exist, calling this method does not create it, and no profiling occurs.       On computers that do not have multiple cores, this method is ignored."
+  summary: "啟用目前的應用程式定義域的程式碼剖析的最佳化，並設定儲存最佳化的設定檔檔案的資料夾。 在單一核心電腦上，此方法會被忽略。"
+  remarks: "您必須先呼叫這個方法，才能呼叫<xref:System.Runtime.ProfileOptimization.StartProfile%2A>第一次目前的應用程式定義域中的方法。</xref:System.Runtime.ProfileOptimization.StartProfile%2A> 如果您呼叫 SetProfileRoot 一次以上，請在相同的應用程式定義域會忽略第一個以外的所有呼叫。       指定的資料夾必須已經存在。 如果不存在，呼叫這個方法不會建立它，而且沒有程式碼剖析。       在電腦上沒有多個核心，這個方法會被忽略。"
   syntax:
     content: public static void SetProfileRoot (string directoryPath);
     parameters:
     - id: directoryPath
       type: System.String
-      description: "The full path to the folder where profile files are stored for the current application domain."
+      description: "目前的應用程式定義域的儲存設定檔的資料夾完整路徑。"
   overload: System.Runtime.ProfileOptimization.SetProfileRoot*
   exceptions: []
   platform:
@@ -57,14 +57,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime
-  summary: "Starts just-in-time (JIT) compilation of the methods that were previously recorded in the specified profile file, on a background thread. Starts the process of recording current method use, which later overwrites the specified profile file."
-  remarks: "If the specified profile exists in the folder specified by the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method, the information it contains is used to determine the order in which methods are compiled on the background thread. The StartProfile method creates the profile if it does not already exist, and initiates the recording of method use.       Only methods that are actually called are recorded, regardless of whether they were compiled on the background thread or on the main application thread. A method is compiled on the main application thread if the application needs to call it before the background thread has compiled it.       The code that performs the recording tracks the rate at which methods are compiled, including methods that are compiled on both the background thread and on the main thread. When the rate falls below a predetermined level, recording stops. Recording also stops if the rate of JIT compilation exceeds a predetermined upper limit.       If the <xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> method has not been called for the current application domain, or if the computer does not have multiple cores, the StartProfile method has no effect."
+  summary: "開始在 just-in-time (JIT) 編譯先前已記錄在指定的設定檔檔案中，在背景執行緒上的方法。 開始記錄目前的方法使用，稍後會覆寫指定的設定檔的程序。"
+  remarks: "如果指定的設定檔存在於所指定的資料夾<xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A>方法，其內含的資訊用來決定的順序編譯背景執行緒的方法。</xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A> 如果它不存在，並初始錄製的方法使用 StartProfile 方法來建立設定檔。       記錄實際呼叫的方法，不論它們所編譯的背景執行緒上或在主應用程式的執行緒上。 如果應用程式需要呼叫它的背景執行緒已編譯它之前，會在主應用程式的執行緒上編譯方法。       執行記錄的程式碼追蹤的速率，此時方法會進行編譯，包括主執行緒和背景執行緒上所編譯的方法。 當速率低於預先決定的層級，記錄就會停止。 如果在 JIT 編譯的速率超過預先決定的時間上限，也會停止錄製。       如果<xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A>不針對目前的應用程式定義域中，呼叫方法，或如果電腦沒有多個核心，StartProfile 方法沒有任何作用。</xref:System.Runtime.ProfileOptimization.SetProfileRoot%2A>"
   syntax:
     content: public static void StartProfile (string profile);
     parameters:
     - id: profile
       type: System.String
-      description: "The file name of the profile to use."
+      description: "若要使用的設定檔檔案名稱。"
   overload: System.Runtime.ProfileOptimization.StartProfile*
   exceptions: []
   platform:
