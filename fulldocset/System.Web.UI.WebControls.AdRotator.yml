@@ -26,8 +26,8 @@ items:
   nameWithType: AdRotator
   fullName: System.Web.UI.WebControls.AdRotator
   type: Class
-  summary: "Displays an advertisement banner on a Web page."
-  remarks: "In this topic:      -   [Introduction](#Introduction)      -   [XML Advertisement File Format](#XMLAdvertisementFileFormat)      -   [Declarative Syntax](#DeclarativeSyntax)      <a name=&quot;Introduction&quot;></a>    ## Introduction    Use the AdRotator control to display a randomly selected advertisement banner on the Web page. The displayed advertisement changes whenever the page refreshes.       Advertisement information is stored in a separate XML file. The XML file allows you to maintain a list of advertisements and their associated attributes. Attributes include the path to an image to display, the URL to link to when the control is clicked, the alternate text to display when the image is not available, a keyword, and the frequency of the advertisement. Information in this file is not validated by the AdRotator control. To prevent ads from executing malicious scripts, you should always check the data before releasing it, or accept ad information only from trusted sources.       To secure your advertisement file from unauthorized Internet access, do one or more of the following:      -   Store it in the App_Data directory, which is configured to deny Internet access for files of any type.      -   Rename the file with an extension that is not .xml, and map the extension to the `HttpForbiddenHandler` in Web.config. For more information, see the  section in your Machine.config file.       As an alternative to an XML file as the source of data, it is possible to provide advertisement information through a callback event. This event can also be used in combination with the XML file to extend the behavior of the AdRotator control, such as redirecting to another page. See the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property for additional information on the file format.      > [!NOTE] >  When page caching is enabled, an AdRotator control is not cached. A new advertisement is selected whenever the Web page refreshes. A new advertisement is not selected, however, if you provide an event handler for the <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event.      <a name=&quot;XMLAdvertisementFileFormat&quot;></a>    ## XML Advertisement File Format    The AdRotator control uses a separate XML advertisement file to store the advertisement information, such as the location of the image to display and the URL of the page to link to. The <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property of the AdRotator control specifies the path to this file.       When creating the advertisement file, opening and closing `<Advertisements>` tags mark the beginning and the end of the file, respectively. Opening and closing `<Ad>` tags delimit each advertisement. All advertisements are nested between the opening and closing `<Advertisements>` tags. If the file contains multiple `<Advertisements>` tags, only the first set of `<Advertisements>` tags in the file will be parsed by the AdRotator control. All other `<Advertisements>` tags will be ignored.       The data elements for each advertisement are nested between the opening and closing `<Ad>` tags. Although certain data elements are predefined (such as <xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A> and <xref:System.Web.UI.WebControls.AdCreatedEventArgs.NavigateUrl%2A>), you can place custom elements between the `<Ad>` tags. These elements will be read by the AdRotator control when it parses the file. The information is then passed to the <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event in the <xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A> dictionary property.       The following table lists the data elements that are predefined for the XML advertisement file.      |Element|Description|   |-------------|-----------------|   |`ImageUrl`|The absolute or relative URL to an image file (optional).|   |`NavigateUrl`|The URL of a page to link to if the user clicks the ad (optional). **Note:**  If this element is not set, the `HRef` property is not rendered on the anchor tag.|   |`Height`|The height of the image, in pixels (optional).|   |`Width`|The width of the image, in pixels (optional).|   |`AlternateText`|The text display in place of the image when the image specified by the <xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A> property is not available (optional).<br /><br /> In some browsers, this text also appears as a `ToolTip` for the advertisement.|   |`Keyword`|A category for the advertisement (for example, &quot;computers&quot;) that you can filter by (optional).|   |`Impressions`|A number that indicates the importance of the ad in the schedule of rotation relative to the other ads in the file (optional).<br /><br /> The larger the number, the more often the ad is displayed. The total of all `<Impressions>` values in the XML file cannot exceed 2,047,999,999*.* If it does, the AdRotator control throws a run-time exception.|       The following example shows the format for the XML advertisement file.      ```   <Advertisements>     <Ad>       <ImageUrl>         URL of image to display for Advertisement #1       </ImageUrl>       <NavigateUrl>         URL of page to link to for Advertisement #1       </NavigateUrl>       <AlternateText>         Text to show as a ToolTip for Advertisement #1       </AlternateText>       <Keyword>         Keyword used to filter for Advertisement #1       </Keyword>       <Impressions>          Relative importance of Advertisement #1       </Impressions>       <CustomInformation>         Custom Data about Advertisement #1       </CustomInformation>     </Ad>   </Advertisements>   ```      <a name=&quot;DeclarativeSyntax&quot;></a>    ## Declarative Syntax      ```   <asp:AdRotator       AccessKey=&quot;string&quot;       AdvertisementFile=&quot;uri&quot;       AlternateTextField=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CssClass=&quot;string&quot;       DataMember=&quot;string&quot;       DataSource=&quot;string&quot;       DataSourceID=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       ImageUrlField=&quot;string&quot;       KeywordFilter=&quot;string&quot;       NavigateUrlField=&quot;string&quot;       OnAdCreated=&quot;AdCreated event handler&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDataBound=&quot;DataBound event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       Target=&quot;string|_blank|_parent|_search|_self|_top&quot;       ToolTip=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   />   ```"
+  summary: "在網頁上顯示廣告橫幅。"
+  remarks: "本主題內容:-[簡介](#Introduction)      -   [XML 通知檔案格式](#XMLAdvertisementFileFormat)      -   [宣告式語法](#DeclarativeSyntax)<a name=&quot;Introduction&quot;> </a> # # 簡介使用 AdRotator 控制項在網頁上顯示隨機選取的廣告橫幅。       頁面重新整理時，就會變更顯示的廣告。       廣告資訊會儲存在個別的 XML 檔案。 XML 檔案，可讓您維護的廣告和其相關聯的屬性清單。 屬性包含要顯示，請按下控制項時，要顯示的映像無法使用時的替代文字、 關鍵字和廣告的頻率時所要連結的 URL 影像的路徑。 AdRotator 控制項不會驗證此檔案中的資訊。 若要防止執行惡意指令碼的廣告，應該一律釋放，之前，先檢查資料或接受來自信任來源的廣告資訊。       若要保護防止未經授權的網際網路存取廣告檔，執行下列其中一個或多個項目:-將它儲存在 App_Data 目錄中，設定為拒絕任何類型檔案的網際網路存取。      -不是.xml 副檔名的檔案重新命名，並將對應的擴充功能`HttpForbiddenHandler`Web.config 中。 如需詳細資訊，請參閱 Machine.config 檔案中的區段。       替代的資料來源為 XML 檔案很可能提供廣告資訊透過回呼事件。 此事件也可用在組合中與 XML 檔案來擴充 AdRotator 控制項，例如重新導向至另一個網頁的行為。 請參閱<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>屬性，如需有關檔案格式。</xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>      > [!NOTE] > 網頁快取啟用時，AdRotator 控制項不會快取。 每當重新整理網頁時，會選取新的廣告。 新公告未選取，不過，如果您提供的事件處理常式<xref:System.Web.UI.WebControls.AdRotator.AdCreated>事件。</xref:System.Web.UI.WebControls.AdRotator.AdCreated>      <a name=&quot;XMLAdvertisementFileFormat&quot;></a># # XML 通知檔案格式 AdRotator 控制使用個別的 XML 通知檔案會儲存通知資訊，例如要顯示之影像的位置以及連結至網頁的 URL。 <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>AdRotator 控制項的屬性會指定這個檔案的路徑。</xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>       建立通知檔案時，開頭和結尾`<Advertisements>`標記標示開頭和結束的檔案，分別。 開啟和關閉`<Ad>`標籤分隔每個廣告。 所有公告都巢都嵌在開頭和結尾之間`<Advertisements>`標記。 如果檔案包含多個`<Advertisements>`標記，只有第一組`<Advertisements>`AdRotator 控制項將會剖析檔案中的標記。 所有其他`<Advertisements>`標記將會被忽略。       每個廣告的資料元素的開頭和結尾之間巢狀`<Ad>`標記。 雖然預先定義的特定資料元素 (例如<xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A>和<xref:System.Web.UI.WebControls.AdCreatedEventArgs.NavigateUrl%2A>)，您可以將自訂項目之間`<Ad>`標記。</xref:System.Web.UI.WebControls.AdCreatedEventArgs.NavigateUrl%2A> </xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A> AdRotator 控制項會讀取這些項目，它會剖析檔案時。 資訊會傳遞至<xref:System.Web.UI.WebControls.AdRotator.AdCreated>中的事件<xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A>字典屬性。</xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A> </xref:System.Web.UI.WebControls.AdRotator.AdCreated>       下表列出預先定義的 XML 通知檔案的資料元素。      |項目 |描述 |  |-------------|-----------------|  |`ImageUrl`|（選擇性） 的映像檔的絕對或相對 URL。 |  |`NavigateUrl`|如果使用者按一下廣告 （選擇性） 連結到網頁的 URL。 **注意︰**如果未設定這個項目，`HRef`屬性不會呈現錨點標籤上。 |  |`Height`|（選擇性） 的像素為單位的影像的高度。 |  |`Width`|（選擇性） 的像素為單位的影像的寬度。 |  |`AlternateText`|所指定的映像的映像取代的文字顯示<xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A>便無法使用屬性 （選擇性）。</xref:System.Web.UI.WebControls.AdCreatedEventArgs.ImageUrl%2A><br /><br /> 在某些瀏覽器中，此文字也會顯示為`ToolTip`廣告。 |  |`Keyword`|公告 （例如，「 電腦 」），您可以篩選 （選用） 的類別。 |  |`Impressions`|數字，指出在相對於其他廣告 （選擇性） 檔案中的循環排程廣告的重要性。<br /><br /> 較大的數目，越常 ad 隨即出現。 所有目的總計`<Impressions>`XML 檔中的值不能超過 2,047,999,999*。* 若是如此，AdRotator 控制項就會擲回執行階段例外狀況。 |      下列範例顯示 XML 通知檔案的格式。      ```   <Advertisements>     <Ad>       <ImageUrl>         URL of image to display for Advertisement #1       </ImageUrl>       <NavigateUrl>         URL of page to link to for Advertisement #1       </NavigateUrl>       <AlternateText>         Text to show as a ToolTip for Advertisement #1       </AlternateText>       <Keyword>         Keyword used to filter for Advertisement #1       </Keyword>       <Impressions>          Relative importance of Advertisement #1       </Impressions>       <CustomInformation>         Custom Data about Advertisement #1       </CustomInformation>     </Ad>   </Advertisements>   ```      <a name=&quot;DeclarativeSyntax&quot;></a># # 宣告式語法```   <asp:AdRotator       AccessKey=&quot;string&quot;       AdvertisementFile=&quot;uri&quot;       AlternateTextField=&quot;string&quot;       BackColor=&quot;color name|#dddddd&quot;       BorderColor=&quot;color name|#dddddd&quot;       BorderStyle=&quot;NotSet|None|Dotted|Dashed|Solid|Double|Groove|Ridge|           Inset|Outset&quot;       BorderWidth=&quot;size&quot;       CssClass=&quot;string&quot;       DataMember=&quot;string&quot;       DataSource=&quot;string&quot;       DataSourceID=&quot;string&quot;       Enabled=&quot;True|False&quot;       EnableTheming=&quot;True|False&quot;       EnableViewState=&quot;True|False&quot;       ForeColor=&quot;color name|#dddddd&quot;       Height=&quot;size&quot;       ID=&quot;string&quot;       ImageUrlField=&quot;string&quot;       KeywordFilter=&quot;string&quot;       NavigateUrlField=&quot;string&quot;       OnAdCreated=&quot;AdCreated event handler&quot;       OnDataBinding=&quot;DataBinding event handler&quot;       OnDataBound=&quot;DataBound event handler&quot;       OnDisposed=&quot;Disposed event handler&quot;       OnInit=&quot;Init event handler&quot;       OnLoad=&quot;Load event handler&quot;       OnPreRender=&quot;PreRender event handler&quot;       OnUnload=&quot;Unload event handler&quot;       runat=&quot;server&quot;       SkinID=&quot;string&quot;       Style=&quot;string&quot;       TabIndex=&quot;integer&quot;       Target=&quot;string|_blank|_parent|_search|_self|_top&quot;       ToolTip=&quot;string&quot;       Visible=&quot;True|False&quot;       Width=&quot;size&quot;   />   ```"
   example:
   - "The following code example demonstrates how to use the AdRotator control to display an advertisement banner on a Web page.  \n  \n [!code-cs[classic adrotator.advertisementfile example#1](~/add/codesnippet/csharp/t-system.web.ui.webcontr_52_1.aspx)]\n [!code-vb[classic adrotator.advertisementfile example#1](~/add/codesnippet/visualbasic/t-system.web.ui.webcontr_52_1.aspx)]  \n  \n The following code example demonstrates the file format for an XML file that contains advertisement information for the previous example. For more information on the file format, see the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> member.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <height>60</height>  \n    <width>190</width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic1</Keyword>  \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <height>90</height>  \n    <width>90</width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic2</Keyword>  \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
@@ -226,8 +226,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Initializes a new instance of the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> class."
-  remarks: "Use this constructor to create and initialize a new instance of the <xref:System.Web.UI.WebControls.AdRotator> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>類別。"
+  remarks: "建立和初始化<xref:System.Web.UI.WebControls.AdRotator>類別</xref:System.Web.UI.WebControls.AdRotator>的新執行個體使用這個建構函式"
   example:
   - "The following code example demonstrates how to create and initialize a new instance of the <xref:System.Web.UI.WebControls.AdRotator> class. The new <xref:System.Web.UI.WebControls.AdRotator> control is then added to the <xref:System.Web.UI.Control.Controls%2A?displayProperty=fullName> collection of a <xref:System.Web.UI.WebControls.PlaceHolder> control and displayed on the Web Forms page.  \n  \n> [!NOTE]\n>  The following code sample uses the single-file code model and may not work correctly if copied directly into a code-behind file. This code sample must be copied into an empty text file that has an .aspx extension. For more information on the Web Forms code model, see [ASP.NET Web Forms Page Code Model](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-vb[AdRotatorCtor#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_208_1.aspx)]\n [!code-cs[AdRotatorCtor#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_208_1.aspx)]"
   syntax:
@@ -249,15 +249,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Occurs once per round trip to the server after the creation of the control, but before the page is rendered."
-  remarks: "This event is raised once per round trip to the server after the creation of the control, but before the page is rendered. When the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property is set, this event occurs after the advertisement has been selected from the file.       You can control how the <xref:System.Web.UI.WebControls.AdRotator> control is displayed by modifying the arguments passed to the event handler of the AdCreated event. If the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property is not set, this allows you to specify the advertisement information directly, without using a separate advertisement file. If the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property is set, this allows you to extend the behavior of the <xref:System.Web.UI.WebControls.AdRotator> control, such as redirecting to another page.      > [!NOTE] >  When page caching is enabled, an <xref:System.Web.UI.WebControls.AdRotator> control is not cached. A new advertisement is selected whenever the Web page refreshes. A new advertisement is not selected, however, if you provide an event handler for the AdCreated event.       For more information about handling events, see [Handling and Raising Events](~/add/includes/ajax-current-ext-md.md)."
+  summary: "轉譯每個往返伺服器建立的控制項之後，但頁面之前發生。"
+  remarks: "一旦呈現每個往返伺服器控制項，但頁面之前在建立後，會引發這個事件。 當<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>屬性設定，就會發生此事件之後已從檔案選取公告。</xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>       您可以控制如何<xref:System.Web.UI.WebControls.AdRotator>控制項會顯示修改傳遞至 AdCreated 事件的事件處理常式的引數。</xref:System.Web.UI.WebControls.AdRotator> 如果<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>未設定屬性，這可讓您直接指定廣告資訊，而不使用個別的廣告檔案。</xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> 如果<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>屬性設定，這可讓您擴充的行為<xref:System.Web.UI.WebControls.AdRotator>控制權，例如重新導向至另一個網頁。</xref:System.Web.UI.WebControls.AdRotator> </xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>      > [!NOTE] > 網頁快取啟用時，<xref:System.Web.UI.WebControls.AdRotator>控制項不會快取。</xref:System.Web.UI.WebControls.AdRotator> 每當重新整理網頁時，會選取新的廣告。 新公告未選取，不過，如果您提供 AdCreated 事件的事件處理常式。       如需處理事件的詳細資訊，請參閱[處理和引發事件](~/add/includes/ajax-current-ext-md.md)。"
   example:
   - "The following code example demonstrates how to specify and code a handler for the AdCreated event. It gets the URL associated with the advertisement, when the <xref:System.Web.UI.WebControls.AdRotator> control is created, and displays it below the control.  \n  \n> [!NOTE]\n>  The following code sample uses the single-file code model and may not work correctly if copied directly into a code-behind file. This code sample must be copied into an empty text file that has an .aspx extension. For more information on the Web Forms code model, see [ASP.NET Web Forms Page Code Model](~/add/includes/ajax-current-ext-md.md).  \n  \n [!code-vb[Classic AdCreatedEventArgs Example#1](~/add/codesnippet/visualbasic/e-system.web.ui.webcontr_113_1.aspx)]\n [!code-cs[Classic AdCreatedEventArgs Example#1](~/add/codesnippet/csharp/e-system.web.ui.webcontr_113_1.aspx)]  \n  \n The following code example demonstrates how to format the XML file that contains the advertisement information. For more information on the XML file, see the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <Height>60</Height>  \n    <Width>190</Width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic1</Keyword>  \n    <Caption>This is the caption for Ad#1</Caption>   \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <Height>90</Height>  \n    <Width>90</Width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic2</Keyword>  \n    <Caption>This is the caption for Ad#2</Caption>   \n  </Ad>  \n</Advertisements>  \n```  \n  \n> [!NOTE]\n>  The following code sample uses the single-file code model and may not work correctly if copied directly into a code-behind file. This code sample must be copied into an empty text file that has an .aspx extension. For more information on the Web Forms code model, see [ASP.NET Web Forms Page Code Model](../Topic/ASP.NET%20Web%20Forms%20Page%20Code%20Model.md).  \n  \n [!code-cs[AdCreatedEventHandler#1](~/add/codesnippet/csharp/e-system.web.ui.webcontr_113_2.aspx)]\n [!code-vb[AdCreatedEventHandler#1](~/add/codesnippet/visualbasic/e-system.web.ui.webcontr_113_2.aspx)]"
   syntax:
     content: public event System.Web.UI.WebControls.AdCreatedEventHandler AdCreated;
     return:
       type: System.Web.UI.WebControls.AdCreatedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -273,15 +273,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the path to an XML file that contains advertisement information."
-  remarks: "Use the AdvertisementFile property to specify the location of an XML file that contains advertisement information. The XML file must reside within the same Web site. For deployment and security purposes, it is strongly recommended that you place the file in the same Web application. It is only possible to access an XML file that is located in a different application on the same site if the application has sufficient trust.       You can set this property to either an absolute path or a path relative to the XML file. Use a relative path to simplify deployment. If you use a relative path, that path is relative to the location of the page or user control that contains the <xref:System.Web.UI.WebControls.AdRotator> control.       The AdvertisementFile property is optional. An advertisement can also be programmatically set in the <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event.       The XML file contains the following predefined attributes. Only the `ImageUrl` attribute is required.      |Attribute|Description|   |---------------|-----------------|   |`ImageUrl`|The URL of the image to display.|   |`Height`|The height of the image, in pixels (optional).|   |`Width`|The width of the image, in pixels (optional).|   |`NavigateUrl`|The URL of the page to navigate to when the <xref:System.Web.UI.WebControls.AdRotator> control is clicked.|   |`AlternateText`|The text to display if the image is unavailable. On some browsers, this text is displayed as a ToolTip.|   |`Keyword`|The category for the advertisement. This is used by the <xref:System.Web.UI.WebControls.AdRotator> control to filter the list of advertisements for a specific category.|   |`Impressions`|A value that indicates how often an advertisement is displayed in relation to other advertisements in the XML file.|      > [!NOTE] >  The `ImageUrl` and `NavigateUrl` attributes can be a full URL, a root-relative path, or a relative path. If you use a root-relative path, the path is relative to the same Web site. If you use a relative path, the path is relative to the directory that contains the advertisement file.       You can also include custom attributes by using custom tags in the XML file. All attribute tags are parsed from the advertisement file, and the values are placed in the <xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A> dictionary. You can use the <xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A> dictionary to programmatically access your custom attributes.       Information in this file is not validated by the <xref:System.Web.UI.WebControls.AdRotator> control. To prevent ads from executing malicious scripts, you should always check the data before releasing it, or accept ad information only from trusted sources.       To secure your advertisement file from unauthorized Internet access, do one or more of the following:      -   Store it in the Data directory, which is configured in Machine.config to deny Internet access for files of any type.      -   Rename the file with an extension that is not .xml, and map the extension to `HttpForbiddenHandler` in Web.config. For more information, see the  section in your Machine.config file."
+  summary: "取得或設定 XML 檔案，其中包含通知資訊的路徑。"
+  remarks: "您可以使用 AdvertisementFile 屬性來指定 XML 檔案，其中包含通知資訊的位置。 XML 檔案必須位於相同的網站。 部署和安全性的理由，強烈建議您將檔案放在相同的 Web 應用程式。 它是只能夠存取應用程式是否充分信任位於相同的站台上的不同應用程式中的 XML 檔案。       您可以設定這個屬性為的絕對路徑或是相對於 XML 檔案的路徑。 為了簡化部署使用的相對路徑。 如果您使用相對路徑，該路徑會相對於網頁或使用者控制項，其中包含位置<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator>       AdvertisementFile 屬性是選擇性的。 公告也可以透過程式設計方式設定<xref:System.Web.UI.WebControls.AdRotator.AdCreated>事件。</xref:System.Web.UI.WebControls.AdRotator.AdCreated>       XML 檔案包含下列預先定義的屬性。 只有`ImageUrl`是必要屬性。      |屬性 |描述 |  |---------------|-----------------|  |`ImageUrl`|若要顯示的影像 URL。 |  |`Height`|（選擇性） 的像素為單位的影像的高度。 |  |`Width`|（選擇性） 的像素為單位的影像的寬度。 |  |`NavigateUrl`|若要在按下<xref:System.Web.UI.WebControls.AdRotator>控制項時，瀏覽至頁面的 URL。 |  |`AlternateText`|無法使用映像時顯示的文字。</xref:System.Web.UI.WebControls.AdRotator> 在某些瀏覽器中，此文字會顯示為工具提示。 |  |`Keyword`|通知類別。 這由<xref:System.Web.UI.WebControls.AdRotator>控制項來篩選特定類別的公告清單。 |  |`Impressions`|值，指出相對於其他 XML 檔案中的廣告顯示廣告的頻率。 |     > [!NOTE] >`ImageUrl`和`NavigateUrl`屬性可以是完整的 URL、 根目錄的相對路徑或相對路徑。</xref:System.Web.UI.WebControls.AdRotator> 如果您使用的根目錄的相對路徑，路徑是相對於相同的網站。 如果您使用相對路徑，路徑是相對於包含廣告檔案的目錄。       您也可以使用 XML 檔案中的自訂標籤，以包含自訂屬性。 從 通告檔案中，剖析的所有屬性標記和值會放在<xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A>字典。</xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A> 您可以使用<xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A>以程式設計方式存取您的自訂屬性的字典。</xref:System.Web.UI.WebControls.AdCreatedEventArgs.AdProperties%2A>       此檔案中的資訊未經過<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator> 若要防止執行惡意指令碼的廣告，應該一律釋放，之前，先檢查資料或接受來自信任來源的廣告資訊。       若要保護防止未經授權的網際網路存取廣告檔，執行下列其中一個或多個項目:-將它儲存在資料目錄中，設定為拒絕任何類型檔案的網際網路存取的 Machine.config 中。      -不是.xml 副檔名的檔案重新命名，並將對應的擴充功能`HttpForbiddenHandler`Web.config 中。 如需詳細資訊，請參閱 Machine.config 檔案中的區段。"
   example:
   - "The following code example demonstrates how to use the AdvertisementFile property to specify the location of the XML file that contains advertisement information.  \n  \n [!code-cs[Classic AdRotator.AdvertisementFile Example#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_1124_1.aspx)]\n [!code-vb[Classic AdRotator.AdvertisementFile Example#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_1124_1.aspx)]  \n  \n The following code example shows the file format of the XML advertisement file.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <Height>60</Height>  \n    <Width>190</Width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic1</Keyword>  \n    <Caption>This is the caption for Ad#1</Caption>   \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <Height>90</Height>  \n    <Width>90</Width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic2</Keyword>  \n    <Caption>This is the caption for Ad#2</Caption>   \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string AdvertisementFile { get; set; }
     return:
       type: System.String
-      description: "The location of an XML file containing advertisement information. The default value is an empty string (&quot;&quot;)."
+      description: "包含通知資訊的 XML 檔案的位置。 預設值為空字串 (&quot;&quot;)。"
   overload: System.Web.UI.WebControls.AdRotator.AdvertisementFile*
   exceptions: []
   platform:
@@ -298,15 +298,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a custom data field to use in place of the <xref uid=&quot;langword_csharp_AlternateText&quot; name=&quot;AlternateText&quot; href=&quot;&quot;></xref> attribute for an advertisement."
-  remarks: "The AlternateTextField property is used to select a custom data field to use in place of the `AlternateText` attribute for an advertisement. Like `AlternateText`, this custom field is defined in the XML file that contains advertisement information."
+  summary: "取得或設定自訂資料欄位，以代替使用<xref uid=&quot;langword_csharp_AlternateText&quot; name=&quot;AlternateText&quot; href=&quot;&quot;></xref>公告的屬性。"
+  remarks: "AlternateTextField 屬性用來選取自訂資料欄位，以代替使用`AlternateText`公告的屬性。 像`AlternateText`，包含通知資訊的 XML 檔案中定義此自訂欄位。"
   example:
   - "The following code example demonstrates using the AlternateTextField property to specify a custom data field. The <xref:System.Web.UI.WebControls.AdRotator.NavigateUrlField%2A>, <xref:System.Web.UI.WebControls.AdRotator.ImageUrlField%2A>, and AlternateTextField properties are used to dynamically select a custom field to use in place of the `NavigateUrl`, `ImageUrl`, and `AlternateText` attributes. This example uses a device filter to indicate that custom fields should be used for Wireless Application Protocol (WAP)-enabled devices.  \n  \n [!code-cs[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_122_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_122_1.aspx)]  \n  \n The following is the sample XML data for the previous example.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/ad1.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com/vbasic/</NavigateUrl>  \n    <AlternateText>Visual Basic Developer Site</AlternateText>  \n    <Width>140</Width>  \n    <Height>100</Height>  \n    <!-- The following custom elements will be used by WAP-enabled  \n      devices. -->  \n    <WmlImageUrl>~/Images/mobileAd1.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobile/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/ad2.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com</NavigateUrl>  \n    <AlternateText>MSDN</AlternateText>  \n    <Width>150</Width>  \n    <Height>150</Height>  \n    <!-- The following custom elements will be used by WAP-enabled  \n      devices. -->  \n    <WmlImageUrl>~/Images/mobileAd2.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobility/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string AlternateTextField { get; set; }
     return:
       type: System.String
-      description: "The name that identifies the field where the alternate text for an advertisement is stored. The default value is &quot;AlternateText.&quot;"
+      description: "識別儲存公告的替代文字的欄位名稱。 預設值是&quot;AlternateText。 」"
   overload: System.Web.UI.WebControls.AdRotator.AlternateTextField*
   exceptions: []
   platform:
@@ -323,12 +323,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the font properties associated with the advertisement banner control."
+  summary: "取得與廣告橫幅控制項相關聯的字型屬性。"
   syntax:
     content: public override System.Web.UI.WebControls.FontInfo Font { get; }
     return:
       type: System.Web.UI.WebControls.FontInfo
-      description: "A <xref href=&quot;System.Web.UI.WebControls.FontInfo&quot;></xref> object that represents the font properties of the control."
+      description: "A <xref href=&quot;System.Web.UI.WebControls.FontInfo&quot;> </xref>物件，代表控制項的字型屬性。"
   overload: System.Web.UI.WebControls.AdRotator.Font*
   exceptions: []
   platform:
@@ -345,15 +345,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a custom data field to use in place of the <xref uid=&quot;langword_csharp_ImageUrl&quot; name=&quot;ImageUrl&quot; href=&quot;&quot;></xref> attribute for an advertisement."
-  remarks: "The ImageUrlField property is used for selecting a custom data field used in place of the `ImageUrl` attribute for an advertisement. Like `ImageUrl`, this custom field is defined in the XML file that contains advertisement information."
+  summary: "取得或設定自訂資料欄位，以代替使用<xref uid=&quot;langword_csharp_ImageUrl&quot; name=&quot;ImageUrl&quot; href=&quot;&quot;></xref>公告的屬性。"
+  remarks: "ImageUrlField 屬性用於選取 自訂資料欄位來代替`ImageUrl`公告的屬性。 像`ImageUrl`，包含通知資訊的 XML 檔案中定義此自訂欄位。"
   example:
   - "The following code example demonstrates using the ImageUrlField property to specify a custom data field. The <xref:System.Web.UI.WebControls.AdRotator.NavigateUrlField%2A>, ImageUrlField, and <xref:System.Web.UI.WebControls.AdRotator.AlternateTextField%2A> properties are used to dynamically select a custom field to use in place of the `NavigateUrl`, `ImageUrl`, and `AlternateText` attributes. This example uses a device filter to indicate that custom fields should be used for Wireless Application Protocol (WAP)-enabled devices.  \n  \n [!code-cs[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_476_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_476_1.aspx)]  \n  \n The following is the sample XML data for the previous example.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/ad1.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com/vbasic/</NavigateUrl>  \n    <AlternateText>Visual Basic Developer Site</AlternateText>  \n    <Width>140</Width>  \n    <Height>100</Height>  \n      <!-- The following custom elements will be used by WAP-enabled  \n        devices. -->  \n     <WmlImageUrl>~/Images/mobileAd1.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobile/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/ad2.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com</NavigateUrl>  \n    <AlternateText>MSDN</AlternateText>  \n    <Width>150</Width>  \n    <Height>150</Height>  \n    <!-- The following custom elements will be used by WAP-enabled  \n      devices. -->  \n    <WmlImageUrl>~/Images/mobileAd2.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobility/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string ImageUrlField { get; set; }
     return:
       type: System.String
-      description: "The name that identifies the field where the URL for the image displayed for an advertisement is stored. The default value is &quot;ImageUrl.&quot;"
+      description: "識別儲存為廣告顯示的影像 URL 的欄位名稱。 預設值是&quot;ImageUrl。 」"
   overload: System.Web.UI.WebControls.AdRotator.ImageUrlField*
   exceptions: []
   platform:
@@ -370,15 +370,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a category keyword to filter for specific types of advertisements in the XML advertisement file."
-  remarks: "Each advertisement in the XML advertisement file can be assigned a category keyword. Use the KeywordFilter property to filter the advertisements for the specified keyword. Only advertisements containing the keyword will be selected for the <xref:System.Web.UI.WebControls.AdRotator> control. The KeywordFilter property can be programmatically set to match the profile of the user.       The KeywordFilter property is a very simple filter that searches for the specified keyword. It is not possible to specify more than one keyword in the KeywordFilter property, nor is it possible to declare multiple keywords in the advertisement file.      > [!NOTE] >  The <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property needs to be set for this property to have any effect.      > [!CAUTION] >  If the specified keyword is not found in the XML advertisement file, no advertisement is displayed in the <xref:System.Web.UI.WebControls.AdRotator> control. Be sure to specify a keyword for this property with at least one match in the advertisement file."
+  summary: "取得或設定類別關鍵字來篩選特定類型的 XML 通知檔案中的廣告。"
+  remarks: "XML 通知檔案中的每個廣告可以指派的分類關鍵字。 您可以使用 KeywordFilter 屬性來篩選指定關鍵字的公告。 將為選取只包含關鍵字的廣告<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator> KeywordFilter 屬性可以透過程式設計方式設定為符合使用者設定檔。       KeywordFilter 屬性是非常簡單篩選來搜尋指定的關鍵字。 不可能在 KeywordFilter 屬性中指定多個關鍵字，也可宣告廣告檔中的多個關鍵字。      > [!NOTE] ><xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>屬性必須設定這個屬性才能發生效用。</xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>      > [!CAUTION] > XML 通知檔案中找不到指定的關鍵字，如果沒有公告會顯示在<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator> 請務必使用廣告檔中至少一個相符項目指定這個屬性的關鍵字。"
   example:
   - "The following code example demonstrates how to use the KeywordFilter property to filter for game-related advertisements.  \n  \n [!code-cs[Classic AdRotator.KeywordFilter Example#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_1145_1.aspx)]\n [!code-vb[Classic AdRotator.KeywordFilter Example#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_1145_1.aspx)]  \n  \n The following code example demonstrates how to specify a keyword for each advertisement in the XML advertisement file. For more information on the file format, see the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> member.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <Height>60</Height>  \n    <Width>190</Width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Business</Keyword>  \n    <Caption>This is the caption for Ad#1</Caption>   \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <Height>90</Height>  \n    <Width>90</Width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Games</Keyword>  \n    <Caption>This is the caption for Ad#2</Caption>   \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string KeywordFilter { get; set; }
     return:
       type: System.String
-      description: "The keyword to filter for specific types of advertisements in the XML advertisement file. The default value is an empty string (&quot;&quot;)."
+      description: "用來篩選特定類型的 XML 通知檔案中的廣告的關鍵字。 預設值為空字串 (&quot;&quot;)。"
   overload: System.Web.UI.WebControls.AdRotator.KeywordFilter*
   exceptions: []
   platform:
@@ -395,15 +395,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets a custom data field to use in place of the <xref uid=&quot;langword_csharp_NavigateUrl&quot; name=&quot;NavigateUrl&quot; href=&quot;&quot;></xref> attribute for an advertisement."
-  remarks: "The NavigateUrlField property is used to select a custom data field used in place of the `NavigateUrl` attribute for an advertisement. Like `NavigateUrl`, this custom field is defined in the XML file that contains advertisement information."
+  summary: "取得或設定自訂資料欄位，以代替使用<xref uid=&quot;langword_csharp_NavigateUrl&quot; name=&quot;NavigateUrl&quot; href=&quot;&quot;></xref>公告的屬性。"
+  remarks: "NavigateUrlField 屬性用來選取自訂資料欄位來代替`NavigateUrl`公告的屬性。 像`NavigateUrl`，包含通知資訊的 XML 檔案中定義此自訂欄位。"
   example:
   - "The following code example demonstrates using the NavigateUrlField property to specify a custom data field. The NavigateUrlField, <xref:System.Web.UI.WebControls.AdRotator.ImageUrlField%2A>, and <xref:System.Web.UI.WebControls.AdRotator.AlternateTextField%2A> properties are used to dynamically select a custom field to use in place of the `NavigateUrl`, `ImageUrl`, and `AlternateText` attributes. This example uses a device filter to indicate that custom fields should be used for Wireless Application Protocol (WAP)-enabled devices.  \n  \n [!code-cs[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_466_1.aspx)]\n [!code-vb[System.Web.UI.WebControls.AdRotator.MobileExamples#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_466_1.aspx)]  \n  \n The following is the sample XML data for the previous example.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/ad1.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com/vbasic/</NavigateUrl>  \n    <AlternateText>Visual Basic Developer Site</AlternateText>  \n    <Width>140</Width>  \n    <Height>100</Height>  \n    <!-- The following custom elements will be used by WAP-enabled  \n      devices. -->  \n     <WmlImageUrl>~/Images/mobileAd1.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobile/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/ad2.gif</ImageUrl>  \n    <NavigateUrl>http://msdn.microsoft.com</NavigateUrl>  \n    <AlternateText>MSDN</AlternateText>  \n    <Width>150</Width>  \n    <Height>150</Height>  \n    <!-- The following custom elements will be used by WAP-enabled  \n      devices. -->  \n    <WmlImageUrl>~/Images/mobileAd2.jpg</WmlImageUrl>  \n    <WmlNavigateUrl>http://msdn.microsoft.com/mobility/</WmlNavigateUrl>  \n    <WmlAlternateText>Windows Mobile Developer Site</WmlAlternateText>  \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string NavigateUrlField { get; set; }
     return:
       type: System.String
-      description: "The name that identifies the field containing the URL for the page to navigate to when the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control is clicked. The default value is &quot;NavigateUrl.&quot;"
+      description: "識別包含頁面的 URL 導覽時的欄位名稱<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>按一下控制項時。 預設值是&quot;NavigateUrl。 」"
   overload: System.Web.UI.WebControls.AdRotator.NavigateUrlField*
   exceptions: []
   platform:
@@ -420,8 +420,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.WebControls.AdRotator.AdCreated&quot;></xref> event for the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control."
-  remarks: "The <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event is raised on the server after the <xref:System.Web.UI.WebControls.AdRotator> control is created, but before the page is rendered. If the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property is set, the <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event is raised after an advertisement has been selected by the <xref:System.Web.UI.WebControls.AdRotator> control.       Raising an event invokes the event-handling method through a delegate. For more information, see [How to: Consume Events in a Web Forms Application](~/add/includes/ajax-current-ext-md.md)."
+  summary: "引發<xref href=&quot;System.Web.UI.WebControls.AdRotator.AdCreated&quot;></xref>事件<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>控制項。"
+  remarks: "<xref:System.Web.UI.WebControls.AdRotator.AdCreated>之後在伺服器上引發事件<xref:System.Web.UI.WebControls.AdRotator>建立控制項時，但頁面呈現之前。</xref:System.Web.UI.WebControls.AdRotator> </xref:System.Web.UI.WebControls.AdRotator.AdCreated> 如果<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>設定屬性，則<xref:System.Web.UI.WebControls.AdRotator.AdCreated>公告已由選取之後，就會引發事件<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator> </xref:System.Web.UI.WebControls.AdRotator.AdCreated> </xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>       引發事件會透過委派事件處理方法叫用。 如需詳細資訊，請參閱[How to︰ 使用 Web Form 應用程式中的事件](~/add/includes/ajax-current-ext-md.md)。"
   example:
   - "The following code example demonstrates how to specify and code a handler for the <xref:System.Web.UI.WebControls.AdRotator.AdCreated> event. It gets the URL associated with the advertisement when the <xref:System.Web.UI.WebControls.AdRotator> control is created and displays it below the control.  \n  \n [!code-vb[Classic AdCreatedEventArgs Example#1](~/add/codesnippet/visualbasic/53c34c6f-b115-4875-84bf-_1.aspx)]\n [!code-cs[Classic AdCreatedEventArgs Example#1](~/add/codesnippet/csharp/53c34c6f-b115-4875-84bf-_1.aspx)]  \n  \n The following code example demonstrates how to format the XML file that contains the advertisement information. For more information on the XML file, see the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <Height>60</Height>  \n    <Width>190</Width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic1</Keyword>  \n    <Caption>This is the caption for Ad#1</Caption>   \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <Height>90</Height>  \n    <Width>90</Width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic2</Keyword>  \n    <Caption>This is the caption for Ad#2</Caption>   \n  </Ad>  \n</Advertisements>  \n```  \n  \n [!code-cs[AdCreatedEventHandler#1](~/add/codesnippet/csharp/53c34c6f-b115-4875-84bf-_2.aspx)]\n [!code-vb[AdCreatedEventHandler#1](~/add/codesnippet/visualbasic/53c34c6f-b115-4875-84bf-_2.aspx)]"
   syntax:
@@ -429,7 +429,7 @@ items:
     parameters:
     - id: e
       type: System.Web.UI.WebControls.AdCreatedEventArgs
-      description: "An <xref href=&quot;System.Web.UI.WebControls.AdCreatedEventArgs&quot;></xref> that contains event data."
+      description: "<xref href=&quot;System.Web.UI.WebControls.AdCreatedEventArgs&quot;> </xref>包含事件資料。"
   overload: System.Web.UI.WebControls.AdRotator.OnAdCreated*
   exceptions: []
   platform:
@@ -446,13 +446,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Raises the <xref href=&quot;System.Web.UI.Control.Init&quot;></xref> event."
+  summary: "引發<xref href=&quot;System.Web.UI.Control.Init&quot;></xref>事件。"
   syntax:
     content: protected override void OnInit (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: "The event arguments."
+      description: "事件引數。"
   overload: System.Web.UI.WebControls.AdRotator.OnInit*
   exceptions: []
   platform:
@@ -469,7 +469,7 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the advertisement information for rendering by looking up the file data or calling the user event."
+  summary: "取得轉譯的廣告資訊藉由查閱檔案資料，或呼叫使用者事件。"
   remarks: ''
   example:
   - "The following code example demonstrates how to override the OnPreRender method so that it always displays a border in a custom <xref:System.Web.UI.WebControls.AdRotator> control.  \n  \n [!code-cs[CustomADRotatorOnPreRender#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_240_1.aspx)]\n [!code-vb[CustomADRotatorOnPreRender#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_240_1.aspx)]  \n[!code-cs[CustomADRotatorOnPreRender#2](~/add/codesnippet/csharp/m-system.web.ui.webcontr_240_2.cs)]\n[!code-vb[CustomADRotatorOnPreRender#2](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_240_2.vb)]"
@@ -478,7 +478,7 @@ items:
     parameters:
     - id: e
       type: System.EventArgs
-      description: "An <xref:System.EventArgs> object that contains event data."
+      description: "<xref:System.EventArgs>物件，其中包含事件資料。</xref:System.EventArgs>"
   overload: System.Web.UI.WebControls.AdRotator.OnPreRender*
   exceptions: []
   platform:
@@ -495,14 +495,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Binds the specified data source to the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control."
-  remarks: "This method is used primarily by control developers.       The PerformDataBinding method is called by the base <xref:System.Web.UI.WebControls.DataBoundControl> class methods to bind the advertisement data from a data source to the control."
+  summary: "將繫結至指定的資料來源<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>控制項。"
+  remarks: "這個方法主要由控制項開發人員使用。       PerformDataBinding 方法會呼叫基底<xref:System.Web.UI.WebControls.DataBoundControl>類別將從資料來源的廣告資料繫結至控制項的方法。</xref:System.Web.UI.WebControls.DataBoundControl>"
   syntax:
     content: protected override void PerformDataBinding (System.Collections.IEnumerable data);
     parameters:
     - id: data
       type: System.Collections.IEnumerable
-      description: "An object that represents the data source; the object must implement the <xref:System.Collections.IEnumerable> interface."
+      description: "物件，表示資料來源;物件必須實作<xref:System.Collections.IEnumerable>介面。</xref:System.Collections.IEnumerable>"
   overload: System.Web.UI.WebControls.AdRotator.PerformDataBinding*
   exceptions: []
   platform:
@@ -519,8 +519,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Retrieves the advertisement data from the associated data source."
-  remarks: "This method is used primarily by control developers.       The PerformSelect method for an <xref:System.Web.UI.WebControls.AdRotator> object retrieves the advertisement data from the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>, and then calls the <xref:System.Web.UI.Control.OnDataBinding%2A> and <xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A> methods.       If the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> property is not set, then the method calls the PerformSelect method of the base <xref:System.Web.UI.WebControls.DataBoundControl> class."
+  summary: "通告從來源擷取資料相關聯的資料。"
+  remarks: "這個方法主要由控制項開發人員使用。       PerformSelect 方法<xref:System.Web.UI.WebControls.AdRotator>物件擷取廣告資料，從<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>，然後再呼叫<xref:System.Web.UI.Control.OnDataBinding%2A>和<xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A>方法。</xref:System.Web.UI.WebControls.BaseDataBoundControl.OnDataBound%2A> </xref:System.Web.UI.Control.OnDataBinding%2A> </xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> </xref:System.Web.UI.WebControls.AdRotator>       如果<xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>未設定屬性，則方法會呼叫 PerformSelect 方法的基底<xref:System.Web.UI.WebControls.DataBoundControl>類別。</xref:System.Web.UI.WebControls.DataBoundControl> </xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A>"
   syntax:
     content: protected override void PerformSelect ();
     parameters: []
@@ -540,8 +540,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Displays the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control on the client."
-  remarks: "Displays an image obtained from the advertisement chosen in <xref:System.Web.UI.WebControls.AdRotator.OnPreRender%2A>."
+  summary: "顯示<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>用戶端上的控制項。"
+  remarks: "顯示從 通告<xref:System.Web.UI.WebControls.AdRotator.OnPreRender%2A>.</xref:System.Web.UI.WebControls.AdRotator.OnPreRender%2A>中選擇取得映像"
   example:
   - "The following code example demonstrates how to override the Render method in a custom server control so that the <xref:System.Web.UI.WebControls.AdRotator> displays a random advertisement, from an XML file, with a link and an image.  \n  \n [!code-cs[CustomADRotatorRender0#1](~/add/codesnippet/csharp/m-system.web.ui.webcontr_144_1.aspx)]\n [!code-vb[CustomADRotatorRender0#1](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_144_1.aspx)]  \n[!code-cs[CustomADRotatorRender0#2](~/add/codesnippet/csharp/m-system.web.ui.webcontr_144_2.cs)]\n[!code-vb[CustomADRotatorRender0#2](~/add/codesnippet/visualbasic/m-system.web.ui.webcontr_144_2.vb)]"
   syntax:
@@ -549,7 +549,7 @@ items:
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: "A <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;></xref> that contains the output stream to render on the client."
+      description: "A <xref href=&quot;System.Web.UI.HtmlTextWriter&quot;> </xref> ，其中包含要在用戶端上呈現的輸出資料流。"
   overload: System.Web.UI.WebControls.AdRotator.Render*
   exceptions: []
   platform:
@@ -566,13 +566,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the HTML tag for the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control."
-  remarks: "This property is used primarily by control developers.       Use the TagKey property to determine the <xref:System.Web.UI.HtmlTextWriterTag> value associated with an <xref:System.Web.UI.WebControls.AdRotator> control. This property overrides the base implementation to always return <xref:System.Web.UI.HtmlTextWriterTag?displayProperty=fullName>."
+  summary: "取得 HTML 標記<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>控制項。"
+  remarks: "這個屬性主要由控制項開發人員使用。       TagKey 屬性用於判斷<xref:System.Web.UI.HtmlTextWriterTag>與相關聯的值<xref:System.Web.UI.WebControls.AdRotator>控制項。</xref:System.Web.UI.WebControls.AdRotator> </xref:System.Web.UI.HtmlTextWriterTag> 這個屬性會覆寫基底實作以永遠傳回<xref:System.Web.UI.HtmlTextWriterTag?displayProperty=fullName>.</xref:System.Web.UI.HtmlTextWriterTag?displayProperty=fullName>"
   syntax:
     content: protected override System.Web.UI.HtmlTextWriterTag TagKey { get; }
     return:
       type: System.Web.UI.HtmlTextWriterTag
-      description: "An <xref href=&quot;System.Web.UI.HtmlTextWriterTag&quot;></xref> enumeration value representing the HTML tag for an <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control."
+      description: "<xref href=&quot;System.Web.UI.HtmlTextWriterTag&quot;> </xref>代表的 HTML 標記的列舉值<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>控制項。"
   overload: System.Web.UI.WebControls.AdRotator.TagKey*
   exceptions: []
   platform:
@@ -589,15 +589,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets or sets the name of the browser window or frame that displays the contents of the Web page linked to when the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control is clicked."
-  remarks: "Use the Target property to specify the target window or frame that displays the contents of the Web page linked to when the <xref:System.Web.UI.WebControls.AdRotator> control is clicked.      > [!NOTE] >  The Target property renders as a `target` attribute . The `target` attribute on anchor (`a`) elements is not allowed in XHTML 1.1. Therefore, if rendered markup must conform to XHTML standards or must conform to accessibility standards, do not set the Target property. For more information, see [XHTML Standards in Visual Studio and ASP.NET](~/add/includes/ajax-current-ext-md.md) and [Accessibility in Visual Studio and ASP.NET](~/add/includes/ajax-current-ext-md.md).       The Target value must begin with a letter in the range of A to Z (case-insensitive), except for the following special values, which begin with an underscore.      |Target value|Description|   |------------------|-----------------|   |`_blank`|Renders the content in a new window without frames.|   |`_parent`|Renders the content in the immediate frameset parent.|   |`_search`|Renders the content in the search pane.|   |`_self`|Renders the content in the frame with focus.|   |`_top`|Renders the content in the full window without frames.|      > [!NOTE] >  Check your browser documentation to determine whether the `_search` value is supported.  For example, Internet Explorer 5.0 or later supports the `_search` target value."
+  summary: "取得或設定瀏覽器視窗或框架，顯示的網頁內容的名稱連結到時<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>按一下控制項時。"
+  remarks: "使用指定的目標視窗或框架所顯示的網頁內容的目標屬性連結到時<xref:System.Web.UI.WebControls.AdRotator>按一下控制項時。</xref:System.Web.UI.WebControls.AdRotator>      > [!NOTE] > Target 屬性轉譯成`target`屬性。 `target`錨點上的屬性 (`a`) 項目不允許在 XHTML 1.1。 因此，如果呈現的標記必須符合 XHTML 標準，或必須符合協助工具標準，未設定目標屬性。 如需詳細資訊，請參閱[XHTML 標準，在 Visual Studio 和 ASP.NET](~/add/includes/ajax-current-ext-md.md)和[Visual Studio 和 ASP.NET 中的協助工具](~/add/includes/ajax-current-ext-md.md)。       目標值必須以中範圍的 A 到 Z （不區分大小寫），除了下列的特殊值，以底線開頭字母為開頭。      |目標值 |描述 |  |------------------|-----------------|  |`_blank`|呈現在新視窗中沒有框架的內容。 |  |`_parent`|即時運算框架組父中呈現內容。 |  |`_search`|[搜尋] 窗格中呈現內容。 |  |`_self`|呈現具有焦點的框架中的內容。 |  |`_top`|框架不完整的視窗中呈現內容。 |     > [!NOTE] > 檢查您的瀏覽器文件，以判斷是否`_search`支援值。  例如，Internet Explorer 5.0 或更新版本支援`_search`目標值。"
   example:
   - "The following code example demonstrates how to use the Target property. It displays the contents of the Web page linked to when the <xref:System.Web.UI.WebControls.AdRotator> control is clicked in a new, unframed window.  \n  \n [!code-cs[classic adrotator.advertisementfile example#1](~/add/codesnippet/csharp/p-system.web.ui.webcontr_384_1.aspx)]\n [!code-vb[classic adrotator.advertisementfile example#1](~/add/codesnippet/visualbasic/p-system.web.ui.webcontr_384_1.aspx)]  \n  \n The following code example demonstrates the file format for an XML file that contains advertisement information. For more information on the file format, see the <xref:System.Web.UI.WebControls.AdRotator.AdvertisementFile%2A> member.  \n  \n```  \n<Advertisements>  \n  <Ad>  \n    <ImageUrl>~/Images/image1.jpg</ImageUrl>  \n    <Height>60</Height>  \n    <Width>190</Width>  \n    <NavigateUrl>http://www.microsoft.com</NavigateUrl>  \n    <AlternateText>Microsoft Main Site</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic1</Keyword>  \n    <Caption>This is the caption for Ad#1</Caption>   \n  </Ad>  \n  <Ad>  \n    <ImageUrl>~/Images/image2.jpg</ImageUrl>  \n    <Height>90</Height>  \n    <Width>90</Width>  \n    <NavigateUrl>http://www.wingtiptoys.com</NavigateUrl>  \n    <AlternateText>Wingtip Toys</AlternateText>  \n    <Impressions>80</Impressions>  \n    <Keyword>Topic2</Keyword>  \n    <Caption>This is the caption for Ad#2</Caption>   \n  </Ad>  \n</Advertisements>  \n```"
   syntax:
     content: public string Target { get; set; }
     return:
       type: System.String
-      description: "The browser window or frame that displays the contents of the Web page linked to when the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control is clicked. The default value is an empty string (&quot;&quot;), which refreshes the window or frame with focus."
+      description: "瀏覽器視窗或框架會顯示 Web 網頁內容的連結時<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>按一下控制項時。 預設值為空字串 (&quot;&quot;)，會重新整理的視窗或具有焦點的框架。"
   overload: System.Web.UI.WebControls.AdRotator.Target*
   exceptions: []
   platform:
@@ -614,13 +614,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls
-  summary: "Gets the unique, hierarchically qualified identifier for the <xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref> control."
-  remarks: "This property differs from the <xref:System.Web.UI.Control.ID%2A> property in that the UniqueID property includes the identifier for the server control&quot;s naming container. This identifier is generated automatically when a page request is processed."
+  summary: "取得唯一且階層式限定識別碼<xref href=&quot;System.Web.UI.WebControls.AdRotator&quot;></xref>控制項。"
+  remarks: "這個屬性與不同<xref:System.Web.UI.Control.ID%2A>屬性中的伺服器控制項的命名容器的唯一識別碼屬性，包含識別項。</xref:System.Web.UI.Control.ID%2A> 處理頁面要求時，會自動產生這個識別碼。"
   syntax:
     content: public override string UniqueID { get; }
     return:
       type: System.String
-      description: "The fully qualified identifier for the server control."
+      description: "伺服器控制項的完整的識別碼。"
   overload: System.Web.UI.WebControls.AdRotator.UniqueID*
   exceptions: []
   platform:

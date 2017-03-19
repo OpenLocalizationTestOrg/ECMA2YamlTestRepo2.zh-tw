@@ -76,7 +76,7 @@ items:
   nameWithType: XmlDocument
   fullName: System.Xml.XmlDocument
   type: Class
-  summary: "Represents an XML document. You can use this class to load, validate, edit, add, and position XML in a document."
+  summary: "表示 XML 文件。 您可以使用這個類別來載入、 驗證、 編輯、 加入和置放 XML 文件中。"
   remarks: "<a name=\"Remarks\"></a> The XmlDocument class is an in-memory representation of an XML document. It implements the W3C [XML Document Object Model (DOM)](~/add/includes/ajax-current-ext-md.md) Level 1 Core and the Core DOM Level 2.  \n  \n *DOM* stands for *document object model*. To read more about it, see [XML Document Object Model (DOM)](../Topic/XML%20Document%20Object%20Model%20\\(DOM\\).md).  \n  \n You can load XML into the DOM by using the XmlDocument class, and then programmatically read, modify, and remove XML in the document.  \n  \n If you want to pry open the XmlDocument class and see how it’s implemented, see the [Reference Source](http://referencesource.microsoft.com/#System.Xml/Xml/System/Xml/Dom/XmlDocument.cs#f82a4c1bd1f0ee12).  \n  \n<a name=\"Common\"></a>   \n## Tasks  \n  \n-   [Load XML into the document object model](#Load)  \n  \n-   [Validate it against a schema](#Validation)  \n  \n-   [Navigate the document tree](#Navigate)  \n  \n-   [Find nodes](#Find)  \n  \n-   [Edit nodes](#Edit)  \n  \n-   [Add nodes](#Add)  \n  \n-   [Remove nodes](#Remove)  \n  \n-   [Position nodes](#Position)  \n  \n<a name=\"Load\"></a>   \n## Load XML into the document object model  \n Start with an XML document like this one. It’s just a few books in a collection. But it does contain the basic things that you’d find in any XML document; a namespace, elements that represent data and attributes that describe the data.  \n  \n```xml  \n<?xml version=\"1.0\" encoding=\"utf-8\"?>  \n<books xmlns=\"http://www.contoso.com/books\">  \n  <book genre=\"novel\" ISBN=\"1-861001-57-8\" publicationdate=\"1823-01-28\">  \n    <title>Pride And Prejudice</title>  \n    <price>24.95</price>  \n  </book>  \n  <book genre=\"novel\" ISBN=\"1-861002-30-1\" publicationdate=\"1985-01-01\">  \n    <title>The Handmaid's Tale</title>  \n    <price>29.95</price>  \n  </book>  \n  <book genre=\"novel\" ISBN=\"1-861001-45-3\" publicationdate=\"1811-01-01\">  \n    <title>Sense and Sensibility</title>  \n    <price>19.95</price>  \n  </book>  \n</books>  \n```  \n  \n Next, load this data into the DOM so that you can work with it in memory. The most popular way to do this is refer to a file on your local computer or on a network.  \n  \n This example loads XML from a file. If the file doesn’t exist, it just generates some XML and loads that.  \n  \n [!code-cpp[XMLProcessingApp#1](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#1)]\n [!code-cs[XMLProcessingApp#1](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#1)]\n [!code-vb[XMLProcessingApp#1](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#1)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n **Learn more:** [Reading an XML Document into the DOM](~/add/includes/ajax-current-ext-md.md)  \n  \n<a name=\"Validation\"></a>   \n## Validate it against a schema  \n Start with an XML schema like this one. This schema defines the data types in the XML and which attributes are required.  \n  \n```xml  \n<?xml version=\"1.0\" encoding=\"utf-8\"?>  \n<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"  \n  attributeFormDefault=\"unqualified\"   \n  elementFormDefault=\"qualified\"  \n  targetNamespace=\"http://www.contoso.com/books\">   \n  <xs:element name=\"books\">  \n    <xs:complexType>  \n      <xs:sequence>  \n        <xs:element maxOccurs=\"unbounded\" name=\"book\">  \n          <xs:complexType>  \n            <xs:sequence>  \n              <xs:element name=\"title\" type=\"xs:string\" />  \n              <xs:element name=\"price\" type=\"xs:decimal\" />  \n            </xs:sequence>  \n            <xs:attribute name=\"genre\" type=\"xs:string\" use=\"required\" />  \n            <xs:attribute name=\"ISBN\" type=\"xs:string\" use=\"required\" />  \n            <xs:attribute name=\"publicationdate\" type=\"xs:date\" use=\"required\" />  \n          </xs:complexType>  \n        </xs:element>  \n      </xs:sequence>  \n    </xs:complexType>  \n  </xs:element>  \n</xs:schema>  \n```  \n  \n Create an <xref:System.Xml.XmlReader> object by using your schema, and then load that object into the DOM. Create an event handler that executes when code attempts to modify your XML file in ways that violate the rules of the schema.  \n  \n These blocks of code show helper methods that do all of this.  \n  \n [!code-cpp[XMLProcessingApp#2](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#2)]\n [!code-cs[XMLProcessingApp#2](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#2)]\n [!code-vb[XMLProcessingApp#2](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#2)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n **Learn more:** [Validating an XML Document in the DOM](~/add/includes/ajax-current-ext-md.md)  \n  \n<a name=\"Navigate\"></a>   \n## Navigate the document tree  \n You can use properties to navigate around an XML document. But before you use any of them, let’s quickly review a few terms. Your document is composed of nodes. Each node has as single *parent* node directly above it. The only node that does not have a parent node is the document root, as it is the top-level node. Most nodes can have *child* nodes, which are nodes directly below them. Nodes that are at the same level are *siblings*.  \n  \n The following examples, show you how to obtain the root node, jump to the first child node of the root node, access any of its child nodes, get back out to the parent node, and then navigate across sibling nodes.  \n  \n **Start with the root node**  \n  \n This example gets the root node and then uses that node to output the contents of the document to the console.  \n  \n [!code-cs[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_3.cs)]\n [!code-cpp[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_3.cpp)]\n [!code-vb[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_3.vb)]  \n  \n **Get child nodes**  \n  \n This example jumps to the first child node of the root node and then iterates through the child nodes of that node if any exist.  \n  \n [!code-cs[Classic WebData XmlNode.HasChildNodes Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_4.cs)]\n [!code-cpp[Classic WebData XmlNode.HasChildNodes Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_4.cpp)]\n [!code-vb[Classic WebData XmlNode.HasChildNodes Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_4.vb)]  \n  \n **Get back to the parent node**  \n  \n Use the <xref:System.Xml.XmlDocument.ParentNode%2A> property.  \n  \n **Refer to the last child node**  \n  \n This example writes the price of a book to the console (which is the last child node of a book node).  \n  \n [!code-cpp[Classic WebData XmlNode.LastChild Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_5.cpp)]\n [!code-cs[Classic WebData XmlNode.LastChild Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_5.cs)]\n [!code-vb[Classic WebData XmlNode.LastChild Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_5.vb)]  \n  \n **Navigate forward across siblings**  \n  \n This example moves forward from book to book. Book nodes are siblings to one another.  \n  \n [!code-vb[Classic WebData XmlNode.NextSibling Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_6.vb)]\n [!code-cpp[Classic WebData XmlNode.NextSibling Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_6.cpp)]\n [!code-cs[Classic WebData XmlNode.NextSibling Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_6.cs)]  \n  \n **Navigate backwards across siblings**  \n  \n This example moves backwards from book to book.  \n  \n [!code-cs[Classic WebData XmlNode.PreviousSibling Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_7.cs)]\n [!code-cpp[Classic WebData XmlNode.PreviousSibling Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_7.cpp)]\n [!code-vb[Classic WebData XmlNode.PreviousSibling Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_7.vb)]  \n  \n<a name=\"Find\"></a>   \n## Find nodes  \n The most popular way to find one or more nodes of data is to use an XPath query string, but there are also methods that don’t require one.  \n  \n **Get a single node**  \n  \n This example locates a book by using the ISBN number.  \n  \n [!code-cpp[XMLProcessingApp#3](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#3)]\n [!code-cs[XMLProcessingApp#3](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#3)]\n [!code-vb[XMLProcessingApp#3](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#3)]  \n  \n The string used in this example is an Xpath query. You can find more examples of them here:   [XPath examples](https://msdn.microsoft.com/en-us/library/ms256086.aspx).  \n  \n You can also use the <xref:System.Xml.XmlDocument.GetElementById%2A> to retrieve nodes. To use this approach, you’ll have to define ID’s in the document type definition declarations of your XML file.  \n  \n After you get a node, you get the value of attributes or child nodes. This example does that with a book node.  \n  \n [!code-cpp[XMLProcessingApp#4](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#4)]\n [!code-cs[XMLProcessingApp#4](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#4)]\n [!code-vb[XMLProcessingApp#4](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#4)]  \n  \n **Get a collection of nodes**  \n  \n This example selects all books where the author's last name is **Austen**, and then changes the price of those books.  \n  \n [!code-cpp[Classic WebData XmlNode.SelectNodes Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_10.cpp)]\n [!code-cs[Classic WebData XmlNode.SelectNodes Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_10.cs)]\n [!code-vb[Classic WebData XmlNode.SelectNodes Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_10.vb)]  \n  \n You can also get a collection of nodes by using the name of the node. For example, this example gets a collection of all book titles.  \n  \n [!code-cs[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/csharp/t-system.xml.xmldocument_11.cs)]\n [!code-cpp[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/cpp/t-system.xml.xmldocument_11.cpp)]\n [!code-vb[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/visualbasic/t-system.xml.xmldocument_11.vb)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n **Learn more:** [Select Nodes Using XPath Navigation](~/add/includes/ajax-current-ext-md.md)  \n  \n<a name=\"Edit\"></a>   \n## Edit nodes  \n This example edits a book node and its attributes.  \n  \n [!code-cpp[XMLProcessingApp#7](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#7)]\n [!code-cs[XMLProcessingApp#7](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#7)]\n [!code-vb[XMLProcessingApp#7](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#7)]  \n  \n **Learn more:** [Modifying Nodes, Content, and Values in an XML Document](~/add/includes/ajax-current-ext-md.md)  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n<a name=\"Add\"></a>   \n## Add nodes  \n To add a node, use the <xref:System.Xml.XmlDocument.CreateElement%2A> method or the <xref:System.Xml.XmlDocument.CreateNode%2A> method.  \n  \n To add a data node such as a book, use the <xref:System.Xml.XmlDocument.CreateElement%2A> method.  \n  \n For any other type of node such as a comment, whitespace node, or CDATA node, use the <xref:System.Xml.XmlDocument.CreateNode%2A> method.  \n  \n This example creates a book node, adds attrubutes to that node, and then adds that node to the document.  \n  \n [!code-cpp[XMLProcessingApp#5](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#5)]\n [!code-cs[XMLProcessingApp#5](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#5)]\n [!code-vb[XMLProcessingApp#5](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#5)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n **Learn more:** [Inserting Nodes into an XML Document](~/add/includes/ajax-current-ext-md.md)  \n  \n<a name=\"Remove\"></a>   \n## Remove nodes  \n To remove a node, use the <xref:System.Xml.XmlNode.RemoveChild%2A> method.  \n  \n This example removes a book from the document and any whitespace that appears just before the book node.  \n  \n [!code-cpp[XMLProcessingApp#6](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#6)]\n [!code-cs[XMLProcessingApp#6](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#6)]\n [!code-vb[XMLProcessingApp#6](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#6)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)  \n  \n **Learn more:** [Removing Nodes, Content, and Values from an XML Document](~/add/includes/ajax-current-ext-md.md)  \n  \n<a name=\"Position\"></a>   \n## Position nodes  \n You can choose where you want a node to appear in your document by using the <xref:System.Xml.XmlNode.InsertBefore%2A> and <xref:System.Xml.XmlNode.InsertAfter%2A> methods.  \n  \n This example shows two helper methods. One of them moves a node higher in a list. The other one moves a node lower.  \n  \n These methods could be used in an application that enables users to move books up and down in a list of books. When a user chooses a book and presses an up or down button, your code could call methods like these to position the corresponding book node before or after other book nodes.  \n  \n [!code-cpp[XMLProcessingApp#8](~/add/codesnippet/cpp/xmldomprocessing/xmldomprocessing.cpp#8)]\n [!code-cs[XMLProcessingApp#8](~/add/codesnippet/csharp/xmlprocessingapp/xmlhelpermethods.cs#8)]\n [!code-vb[XMLProcessingApp#8](~/add/codesnippet/visualbasic/xmlprocessingappvb/xmlhelpermethods.vb#8)]  \n  \n **Complete sample:** [Manipulate XML in-Memory by using the XmlDocument class and other related types](https://code.msdn.microsoft.com/windowsdesktop/Manipulate-XML-in-memory-4b612d6b/view/SourceCode)"
   syntax:
     content: 'public class XmlDocument : System.Xml.XmlNode'
@@ -132,7 +132,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Initializes a new instance of the <xref href=&quot;System.Xml.XmlDocument&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Xml.XmlDocument&quot;></xref>類別。"
   remarks: ''
   example:
   - "The following is an example of load-time validation. A document type definition (DTD) validating <xref:System.Xml.XmlReader> is passed to the <xref:System.Xml.XmlDocument.Load%2A> method and a <xref:System.Xml.Schema.ValidationEventHandler> is provided to notify users of any validation errors. In this example a validation error is found, but the document is still loaded. Alternatively, you can define a validating <xref:System.Xml.XmlReader> to throw an exception and stop the load process when a validation error is found by not specifying the <xref:System.Xml.Schema.ValidationEventHandler>. For more information about validating XML data, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.  \n  \n [!code-vb[XmlDocument.cctor#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_11_1.vb)]\n [!code-cs[XmlDocument.cctor#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_11_1.cs)]\n [!code-cpp[XmlDocument.cctor#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_11_1.cpp)]  \n  \n The example uses the `bookDTD.xml` file as input.  \n  \n [!code-xml[XmlDocument.cctor#2](~/add/codesnippet/xml/m-system.xml.xmldocument_11_2.xml)]"
@@ -155,7 +155,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Initializes a new instance of the <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> class with the specified <xref href=&quot;System.Xml.XmlImplementation&quot;></xref>."
+  summary: "初始化的新執行個體<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>類別具有指定<xref href=&quot;System.Xml.XmlImplementation&quot;> </xref>。"
   syntax:
     content: protected XmlDocument (System.Xml.XmlImplementation imp);
     parameters:
@@ -178,7 +178,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Initializes a new instance of the <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> class with the specified <xref:System.Xml.XmlNameTable>."
+  summary: "初始化的新執行個體<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>指定<xref:System.Xml.XmlNameTable>.</xref:System.Xml.XmlNameTable>類別"
   syntax:
     content: public XmlDocument (System.Xml.XmlNameTable nt);
     parameters:
@@ -201,13 +201,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the base URI of the current node."
-  remarks: "A networked XML document is comprised of chunks of data aggregated using various W3C standard inclusion mechanisms and therefore contains nodes that come from different places. The `BaseURI` tells you where these nodes came from.       For Document nodes, `BaseURI` returns the location of the XML document. For example, if the `XmlDocument` was loaded using the following call doc.Load(&quot;http://server/mydata.xml&quot;), the `BaseURI` for the document node is http://server/mydata.xml. However, if the <xref:System.Xml.XmlDocument.Load%2A> method is redirected by server to a different URI, `BaseURI` returns the original URI passed to the `Load` method.       This property is a Microsoft extension to the Document Object Model (DOM). For additional information on `BaseURI` and how it behaves with other node types, see <xref:System.Xml.XmlNode.BaseURI%2A?displayProperty=fullName>."
+  summary: "取得目前節點的基底 URI。"
+  remarks: "網路的 XML 文件由使用各種 W3C 標準包含機制彙總的資料區塊組成，因此包含來自不同位置的節點。 `BaseURI`會告訴您這些節點的來源。       文件節點`BaseURI`傳回的 XML 文件的位置。 例如，如果`XmlDocument`使用下列呼叫文件已載入。負載 (「 http://server/mydata.xml 」)`BaseURI`文件節點是 http://server/mydata.xml。 不過，如果<xref:System.Xml.XmlDocument.Load%2A>方法會被重新導向至不同的 URI，伺服器`BaseURI`傳回傳遞至與原始 URI`Load`方法。</xref:System.Xml.XmlDocument.Load%2A>       這個屬性是 Microsoft 擴充功能的文件物件模型 (DOM)。 如需有關`BaseURI`以及如何其行為與其他節點型別，請參閱<xref:System.Xml.XmlNode.BaseURI%2A?displayProperty=fullName>.</xref:System.Xml.XmlNode.BaseURI%2A?displayProperty=fullName>"
   syntax:
     content: public override string BaseURI { get; }
     return:
       type: System.String
-      description: "The location from which the node was loaded."
+      description: "節點載入的位置。"
   overload: System.Xml.XmlDocument.BaseURI*
   exceptions: []
   platform:
@@ -224,8 +224,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates a duplicate of this node."
-  remarks: "This method serves as a copy constructor for nodes. The cloned node has no parent (<xref:System.Xml.XmlNode.ParentNode%2A> returns `null`).       If `deep` is `true`, the cloned node includes all the child nodes, otherwise only the `XmlDocument` node is cloned. See the <xref:System.Xml.XmlNode.CloneNode%2A?displayProperty=fullName> method to see how this method behaves on other node types."
+  summary: "建立這個節點的複本。"
+  remarks: "這個方法可做為節點的複製建構函式。 複製的節點有沒有父代 (<xref:System.Xml.XmlNode.ParentNode%2A>傳回`null`)。</xref:System.Xml.XmlNode.ParentNode%2A>       如果`deep`是`true`，複製的節點包含所有子節點，否則只有`XmlDocument`節點會複製。 請參閱<xref:System.Xml.XmlNode.CloneNode%2A?displayProperty=fullName>方法以查看此方法在其他節點型別上的運作方式。</xref:System.Xml.XmlNode.CloneNode%2A?displayProperty=fullName>"
   example:
   - "The following example shows the difference between a deep and shallow clone.  \n  \n [!code-cpp[Classic WebData XmlDocument.CloneNode Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_13_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CloneNode Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_13_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CloneNode Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_13_1.vb)]"
   syntax:
@@ -233,10 +233,10 @@ items:
     parameters:
     - id: deep
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to recursively clone the subtree under the specified node; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> to clone only the node itself."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>以遞迴方式複製指定的節點; 下的樹狀子目錄<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>至只要複製節點本身。"
     return:
       type: System.Xml.XmlNode
-      description: "The cloned <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> node."
+      description: "複製<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點。"
   overload: System.Xml.XmlDocument.CloneNode*
   exceptions: []
   platform:
@@ -253,8 +253,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlAttribute&quot;></xref> with the specified <xref:System.Xml.XmlDocument.Name*>."
-  remarks: "The `XmlAttribute` can be added to an <xref:System.Xml.XmlElement> using the <xref:System.Xml.XmlElement.SetAttributeNode%2A> method."
+  summary: "建立<xref href=&quot;System.Xml.XmlAttribute&quot;></xref>與指定<xref:System.Xml.XmlDocument.Name*>.</xref:System.Xml.XmlDocument.Name*>"
+  remarks: "`XmlAttribute`可以加入至<xref:System.Xml.XmlElement>使用<xref:System.Xml.XmlElement.SetAttributeNode%2A>方法。</xref:System.Xml.XmlElement.SetAttributeNode%2A> </xref:System.Xml.XmlElement>"
   example:
   - "The following creates an attribute and adds it to an XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateAttribute Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_1_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.CreateAttribute Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_1_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateAttribute Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_1_1.vb)]"
   syntax:
@@ -262,7 +262,7 @@ items:
     parameters:
     - id: name
       type: System.String
-      description: "The qualified name of the attribute. If the name contains a colon, the <xref:System.Xml.XmlNode.Prefix*> property reflects the part of the name preceding the first colon and the <xref:System.Xml.XmlDocument.LocalName*> property reflects the part of the name following the first colon. The <xref:System.Xml.XmlNode.NamespaceURI*> remains empty unless the prefix is a recognized built-in prefix such as xmlns. In this case <xref uid=&quot;langword_csharp_NamespaceURI&quot; name=&quot;NamespaceURI&quot; href=&quot;&quot;></xref> has a value of http://www.w3.org/2000/xmlns/."
+      description: "屬性的限定的名稱。 如果名稱包含冒號， <> </> *> 屬性會反映第一個冒號之前的名稱部分而<> *> 屬性會反映第一個冒號之後的名稱部分。 <xref:System.Xml.XmlNode.NamespaceURI*>會保持空白，除非前置詞是可辨識的內建前置詞，例如 xmlns。</xref:System.Xml.XmlNode.NamespaceURI*> 在此情況下<xref uid=&quot;langword_csharp_NamespaceURI&quot; name=&quot;NamespaceURI&quot; href=&quot;&quot;></xref>值為 http://www.w3.org/2000/xmlns/。"
     return:
       type: System.Xml.XmlAttribute
       description: "The new <xref uid=&quot;langword_csharp_XmlAttribute&quot; name=&quot;XmlAttribute&quot; href=&quot;&quot;></xref>."
@@ -282,17 +282,17 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlAttribute&quot;></xref> with the specified qualified name and <xref:System.Xml.XmlNode.NamespaceURI*>."
-  remarks: "The `XmlAttribute` can be added to an <xref:System.Xml.XmlElement> using the <xref:System.Xml.XmlElement.SetAttributeNode%2A> method."
+  summary: "建立<xref href=&quot;System.Xml.XmlAttribute&quot;></xref>具有指定限定名稱和<xref:System.Xml.XmlNode.NamespaceURI*>.</xref:System.Xml.XmlNode.NamespaceURI*>"
+  remarks: "`XmlAttribute`可以加入至<xref:System.Xml.XmlElement>使用<xref:System.Xml.XmlElement.SetAttributeNode%2A>方法。</xref:System.Xml.XmlElement.SetAttributeNode%2A> </xref:System.Xml.XmlElement>"
   syntax:
     content: public System.Xml.XmlAttribute CreateAttribute (string qualifiedName, string namespaceURI);
     parameters:
     - id: qualifiedName
       type: System.String
-      description: "The qualified name of the attribute. If the name contains a colon then the <xref:System.Xml.XmlNode.Prefix*> property will reflect the part of the name preceding the colon and the <xref:System.Xml.XmlDocument.LocalName*> property will reflect the part of the name after the colon."
+      description: "屬性的限定的名稱。 如果名稱包含冒號， <> </> *> 屬性會反映冒號前面的名稱的一部分而<> *> 屬性會反映冒號後面的名稱的一部分。"
     - id: namespaceURI
       type: System.String
-      description: "The namespaceURI of the attribute. If the qualified name includes a prefix of xmlns, then this parameter must be http://www.w3.org/2000/xmlns/."
+      description: "屬性的 namespaceURI。 如果限定的名稱包含 xmlns 前置詞，則此參數必須是 http://www.w3.org/2000/xmlns/。"
     return:
       type: System.Xml.XmlAttribute
       description: "The new <xref uid=&quot;langword_csharp_XmlAttribute&quot; name=&quot;XmlAttribute&quot; href=&quot;&quot;></xref>."
@@ -312,20 +312,20 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlAttribute&quot;></xref> with the specified <xref:System.Xml.XmlNode.Prefix*>, <xref:System.Xml.XmlDocument.LocalName*>, and <xref:System.Xml.XmlNode.NamespaceURI*>."
-  remarks: "The `XmlAttribute` can be added to an <xref:System.Xml.XmlElement> using the <xref:System.Xml.XmlElement.SetAttributeNode%2A> method.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "建立<xref href=&quot;System.Xml.XmlAttribute&quot;></xref>具有指定<> *>， <> </> *>，和<xref:System.Xml.XmlNode.NamespaceURI*>。</xref:System.Xml.XmlNode.NamespaceURI*>"
+  remarks: "`XmlAttribute`可以加入至<xref:System.Xml.XmlElement>使用<xref:System.Xml.XmlElement.SetAttributeNode%2A>方法。</xref:System.Xml.XmlElement.SetAttributeNode%2A> </xref:System.Xml.XmlElement>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: public virtual System.Xml.XmlAttribute CreateAttribute (string prefix, string localName, string namespaceURI);
     parameters:
     - id: prefix
       type: System.String
-      description: "The prefix of the attribute (if any). String.Empty and <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> are equivalent."
+      description: "屬性 （如果有的話） 的前置詞。 String.Empty 與<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>相等。"
     - id: localName
       type: System.String
-      description: "The local name of the attribute."
+      description: "屬性的本機名稱。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the attribute (if any). String.Empty and <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> are equivalent. If `prefix` is xmlns, then this parameter must be http://www.w3.org/2000/xmlns/; otherwise an exception is thrown."
+      description: "命名空間 URI 的屬性 （如果有的話）。 String.Empty 與<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>相等。 如果`prefix`為 xmlns，這個參數必須是 http: //www.w3.org/2000/xmlns/，否則會擲回例外狀況。"
     return:
       type: System.Xml.XmlAttribute
       description: "The new <xref uid=&quot;langword_csharp_XmlAttribute&quot; name=&quot;XmlAttribute&quot; href=&quot;&quot;></xref>."
@@ -345,8 +345,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlCDataSection&quot;></xref> containing the specified data."
-  remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), CDataSection nodes are allowed within Element nodes and in EntityReference nodes when the EntityReference node is not a child of an Attribute node."
+  summary: "建立<xref href=&quot;System.Xml.XmlCDataSection&quot;></xref>包含指定的資料。"
+  remarks: "雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) CDataSection 節點時，允許在項目節點和 EntityReference 節點 EntityReference 節點不是屬性節點的子系。"
   example:
   - "The following example creates a CDATA node and adds it to the document.  \n  \n [!code-vb[Classic WebData XmlDocument.CreateCDataSection Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_9_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.CreateCDataSection Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_9_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateCDataSection Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_9_1.cs)]"
   syntax:
@@ -354,7 +354,7 @@ items:
     parameters:
     - id: data
       type: System.String
-      description: "The content of the new <xref uid=&quot;langword_csharp_XmlCDataSection&quot; name=&quot;XmlCDataSection&quot; href=&quot;&quot;></xref>."
+      description: "新的內容<xref uid=&quot;langword_csharp_XmlCDataSection&quot; name=&quot;XmlCDataSection&quot; href=&quot;&quot;> </xref>。"
     return:
       type: System.Xml.XmlCDataSection
       description: "The new <xref uid=&quot;langword_csharp_XmlCDataSection&quot; name=&quot;XmlCDataSection&quot; href=&quot;&quot;></xref>."
@@ -374,8 +374,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlComment&quot;></xref> containing the specified data."
-  remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), Comment nodes are only allowed within Document, Element and EntityReference nodes, when the EntityReference node is not a child of an Attribute node."
+  summary: "建立<xref href=&quot;System.Xml.XmlComment&quot;></xref>包含指定的資料。"
+  remarks: "雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) 中，註解節點時，才允許文件、 元素和 EntityReference 節點內 EntityReference 節點不是屬性節點的子系。"
   example:
   - "The following example creates a comment and adds it to an XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateComment Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_12_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateComment Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_12_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.CreateComment Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_12_1.cpp)]"
   syntax:
@@ -383,7 +383,7 @@ items:
     parameters:
     - id: data
       type: System.String
-      description: "The content of the new <xref uid=&quot;langword_csharp_XmlComment&quot; name=&quot;XmlComment&quot; href=&quot;&quot;></xref>."
+      description: "新的內容<xref uid=&quot;langword_csharp_XmlComment&quot; name=&quot;XmlComment&quot; href=&quot;&quot;> </xref>。"
     return:
       type: System.Xml.XmlComment
       description: "The new <xref uid=&quot;langword_csharp_XmlComment&quot; name=&quot;XmlComment&quot; href=&quot;&quot;></xref>."
@@ -403,20 +403,20 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates a default attribute with the specified prefix, local name and namespace URI."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "具有指定之前置詞、 區域名稱和命名空間 URI 建立的預設屬性。"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: protected virtual System.Xml.XmlAttribute CreateDefaultAttribute (string prefix, string localName, string namespaceURI);
     parameters:
     - id: prefix
       type: System.String
-      description: "The prefix of the attribute (if any)."
+      description: "屬性 （如果有的話） 的前置詞。"
     - id: localName
       type: System.String
-      description: "The local name of the attribute."
+      description: "屬性的本機名稱。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the attribute (if any)."
+      description: "命名空間 URI 的屬性 （如果有的話）。"
     return:
       type: System.Xml.XmlAttribute
       description: "The new <xref href=&quot;System.Xml.XmlAttribute&quot;></xref>."
@@ -436,8 +436,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlDocumentFragment&quot;></xref>."
-  remarks: "DocumentFragment nodes cannot be inserted into a document. However, you can insert children of the DocumentFragment node into a document."
+  summary: "建立<xref href=&quot;System.Xml.XmlDocumentFragment&quot;> </xref>。"
+  remarks: "DocumentFragment 節點無法插入至文件。 不過，您可以將 DocumentFragment 節點的子節點插入文件。"
   example:
   - "The following example adds new nodes to an XML document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateDocumentFragment Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_14_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateDocumentFragment Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_14_1.vb)]\n [!code-cs[Classic WebData XmlDocument.CreateDocumentFragment Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_14_1.cs)]"
   syntax:
@@ -462,8 +462,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Returns a new <xref href=&quot;System.Xml.XmlDocumentType&quot;></xref> object."
-  remarks: "The returned node will have parsed <xref:System.Xml.XmlDocumentType.Entities%2A> and <xref:System.Xml.XmlDocumentType.Notations%2A> collections.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), DocumentType nodes are only allowed within Document nodes. Each <xref:System.Xml.XmlDocument> can have only one DocumentType node. The DocumentType node must also be inserted before the root element of the `XmlDocument` (if the document already has a root element, you cannot add a DocumentType node).       If the passed parameters do not combine to build a valid `XmlDocumentType`, an exception is thrown."
+  summary: "傳回新<xref href=&quot;System.Xml.XmlDocumentType&quot;></xref>物件。"
+  remarks: "傳回的節點將有剖析<xref:System.Xml.XmlDocumentType.Entities%2A>和<xref:System.Xml.XmlDocumentType.Notations%2A>集合。</xref:System.Xml.XmlDocumentType.Notations%2A> </xref:System.Xml.XmlDocumentType.Entities%2A>       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) DocumentType 節點之內，才允許文件節點。 每個<xref:System.Xml.XmlDocument>可以有只有一個 DocumentType 節點。</xref:System.Xml.XmlDocument> DocumentType 節點也必須的根項目之前插入`XmlDocument`（如果文件已經有根項目，您無法加入 DocumentType 節點）。       如果傳遞的參數不會合併來建置有效`XmlDocumentType`，擲回例外狀況。"
   example:
   - "The following example creates a DocumentType node and adds it to an XML document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateDocumentType Example#1](~/add/codesnippet/cpp/8d2758e1-ca32-4a6b-b7e7-_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateDocumentType Example#1](~/add/codesnippet/csharp/8d2758e1-ca32-4a6b-b7e7-_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateDocumentType Example#1](~/add/codesnippet/visualbasic/8d2758e1-ca32-4a6b-b7e7-_1.vb)]"
   syntax:
@@ -471,16 +471,16 @@ items:
     parameters:
     - id: name
       type: System.String
-      description: "Name of the document type."
+      description: "文件類型的名稱。"
     - id: publicId
       type: System.String
-      description: "The public identifier of the document type or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>. You can specify a public URI and also a system identifier to identify the location of the external DTD subset."
+      description: "文件類型的公用識別項。 或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。 您可以指定公用 URI 及系統識別項，以識別外部 DTD 子集的位置。"
     - id: systemId
       type: System.String
-      description: "The system identifier of the document type or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>. Specifies the URL of the file location for the external DTD subset."
+      description: "文件類型的系統識別項或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。 指定外部 DTD 子集之檔案位置的 URL。"
     - id: internalSubset
       type: System.String
-      description: "The DTD internal subset of the document type or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "文件類型的 DTD 內部子集或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。"
     return:
       type: System.Xml.XmlDocumentType
       description: "The new <xref uid=&quot;langword_csharp_XmlDocumentType&quot; name=&quot;XmlDocumentType&quot; href=&quot;&quot;></xref>."
@@ -500,8 +500,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an element with the specified name."
-  remarks: "Note that the instance returned implements the `XmlElement` interface, so default attributes would be created directly on the returned object.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), Element nodes are allowed within Document and Element nodes, and in EntityReference nodes when the EntityReference node is not a child of an Attribute node."
+  summary: "建立指定之名稱的項目。"
+  remarks: "請注意執行個體，傳回實作`XmlElement`介面，以便直接在傳回的物件上建立預設屬性。       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) 中，元素節點時，允許在文件和項目節點和 EntityReference 節點 EntityReference 節點不是屬性節點的子系。"
   example:
   - "The following example creates a new element and adds it to the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_17_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_17_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_17_1.vb)]"
   syntax:
@@ -509,7 +509,7 @@ items:
     parameters:
     - id: name
       type: System.String
-      description: "The qualified name of the element. If the name contains a colon then the <xref:System.Xml.XmlNode.Prefix*> property reflects the part of the name preceding the colon and the <xref:System.Xml.XmlDocument.LocalName*> property reflects the part of the name after the colon. The qualified name cannot include a prefix of&quot;xmlns&quot;."
+      description: "項目的限定的名稱。 如果名稱包含冒號， <> </> *> 屬性會反映冒號前面的名稱部分而<> *> 屬性會反映冒號後面的名稱部分。 限定的名稱不能包含 xmlns 前置詞。"
     return:
       type: System.Xml.XmlElement
       description: "The new <xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;></xref>."
@@ -529,17 +529,17 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlElement&quot;></xref> with the qualified name and <xref:System.Xml.XmlNode.NamespaceURI*>."
-  remarks: "The following C# code      ```   XmlElement elem;   elem=doc.CreateElement(&quot;xy:item&quot;, &quot;urn:abc&quot;);   ```       results in an element that is equivalent to the following XML text.      ```   <xy:item          xmlns:xy=&quot;urn:abc&quot;/>   ```       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), Element nodes are allowed within Document and Element nodes, and in EntityReference nodes when the EntityReference node is not a child of an Attribute node."
+  summary: "建立<xref href=&quot;System.Xml.XmlElement&quot;></xref>具有限定的名稱和<xref:System.Xml.XmlNode.NamespaceURI*>.</xref:System.Xml.XmlNode.NamespaceURI*>"
+  remarks: "下列 C# 程式碼```   XmlElement elem;   elem=doc.CreateElement(&quot;xy:item&quot;, &quot;urn:abc&quot;);   ```導致相當於下列 XML 文字的項目。      ```   <xy:item          xmlns:xy=&quot;urn:abc&quot;/>   ```雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) 中，元素節點時，允許在文件和項目節點和 EntityReference 節點 EntityReference 節點不是屬性節點的子系。"
   syntax:
     content: public System.Xml.XmlElement CreateElement (string qualifiedName, string namespaceURI);
     parameters:
     - id: qualifiedName
       type: System.String
-      description: "The qualified name of the element. If the name contains a colon then the <xref:System.Xml.XmlNode.Prefix*> property will reflect the part of the name preceding the colon and the <xref:System.Xml.XmlDocument.LocalName*> property will reflect the part of the name after the colon. The qualified name cannot include a prefix of&quot;xmlns&quot;."
+      description: "項目的限定的名稱。 如果名稱包含冒號， <> </> *> 屬性會反映冒號前面的名稱的一部分而<> *> 屬性會反映冒號後面的名稱的一部分。 限定的名稱不能包含 xmlns 前置詞。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the element."
+      description: "命名空間 URI 的項目。"
     return:
       type: System.Xml.XmlElement
       description: "The new <xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;></xref>."
@@ -559,8 +559,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an element with the specified <xref:System.Xml.XmlNode.Prefix*>, <xref:System.Xml.XmlDocument.LocalName*>, and <xref:System.Xml.XmlNode.NamespaceURI*>."
-  remarks: "The following C# code      ```   XmlElement elem;   elem=doc.CreateElement(&quot;xy&quot;, &quot;item&quot;, &quot;urn:abc&quot;);   ```       creates an element equivalent to the following XML text:      ```   <xy:item xmlns:xy=&quot;urn:abc&quot;/>   ```       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), Element nodes are allowed within Document and Element nodes, and in EntityReference nodes when the EntityReference is outside an Attribute node.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "建立具有指定的項目<> *>， <> </> *>，和<xref:System.Xml.XmlNode.NamespaceURI*>。</xref:System.Xml.XmlNode.NamespaceURI*>"
+  remarks: "下列 C# 程式碼```   XmlElement elem;   elem=doc.CreateElement(&quot;xy&quot;, &quot;item&quot;, &quot;urn:abc&quot;);   ```建立的項目相當於下列 XML 文字︰```   <xy:item xmlns:xy=&quot;urn:abc&quot;/>   ```雖然這個方法會在文件的內容中建立新的物件，它不會自動將新物件加入文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) 中，元素節點時，允許在文件和項目節點和 EntityReference 節點 EntityReference 超出屬性節點。       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example adds a new element to the existing XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/csharp/9cc675fc-f986-4de5-bce9-_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/visualbasic/9cc675fc-f986-4de5-bce9-_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/cpp/9cc675fc-f986-4de5-bce9-_1.cpp)]"
   syntax:
@@ -568,13 +568,13 @@ items:
     parameters:
     - id: prefix
       type: System.String
-      description: "The prefix of the new element (if any). String.Empty and <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> are equivalent."
+      description: "新的項目 （如果有的話） 的前置詞。 String.Empty 與<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>相等。"
     - id: localName
       type: System.String
-      description: "The local name of the new element."
+      description: "新項目的本機名稱。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the new element (if any). String.Empty and <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> are equivalent."
+      description: "命名空間 URI （如果有的話） 的新項目。 String.Empty 與<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>相等。"
     return:
       type: System.Xml.XmlElement
       description: "The new <xref href=&quot;System.Xml.XmlElement&quot;></xref>."
@@ -594,8 +594,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlEntityReference&quot;></xref> with the specified name."
-  remarks: "If the referenced entity is known, the child list of the `XmlEntityReference` node is made the same as that of the corresponding <xref:System.Xml.XmlEntity> node.       The namespaces used in the replacement text for the entity reference are bound at the time the parent of the entity reference node is first set (for example, when the entity reference node is inserted into the document). For example, given the following entity:      ```   <!ENTITY a &quot;<b>test</b>&quot;>   ```       If you call `CreateEntityReference(&quot;a&quot;)` you get back a single node of type EntityReference with no children. If you append this node as a child of the following node,      ```   <item xmlns=&quot;urn:1&quot;/>   ```       then, at the time of calling <xref:System.Xml.XmlNode.AppendChild%2A>, the parent of the newly created entity reference node is set and the children are expanded in this namespace context. The child element node `b` will have NamespaceURI equal to `urn:1`. The child nodes of the entity reference remain the same even if you move the entity reference to a place in the document that has a different default namespace context. This does not happen for existing entity reference nodes when you remove and insert them or for entity references that you clone with <xref:System.Xml.XmlDocument.CloneNode%2A>. It only happens for newly created entity references.       If the corresponding entity is not defined in the DocumentType when the entity reference node is added, because the entity reference is not defined, its only child node will be an empty text node.       The built-in entities amp, lt, gt, apos, and quot are also allowed, and they will have a child text node with the appropriate expanded character value.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), EntityReference nodes are only allowed within Element, Attribute and EntityReference nodes."
+  summary: "建立<xref href=&quot;System.Xml.XmlEntityReference&quot;></xref>具有指定名稱。"
+  remarks: "如果受參考的實體為已知的子清單`XmlEntityReference`節點進行對應的相同<xref:System.Xml.XmlEntity>節點。</xref:System.Xml.XmlEntity>       實體參考取代文字中使用的命名空間繫結時 （例如，實體參考節點插入文件） 時，會先設定實體參照節點的父系。 例如，給定以下實體︰```   <!ENTITY a &quot;<b>test</b>&quot;>   ```如果您呼叫`CreateEntityReference(&quot;a&quot;)`您會回到類型的 EntityReference 的單一節點，不含子系。 如果您將這個節點附加的下列節點中，子系```   <item xmlns=&quot;urn:1&quot;/>   ```然後，在呼叫時<xref:System.Xml.XmlNode.AppendChild%2A>、 設定新建立的實體參考節點的父系和子系會展開這個命名空間內容中。</xref:System.Xml.XmlNode.AppendChild%2A> 子項目節點`b`必須等於 NamespaceURI `urn:1`。 實體參考的子節點維持不變，即使您移動實體參考至具有不同的預設命名空間內容的文件中的位置。 這不會針對現有實體參考節點，當您移除，並將其插入或您與<xref:System.Xml.XmlDocument.CloneNode%2A>.</xref:System.Xml.XmlDocument.CloneNode%2A>複製的實體參考 它只會發生之新建立的實體參考。       如果對應的實體中未定義 DocumentType 加入實體參考節點之後，因為未定義的實體參考，其唯一的子節點會是空白文字節點。       也允許內建的實體 amp、 lt、 gt、 a p o s 和 q u o t，而且會有一個文字子節點以展開適當的字元值。       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) EntityReference 節點之內，才允許項目、 屬性和 EntityReference 節點。"
   example:
   - "The following example creates two entity reference nodes and inserts them into an XML document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateEntityReference Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_7_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateEntityReference Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_7_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateEntityReference Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_7_1.vb)]"
   syntax:
@@ -603,7 +603,7 @@ items:
     parameters:
     - id: name
       type: System.String
-      description: "The name of the entity reference."
+      description: "實體參考的名稱。"
     return:
       type: System.Xml.XmlEntityReference
       description: "The new <xref uid=&quot;langword_csharp_XmlEntityReference&quot; name=&quot;XmlEntityReference&quot; href=&quot;&quot;></xref>."
@@ -611,7 +611,7 @@ items:
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The name is invalid (for example, names starting with&quot;#&quot; are invalid.)"
+    description: "名稱無效 （例如，以 &quot;#&quot; 開頭的名稱是無效）。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.CreateNavigator
@@ -626,8 +626,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates a new <xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref> object for navigating this document."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "建立新<xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref>巡覽這份文件的物件。"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - See <xref:System.Xml.XmlNode.CreateNavigator%2A?displayProperty=fullName> for an example using this method.
   syntax:
@@ -635,7 +635,7 @@ items:
     parameters: []
     return:
       type: System.Xml.XPath.XPathNavigator
-      description: "An <xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref> object."
+      description: "<xref href=&quot;System.Xml.XPath.XPathNavigator&quot;> </xref>物件。"
   overload: System.Xml.XmlDocument.CreateNavigator*
   exceptions: []
   platform:
@@ -652,8 +652,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref> object for navigating this document positioned on the <xref href=&quot;System.Xml.XmlNode&quot;></xref> specified."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "建立<xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref>物件，用於巡覽位於這份文件<xref href=&quot;System.Xml.XmlNode&quot;></xref>指定。"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - See <xref:System.Xml.XmlNode.CreateNavigator%2A?displayProperty=fullName> for an example using this method.
   syntax:
@@ -661,10 +661,10 @@ items:
     parameters:
     - id: node
       type: System.Xml.XmlNode
-      description: "The <xref href=&quot;System.Xml.XmlNode&quot;></xref> you want the navigator initially positioned on."
+      description: "<xref href=&quot;System.Xml.XmlNode&quot;> </xref>您希望巡覽器一開始定位所在。"
     return:
       type: System.Xml.XPath.XPathNavigator
-      description: "An <xref href=&quot;System.Xml.XPath.XPathNavigator&quot;></xref> object."
+      description: "<xref href=&quot;System.Xml.XPath.XPathNavigator&quot;> </xref>物件。"
   overload: System.Xml.XmlDocument.CreateNavigator*
   exceptions: []
   platform:
@@ -681,7 +681,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlNode&quot;></xref> with the specified node type, <xref:System.Xml.XmlDocument.Name*>, and <xref:System.Xml.XmlNode.NamespaceURI*>."
+  summary: "建立<xref href=&quot;System.Xml.XmlNode&quot;></xref>具有指定的節點類型、 <> </> *>，以及<> *>。"
   remarks: "The `nodeTypeString` parameter is case sensitive and must be one of the values in the following table.  \n  \n|nodeTypeString|XmlNodeType|  \n|--------------------|-----------------|  \n|attribute|Attribute|  \n|cdatasection|CDATA|  \n|comment|Comment|  \n|document|Document|  \n|documentfragment|DocumentFragment|  \n|documenttype|DocumentType|  \n|element|Element|  \n|entityreference|EntityReference|  \n|processinginstruction|ProcessingInstruction|  \n|significantwhitespace|SignificantWhitespace|  \n|text|Text|  \n|whitespace|Whitespace|  \n  \n Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.  \n  \n The following table shows you what NodeType[row] is allowed inside another NodeType[column] according to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210).  \n  \n||Document|DocumentType|XmlDeclaration|Element|Attribute|Text|CDATA|Markup|EntityReference|  \n|------|--------------|------------------|--------------------|-------------|---------------|----------|-----------|------------|---------------------|  \n|`Document`|no|no|no|no|no|no|no|no|no|  \n|`DocumentType`|yes|no|no|no|no|no|no|no|no|  \n|`XmlDeclaration`|yes*|no|no|no|no|no|no|no|no|  \n|`Element`|yes|no|no|yes|no|no|no|no|yes***|  \n|`Attribute`|no|no|no|yes****|no|no|no|no|no|  \n|`Text`|no|no|no|yes|yes|no|no|no|yes|  \n|`CDATA`|no|no|no|yes|no|no|no|no|yes***|  \n|`Markup**`|yes|no|no|yes|no|no|no|no|no|  \n|`EntityReference`|no|no|no|yes|yes|no|no|no|yes|  \n  \n \\* The XmlDeclaration node must be the first child of the Document node.  \n  \n ** Markup includes ProcessingInstruction and Comment nodes.  \n  \n *** Element and CDATA nodes are only allowed in EntityReference nodes when the EntityReference node is not a child of an Attribute node.  \n  \n **** Attributes are not children of an Element node. Attributes are contained inside an attribute collection that belongs to an Element node.  \n  \n This method is a Microsoft extension to the Document Object Model (DOM)."
   example:
   - "The following example creates a new element and inserts it into the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateNode1 Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_15_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateNode1 Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_15_1.vb)]\n [!code-cs[Classic WebData XmlDocument.CreateNode1 Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_15_1.cs)]"
@@ -690,13 +690,13 @@ items:
     parameters:
     - id: nodeTypeString
       type: System.String
-      description: "String version of the <xref:System.Xml.XmlNodeType> of the new node. This parameter must be one of the values listed in the table below."
+      description: "字串版本<xref:System.Xml.XmlNodeType>新節點。</xref:System.Xml.XmlNodeType> 這個參數必須是下表所列的值的其中一個。"
     - id: name
       type: System.String
-      description: "The qualified name of the new node. If the name contains a colon, it is parsed into <xref:System.Xml.XmlNode.Prefix*> and <xref:System.Xml.XmlDocument.LocalName*> components."
+      description: "新節點的限定的名稱。 如果名稱包含冒號，將會剖析為<> *> 和<> *> 元件。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the new node."
+      description: "命名空間的新節點的 URI。"
     return:
       type: System.Xml.XmlNode
       description: "The new <xref uid=&quot;langword_csharp_XmlNode&quot; name=&quot;XmlNode&quot; href=&quot;&quot;></xref>."
@@ -704,7 +704,7 @@ items:
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The name was not provided and the <xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref> requires a name; or <code>nodeTypeString</code> is not one of the strings listed below."
+    description: "未提供名稱和<xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref>需要名稱; 或<code> nodeTypeString </code>不是其中一個下面所列的字串。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.CreateNode(System.Xml.XmlNodeType,System.String,System.String)
@@ -719,7 +719,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlNode&quot;></xref> with the specified <xref:System.Xml.XmlNodeType>, <xref:System.Xml.XmlDocument.Name*>, and <xref:System.Xml.XmlNode.NamespaceURI*>."
+  summary: "建立<xref href=&quot;System.Xml.XmlNode&quot;></xref>具有指定<xref:System.Xml.XmlNodeType>， <> </> *>，以及<> *>。</xref:System.Xml.XmlNodeType>"
   remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.  \n  \n The following table shows you what NodeType[row] is allowed inside another NodeType[column] according to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210).  \n  \n||Document|DocumentType|XmlDeclaration|Element|Attribute|Text|CDATA|Markup|EntityReference|  \n|------|--------------|------------------|--------------------|-------------|---------------|----------|-----------|------------|---------------------|  \n|`Document`|no|no|no|no|no|no|no|no|no|  \n|`DocumentType`|yes|no|no|no|no|no|no|no|no|  \n|`XmlDeclaration`|yes*|no|no|no|no|no|no|no|no|  \n|`Element`|yes|no|no|yes|no|no|no|no|yes***|  \n|`Attribute`|no|no|no|yes****|no|no|no|no|no|  \n|`Text`|no|no|no|yes|yes|no|no|no|yes|  \n|`CDATA`|no|no|no|yes|no|no|no|no|yes***|  \n|`Markup**`|yes|no|no|yes|no|no|no|no|no|  \n|`EntityReference`|no|no|no|yes|yes|no|no|no|yes|  \n  \n \\* The XmlDeclaration node must be the first child of the Document node.  \n  \n ** Markup includes ProcessingInstruction and Comment nodes.  \n  \n *** Element and CDATA nodes are only allowed in EntityReference nodes when the EntityReference node is not a child of an Attribute node.  \n  \n **** Attributes are not children of an Element node. Attributes are contained inside an attribute collection that belongs to an Element node.  \n  \n This method is a Microsoft extension to the Document Object Model (DOM)."
   example:
   - "The following example creates a new element and inserts it into an XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateNode Example#1](~/add/codesnippet/csharp/5e223793-7104-464b-b797-_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.CreateNode Example#1](~/add/codesnippet/cpp/5e223793-7104-464b-b797-_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateNode Example#1](~/add/codesnippet/visualbasic/5e223793-7104-464b-b797-_1.vb)]"
@@ -728,13 +728,13 @@ items:
     parameters:
     - id: type
       type: System.Xml.XmlNodeType
-      description: "The <xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref> of the new node."
+      description: "<xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;> </xref>新節點。"
     - id: name
       type: System.String
-      description: "The qualified name of the new node. If the name contains a colon then it is parsed into <xref:System.Xml.XmlNode.Prefix*> and <xref:System.Xml.XmlDocument.LocalName*> components."
+      description: "新節點的限定的名稱。 如果名稱包含冒號，則將會剖析為<> *> 和<> *> 元件。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the new node."
+      description: "命名空間的新節點的 URI。"
     return:
       type: System.Xml.XmlNode
       description: "The new <xref uid=&quot;langword_csharp_XmlNode&quot; name=&quot;XmlNode&quot; href=&quot;&quot;></xref>."
@@ -742,7 +742,7 @@ items:
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The name was not provided and the <xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref> requires a name."
+    description: "未提供名稱和<xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref>需要名稱。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.CreateNode(System.Xml.XmlNodeType,System.String,System.String,System.String)
@@ -757,7 +757,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates a <xref href=&quot;System.Xml.XmlNode&quot;></xref> with the specified <xref:System.Xml.XmlNodeType>, <xref:System.Xml.XmlNode.Prefix*>, <xref:System.Xml.XmlDocument.Name*>, and <xref:System.Xml.XmlNode.NamespaceURI*>."
+  summary: "Creates a <xref href=&quot;System.Xml.XmlNode&quot;></xref> with the specified <xref:System.Xml.XmlNodeType>, <>*>, <>*>, and <xref:System.Xml.XmlNode.NamespaceURI*>.</xref:System.Xml.XmlNode.NamespaceURI*></xref:System.Xml.XmlNodeType>"
   remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.  \n  \n The following table shows you what NodeType[row] is allowed inside another NodeType[column] according to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210).  \n  \n||Document|DocumentType|XmlDeclaration|Element|Attribute|Text|CDATA|Markup|EntityReference|  \n|------|--------------|------------------|--------------------|-------------|---------------|----------|-----------|------------|---------------------|  \n|`Document`|no|no|no|no|no|no|no|no|no|  \n|`DocumentType`|yes|no|no|no|no|no|no|no|no|  \n|`XmlDeclaration`|yes*|no|no|no|no|no|no|no|no|  \n|`Element`|yes|no|no|yes|no|no|no|no|yes***|  \n|`Attribute`|no|no|no|yes****|no|no|no|no|no|  \n|`Text`|no|no|no|yes|yes|no|no|no|yes|  \n|`CDATA`|no|no|no|yes|no|no|no|no|yes***|  \n|`Markup**`|yes|no|no|yes|no|no|no|no|no|  \n|`EntityReference`|no|no|no|yes|yes|no|no|no|yes|  \n  \n \\* The XmlDeclaration node must be the first child of the Document node.  \n  \n ** Markup includes ProcessingInstruction and Comment nodes.  \n  \n *** Element and CDATA nodes are only allowed in EntityReference nodes when the EntityReference node is not a child of an Attribute node.  \n  \n **** Attributes are not children of an Element node. Attributes are contained inside an attribute collection that belongs to the Element node.  \n  \n This method is a Microsoft extension to the Document Object Model (DOM)."
   example:
   - "The following example adds a new element to the document.  \n  \n [!code-vb[Classic WebData XmlDocument.CreateNode2 Example#1](~/add/codesnippet/visualbasic/9b485b37-d267-4da7-a8ac-_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.CreateNode2 Example#1](~/add/codesnippet/cpp/9b485b37-d267-4da7-a8ac-_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateNode2 Example#1](~/add/codesnippet/csharp/9b485b37-d267-4da7-a8ac-_1.cs)]"
@@ -766,16 +766,16 @@ items:
     parameters:
     - id: type
       type: System.Xml.XmlNodeType
-      description: "The <xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref> of the new node."
+      description: "<xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;> </xref>新節點。"
     - id: prefix
       type: System.String
-      description: "The prefix of the new node."
+      description: "新節點的前置詞。"
     - id: name
       type: System.String
-      description: "The local name of the new node."
+      description: "新節點的本機名稱。"
     - id: namespaceURI
       type: System.String
-      description: "The namespace URI of the new node."
+      description: "命名空間的新節點的 URI。"
     return:
       type: System.Xml.XmlNode
       description: "The new <xref uid=&quot;langword_csharp_XmlNode&quot; name=&quot;XmlNode&quot; href=&quot;&quot;></xref>."
@@ -783,7 +783,7 @@ items:
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The name was not provided and the <xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref> requires a name."
+    description: "未提供名稱和<xref uid=&quot;langword_csharp_XmlNodeType&quot; name=&quot;XmlNodeType&quot; href=&quot;&quot;></xref>需要名稱。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.CreateProcessingInstruction(System.String,System.String)
@@ -798,8 +798,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlProcessingInstruction&quot;></xref> with the specified name and data."
-  remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), ProcessingInstruction nodes are only allowed within Document, Element, and EntityReference nodes, when the EntityReference node is not a child of an Attribute node."
+  summary: "建立<xref href=&quot;System.Xml.XmlProcessingInstruction&quot;></xref>具有指定的名稱和資料。"
+  remarks: "雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) ProcessingInstruction 節點時，才允許文件、 項目和 EntityReference 節點內 EntityReference 節點不是屬性節點的子系。"
   example:
   - "The following example creates a ProcessingInstruction node and adds it to the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateProcessingInstruction Example#1](~/add/codesnippet/cpp/b628e59c-914d-4083-89f5-_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateProcessingInstruction Example#1](~/add/codesnippet/visualbasic/b628e59c-914d-4083-89f5-_1.vb)]\n [!code-cs[Classic WebData XmlDocument.CreateProcessingInstruction Example#1](~/add/codesnippet/csharp/b628e59c-914d-4083-89f5-_1.cs)]"
   syntax:
@@ -807,10 +807,10 @@ items:
     parameters:
     - id: target
       type: System.String
-      description: "The name of the processing instruction."
+      description: "處理指示的名稱。"
     - id: data
       type: System.String
-      description: "The data for the processing instruction."
+      description: "處理指示的資料。"
     return:
       type: System.Xml.XmlProcessingInstruction
       description: "The new <xref uid=&quot;langword_csharp_XmlProcessingInstruction&quot; name=&quot;XmlProcessingInstruction&quot; href=&quot;&quot;></xref>."
@@ -830,8 +830,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlSignificantWhitespace&quot;></xref> node."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM). It is used when you want to manually format your document.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods."
+  summary: "建立<xref href=&quot;System.Xml.XmlSignificantWhitespace&quot;></xref>節點。"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。 您想要以手動方式格式化文件時使用它。       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。"
   example:
   - "The following example adds significant white space to the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateSignificantWhitespace Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_24_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateSignificantWhitespace Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_24_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateSignificantWhitespace Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_24_1.vb)]"
   syntax:
@@ -839,7 +839,7 @@ items:
     parameters:
     - id: text
       type: System.String
-      description: "The string must contain only the following characters &amp;#20; &amp;#10; &amp;#13; and &amp;#9;"
+      description: "字串必須包含下列字元&amp;#20;&amp;#10;&amp;#13; and &amp;#9;"
     return:
       type: System.Xml.XmlSignificantWhitespace
       description: "A new <xref uid=&quot;langword_csharp_XmlSignificantWhitespace&quot; name=&quot;XmlSignificantWhitespace&quot; href=&quot;&quot;></xref> node."
@@ -859,8 +859,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlText&quot;></xref> with the specified text."
-  remarks: "Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), Text nodes are only allowed within Element, Attribute and EntityReference nodes."
+  summary: "建立<xref href=&quot;System.Xml.XmlText&quot;></xref>使用指定的文字。"
+  remarks: "雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210) 中，文字節點之內，才允許項目、 屬性和 EntityReference 節點。"
   example:
   - "The following example creates a new element and adds it to the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_3_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_3_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateElement Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_3_1.vb)]"
   syntax:
@@ -868,10 +868,10 @@ items:
     parameters:
     - id: text
       type: System.String
-      description: "The text for the Text node."
+      description: "Text 節點的文字。"
     return:
       type: System.Xml.XmlText
-      description: "The new <xref uid=&quot;langword_csharp_XmlText&quot; name=&quot;XmlText&quot; href=&quot;&quot;></xref> node."
+      description: "新<xref uid=&quot;langword_csharp_XmlText&quot; name=&quot;XmlText&quot; href=&quot;&quot;></xref>節點。"
   overload: System.Xml.XmlDocument.CreateTextNode*
   exceptions: []
   platform:
@@ -888,8 +888,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlWhitespace&quot;></xref> node."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM). It is used when you want to manually format your document.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods."
+  summary: "建立<xref href=&quot;System.Xml.XmlWhitespace&quot;></xref>節點。"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。 您想要以手動方式格式化文件時使用它。       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。"
   example:
   - "The following example adds white space to the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.CreateWhitespace Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_4_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateWhitespace Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_4_1.vb)]\n [!code-cs[Classic WebData XmlDocument.CreateWhitespace Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_4_1.cs)]"
   syntax:
@@ -897,7 +897,7 @@ items:
     parameters:
     - id: text
       type: System.String
-      description: "The string must contain only the following characters &amp;#20; &amp;#10; &amp;#13; and &amp;#9;"
+      description: "字串必須包含下列字元&amp;#20;&amp;#10;&amp;#13; and &amp;#9;"
     return:
       type: System.Xml.XmlWhitespace
       description: "A new <xref uid=&quot;langword_csharp_XmlWhitespace&quot; name=&quot;XmlWhitespace&quot; href=&quot;&quot;></xref> node."
@@ -917,8 +917,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlDeclaration&quot;></xref> node with the specified values."
-  remarks: "The attributes are exposed as special properties on the `XmlDeclaration` node, and not as <xref:System.Xml.XmlAttribute> nodes.       Although this method creates the new object in the context of the document, it does not automatically add the new object to the document tree. To add the new object, you must explicitly call one of the node insert methods.       According to the W3C Extensible Markup Language (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210), the `XmlDeclaration` node must be the first node in the document.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "建立<xref href=&quot;System.Xml.XmlDeclaration&quot;></xref>節點，以指定的值。"
+  remarks: "屬性會公開為特殊的屬性上`XmlDeclaration` 節點，而不是<xref:System.Xml.XmlAttribute>節點。</xref:System.Xml.XmlAttribute>       雖然這個方法會在文件的內容中建立新的物件，它不會自動將新的物件至文件樹狀結構。 若要加入新的物件，您必須明確呼叫其中一個節點插入方法。       根據 W3C 可延伸標記語言 (XML) 1.0 recommendation (www.w3.org/TR/1998/REC-xml-19980210)，`XmlDeclaration`節點必須是文件中的第一個節點。       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example creates an XML declaration and adds it to the document.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateXmlDeclaration Example#1](~/add/codesnippet/csharp/89cf6f87-55c5-4c7d-9c11-_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.CreateXmlDeclaration Example#1](~/add/codesnippet/cpp/89cf6f87-55c5-4c7d-9c11-_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.CreateXmlDeclaration Example#1](~/add/codesnippet/visualbasic/89cf6f87-55c5-4c7d-9c11-_1.vb)]"
   syntax:
@@ -926,21 +926,21 @@ items:
     parameters:
     - id: version
       type: System.String
-      description: "The version must be &quot;1.0&quot;."
+      description: "版本必須是&quot;1.0&quot;。"
     - id: encoding
       type: System.String
-      description: "The value of the encoding attribute. This is the encoding that is used when you save the <xref href=&quot;System.Xml.XmlDocument&quot;></xref> to a file or a stream; therefore, it must be set to a string supported by the <xref:System.Text.Encoding> class, otherwise <xref:System.Xml.XmlDocument.Save*> fails. If this is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> or String.Empty, the <xref uid=&quot;langword_csharp_Save&quot; name=&quot;Save&quot; href=&quot;&quot;></xref> method does not write an encoding attribute on the XML declaration and therefore the default encoding, UTF-8, is used.       Note: If the <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> is saved to either a <xref:System.IO.TextWriter> or an <xref:System.Xml.XmlTextWriter>, this encoding value is discarded. Instead, the encoding of the <xref uid=&quot;langword_csharp_TextWriter&quot; name=&quot;TextWriter&quot; href=&quot;&quot;></xref> or the <xref uid=&quot;langword_csharp_XmlTextWriter&quot; name=&quot;XmlTextWriter&quot; href=&quot;&quot;></xref> is used. This ensures that the XML written out can be read back using the correct encoding."
+      description: "編碼屬性的值。 這是您儲存時將使用的編碼方式<xref href=&quot;System.Xml.XmlDocument&quot;></xref>至檔案或資料流中; 因此，它必須設定支援的字串<xref:System.Text.Encoding>類別細明體，否則為<xref:System.Xml.XmlDocument.Save*>失敗。</xref:System.Xml.XmlDocument.Save*> </xref:System.Text.Encoding> 如果這是<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>或 String.Empty， <xref uid=&quot;langword_csharp_Save&quot; name=&quot;Save&quot; href=&quot;&quot;> </xref>方法不會在 XML 宣告上寫入編碼屬性，因此會使用預設編碼方式 utf-8。       注意︰ 如果<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>儲存至<xref:System.IO.TextWriter>或<xref:System.Xml.XmlTextWriter>，則會捨棄這個編碼值。</xref:System.Xml.XmlTextWriter> </xref:System.IO.TextWriter> 相反地的編碼方式<xref uid=&quot;langword_csharp_TextWriter&quot; name=&quot;TextWriter&quot; href=&quot;&quot;></xref>或<xref uid=&quot;langword_csharp_XmlTextWriter&quot; name=&quot;XmlTextWriter&quot; href=&quot;&quot;></xref>用。 這可以確保，可以使用正確的編碼方式讀寫出的 XML。"
     - id: standalone
       type: System.String
-      description: "The value must be either &quot;yes&quot; or &quot;no&quot;. If this is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> or String.Empty, the <xref uid=&quot;langword_csharp_Save&quot; name=&quot;Save&quot; href=&quot;&quot;></xref> method does not write a standalone attribute on the XML declaration."
+      description: "值必須是&quot;yes&quot;no&quot;。 如果這是<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>或 String.Empty， <xref uid=&quot;langword_csharp_Save&quot; name=&quot;Save&quot; href=&quot;&quot;> </xref>方法不會在 XML 宣告上寫入獨立屬性。"
     return:
       type: System.Xml.XmlDeclaration
-      description: "The new <xref uid=&quot;langword_csharp_XmlDeclaration&quot; name=&quot;XmlDeclaration&quot; href=&quot;&quot;></xref> node."
+      description: "新<xref uid=&quot;langword_csharp_XmlDeclaration&quot; name=&quot;XmlDeclaration&quot; href=&quot;&quot;></xref>節點。"
   overload: System.Xml.XmlDocument.CreateXmlDeclaration*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The values of <code>version</code> or <code>standalone</code> are something other than the ones specified above."
+    description: "值<code> version </code>或<code> standalone </code>是上述指定以外的項目。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.DocumentElement
@@ -955,7 +955,7 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the root <xref href=&quot;System.Xml.XmlElement&quot;></xref> for the document."
+  summary: "取得根<xref href=&quot;System.Xml.XmlElement&quot;></xref>文件。"
   remarks: ''
   example:
   - "The following example displays the root element of the XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_8_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_8_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.DocumentElement Example#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_8_1.vb)]  \n  \n **Output:**  \n  \n```  \n<book genre=\"novel\" ISBN=\"1-861001-57-5\"><title>Pride And Prejudice</title></book>   \n```"
@@ -963,7 +963,7 @@ items:
     content: public System.Xml.XmlElement DocumentElement { get; }
     return:
       type: System.Xml.XmlElement
-      description: "The <xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;></xref> that represents the root of the XML document tree. If no root exists, <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> is returned."
+      description: "<xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;> </xref>表示 XML 文件樹狀結構的根。 如果有根， <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>傳回。"
   overload: System.Xml.XmlDocument.DocumentElement*
   exceptions: []
   platform:
@@ -980,15 +980,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the node containing the DOCTYPE declaration."
-  remarks: "An `XmlDocument` can have one and only one child with <xref:System.Xml.XmlNodeType> equal to DocumentType.      > [!NOTE] >  This property is read-only. To change the DocumentType node, delete the existing node, create a new one using the <xref:System.Xml.XmlDocument.CreateDocumentType%2A> method, and add the new node to the document."
+  summary: "取得包含 DOCTYPE 宣告的節點。"
+  remarks: "`XmlDocument`可以有只有一個子系<xref:System.Xml.XmlNodeType>等於 DocumentType。</xref:System.Xml.XmlNodeType>      > [!NOTE] > 這個屬性是唯讀的。 若要變更 DocumentType 節點，請刪除現有的節點，建立新一個使用<xref:System.Xml.XmlDocument.CreateDocumentType%2A>方法，並將新節點加入至文件。</xref:System.Xml.XmlDocument.CreateDocumentType%2A>"
   example:
   - "The following example gets and displays the DOCTYPE declaration for the document.  \n  \n [!code-cpp[Classic WebData XmlDocument.DocumentType Example#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_4_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.DocumentType Example#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_4_1.cs)]\n [!code-vb[Classic WebData XmlDocument.DocumentType Example#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_4_1.vb)]"
   syntax:
     content: public virtual System.Xml.XmlDocumentType DocumentType { get; }
     return:
       type: System.Xml.XmlDocumentType
-      description: "The <xref href=&quot;System.Xml.XmlNode&quot;></xref> containing the DocumentType (DOCTYPE declaration)."
+      description: "<xref href=&quot;System.Xml.XmlNode&quot;> </xref>包含 DocumentType （DOCTYPE 宣告）。"
   overload: System.Xml.XmlDocument.DocumentType*
   exceptions: []
   platform:
@@ -1005,8 +1005,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the <xref href=&quot;System.Xml.XmlElement&quot;></xref> with the specified ID."
-  remarks: "If the document has multiple elements with the matching ID, this method returns the first matching element in the document.      > [!NOTE] >  The DOM implementation must have information which defines which attributes are of type ID. Although attributes of type ID can be defined in either XSD schemas or DTDs, this version of the product only supports those defined in DTDs. Attributes with the name &quot;ID&quot; are not of type ID unless so defined in the DTD. Implementations where it is unknown whether the attributes are of type ID are expected to return `null`."
+  summary: "取得<xref href=&quot;System.Xml.XmlElement&quot;></xref>與指定的識別碼。"
+  remarks: "如果文件有多個具有相符 ID 的項目，這個方法會傳回文件中的第一個相符的項目。      > [!NOTE] > DOM 實作必須擁有這些資訊會定義哪些屬性屬於類型識別碼。 雖然型別 ID 的屬性可以定義 XSD 結構描述或 Dtd 中，產品版本只支援 Dtd 中所定義。 除非因此 DTD 中所定義，具有 「 識別碼 」 不是名稱的屬性類型識別碼。 其中是未知的屬性是否為型別 ID 的實作都應傳回`null`。"
   example:
   - "The following example uses the `GetElementById` method.  \n  \n [!code-cs[Classic WebData XmlDocument.GetElementById Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_20_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.GetElementById Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_20_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.GetElementById Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_20_1.vb)]  \n  \n The example uses the file, `ids.xml`, as input.  \n  \n```xml  \n<!DOCTYPE root [  \n  <!ELEMENT root ANY>   \n  <!ELEMENT Person ANY>   \n  <!ELEMENT Customer EMPTY>  \n  <!ELEMENT Team EMPTY>  \n  <!ATTLIST Person SSN ID #REQUIRED>  \n  <!ATTLIST Customer id IDREF #REQUIRED >  \n  <!ATTLIST Team members IDREFS #REQUIRED>]>  \n<root>  \n  <Person SSN='A111' Name='Fred'/>  \n  <Person SSN='A222' Name='Tom'/>  \n  <Customer id='A222334444'/>  \n  <Team members='A222334444 A333445555'/>  \n</root>  \n```"
   syntax:
@@ -1014,10 +1014,10 @@ items:
     parameters:
     - id: elementId
       type: System.String
-      description: "The attribute ID to match."
+      description: "要比對的屬性識別碼。"
     return:
       type: System.Xml.XmlElement
-      description: "The <xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;></xref> with the matching ID or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if no matching element is found."
+      description: "<xref uid=&quot;langword_csharp_XmlElement&quot; name=&quot;XmlElement&quot; href=&quot;&quot;> </xref>具有相符 ID 或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>如果找到相符的項目。"
   overload: System.Xml.XmlDocument.GetElementById*
   exceptions: []
   platform:
@@ -1034,8 +1034,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Returns an <xref href=&quot;System.Xml.XmlNodeList&quot;></xref> containing a list of all descendant elements that match the specified <xref:System.Xml.XmlDocument.Name*>."
-  remarks: "The nodes are placed in the order in which they would be encountered in the document.      > [!NOTE] >  It is recommended that you use the <xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName> or <xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName> method instead of the GetElementsByTagName method."
+  summary: "傳回<xref href=&quot;System.Xml.XmlNodeList&quot;></xref>包含符合指定<xref:System.Xml.XmlDocument.Name*>.</xref:System.Xml.XmlDocument.Name*>之所有子代項目的清單"
+  remarks: "節點會放置在其中發生文件中的順序。      > [!NOTE] > 建議，您會使用<xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName>或<xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName>方法，而不是 GetElementsByTagName 方法。</xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName> </xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName>"
   example:
   - "The following example creates a `XmlDocument` object and uses the `GetElementsByTagName` method and the resulting <xref:System.Xml.XmlNodeList> object to display all the book titles.  \n  \n [!code-cs[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_10_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_10_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.GetElementsByTagName Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_10_1.vb)]  \n  \n The example uses the `books.xml` file as input.  \n  \n [!code-xml[Classic WebData XslTransform.Transform7 Example#2](~/add/codesnippet/xml/m-system.xml.xmldocument_10_2.xml)]"
   syntax:
@@ -1043,10 +1043,10 @@ items:
     parameters:
     - id: name
       type: System.String
-      description: "The qualified name to match. It is matched against the <xref uid=&quot;langword_csharp_Name&quot; name=&quot;Name&quot; href=&quot;&quot;></xref> property of the matching node. The special value &quot;*&quot; matches all tags."
+      description: "要比對的限定的名稱。 比對<xref uid=&quot;langword_csharp_Name&quot; name=&quot;Name&quot; href=&quot;&quot;></xref>相符節點的屬性。 特殊值&quot;*&quot;與所有標記都相符。"
     return:
       type: System.Xml.XmlNodeList
-      description: "An <xref href=&quot;System.Xml.XmlNodeList&quot;></xref> containing a list of all matching nodes. If no nodes match <code>name</code>, the returned collection will be empty."
+      description: "<xref href=&quot;System.Xml.XmlNodeList&quot;> </xref>包含所有符合節點的清單。 如果沒有節點符合<code> name </code>，傳回的集合將會空白。"
   overload: System.Xml.XmlDocument.GetElementsByTagName*
   exceptions: []
   platform:
@@ -1063,20 +1063,20 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Returns an <xref href=&quot;System.Xml.XmlNodeList&quot;></xref> containing a list of all descendant elements that match the specified <xref:System.Xml.XmlDocument.LocalName*> and <xref:System.Xml.XmlNode.NamespaceURI*>."
-  remarks: "The nodes are placed in the order in which they would be encountered in the document tree.      > [!NOTE] >  It is recommended that you use the <xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName> or <xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName> method instead of the GetElementsByTagName method."
+  summary: "傳回<xref href=&quot;System.Xml.XmlNodeList&quot;></xref>包含符合指定之所有子代項目的清單<> *> 和<> *>。"
+  remarks: "節點會放置在其中發生在文件樹狀目錄中的順序。      > [!NOTE] > 建議，您會使用<xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName>或<xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName>方法，而不是 GetElementsByTagName 方法。</xref:System.Xml.XmlNode.SelectSingleNode%2A?displayProperty=fullName> </xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=fullName>"
   syntax:
     content: public virtual System.Xml.XmlNodeList GetElementsByTagName (string localName, string namespaceURI);
     parameters:
     - id: localName
       type: System.String
-      description: "The LocalName to match. The special value &quot;*&quot; matches all tags."
+      description: "要相符的 LocalName。 特殊值&quot;*&quot;與所有標記都相符。"
     - id: namespaceURI
       type: System.String
-      description: "NamespaceURI to match."
+      description: "要比對的 NamespaceURI。"
     return:
       type: System.Xml.XmlNodeList
-      description: "An <xref href=&quot;System.Xml.XmlNodeList&quot;></xref> containing a list of all matching nodes. If no nodes match the specified <code>localName</code> and <code>namespaceURI</code>, the returned collection will be empty."
+      description: "<xref href=&quot;System.Xml.XmlNodeList&quot;> </xref>包含所有符合節點的清單。 如果沒有節點符合指定<code> localName </code>和<code> namespaceURI </code>，傳回的集合將會空白。"
   overload: System.Xml.XmlDocument.GetElementsByTagName*
   exceptions: []
   platform:
@@ -1093,15 +1093,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the <xref href=&quot;System.Xml.XmlImplementation&quot;></xref> object for the current document."
-  remarks: "`XmlDocument` objects created from the same `XmlImplementation` share the same <xref:System.Xml.XmlNameTable>. This allows users to compare attribute and element names as objects rather than strings.       Although the `XmlDocument` objects share the same implementation, to move nodes from one document to another you must use the <xref:System.Xml.XmlDocument.ImportNode%2A> method."
+  summary: "取得<xref href=&quot;System.Xml.XmlImplementation&quot;></xref>目前文件的物件。"
+  remarks: "`XmlDocument`建立從相同物件`XmlImplementation`共用相同<xref:System.Xml.XmlNameTable>.</xref:System.Xml.XmlNameTable> 這可讓使用者做為物件，而不是字串比較的屬性和項目名稱。       雖然`XmlDocument`物件共用相同的實作，以將節點從一份文件移到另一個則必須使用<xref:System.Xml.XmlDocument.ImportNode%2A>方法。</xref:System.Xml.XmlDocument.ImportNode%2A>"
   example:
   - "The following example creates a new `XmlDocument` using another document's implementation.  \n  \n [!code-cs[Classic WebData XmlDocument.Implementation Example#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_11_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.Implementation Example#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_11_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.Implementation Example#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_11_1.vb)]"
   syntax:
     content: public System.Xml.XmlImplementation Implementation { get; }
     return:
       type: System.Xml.XmlImplementation
-      description: "The <xref uid=&quot;langword_csharp_XmlImplementation&quot; name=&quot;XmlImplementation&quot; href=&quot;&quot;></xref> object for the current document."
+      description: "<xref uid=&quot;langword_csharp_XmlImplementation&quot; name=&quot;XmlImplementation&quot; href=&quot;&quot;> </xref>目前文件的物件。"
   overload: System.Xml.XmlDocument.Implementation*
   exceptions: []
   platform:
@@ -1118,8 +1118,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Imports a node from another document to the current document."
-  remarks: "The returned node has no parent. The source node is not altered or removed from the original document; `ImportNode` creates a copy of the source node.       Importing a node creates an `XmlNode` object owned by the importing document, with <xref:System.Xml.XmlNode.Name%2A> and <xref:System.Xml.XmlNode.NodeType%2A> identical to the source node. The new object also has the attributes related to namespaces (<xref:System.Xml.XmlNode.Prefix%2A>, <xref:System.Xml.XmlNode.LocalName%2A>, and <xref:System.Xml.XmlNode.NamespaceURI%2A>).       Depending on the node type of the imported node and the value of the `deep` parameter, additional information is copied as appropriate. This method attempts to mirror the behavior expected if a fragment of XML or HTML source was copied from one document to another (recognizing that, in the XML case, the two documents could have different DTDs).       The following table describes the specific behavior for each <xref:System.Xml.XmlNodeType>.      |XmlNodeType|ImportNode(true)|ImportNode(false)|   |-----------------|------------------------|-------------------------|   |Attribute|The <xref:System.Xml.XmlAttribute.Specified%2A> property is set to `true` on the generated <xref:System.Xml.XmlAttribute>. The descendants of the source `XmlAttribute` are recursively imported and the resulting nodes reassembled to form the corresponding subtree.|The `deep` parameter does not apply to `XmlAttribute` nodes; they always carry their children with them when imported.|   |CData|Copies the node, including its data.|Copies the node, including its data.|   |Comment|Copies the node, including its data.|Copies the node, including its data.|   |DocumentFragment|The descendants of the source node are recursively imported and the resulting nodes reassembled to form the corresponding subtree.|An empty <xref:System.Xml.XmlDocumentFragment> is generated.|   |DocumentType|Copies the node, including its data.*|Copies the node, including its data.*|   |Element|The descendants of the source element and its specified attribute nodes are recursively imported and the resulting nodes reassembled to form the corresponding subtree.<br /><br /> Note: Default attributes are not copied. If the document being imported into defines default attributes for this element name, those are assigned.|Specified attribute nodes of the source element are imported, and the generated `XmlAttribute` nodes are attached to the generated <xref:System.Xml.XmlElement>.<br /><br /> Note: Default attributes are not copied. If the document being imported into defines default attributes for this element name, those are assigned.|   |EntityReference|Because the source and destination documents could have the entities defined differently, this method only copies the <xref:System.Xml.XmlEntityReference> node. The replacement text is not included. If the destination document has the entity defined, its value is assigned.|Because the source and destination documents could have the entities defined differently, this method only copies the <xref:System.Xml.XmlEntityReference> node. The replacement text is not included. If the destination document has the entity defined, its value is assigned.|   |ProcessingInstruction|Copies the target and data value from the imported node.|Copies the target and data value from the imported node.|   |Text|Copies the node, including its data.|Copies the node, including its data.|   |SignificantWhitespace|Copies the node, including its data.|Copies the node, including its data.|   |Whitespace|Copies the node, including its data.|Copies the node, including its data.|   |XmlDeclaration|Copies the target and data value from the imported node.|Copies the target and data value from the imported node.|   |All other node types.|These node types cannot be imported.|These node types cannot be imported.|       *Although DocumentType nodes can be imported, a document can only have one DocumentType. If the document currently has a DocumenType node, it must be removed before adding a new one."
+  summary: "從其他文件匯入節點至目前的文件。"
+  remarks: "傳回的節點有沒有父代。 來源節點不改變或移除原始文件。`ImportNode`建立來源節點的複本。       匯入的節點會建立`XmlNode`物件與所匯入的文件中，擁有<xref:System.Xml.XmlNode.Name%2A>和<xref:System.Xml.XmlNode.NodeType%2A>來源節點相同。</xref:System.Xml.XmlNode.NodeType%2A> </xref:System.Xml.XmlNode.Name%2A> 新的物件也有命名空間與相關的屬性 (<xref:System.Xml.XmlNode.Prefix%2A>， <xref:System.Xml.XmlNode.LocalName%2A>，和<xref:System.Xml.XmlNode.NamespaceURI%2A>)。</xref:System.Xml.XmlNode.NamespaceURI%2A> </xref:System.Xml.XmlNode.LocalName%2A> </xref:System.Xml.XmlNode.Prefix%2A>       根據節點類型的值匯入的節點以及`deep`參數，其他資訊會適當的複製。 這個方法會嘗試預期的行為，如果 XML 或 HTML 來源的片段從一份文件複製到另一個鏡像 （可辨識在 XML 案例中，兩份文件可能有不同的 Dtd）。       下表描述每個<xref:System.Xml.XmlNodeType>.</xref:System.Xml.XmlNodeType>的特定行為      |XmlNodeType |ImportNode(true) |ImportNode(false) |  |-----------------|------------------------|-------------------------|  |屬性 |<xref:System.Xml.XmlAttribute.Specified%2A>屬性設定為`true`產生<xref:System.Xml.XmlAttribute>。</xref:System.Xml.XmlAttribute> </xref:System.Xml.XmlAttribute.Specified%2A> 來源的下階`XmlAttribute`會遞迴匯入與產生的節點會重組以形成對應的樹狀子目錄。 |`deep`參數不適用於`XmlAttribute`節點; 它們永遠執行具有匯入時及其子系。 |  |CData |複製節點，包含其資料。 |複製節點，包含其資料。 |  |註解 |複製節點，包含其資料。 |複製節點，包含其資料。 |  |DocumentFragment |來源節點的子代會遞迴匯入，而且產生的節點會重組以形成對應的樹狀子目錄。 |產生空<xref:System.Xml.XmlDocumentFragment>。 |  |DocumentType |複製節點，包含其資料。*|複製節點，包含其資料。*|  |項目 |來源項目和其指定的屬性節點的子代會遞迴匯入，而且產生的節點會重組以形成對應的樹狀子目錄。</xref:System.Xml.XmlDocumentFragment><br /><br /> 附註︰ 預設不會複製屬性。 如果要匯入的文件定義這個項目名稱的預設屬性，會指派這些。 |指定的屬性節點的來源項目會匯入，以及產生`XmlAttribute`節點會附加至產生<xref:System.Xml.XmlElement>。</xref:System.Xml.XmlElement><br /><br /> 附註︰ 預設不會複製屬性。 如果要匯入的文件定義這個項目名稱的預設屬性，會指派這些。 |  |EntityReference |因為來源和目的文件可以擁有定義不同的實體，這個方法只會複製<xref:System.Xml.XmlEntityReference>節點。</xref:System.Xml.XmlEntityReference> 取代文字就不會包含。 如果目的文件有定義的實體，其值指派。 |因為來源和目的文件可以擁有定義不同的實體，這個方法只會複製<xref:System.Xml.XmlEntityReference>節點。</xref:System.Xml.XmlEntityReference> 取代文字就不會包含。 如果目的文件有定義的實體，其值指派。 |  |ProcessingInstruction |從匯入的節點複製目標和資料值。 |從匯入的節點複製目標和資料值。 |  |文字 |複製節點，包含其資料。 |複製節點，包含其資料。 |  |SignificantWhitespace |複製節點，包含其資料。 |複製節點，包含其資料。 |  |空白字元 |複製節點，包含其資料。 |複製節點，包含其資料。 |  |XmlDeclaration |從匯入的節點複製目標和資料值。 |從匯入的節點複製目標和資料值。 |  |其他所有節點類型。 |無法匯入這些節點型別。 |無法匯入這些節點型別。 |      * 雖然 DocumentType 節點可以匯入，文件只能有一個 DocumentType。 如果目前文件會具有 DocumenType 節點，必須將它移除之前新增一個新。"
   example:
   - "The following example imports a book node from a second XML document into the original XML document.  \n  \n [!code-vb[Classic WebData XmlDocument.ImportNode Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_22_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.ImportNode Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_22_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.ImportNode Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_22_1.cs)]  \n  \n The example uses the file, `books.xml`, as input.  \n  \n [!code-xml[Classic WebData XslTransform.Transform7 Example#2](~/add/codesnippet/xml/m-system.xml.xmldocument_22_2.xml)]"
   syntax:
@@ -1127,18 +1127,18 @@ items:
     parameters:
     - id: node
       type: System.Xml.XmlNode
-      description: "The node being imported."
+      description: "匯入的節點。"
     - id: deep
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to perform a deep clone; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>執行深層複製;否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
     return:
       type: System.Xml.XmlNode
-      description: "The imported <xref href=&quot;System.Xml.XmlNode&quot;></xref>."
+      description: "匯入<xref href=&quot;System.Xml.XmlNode&quot;> </xref>。"
   overload: System.Xml.XmlDocument.ImportNode*
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "Calling this method on a node type which cannot be imported."
+    description: "無法匯入的節點型別上呼叫這個方法。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.InnerText
@@ -1153,18 +1153,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Throws an <xref:System.InvalidOperationException> in all cases."
-  remarks: "This property is not implemented."
+  summary: "擲回<xref:System.InvalidOperationException>在所有情況下。</xref:System.InvalidOperationException>"
+  remarks: "這個屬性未實作。"
   syntax:
     content: public override string InnerText { set; }
     return:
       type: System.String
-      description: "The values of the node and all its child nodes."
+      description: "節點和其所有子節點的值。"
   overload: System.Xml.XmlDocument.InnerText*
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "In all cases."
+    description: "在所有情況下。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.InnerXml
@@ -1179,18 +1179,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets or sets the markup representing the children of the current node."
-  remarks: "Setting this property replaces the children of the node with the parsed contents of the given string. The parsing is done in the current namespace context.       `InnerXml` removes redundant namespace declarations. As a result, numerous cut and paste operations do not increase the size of your document with redundant namespace declarations. Consider the following XSL document:      ```   <xsl:stylesheet version=&quot;1.0&quot;          xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>        <xsl:template match=&quot;stock&quot;>            ...        </xsl:template>       </xsl:stylesheet>   ```       The `InnerXml` property on the stylesheet node returns the following string:      ```   <xsl:template match=&quot;stock&quot;          xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>        ...       </xsl:template>   ```       Notice the additional xmlns:xsl namespace declaration which is used to preserve the node identity. If you re-insert this inner XML string, you will get back your original document. In other words, `InnerXml` recognizes that the xmlns:xsl namespace declaration is redundant, given that the parent xsl:stylesheet element already has the xmlns:xsl namespace delcaration, and therefore removes it.       If you move `InnerXml` from a document with no default namespace to a document with a default namespace, the behavior is a little different. Consider the following XML string:      ```   <test>         <item>123</item>       </test>   ```       `InnerXml` returns a plain XML string with no namespace declarations:      ```   <item>123</item>   ```       If you then insert this string into a document that does have a default namespace, such as the following:      ```   <test2 xmlns=&quot;urn:1&quot;>       </test>   ```       `InnerXml` parses the string in context, and the new nodes pick up the urn:1 namespace. The result looks like this:      ```   <test2 xmlns=&quot;urn:1&quot;>         <item>123</item>       </test>   ```       Now when you ask for the `InnerXml` you get back the following:      ```   <item xmlns=&quot;urn:1&quot;>123</item>   ```       If you explicitly want the inserted item to preserve the fact that it came from a document that had no namespace then you need to manually add an xmlns= &quot;&quot; declaration and insert the resulting string:      ```   <item xmlns=&quot;&quot;>123</item>   ```       The net effect of all this is as follows:      1.  Cutting and pasting `InnerXml` among documents that do not use namespaces is clean and simple and does not create &quot;xmlns&quot; redundancy in your strings.      2.  `InnerXml` can also be used to cut and paste between documents which have more than one namespace (that is XSL stylesheets).      3.  xmlns:xsl declarations automatically appear in your strings and disappear in your node hierarchies.      4.  In the case where you are moving `InnerXml` from a document that has no default namespace to a document that does have a default namespace, the new nodes will pick up the new default namespace.       If `InnerXml` is set with text containing entity references that are not currently defined in the document, the resulting tree will contain empty EntityReference nodes.       This property is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "取得或設定表示目前節點的子系的標記。"
+  remarks: "設定這個屬性指定字串的已剖析內容取代節點的子系。 剖析會在目前的命名空間內容中完成。       `InnerXml`移除多餘的命名空間宣告。 結果中，許多剪下和貼上作業不會增加您的文件有多餘的命名空間宣告的大小。 請考量下列 XSL 文件︰ ```   <xsl:stylesheet version=&quot;1.0&quot;          xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>        <xsl:template match=&quot;stock&quot;>            ...        </xsl:template>       </xsl:stylesheet>   ``` `InnerXml`樣式表節點上的屬性會傳回下列字串︰```   <xsl:template match=&quot;stock&quot;          xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;>        ...       </xsl:template>   ```請注意其他 xmlns:xsl 命名空間宣告用來保留節點的身分識別。 如果您重新插入此內部的 XML 字串，您將會傳回原始文件。 換句話說，`InnerXml`辨識 xmlns:xsl 命名空間宣告為備援，，假設父 xsl: stylesheet 項目已經有 xmlns:xsl 命名空間 delcaration 中，並因此將它移除。       如果您移動`InnerXml`稍有不同的行為是預設命名空間加入文件沒有預設命名空間與文件中。 請考慮下列的 XML 字串︰ ```   <test>         <item>123</item>       </test>   ``` `InnerXml`傳回純文字 XML 字串有沒有命名空間宣告︰```   <item>123</item>   ```如果然後插入具有預設命名空間，如下所示的文件的這個字串︰ ```   <test2 xmlns=&quot;urn:1&quot;>       </test>   ``` `InnerXml`剖析在內容中，字串和新的節點收取 urn:&1; 命名空間。               結果看起來像這樣︰```   <test2 xmlns=&quot;urn:1&quot;>         <item>123</item>       </test>   ```現在當您尋求`InnerXml`您會回到下列︰```   <item xmlns=&quot;urn:1&quot;>123</item>   ```您是否明確插入的項目，以保留它來自已沒有命名空間，則您必須手動加入 xmlns 的文件的事實 =&quot;&quot;宣告，並且插入產生的字串︰ ```   <item xmlns=&quot;&quot;>123</item>   ``` ，如下所示這是所有的淨效果︰ 1。  剪下和貼上`InnerXml`之間的文件，請勿使用命名空間清楚且簡單，而不會建立&quot;xmlns&quot;備援性在字串中。      2.  `InnerXml`也可以用來剪下並貼上具有一個以上的命名空間 （亦即 XSL 樣式表） 的文件之間。      3.  xmlns:xsl 宣告自動出現在您的字串，而且節點階層中消失。      4.  在您所移動的情況下`InnerXml`從沒有預設的命名空間的文件沒有預設命名空間的文件中，新的節點會收取新的預設命名空間。       如果`InnerXml`設定文字中包含目前未定義文件中的實體參考，結果樹狀結構會包含空白的 EntityReference 節點。       這個屬性是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: public override string InnerXml { get; set; }
     return:
       type: System.String
-      description: "The markup of the children of the current node."
+      description: "目前節點子系的標記。"
   overload: System.Xml.XmlDocument.InnerXml*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "The XML specified when setting this property is not well-formed."
+    description: "當設定這個屬性不是語式正確指定的 XML。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.IsReadOnly
@@ -1205,15 +1205,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets a value indicating whether the current node is read-only."
-  remarks: "A read-only node is one whose properties, attributes, or children cannot be changed. You can remove a read-only node from the tree and insert it somewhere else.       This property is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "取得值，指出目前節點是否為唯讀。"
+  remarks: "無法變更其屬性、 屬性或子系是唯讀的節點。 您可以從樹狀目錄移除唯讀節點，然後插入該子其他地方。       這個屬性是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example shows how to use the `IsReadOnly` property.  \n  \n [!code-cs[Classic WebData XmlDocument.IsReadOnly Example#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_7_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.IsReadOnly Example#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_7_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.IsReadOnly Example#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_7_1.vb)]"
   syntax:
     content: public override bool IsReadOnly { get; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the current node is read-only; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> nodes always return <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果目前的節點是唯讀的;否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點永遠傳回<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Xml.XmlDocument.IsReadOnly*
   exceptions: []
   platform:
@@ -1230,19 +1230,19 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Loads the XML document from the specified stream."
-  remarks: "> [!NOTE] >  The `Load` method always preserves significant white space. The <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> property determines whether or not insignificant white space, that is white space in element content, is preserved. The default is `false`; white space in element content is not preserved.       If you want validation to occur, you can create a validating <xref:System.Xml.XmlReader> instance by using the <xref:System.Xml.XmlReaderSettings> class and the <xref:System.Xml.XmlReader.Create%2A> method. For more information, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.       This method is a Microsoft extension to the Document Object Model (DOM).       This method automatically detects the string format of the input XML (for example, UTF-8, ANSI, and so on). If your application needs to know which encoding is used to read the stream, consider using an <xref:System.Xml.XmlTextReader> object to read the stream, and then use the <xref:System.Xml.XmlTextReader.Encoding%2A?displayProperty=fullName> property to determine the encoding. If you need to use a <xref:System.Xml.XmlDocument> object to work with XML, you can use the <xref:System.Xml.XmlTextReader> object to create one. For more information, see [Reading XML Data using XPathDocument and XmlDocument](~/add/includes/ajax-current-ext-md.md)."
+  summary: "從指定的資料流載入 XML 文件。"
+  remarks: "> [!NOTE]>`Load`方法一律會保留顯著泛空白字元。 <xref:System.Xml.XmlDocument.PreserveWhitespace%2A>屬性會決定是否要保留不顯著泛空白字元的項目內容中的空白字元，。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A> 預設值是`false`; 不會保留項目內容中的空白字元。       如果您想進行驗證，您可以建立對其進行驗證<xref:System.Xml.XmlReader>所使用的執行個體<xref:System.Xml.XmlReaderSettings>類別和<xref:System.Xml.XmlReader.Create%2A>方法。</xref:System.Xml.XmlReader.Create%2A> </xref:System.Xml.XmlReaderSettings> </xref:System.Xml.XmlReader> 如需詳細資訊，請參閱 < 備註 > 一節<xref:System.Xml.XmlReader>參考頁面。</xref:System.Xml.XmlReader>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。       這個方法會自動偵測輸入 （例如，utf-8、 ANSI、 等等） 的 XML 字串的格式。 如果您的應用程式必須知道哪一種編碼會用來讀取資料流，請考慮使用<xref:System.Xml.XmlTextReader>來讀取資料流，物件，然後使用<xref:System.Xml.XmlTextReader.Encoding%2A?displayProperty=fullName>屬性來決定編碼。</xref:System.Xml.XmlTextReader.Encoding%2A?displayProperty=fullName> </xref:System.Xml.XmlTextReader> 如果您需要使用<xref:System.Xml.XmlDocument>物件來處理的 XML，您可以使用<xref:System.Xml.XmlTextReader>物件建立一個。</xref:System.Xml.XmlTextReader> </xref:System.Xml.XmlDocument> 如需詳細資訊，請參閱[使用 XPathDocument 及 XmlDocument 讀取 XML 資料](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public virtual void Load (System.IO.Stream inStream);
     parameters:
     - id: inStream
       type: System.IO.Stream
-      description: "The stream containing the XML document to load."
+      description: "包含要載入 XML 文件的資料流。"
   overload: System.Xml.XmlDocument.Load*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "There is a load or parse error in the XML. In this case, a <xref:System.IO.FileNotFoundException> is raised."
+    description: "在 XML 中沒有載入或剖析錯誤。 在此情況下， <xref:System.IO.FileNotFoundException>，就會引發。</xref:System.IO.FileNotFoundException>"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Load(System.IO.TextReader)
@@ -1257,8 +1257,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Loads the XML document from the specified <xref:System.IO.TextReader>."
-  remarks: "> [!NOTE] >  The `Load` method always preserves significant white space. The <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> property determines whether or not insignificant white space, that is white space in element content, is preserved. The default is `false`; white space in element content is not preserved.       If you want validation to occur, you can create a validating <xref:System.Xml.XmlReader> instance by using the <xref:System.Xml.XmlReaderSettings> class and the <xref:System.Xml.XmlReader.Create%2A> method. For more information, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "從指定<xref:System.IO.TextReader>.</xref:System.IO.TextReader>載入 XML 文件"
+  remarks: "> [!NOTE]>`Load`方法一律會保留顯著泛空白字元。 <xref:System.Xml.XmlDocument.PreserveWhitespace%2A>屬性會決定是否要保留不顯著泛空白字元的項目內容中的空白字元，。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A> 預設值是`false`; 不會保留項目內容中的空白字元。       如果您想進行驗證，您可以建立對其進行驗證<xref:System.Xml.XmlReader>所使用的執行個體<xref:System.Xml.XmlReaderSettings>類別和<xref:System.Xml.XmlReader.Create%2A>方法。</xref:System.Xml.XmlReader.Create%2A> </xref:System.Xml.XmlReaderSettings> </xref:System.Xml.XmlReader> 如需詳細資訊，請參閱 < 備註 > 一節<xref:System.Xml.XmlReader>參考頁面。</xref:System.Xml.XmlReader>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example uses the <xref:System.IO.StringReader> class to load a string of XML data into the `XmlDocument` object.  \n  \n [!code-cs[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_8_1.cs)]\n [!code-vb[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_8_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.CreateElement2 Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_8_1.cpp)]"
   syntax:
@@ -1266,12 +1266,12 @@ items:
     parameters:
     - id: txtReader
       type: System.IO.TextReader
-      description: "The <xref uid=&quot;langword_csharp_TextReader&quot; name=&quot;TextReader&quot; href=&quot;&quot;></xref> used to feed the XML data into the document."
+      description: "<xref uid=&quot;langword_csharp_TextReader&quot; name=&quot;TextReader&quot; href=&quot;&quot;> </xref>用來將 XML 資料送入文件。"
   overload: System.Xml.XmlDocument.Load*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "There is a load or parse error in the XML. In this case, the document remains empty."
+    description: "在 XML 中沒有載入或剖析錯誤。 在此情況下，文件會保持空白。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Load(System.String)
@@ -1286,46 +1286,46 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Loads the XML document from the specified URL."
-  remarks: "> [!NOTE] >  The `Load` method always preserves significant white space. The <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> property determines whether or not insignificant white space, that is white space in element content, is preserved. The default is `false`; white space in element content is not preserved.       If you want validation to occur, you can create a validating <xref:System.Xml.XmlReader> instance by using the <xref:System.Xml.XmlReaderSettings> class and the <xref:System.Xml.XmlReader.Create%2A> method. For more information, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "從指定的 URL 載入 XML 文件。"
+  remarks: "> [!NOTE]>`Load`方法一律會保留顯著泛空白字元。 <xref:System.Xml.XmlDocument.PreserveWhitespace%2A>屬性會決定是否要保留不顯著泛空白字元的項目內容中的空白字元，。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A> 預設值是`false`; 不會保留項目內容中的空白字元。       如果您想進行驗證，您可以建立對其進行驗證<xref:System.Xml.XmlReader>所使用的執行個體<xref:System.Xml.XmlReaderSettings>類別和<xref:System.Xml.XmlReader.Create%2A>方法。</xref:System.Xml.XmlReader.Create%2A> </xref:System.Xml.XmlReaderSettings> </xref:System.Xml.XmlReader> 如需詳細資訊，請參閱 < 備註 > 一節<xref:System.Xml.XmlReader>參考頁面。</xref:System.Xml.XmlReader>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: public virtual void Load (string filename);
     parameters:
     - id: filename
       type: System.String
-      description: "URL for the file containing the XML document to load. The URL can be either a local file or an HTTP URL (a Web address)."
+      description: "包含 XML 文件的檔案要載入的 URL。 URL 可以是本機檔案或 HTTP URL （網址）。"
   overload: System.Xml.XmlDocument.Load*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "There is a load or parse error in the XML. In this case, a <xref:System.IO.FileNotFoundException> is raised."
+    description: "在 XML 中沒有載入或剖析錯誤。 在此情況下， <xref:System.IO.FileNotFoundException>，就會引發。</xref:System.IO.FileNotFoundException>"
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "<code>filename</code> is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <xref:System.IO.Path.InvalidPathChars>."
+    description: "<code>filename</code>為零長度字串、 只包含空格，或包含一或多個無效字元所定義的<xref:System.IO.Path.InvalidPathChars>。"
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>filename</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>filename</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.IO.PathTooLongException
     commentId: T:System.IO.PathTooLongException
-    description: "The specified path, file name, or both exceed the system-defined maximum length. For example, on Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260 characters."
+    description: "指定的路徑、 檔案名稱，或兩者都超出系統定義的長度上限。 例如，windows 平台上，路徑必須少於 248 個字元，和檔案名稱必須少於 260 個字元。"
   - type: System.IO.DirectoryNotFoundException
     commentId: T:System.IO.DirectoryNotFoundException
-    description: "The specified path is invalid (for example, it is on an unmapped drive)."
+    description: "指定的路徑無效 （例如，它位於未對應的磁碟機上）。"
   - type: System.IO.IOException
     commentId: T:System.IO.IOException
-    description: "An I/O error occurred while opening the file."
+    description: "開啟檔案時發生 I/O 錯誤。"
   - type: System.UnauthorizedAccessException
     commentId: T:System.UnauthorizedAccessException
-    description: "<code>filename</code> specified a file that is read-only.       -or-       This operation is not supported on the current platform.       -or-       <code>filename</code> specified a directory.       -or-       The caller does not have the required permission."
+    description: "<code>filename</code>指定為唯讀的檔案。       -或者-目前的平台不支援此作業。       -或-<code>filename</code>指定了目錄。       -或者-呼叫端沒有必要的權限。"
   - type: System.IO.FileNotFoundException
     commentId: T:System.IO.FileNotFoundException
-    description: "The file specified in <code>filename</code> was not found."
+    description: "中指定的檔案<code> filename </code>找不到。"
   - type: System.NotSupportedException
     commentId: T:System.NotSupportedException
-    description: "<code>filename</code> is in an invalid format."
+    description: "<code>filename</code>是無效的格式。"
   - type: System.Security.SecurityException
     commentId: T:System.Security.SecurityException
-    description: "The caller does not have the required permission."
+    description: "呼叫端沒有必要的權限。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Load(System.Xml.XmlReader)
@@ -1340,8 +1340,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Loads the XML document from the specified <xref:System.Xml.XmlReader>."
-  remarks: "> [!NOTE] >  The `Load` method always preserves significant white space. The <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> property determines whether or not insignificant white space, that is white space in element content, is preserved. The default is `false`; white space in element content is not preserved.       If the reader is in the initial state (<xref:System.Xml.XmlReader.ReadState%2A> =ReadState.Initial), `Load` consumes the entire contents of the reader and builds the DOM from what it finds.       If the reader is already positioned on some node at depth &quot;n&quot;, this method loads that node and all subsequent siblings up to the end tag that closes depth &quot;n&quot;. This has the following results.       If the current node and its siblings look like the following:      ```   <!--comment--><element1>one</element1><element2>two</element2>   ```       `Load` throws an exception because a document cannot have two root level elements. If the current node and its siblings look like the following:      ```   <!--comment--><?process instruction?><!--comment--></endtag>   ```       `Load` succeeds, but you have an incomplete DOM tree because there is no root level element. Before you save the document, you must add a root level element, otherwise <xref:System.Xml.XmlDocument.Save%2A> will throw an exception.       If the reader is positioned on a leaf node that is invalid for the root level of a document, for example a white space or attribute node, the reader continues to read until it is positioned on a node that can be used for the root. The document begins loading at this point.       If you want validation to occur, you can create a validating <xref:System.Xml.XmlReader> instance by using the <xref:System.Xml.XmlReaderSettings> class and the <xref:System.Xml.XmlReader.Create%2A> method. For more information, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "從指定<xref:System.Xml.XmlReader>.</xref:System.Xml.XmlReader>載入 XML 文件"
+  remarks: "> [!NOTE]>`Load`方法一律會保留顯著泛空白字元。 <xref:System.Xml.XmlDocument.PreserveWhitespace%2A>屬性會決定是否要保留不顯著泛空白字元的項目內容中的空白字元，。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A> 預設值是`false`; 不會保留項目內容中的空白字元。       如果讀取器中的初始狀態 (<xref:System.Xml.XmlReader.ReadState%2A> = 為 ReadState.Initial)，`Load`取用讀取器的整個內容，並建置它所找到的 DOM。</xref:System.Xml.XmlReader.ReadState%2A>       如果讀取器已經位於某個節點的深度&quot;n&quot;，這個方法會載入該節點和所有後續的同層級直到關閉深度&quot;n&quot;的結束標記。 這有下列結果。       如果目前節點和其同層級如下所示︰ ```   <!--comment--><element1>one</element1><element2>two</element2>   ``` `Load`擲回例外狀況，因為文件不能有兩個根層級元素。        如果目前節點和其同層級看起來類似下列︰ ```   <!--comment--><?process instruction?><!--comment--></endtag>   ``` `Load`成功，因為沒有任何根層級元素，但不完整的 DOM 樹狀目錄。        儲存文件之前，必須將根層級元素，否則<xref:System.Xml.XmlDocument.Save%2A>將會擲回例外狀況。</xref:System.Xml.XmlDocument.Save%2A>       如果讀取器定位於分葉節點的文件，例如空白字元或屬性節點的根層級而言是無效的讀取器會繼續讀取，直到將其置於可用於在節點上。 文件會開始載入此時。       如果您想進行驗證，您可以建立對其進行驗證<xref:System.Xml.XmlReader>所使用的執行個體<xref:System.Xml.XmlReaderSettings>類別和<xref:System.Xml.XmlReader.Create%2A>方法。</xref:System.Xml.XmlReader.Create%2A> </xref:System.Xml.XmlReaderSettings> </xref:System.Xml.XmlReader> 如需詳細資訊，請參閱 < 備註 > 一節<xref:System.Xml.XmlReader>參考頁面。</xref:System.Xml.XmlReader>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example loads the last book node of the `books.xml` file into the XML document.  \n  \n [!code-cs[Classic WebData XmlDocument.Load2 Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_23_1.cs)]\n [!code-vb[Classic WebData XmlDocument.Load2 Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_23_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.Load2 Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_23_1.cpp)]  \n  \n The example uses the file, `books.xml`, as input.  \n  \n [!code-xml[Classic WebData XslTransform.Transform7 Example#2](~/add/codesnippet/xml/m-system.xml.xmldocument_23_2.xml)]"
   syntax:
@@ -1349,12 +1349,12 @@ items:
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "The <xref uid=&quot;langword_csharp_XmlReader&quot; name=&quot;XmlReader&quot; href=&quot;&quot;></xref> used to feed the XML data into the document."
+      description: "<xref uid=&quot;langword_csharp_XmlReader&quot; name=&quot;XmlReader&quot; href=&quot;&quot;> </xref>用來將 XML 資料送入文件。"
   overload: System.Xml.XmlDocument.Load*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "There is a load or parse error in the XML. In this case, the document remains empty."
+    description: "在 XML 中沒有載入或剖析錯誤。 在此情況下，文件會保持空白。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.LoadXml(System.String)
@@ -1369,8 +1369,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Loads the XML document from the specified string."
-  remarks: "By default the `LoadXml` method does not preserve white space or significant white space.       This method parses DTDs, but does not do DTD or Schema validation. If you want validation to occur, you can create a validating <xref:System.Xml.XmlReader> instance by using the <xref:System.Xml.XmlReaderSettings> class and the <xref:System.Xml.XmlReader.Create%2A> method. For more information, see the Remarks section of the <xref:System.Xml.XmlReader> reference page.       If you want to load from a <xref:System.IO.Stream>, <xref:System.String>, <xref:System.IO.TextReader>, or <xref:System.Xml.XmlReader>, use the Load method instead of this method.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "從指定的字串載入 XML 文件。"
+  remarks: "根據預設`LoadXml`方法不會保留泛空白字元或顯著泛空白字元。       這個方法會剖析 Dtd，但不會執行 DTD 或結構描述驗證。 如果您想進行驗證，您可以建立對其進行驗證<xref:System.Xml.XmlReader>所使用的執行個體<xref:System.Xml.XmlReaderSettings>類別和<xref:System.Xml.XmlReader.Create%2A>方法。</xref:System.Xml.XmlReader.Create%2A> </xref:System.Xml.XmlReaderSettings> </xref:System.Xml.XmlReader> 如需詳細資訊，請參閱 < 備註 > 一節<xref:System.Xml.XmlReader>參考頁面。</xref:System.Xml.XmlReader>       如果您想要從載入<xref:System.IO.Stream>， <xref:System.String>， <xref:System.IO.TextReader>，或<xref:System.Xml.XmlReader>，而不是此方法使用 Load 方法。</xref:System.Xml.XmlReader> </xref:System.IO.TextReader> </xref:System.String> </xref:System.IO.Stream>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example loads XML into an `XmlDocument` object and saves it out to a file.  \n  \n [!code-cpp[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_2_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_2_1.cs)]\n [!code-vb[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_2_1.vb)]"
   syntax:
@@ -1378,12 +1378,12 @@ items:
     parameters:
     - id: xml
       type: System.String
-      description: "String containing the XML document to load."
+      description: "字串，包含要載入 XML 文件。"
   overload: System.Xml.XmlDocument.LoadXml*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "There is a load or parse error in the XML. In this case, the document remains empty."
+    description: "在 XML 中沒有載入或剖析錯誤。 在此情況下，文件會保持空白。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.LocalName
@@ -1398,13 +1398,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the local name of the node."
-  remarks: "The local name returned depends on the <xref:System.Xml.XmlDocument.NodeType%2A> of the node. To see a table describing the local name returned for each of the node types, see the <xref:System.Xml.XmlNode.LocalName%2A> property in the <xref:System.Xml.XmlNode> class."
+  summary: "取得節點的本機名稱。"
+  remarks: "傳回的本機名稱，取決於<xref:System.Xml.XmlDocument.NodeType%2A>的節點。</xref:System.Xml.XmlDocument.NodeType%2A> 若要查看描述傳回的每個節點類型的本機名稱的資料表，請參閱<xref:System.Xml.XmlNode.LocalName%2A>屬性<xref:System.Xml.XmlNode>類別。</xref:System.Xml.XmlNode> </xref:System.Xml.XmlNode.LocalName%2A>"
   syntax:
     content: public override string LocalName { get; }
     return:
       type: System.String
-      description: 'For <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> nodes, the local name is #document.'
+      description: '如<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點，區域名稱為 #document。'
   overload: System.Xml.XmlDocument.LocalName*
   exceptions: []
   platform:
@@ -1421,13 +1421,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the qualified name of the node."
-  remarks: "The name returned depends on the <xref:System.Xml.XmlDocument.NodeType%2A> of the node. To see a table describing the name returned for each of the node types, see the <xref:System.Xml.XmlNode.Name%2A> property in the <xref:System.Xml.XmlNode> class."
+  summary: "取得節點的限定的名稱。"
+  remarks: "傳回的名稱取決於<xref:System.Xml.XmlDocument.NodeType%2A>的節點。</xref:System.Xml.XmlDocument.NodeType%2A> 若要查看資料表，描述傳回的每個節點類型的名稱，請參閱<xref:System.Xml.XmlNode.Name%2A>屬性<xref:System.Xml.XmlNode>類別。</xref:System.Xml.XmlNode> </xref:System.Xml.XmlNode.Name%2A>"
   syntax:
     content: public override string Name { get; }
     return:
       type: System.String
-      description: 'For <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> nodes, the name is #document.'
+      description: '如<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點，名稱為 #document。'
   overload: System.Xml.XmlDocument.Name*
   exceptions: []
   platform:
@@ -1444,13 +1444,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the <xref:System.Xml.XmlNameTable> associated with this implementation."
-  remarks: "Each `XmlDocument` object has a <xref:System.Xml.NameTable> object. Element and attribute names are stored in the `NameTable` as atomized strings. This means that even if a name is referenced in the document multiple times it is stored only once in the `NameTable`. For example, if the document had multiple elements with the name &quot;Customer&quot;, `NameTable` returns the same object whenever it receives a request for that name. As a result, users can write code using object comparisons on these strings rather than the more expensive string comparisons.       For more information on atomized strings, see <xref:System.Xml.XmlNameTable>.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "取得<xref:System.Xml.XmlNameTable>與這個實作關聯。</xref:System.Xml.XmlNameTable>"
+  remarks: "每個`XmlDocument`物件具有<xref:System.Xml.NameTable>物件。</xref:System.Xml.NameTable> 元素和屬性名稱會儲存在`NameTable`原子化字串的形式。 這表示，即使參考文件中的名稱多次它會儲存一次在`NameTable`。 例如，如果文件有多個名稱為 「 客戶 」 項目`NameTable`傳回相同的物件，每當它接收的要求，該名稱。 如此一來，使用者可以撰寫程式碼使用這些字串，而不是更耗費資源的字串比較的物件比較。       如需有關原子化字串的詳細資訊，請參閱<xref:System.Xml.XmlNameTable>.</xref:System.Xml.XmlNameTable>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: public System.Xml.XmlNameTable NameTable { get; }
     return:
       type: System.Xml.XmlNameTable
-      description: "An <xref uid=&quot;langword_csharp_XmlNameTable&quot; name=&quot;XmlNameTable&quot; href=&quot;&quot;></xref> enabling you to get the atomized version of a string within the document."
+      description: "<xref uid=&quot;langword_csharp_XmlNameTable&quot; name=&quot;XmlNameTable&quot; href=&quot;&quot;> </xref>讓您取得文件中字串之擷取的版本。"
   overload: System.Xml.XmlDocument.NameTable*
   exceptions: []
   platform:
@@ -1467,13 +1467,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when the <xref:System.Xml.XmlNode.Value*> of a node belonging to this document has been changed."
-  remarks: "This event only applies to nodes that have a value.       All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "發生時<xref:System.Xml.XmlNode.Value*>屬於這份文件已變更的節點。</xref:System.Xml.XmlNode.Value*>"
+  remarks: "此事件僅適用於具有值的節點。       在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeChanged;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1489,13 +1489,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when the <xref:System.Xml.XmlNode.Value*> of a node belonging to this document is about to be changed."
-  remarks: "This event allows the user to do extra checking and, if necessary, throw an exception to stop the operation. If an exception is thrown the `XmlDocument` returns to its original state. This event only applies to nodes that have a value.       All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "發生時<xref:System.Xml.XmlNode.Value*>屬於這份文件是即將變更的節點。</xref:System.Xml.XmlNode.Value*>"
+  remarks: "此事件可讓使用者進行額外的檢查，而且必要時，會擲回例外狀況，無法停止作業。 如果擲回例外狀況`XmlDocument`回到其原始狀態。 此事件僅適用於具有值的節點。       在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeChanging;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1511,13 +1511,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when a node belonging to this document has been inserted into another node."
-  remarks: "All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "發生於屬於這份文件的節點已經插入另一個節點。"
+  remarks: "在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeInserted;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1533,13 +1533,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when a node belonging to this document is about to be inserted into another node."
-  remarks: "This event allows the user to do extra checking and, if necessary, throw an exception to stop the operation. If an exception is thrown the `XmlDocument` returns to its original state.       All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "屬於此文件的節點將要插入另一個節點時發生。"
+  remarks: "此事件可讓使用者進行額外的檢查，而且必要時，會擲回例外狀況，無法停止作業。 如果擲回例外狀況`XmlDocument`回到其原始狀態。       在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeInserting;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1555,13 +1555,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when a node belonging to this document has been removed from its parent."
-  remarks: "All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "發生於屬於這份文件的節點已從其父代移除。"
+  remarks: "在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeRemoved;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1577,13 +1577,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Occurs when a node belonging to this document is about to be removed from the document."
-  remarks: "This event allows the user to do extra checking and, if necessary, throw an exception to stop the operation. If an exception is thrown the `XmlDocument` returns to its original state.       All nodes created by this document, whether or not they have been inserted into the document, are included in this event."
+  summary: "發生於屬於這份文件的節點即將從文件中移除。"
+  remarks: "此事件可讓使用者進行額外的檢查，而且必要時，會擲回例外狀況，無法停止作業。 如果擲回例外狀況`XmlDocument`回到其原始狀態。       在此事件會包含本文件中，不論是否已插入到文件，建立的所有節點。"
   syntax:
     content: public event System.Xml.XmlNodeChangedEventHandler NodeRemoving;
     return:
       type: System.Xml.XmlNodeChangedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -1599,12 +1599,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the type of the current node."
+  summary: "取得目前節點的類型。"
   syntax:
     content: public override System.Xml.XmlNodeType NodeType { get; }
     return:
       type: System.Xml.XmlNodeType
-      description: "The node type. For <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> nodes, this value is XmlNodeType.Document."
+      description: "節點類型。 如<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點，此值為 XmlNodeType.Document。"
   overload: System.Xml.XmlDocument.NodeType*
   exceptions: []
   platform:
@@ -1621,12 +1621,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the <xref href=&quot;System.Xml.XmlDocument&quot;></xref> to which the current node belongs."
+  summary: "取得<xref href=&quot;System.Xml.XmlDocument&quot;></xref>目前節點所屬。"
   syntax:
     content: public override System.Xml.XmlDocument OwnerDocument { get; }
     return:
       type: System.Xml.XmlDocument
-      description: "For <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> nodes (<xref:System.Xml.XmlDocument.NodeType*> equals XmlNodeType.Document), this property always returns <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "如<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>節點 (<xref:System.Xml.XmlDocument.NodeType*>等於 XmlNodeType.Document)，這個屬性永遠傳回<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。</xref:System.Xml.XmlDocument.NodeType*>"
   overload: System.Xml.XmlDocument.OwnerDocument*
   exceptions: []
   platform:
@@ -1643,12 +1643,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets the parent node of this node (for nodes that can have parents)."
+  summary: "取得這個節點的父節點 （對於具有父代的節點）。"
   syntax:
     content: public override System.Xml.XmlNode ParentNode { get; }
     return:
       type: System.Xml.XmlNode
-      description: "Always returns <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+      description: "一律傳回<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。"
   overload: System.Xml.XmlDocument.ParentNode*
   exceptions: []
   platform:
@@ -1665,15 +1665,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets or sets a value indicating whether to preserve white space in element content."
-  remarks: "This property determines how white space is handled during the load and save process.       If `PreserveWhitespace` is `true` before <xref:System.Xml.XmlDocument.Load%2A> or <xref:System.Xml.XmlDocument.LoadXml%2A> is called, white space nodes are preserved; otherwise, if this property is `false`, significant white space is preserved, white space is not.       If `PreserveWhitespace` is `true` before <xref:System.Xml.XmlDocument.Save%2A> is called, white space in the document is preserved in the output; otherwise, if this property is `false`, `XmlDocument` auto-indents the output.       This method is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "取得或設定值，指出是否保留項目內容中的空白字元。"
+  remarks: "這個屬性決定如何在載入時處理泛空白字元，並儲存程序。       如果`PreserveWhitespace`是`true`之前<xref:System.Xml.XmlDocument.Load%2A>或<xref:System.Xml.XmlDocument.LoadXml%2A>是呼叫，泛空白字元節點會保留; 否則如果這個屬性是`false`保留顯著泛空白字元，空白字元不是。</xref:System.Xml.XmlDocument.LoadXml%2A> </xref:System.Xml.XmlDocument.Load%2A>       如果`PreserveWhitespace`是`true`之前<xref:System.Xml.XmlDocument.Save%2A>是稱為，文件中的泛空白字元是保留在輸出中; 否則如果這個屬性是`false`，`XmlDocument`自動縮排輸出。</xref:System.Xml.XmlDocument.Save%2A>       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example shows how to strip white space from a file.  \n  \n [!code-cs[Classic WebData XmlDocument.PreserveWhitespace Example#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_6_1.cs)]\n [!code-vb[Classic WebData XmlDocument.PreserveWhitespace Example#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_6_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.PreserveWhitespace Example#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_6_1.cpp)]  \n  \n The example uses the file `book.xml` as input.  \n  \n [!code-xml[Classic WebData XmlDocument.PreserveWhitespace Example#2](~/add/codesnippet/xml/p-system.xml.xmldocument_6_2.xml)]"
   syntax:
     content: public bool PreserveWhitespace { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to preserve white space; otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>若要保留空白字元。否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Xml.XmlDocument.PreserveWhitespace*
   exceptions: []
   platform:
@@ -1690,8 +1690,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Creates an <xref href=&quot;System.Xml.XmlNode&quot;></xref> object based on the information in the <xref:System.Xml.XmlReader>. The reader must be positioned on a node or attribute."
-  remarks: "Reads one `XmlNode` from the given reader and positions the reader on the next node. This method creates the type of `XmlNode` matching the <xref:System.Xml.XmlNode.NodeType%2A> on which the reader is currently positioned. (If the reader is in the initial state, `ReadNode` advances the reader to the first node and then operates on that node.)       If the reader is positioned on the start of an element, `ReadNode` reads all the attributes and any child nodes, up to and including the end tag of the current node. The `XmlNode` returned contains the sub-tree representing everything read. The reader is positioned immediately after the end tag.       `ReadNode` can also read attributes, but in this case it does not advance the reader to the next attribute. This allows you to write the following C# code:      ```   XmlDocument doc = new XmlDocument();   while (reader.MoveToNextAttribute())   {     XmlNode a = doc.ReadNode(reader);     // Do some more processing.   }   ```       `ReadNode` does consume the attribute value though, which means after calling `ReadNode` on an attribute, <xref:System.Xml.XmlReader.ReadAttributeValue%2A?displayProperty=fullName> returns `false`."
+  summary: "建立<xref href=&quot;System.Xml.XmlNode&quot;> </xref> <xref:System.Xml.XmlReader>。</xref:System.Xml.XmlReader>資訊為基礎的物件 讀取器必須定位在節點或屬性上。"
+  remarks: "讀取一`XmlNode`從指定的讀取器，並將讀取器置於下一個節點上。 這個方法建立的型別`XmlNode`比對<xref:System.Xml.XmlNode.NodeType%2A>讀取器目前所在。</xref:System.Xml.XmlNode.NodeType%2A> (如果讀取器中的初始狀態，`ReadNode`使讀取器前進至第一個節點，然後在該節點上運作。)     如果讀取器位於項目，開頭`ReadNode`讀取所有屬性和任何子節點，以及目前節點的結束標記。 `XmlNode`傳回包含子樹狀結構表示所有項目讀取。 讀取器定位於結束標記的後面。       `ReadNode`也可以讀取屬性，但在此情況下它並不使讀取器前進至下一個屬性。 這可讓您撰寫下列 C# 程式碼︰ ```   XmlDocument doc = new XmlDocument();   while (reader.MoveToNextAttribute())   {     XmlNode a = doc.ReadNode(reader);     // Do some more processing.   }   ``` `ReadNode`會耗用屬性值，這表示在呼叫`ReadNode`屬性，<xref:System.Xml.XmlReader.ReadAttributeValue%2A?displayProperty=fullName>傳回`false`。</xref:System.Xml.XmlReader.ReadAttributeValue%2A?displayProperty=fullName>       "
   example:
   - "The following example uses `ReadNode` to create a new node and then inserts the new node into the document.  \n  \n [!code-cs[Classic WebData XmlDocument.ReadNode Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_21_1.cs)]\n [!code-cpp[Classic WebData XmlDocument.ReadNode Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_21_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.ReadNode Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_21_1.vb)]  \n  \n The example uses the file, `cd.xml`, as input.  \n  \n [!code-xml[Classic WebData XmlDocument.ReadNode Example#2](~/add/codesnippet/xml/m-system.xml.xmldocument_21_2.xml)]"
   syntax:
@@ -1699,15 +1699,15 @@ items:
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "The XML source"
+      description: "XML 來源"
     return:
       type: System.Xml.XmlNode
-      description: "The new <xref uid=&quot;langword_csharp_XmlNode&quot; name=&quot;XmlNode&quot; href=&quot;&quot;></xref> or <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> if no more nodes exist."
+      description: "新<xref uid=&quot;langword_csharp_XmlNode&quot; name=&quot;XmlNode&quot; href=&quot;&quot;></xref>或<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>如果沒有其他節點。"
   overload: System.Xml.XmlDocument.ReadNode*
   exceptions:
   - type: System.NullReferenceException
     commentId: T:System.NullReferenceException
-    description: "The reader is positioned on a node type that does not translate to a valid DOM node (for example, EndElement or EndEntity)."
+    description: "讀取器不會轉譯是有效的 DOM 節點 （例如 EndElement 或 EndEntity） 的節點類型上。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Save(System.IO.Stream)
@@ -1722,19 +1722,19 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves the XML document to the specified stream."
-  remarks: "White space is preserved only if <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> is set to `true`.       The XmlDeclaration of the current `XmlDocument` object determines the encoding attribute in the saved document. The value of the encoding attribute is taken from the <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> property. If the `XmlDocument` does not have an XmlDeclaration, or if the XmlDeclaration does not have an encoding attribute, the saved document will not have one either.       When the document is saved, xmlns attributes are generated to persist the node identity (local name + namespace URI) correctly. For example, the following C# code      ```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```       generates this xmls attribute `<item xmls=&quot;urn:1&quot;/>`.       This method is a Microsoft extension to the Document Object Model (DOM).       Note that only the <xref:System.Xml.XmlDocument.Save%2A> method enforces a well-formed XML document. All other `Save` overloads only guarantee a well-formed fragment."
+  summary: "將 XML 文件儲存至指定的資料流。"
+  remarks: "只有當保留空白字元<xref:System.Xml.XmlDocument.PreserveWhitespace%2A>設`true`。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A>       目前的 XmlDeclaration`XmlDocument`物件可以決定所儲存的文件中的編碼屬性。 編碼屬性的值取自<xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName>屬性。</xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> 如果`XmlDocument`並沒有 xml 宣告，或如果 XmlDeclaration 沒有編碼方式的屬性，儲存的文件不會有其中一個是。       儲存文件時，會產生 xmlns 屬性正確保存 （區域名稱 + 命名空間 URI） 的節點識別。 例如，下列 C# 程式碼```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```會產生此 xml 屬性`<item xmls=&quot;urn:1&quot;/>`。       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。       請注意，只有<xref:System.Xml.XmlDocument.Save%2A>方法會強制語式正確的 XML 文件。</xref:System.Xml.XmlDocument.Save%2A> 所有其他`Save`多載只會保證語式正確的片段。"
   syntax:
     content: public virtual void Save (System.IO.Stream outStream);
     parameters:
     - id: outStream
       type: System.IO.Stream
-      description: "The stream to which you want to save."
+      description: "您要儲存的資料流。"
   overload: System.Xml.XmlDocument.Save*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "The operation would not result in a well formed XML document (for example, no document element or duplicate XML declarations)."
+    description: "作業不會產生格式正確的 XML 文件 （例如，沒有文件項目或重複 XML 宣告）。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Save(System.IO.TextWriter)
@@ -1749,19 +1749,19 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves the XML document to the specified <xref:System.IO.TextWriter>."
-  remarks: "The encoding on the `TextWriter` determines the encoding that is written out (The encoding of the XmlDeclaration node is replaced by the encoding of the `TextWriter`). If there was no encoding specified on the `TextWriter`, the `XmlDocument` is saved without an encoding attribute.       This method is a Microsoft extension to the Document Object Model (DOM).       Note that only the <xref:System.Xml.XmlDocument.Save%2A> method enforces a well-formed XML document. All other `Save` overloads only guarantee a well-formed fragment."
+  summary: "將 XML 文件儲存至指定<xref:System.IO.TextWriter>。</xref:System.IO.TextWriter>"
+  remarks: "上的編碼`TextWriter`判斷會寫出的編碼方式 (的編碼方式編碼的 xml 宣告節點取代`TextWriter`)。 如果沒有指定在沒有編碼`TextWriter`、`XmlDocument`儲存沒有編碼方式的屬性。       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。       請注意，只有<xref:System.Xml.XmlDocument.Save%2A>方法會強制語式正確的 XML 文件。</xref:System.Xml.XmlDocument.Save%2A> 所有其他`Save`多載只會保證語式正確的片段。"
   syntax:
     content: public virtual void Save (System.IO.TextWriter writer);
     parameters:
     - id: writer
       type: System.IO.TextWriter
-      description: "The <xref uid=&quot;langword_csharp_TextWriter&quot; name=&quot;TextWriter&quot; href=&quot;&quot;></xref> to which you want to save."
+      description: "<xref uid=&quot;langword_csharp_TextWriter&quot; name=&quot;TextWriter&quot; href=&quot;&quot;> </xref>至您要儲存。"
   overload: System.Xml.XmlDocument.Save*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "The operation would not result in a well formed XML document (for example, no document element or duplicate XML declarations)."
+    description: "作業不會產生格式正確的 XML 文件 （例如，沒有文件項目或重複 XML 宣告）。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Save(System.String)
@@ -1776,8 +1776,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves the XML document to the specified file. If the specified file exists, this method overwrites it."
-  remarks: "White space is preserved in the output file only if <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> is set to `true`.       The XmlDeclaration of the current `XmlDocument` object determines the encoding attribute in the saved document. The value of the encoding attribute is taken from the <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> property. If the `XmlDocument` does not have an XmlDeclaration, or if the XmlDeclaration does not have an encoding attribute, the saved document will not have one either.       When the document is saved, xmlns attributes are generated to persist the node identity (local name + namespace URI) correctly. For example, the following C# code      ```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```       generates this xmls attribute `<item xmls=&quot;urn:1&quot;/>`.       This method is a Microsoft extension to the Document Object Model (DOM).       Note that only the Save method enforces a well-formed XML document. All other `Save` overloads only guarantee a well-formed fragment."
+  summary: "將 XML 文件儲存至指定的檔案。 如果指定的檔案存在，這個方法會覆寫它。"
+  remarks: "輸出的檔案才會在中，會保留空白字元<xref:System.Xml.XmlDocument.PreserveWhitespace%2A>設`true`。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A>       目前的 XmlDeclaration`XmlDocument`物件可以決定所儲存的文件中的編碼屬性。 編碼屬性的值取自<xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName>屬性。</xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> 如果`XmlDocument`並沒有 xml 宣告，或如果 XmlDeclaration 沒有編碼方式的屬性，儲存的文件不會有其中一個是。       儲存文件時，會產生 xmlns 屬性正確保存 （區域名稱 + 命名空間 URI） 的節點識別。 例如，下列 C# 程式碼```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```會產生此 xml 屬性`<item xmls=&quot;urn:1&quot;/>`。       這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。       請注意，只有儲存方法會強制執行語式正確的 XML 文件。 所有其他`Save`多載只會保證語式正確的片段。"
   example:
   - "The following example loads XML into an XmlDocument object, modifies it, and then saves it to a file named data.xml.  \n  \n [!code-cs[Classic WebData XmlDocument.Save Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_18_1.cs)]\n [!code-vb[Classic WebData XmlDocument.Save Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_18_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.Save Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_18_1.cpp)]  \n  \n The data.xml file will contain the following XML: `<item><name>wrench</name><price>10.95</price></item>`."
   syntax:
@@ -1785,12 +1785,12 @@ items:
     parameters:
     - id: filename
       type: System.String
-      description: "The location of the file where you want to save the document."
+      description: "您要儲存文件的檔案位置。"
   overload: System.Xml.XmlDocument.Save*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "The operation would not result in a well formed XML document (for example, no document element or duplicate XML declarations)."
+    description: "作業不會產生格式正確的 XML 文件 （例如，沒有文件項目或重複 XML 宣告）。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Save(System.Xml.XmlWriter)
@@ -1805,8 +1805,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves the XML document to the specified <xref:System.Xml.XmlWriter>."
-  remarks: "White space is preserved only if <xref:System.Xml.XmlDocument.PreserveWhitespace%2A> is set to `true`.       The encoding on the `XmlWriter` determines the encoding that is written out (The encoding of the XmlDeclaration node is replaced by the encoding of the `XmlWriter`). If there was no encoding specified on the `XmlWriter`, the `XmlDocument` is saved without an encoding attribute.       When the document is saved, xmlns attributes are generated to persist the node identity (LocalName + NamespaceURI) correctly. For example, the following C# code      ```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```       generates this xmls attribute:      ```   <item       xmls=&quot;urn:1&quot;/>   ```       This method is a Microsoft extension to the Document Object Model (DOM).       Note that only the <xref:System.Xml.XmlDocument.Save%2A> method enforces a well-formed XML document. All other `Save` overloads only guarantee a well-formed fragment."
+  summary: "將 XML 文件儲存至指定<xref:System.Xml.XmlWriter>。</xref:System.Xml.XmlWriter>"
+  remarks: "只有當保留空白字元<xref:System.Xml.XmlDocument.PreserveWhitespace%2A>設`true`。</xref:System.Xml.XmlDocument.PreserveWhitespace%2A>       上的編碼`XmlWriter`判斷會寫出的編碼方式 (的編碼方式編碼的 xml 宣告節點取代`XmlWriter`)。 如果沒有指定在沒有編碼`XmlWriter`、`XmlDocument`儲存沒有編碼方式的屬性。       儲存文件時，會產生 xmlns 屬性正確保存 （LocalName + NamespaceURI） 的節點識別。 例如，下列 C# 程式碼```   XmlDocument doc = new XmlDocument();   doc.AppendChild(doc.CreateElement(&quot;item&quot;,&quot;urn:1&quot;));   doc.Save(Console.Out);   ```會產生此 xml 屬性︰```   <item       xmls=&quot;urn:1&quot;/>   ```這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。       請注意，只有<xref:System.Xml.XmlDocument.Save%2A>方法會強制語式正確的 XML 文件。</xref:System.Xml.XmlDocument.Save%2A> 所有其他`Save`多載只會保證語式正確的片段。"
   example:
   - "The following example loads XML into an `XmlDocument` object and saves it out to a file.  \n  \n [!code-cpp[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_5_1.cpp)]\n [!code-cs[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_5_1.cs)]\n [!code-vb[Classic WebData XmlDocument.LoadXml Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_5_1.vb)]"
   syntax:
@@ -1814,12 +1814,12 @@ items:
     parameters:
     - id: w
       type: System.Xml.XmlWriter
-      description: "The <xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;></xref> to which you want to save."
+      description: "<xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;> </xref>至您要儲存。"
   overload: System.Xml.XmlDocument.Save*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "The operation would not result in a well formed XML document (for example, no document element or duplicate XML declarations)."
+    description: "作業不會產生格式正確的 XML 文件 （例如，沒有文件項目或重複 XML 宣告）。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.SchemaInfo
@@ -1834,13 +1834,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Returns the Post-Schema-Validation-Infoset (PSVI) of the node."
-  remarks: "The PSVI contents of this property are set after the node has been validated.       This property is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "傳回後-結構描述的驗證資訊集 (PSVI) 節點。"
+  remarks: "節點已通過驗證後，會設定這個屬性的 PSVI 內容。       這個屬性是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   syntax:
     content: public override System.Xml.Schema.IXmlSchemaInfo SchemaInfo { get; }
     return:
       type: System.Xml.Schema.IXmlSchemaInfo
-      description: "The <xref href=&quot;System.Xml.Schema.IXmlSchemaInfo&quot;></xref> object representing the PSVI of the node."
+      description: "<xref href=&quot;System.Xml.Schema.IXmlSchemaInfo&quot;> </xref>物件，表示節點的 PSVI。"
   overload: System.Xml.XmlDocument.SchemaInfo*
   exceptions: []
   platform:
@@ -1857,13 +1857,13 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Gets or sets the <xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;></xref> object associated with this <xref href=&quot;System.Xml.XmlDocument&quot;></xref>."
-  remarks: "The schemas contained in an <xref:System.Xml.Schema.XmlSchemaSet> object associated with an <xref:System.Xml.XmlDocument> object are used for validation when the <xref:System.Xml.XmlDocument.Validate%2A> method of an <xref:System.Xml.XmlDocument> is executed.       When an <xref:System.Xml.XmlDocument> object is initialized with XML data from an <xref:System.Xml.XmlReader> object, the <xref:System.Xml.Schema.XmlSchemaSet> object is loaded from the <xref:System.Xml.XmlReaderSettings.Schemas%2A> property of the <xref:System.Xml.XmlReader> object."
+  summary: "取得或設定<xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;></xref>與此相關聯的物件<xref href=&quot;System.Xml.XmlDocument&quot;> </xref>。"
+  remarks: "中包含的結構描述<xref:System.Xml.Schema.XmlSchemaSet>物件相關聯<xref:System.Xml.XmlDocument>物件會用於驗證時<xref:System.Xml.XmlDocument.Validate%2A>方法<xref:System.Xml.XmlDocument>執行。</xref:System.Xml.XmlDocument> </xref:System.Xml.XmlDocument.Validate%2A> </xref:System.Xml.XmlDocument> </xref:System.Xml.Schema.XmlSchemaSet>       當<xref:System.Xml.XmlDocument>物件會使用來自 XML 資料初始化<xref:System.Xml.XmlReader>物件，<xref:System.Xml.Schema.XmlSchemaSet>從已載入物件<xref:System.Xml.XmlReaderSettings.Schemas%2A>屬性<xref:System.Xml.XmlReader>物件。</xref:System.Xml.XmlReader> </xref:System.Xml.XmlReaderSettings.Schemas%2A> </xref:System.Xml.Schema.XmlSchemaSet> </xref:System.Xml.XmlReader> </xref:System.Xml.XmlDocument>"
   syntax:
     content: public System.Xml.Schema.XmlSchemaSet Schemas { get; set; }
     return:
       type: System.Xml.Schema.XmlSchemaSet
-      description: "An <xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;></xref> object containing the XML Schema Definition Language (XSD) schemas associated with this <xref href=&quot;System.Xml.XmlDocument&quot;></xref>; otherwise, an empty <xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;></xref> object."
+      description: "<xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;> </xref>物件，其中包含與此相關聯的 XML 結構描述定義語言 (XSD) 結構描述<xref href=&quot;System.Xml.XmlDocument&quot;> </xref>，否則為空<xref href=&quot;System.Xml.Schema.XmlSchemaSet&quot;></xref>物件。"
   overload: System.Xml.XmlDocument.Schemas*
   exceptions: []
   platform:
@@ -1880,8 +1880,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Validates the <xref href=&quot;System.Xml.XmlDocument&quot;></xref> against the XML Schema Definition Language (XSD) schemas contained in the <xref:System.Xml.XmlDocument.Schemas*> property."
-  remarks: "The Validate method validates the XML data in the <xref:System.Xml.XmlDocument> against the schemas contained in the <xref:System.Xml.XmlDocument.Schemas%2A> property. The Validate method performs infoset augmentation. Specifically, after successful validation, schema defaults are applied, text values are converted to atomic values as necessary, and type information is associated with validated information items. The result is a previously un-typed XML sub-tree in the <xref:System.Xml.XmlDocument> replaced with a typed sub-tree.       The following are important notes to consider when using the Validate method.      -   Schema location hints like `xsi:schemaLocation` or `xsi:noNamespaceSchemaLocation` are ignored.      -   Inline schemas are ignored.      -   If schema validation errors occur during validation the <xref:System.Xml.XmlDocument> becomes partially validated with some nodes with correct type information and some without.      -   The validation process includes checking for uniqueness and reference constraints (`xs:ID`, `xs:IDREF`, `xs:key`, `xs:keyref`, and `xs:unique`)."
+  summary: "驗證<xref href=&quot;System.Xml.XmlDocument&quot;></xref>中包含的 XML 結構描述定義語言 (XSD) 結構描述<xref:System.Xml.XmlDocument.Schemas*>屬性。</xref:System.Xml.XmlDocument.Schemas*>"
+  remarks: "Validate 方法會驗證 XML 資料中的<xref:System.Xml.XmlDocument>中包含的結構描述<xref:System.Xml.XmlDocument.Schemas%2A>屬性。</xref:System.Xml.XmlDocument.Schemas%2A> </xref:System.Xml.XmlDocument> Validate 方法執行資訊集增加。 具體而言，在驗證成功之後會套用結構描述預設值、 文字值會轉換成在必要時，不可部份完成值和類型資訊已驗證的資訊項目相關聯。 結果是以先前不具型別的的 XML 子樹狀結構中<xref:System.Xml.XmlDocument>取代具類型的子樹。</xref:System.Xml.XmlDocument>       以下是使用驗證方法時要考慮的重要注意事項。      結構描述位置提示喜歡`xsi:schemaLocation`或`xsi:noNamespaceSchemaLocation`都會被忽略。      內嵌結構描述都會被忽略。      -如果在驗證期間發生的結構描述驗證錯誤<xref:System.Xml.XmlDocument>部分會變成驗證與以正確的類型資訊的某些節點有些則沒有。</xref:System.Xml.XmlDocument>      -驗證程序包括檢查唯一性和參考條件約束 (`xs:ID`， `xs:IDREF`， `xs:key`， `xs:keyref`，和`xs:unique`)。"
   example:
   - "The following example illustrates use of the Validate method. The example creates an <xref:System.Xml.XmlDocument> that contains an associated XSD schema using the <xref:System.Xml.XmlReaderSettings> and <xref:System.Xml.XmlReader> objects. The example then uses the <xref:System.Xml.XPath.XPathNavigator> class to incorrectly modify the typed value of an element in the XML document generating a schema validation error.  \n  \n [!code-cs[XPathValidation#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_19_1.cs)]\n [!code-cpp[XPathValidation#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_19_1.cpp)]\n [!code-vb[XPathValidation#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_19_1.vb)]  \n  \n The example takes the `contosoBooks.xml` and `contosoBooks.xsd` files as input.  \n  \n [!code-xml[XPathXMLExamples#2](~/add/codesnippet/xml/m-system.xml.xmldocument_19_2.xml)]  \n  \n [!code-xml[XPathXMLExamples#3](~/add/codesnippet/xml/m-system.xml.xmldocument_19_3.xsd)]"
   syntax:
@@ -1889,12 +1889,12 @@ items:
     parameters:
     - id: validationEventHandler
       type: System.Xml.Schema.ValidationEventHandler
-      description: "The <xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref> object that receives information about schema validation warnings and errors."
+      description: "<xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;> </xref>物件，可接收有關結構描述驗證警告和錯誤的資訊。"
   overload: System.Xml.XmlDocument.Validate*
   exceptions:
   - type: System.Xml.Schema.XmlSchemaValidationException
     commentId: T:System.Xml.Schema.XmlSchemaValidationException
-    description: "A schema validation event occurred and no <xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref> object was specified."
+    description: "發生結構描述驗證事件，而且沒有<xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref>指定的物件。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.Validate(System.Xml.Schema.ValidationEventHandler,System.Xml.XmlNode)
@@ -1909,8 +1909,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Validates the <xref href=&quot;System.Xml.XmlNode&quot;></xref> object specified against the XML Schema Definition Language (XSD) schemas in the <xref:System.Xml.XmlDocument.Schemas*> property."
-  remarks: "The Validate method validates the XML data in the <xref:System.Xml.XmlNode> object against the schemas contained in the <xref:System.Xml.XmlDocument.Schemas%2A> property. The Validate method performs infoset augmentation. Specifically, after successful validation, schema defaults are applied, text values are converted to atomic values as necessary, and type information is associated with validated information items. The result is a previously un-typed XML sub-tree in the <xref:System.Xml.XmlDocument> replaced with a typed sub-tree.       The following are important notes to consider when using the Validate method.      -   Schema location hints like `xsi:schemaLocation` or `xsi:noNamespaceSchemaLocation` are ignored.      -   Inline schemas are ignored.      -   If schema validation errors occur during validation the <xref:System.Xml.XmlDocument> becomes partially validated with some nodes with correct type information and some without.       If the node to validate is the root node, the validation process includes checking for uniqueness and reference constraints (`xs:ID`, `xs:IDREF`, `xs:key`, `xs:keyref`, and `xs:unique`); otherwise, uniqueness and reference constraints are omitted."
+  summary: "驗證<xref href=&quot;System.Xml.XmlNode&quot;></xref>物件中包含的 XML 結構描述定義語言 (XSD) 結構描述指定<xref:System.Xml.XmlDocument.Schemas*>屬性。</xref:System.Xml.XmlDocument.Schemas*>"
+  remarks: "Validate 方法會驗證 XML 資料中的<xref:System.Xml.XmlNode>物件中包含的結構描述<xref:System.Xml.XmlDocument.Schemas%2A>屬性。</xref:System.Xml.XmlDocument.Schemas%2A> </xref:System.Xml.XmlNode> Validate 方法執行資訊集增加。 具體而言，在驗證成功之後會套用結構描述預設值、 文字值會轉換成在必要時，不可部份完成值和類型資訊已驗證的資訊項目相關聯。 結果是以先前不具型別的的 XML 子樹狀結構中<xref:System.Xml.XmlDocument>取代具類型的子樹。</xref:System.Xml.XmlDocument>       以下是使用驗證方法時要考慮的重要注意事項。      結構描述位置提示喜歡`xsi:schemaLocation`或`xsi:noNamespaceSchemaLocation`都會被忽略。      內嵌結構描述都會被忽略。      -如果在驗證期間發生的結構描述驗證錯誤<xref:System.Xml.XmlDocument>部分會變成驗證與以正確的類型資訊的某些節點有些則沒有。</xref:System.Xml.XmlDocument>       如果要驗證的節點是根節點，驗證程序包括檢查唯一性和參考條件約束 (`xs:ID`， `xs:IDREF`， `xs:key`， `xs:keyref`，和`xs:unique`); 否則會省略唯一性和參考條件約束。"
   example:
   - For an example of the Validate method, see the <xref:System.Xml.XmlDocument.Validate%2A> method.
   syntax:
@@ -1918,21 +1918,21 @@ items:
     parameters:
     - id: validationEventHandler
       type: System.Xml.Schema.ValidationEventHandler
-      description: "The <xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref> object that receives information about schema validation warnings and errors."
+      description: "<xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;> </xref>物件，可接收有關結構描述驗證警告和錯誤的資訊。"
     - id: nodeToValidate
       type: System.Xml.XmlNode
-      description: "The <xref href=&quot;System.Xml.XmlNode&quot;></xref> object created from an <xref href=&quot;System.Xml.XmlDocument&quot;></xref> to validate."
+      description: "<xref href=&quot;System.Xml.XmlNode&quot;> </xref>所建立的物件<xref href=&quot;System.Xml.XmlDocument&quot;></xref>驗證。"
   overload: System.Xml.XmlDocument.Validate*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "The <xref href=&quot;System.Xml.XmlNode&quot;></xref> object parameter was not created from an <xref href=&quot;System.Xml.XmlDocument&quot;></xref>."
+    description: "<xref href=&quot;System.Xml.XmlNode&quot;> </xref>物件參數不是從<xref href=&quot;System.Xml.XmlDocument&quot;> </xref>。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "The <xref href=&quot;System.Xml.XmlNode&quot;></xref> object parameter is not an element, attribute, document fragment, or the root node."
+    description: "<xref href=&quot;System.Xml.XmlNode&quot;> </xref>物件參數不是項目、 屬性、 文件片段或根節點。"
   - type: System.Xml.Schema.XmlSchemaValidationException
     commentId: T:System.Xml.Schema.XmlSchemaValidationException
-    description: "A schema validation event occurred and no <xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref> object was specified."
+    description: "發生結構描述驗證事件，而且沒有<xref href=&quot;System.Xml.Schema.ValidationEventHandler&quot;></xref>指定的物件。"
   platform:
   - net462
 - uid: System.Xml.XmlDocument.WriteContentTo(System.Xml.XmlWriter)
@@ -1947,8 +1947,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves all the children of the <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> node to the specified <xref:System.Xml.XmlWriter>."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM). It is functionally equivalent to the <xref:System.Xml.XmlDocument.InnerXml%2A> property.       The <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> property determines the encoding that is written out. If the `Encoding` property does not have a value, the `XmlDocument` is written out without an encoding attribute."
+  summary: "將儲存的所有子系<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>至指定<xref:System.Xml.XmlWriter>。</xref:System.Xml.XmlWriter>節點"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。 它在功能上等於<xref:System.Xml.XmlDocument.InnerXml%2A>屬性。</xref:System.Xml.XmlDocument.InnerXml%2A>       <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName>屬性會決定會寫出的編碼方式。</xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> 如果`Encoding`屬性沒有值，`XmlDocument`編碼屬性不會寫出。"
   example:
   - "The following example displays the document onscreen.  \n  \n [!code-cs[Classic WebData XmlDocument.WriteContentTo Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_0_1.cs)]\n [!code-vb[Classic WebData XmlDocument.WriteContentTo Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_0_1.vb)]\n [!code-cpp[Classic WebData XmlDocument.WriteContentTo Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_0_1.cpp)]"
   syntax:
@@ -1956,7 +1956,7 @@ items:
     parameters:
     - id: xw
       type: System.Xml.XmlWriter
-      description: "The <xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;></xref> to which you want to save."
+      description: "<xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;> </xref>至您要儲存。"
   overload: System.Xml.XmlDocument.WriteContentTo*
   exceptions: []
   platform:
@@ -1973,8 +1973,8 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Saves the <xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref> node to the specified <xref:System.Xml.XmlWriter>."
-  remarks: "This method is a Microsoft extension to the Document Object Model (DOM). It is functionally equivalent to the <xref:System.Xml.XmlNode.OuterXml%2A> property.       The <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> property determines the encoding that is written out. If the `Encoding` property does not have a value, the `XmlDocument` is written out without an encoding attribute."
+  summary: "將儲存<xref uid=&quot;langword_csharp_XmlDocument&quot; name=&quot;XmlDocument&quot; href=&quot;&quot;></xref>至指定<xref:System.Xml.XmlWriter>。</xref:System.Xml.XmlWriter>節點"
+  remarks: "這個方法是 Microsoft 擴充功能的文件物件模型 (DOM)。 它在功能上等於<xref:System.Xml.XmlNode.OuterXml%2A>屬性。</xref:System.Xml.XmlNode.OuterXml%2A>       <xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName>屬性會決定會寫出的編碼方式。</xref:System.Xml.XmlDeclaration.Encoding%2A?displayProperty=fullName> 如果`Encoding`屬性沒有值，`XmlDocument`編碼屬性不會寫出。"
   example:
   - "The following example displays the document onscreen.  \n  \n [!code-cpp[Classic WebData XmlDocument.WriteTo Example#1](~/add/codesnippet/cpp/m-system.xml.xmldocument_6_1.cpp)]\n [!code-vb[Classic WebData XmlDocument.WriteTo Example#1](~/add/codesnippet/visualbasic/m-system.xml.xmldocument_6_1.vb)]\n [!code-cs[Classic WebData XmlDocument.WriteTo Example#1](~/add/codesnippet/csharp/m-system.xml.xmldocument_6_1.cs)]"
   syntax:
@@ -1982,7 +1982,7 @@ items:
     parameters:
     - id: w
       type: System.Xml.XmlWriter
-      description: "The <xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;></xref> to which you want to save."
+      description: "<xref uid=&quot;langword_csharp_XmlWriter&quot; name=&quot;XmlWriter&quot; href=&quot;&quot;> </xref>至您要儲存。"
   overload: System.Xml.XmlDocument.WriteTo*
   exceptions: []
   platform:
@@ -1999,20 +1999,20 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml
-  summary: "Sets the <xref href=&quot;System.Xml.XmlResolver&quot;></xref> to use for resolving external resources."
-  remarks: "The `XmlResolver` can be used to load DTDs or expand entity references. Using the <xref:System.Xml.XmlResolver.Credentials%2A?displayProperty=fullName> property, you can set credentials on the `XmlResolver` to access resources stored on a secure network resource.      -   If the document was not loaded using an <xref:System.Xml.XmlReader> (that is, if it was loaded using a stream, file, and so on) the `XmlResolver` on the `XmlDocument` is always used.      -   If the document was loaded with an <xref:System.Xml.XmlTextReader>, the resolver on the `XmlTextReader` is used to resolve any DTD references in the DocumentType node. The resolver on the `XmlDocument` is used to expand any entity references.      -   If the document was loaded with an <xref:System.Xml.XmlValidatingReader>, the resolver on the `XmlDocument` is never used.      -   If the document was loaded with a class that extends `XmlReader` and the `XmlReader` cannot resolve entities (<xref:System.Xml.XmlReader.CanResolveEntity%2A> returns `false`), the `XmlResolver` on the `XmlDocument` is used to resolve any references in the DocumentType node and to expand any entity references.      > [!NOTE] >  If the `XmlDocument` is loaded using an <xref:System.Xml.XmlReader> which had an `XmlResolver` set to it, the `XmlResolver` on the `XmlReader` is not cached by the `XmlDocument` after <xref:System.Xml.XmlDocument.Load%2A> completes.       In version 1.1 of the.NET Framework, if this property is not set, the trust level of the application determines the default behavior.       `Fully trusted code:` The document uses a default <xref:System.Xml.XmlUrlResolver> with no user credentials. If authentication is required to access a network resource, use the `XmlResolver` property to specify an `XmlResolver` with the necessary credentials.       `Semi-trusted code:` The `XmlResolver` property is set to `null`. External resources are not resolved.       For more information on security and the `XmlResolver` property, see [Resolving External Resources](~/add/includes/ajax-current-ext-md.md).       This property is a Microsoft extension to the Document Object Model (DOM)."
+  summary: "設定<xref href=&quot;System.Xml.XmlResolver&quot;></xref>来用來解析外部資源。"
+  remarks: "`XmlResolver`可用來載入 Dtd 或擴充實體參考。 使用<xref:System.Xml.XmlResolver.Credentials%2A?displayProperty=fullName>屬性，您可以在設定認證`XmlResolver`存取儲存在安全的網路資源上的資源。</xref:System.Xml.XmlResolver.Credentials%2A?displayProperty=fullName>      -如果使用未載入文件<xref:System.Xml.XmlReader>（亦即，如果它使用資料流載入，檔案，等等）`XmlResolver`上`XmlDocument`一律使用。</xref:System.Xml.XmlReader>      -如果文件使用載入<xref:System.Xml.XmlTextReader>，解析`XmlTextReader`用來解析 DTD 中的任何參考 DocumentType 節點。</xref:System.Xml.XmlTextReader> 在解析程式`XmlDocument`用來展開實體的任何參考。      -如果文件使用載入<xref:System.Xml.XmlValidatingReader>，解析`XmlDocument`從未使用過。</xref:System.Xml.XmlValidatingReader>      -如果文件已載入與該類別可擴充`XmlReader`和`XmlReader`無法解析實體 (<xref:System.Xml.XmlReader.CanResolveEntity%2A>傳回`false`)、`XmlResolver`上`XmlDocument`用來解析 DocumentType 節點中的任何參考，並展開實體的任何參考。</xref:System.Xml.XmlReader.CanResolveEntity%2A>      > [!NOTE] > 如果`XmlDocument`使用載入<xref:System.Xml.XmlReader>其中有`XmlResolver`設，`XmlResolver`上`XmlReader`不會快取用`XmlDocument`之後<xref:System.Xml.XmlDocument.Load%2A>完成。</xref:System.Xml.XmlDocument.Load%2A> </xref:System.Xml.XmlReader>       在 1.1 版的.net Framework，如果未設定這個屬性，應用程式的信任層級會決定預設的行為。       `Fully trusted code:`文件會使用預設值<xref:System.Xml.XmlUrlResolver>不具使用者認證。</xref:System.Xml.XmlUrlResolver> 如果驗證才能存取網路資源，使用`XmlResolver`屬性來指定`XmlResolver`具有必要認證。       `Semi-trusted code:``XmlResolver`屬性設定為`null`。 不會解析外部資源。       如需有關安全性和`XmlResolver`屬性，請參閱[解析外部資源](~/add/includes/ajax-current-ext-md.md)。       這個屬性是 Microsoft 擴充功能的文件物件模型 (DOM)。"
   example:
   - "The following example loads an XML document which includes a reference to a DTD file. The `XmlResolver` property is used to set the credentials necessary to access the network resource.  \n  \n [!code-cpp[XmlDocument.XmlResolver#1](~/add/codesnippet/cpp/p-system.xml.xmldocument_9_1.cpp)]\n [!code-cs[XmlDocument.XmlResolver#1](~/add/codesnippet/csharp/p-system.xml.xmldocument_9_1.cs)]\n [!code-vb[XmlDocument.XmlResolver#1](~/add/codesnippet/visualbasic/p-system.xml.xmldocument_9_1.vb)]  \n  \n The example uses the following data files as input.  \n  \n `book5.xml`  \n  \n [!code-xml[XmlDocument.XmlResolver#2](~/add/codesnippet/xml/p-system.xml.xmldocument_9_2.xml)]  \n  \n `books.dtd`  \n  \n [!code-cs[XpsCreate#XpsCreateAddPkgContent](~/add/codesnippet/csharp/XpsCreate/XpsCreate.cs#xpscreateaddpkgcontent)]"
   syntax:
     content: public virtual System.Xml.XmlResolver XmlResolver { set; }
     return:
       type: System.Xml.XmlResolver
-      description: "The <xref uid=&quot;langword_csharp_XmlResolver&quot; name=&quot;XmlResolver&quot; href=&quot;&quot;></xref> to use.       In version 1.1 of the.NET Framework, the caller must be fully trusted in order to specify an <xref uid=&quot;langword_csharp_XmlResolver&quot; name=&quot;XmlResolver&quot; href=&quot;&quot;></xref>."
+      description: "The <xref uid=&quot;langword_csharp_XmlResolver&quot; name=&quot;XmlResolver&quot; href=&quot;&quot;></xref> to use.       在 1.1 版的.net Framework，呼叫端必須是完全信任才能指定<xref uid=&quot;langword_csharp_XmlResolver&quot; name=&quot;XmlResolver&quot; href=&quot;&quot;> </xref>。"
   overload: System.Xml.XmlDocument.XmlResolver*
   exceptions:
   - type: System.Xml.XmlException
     commentId: T:System.Xml.XmlException
-    description: "This property is set to <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref> and an external DTD or entity is encountered."
+    description: "這個屬性設定為<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>且遇到外部 DTD 或實體。"
   platform:
   - net462
 references:
