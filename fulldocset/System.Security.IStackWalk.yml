@@ -13,8 +13,8 @@ items:
   nameWithType: IStackWalk
   fullName: System.Security.IStackWalk
   type: Interface
-  summary: "Manages the stack walk that determines whether all callers in the call stack have the required permissions to access a protected resource."
-  remarks: "Partially trusted code always presents a security risk. It can sometimes be manipulated to perform actions on behalf of malicious code that does not have permission to access a resource. In this way, malicious code can achieve higher security access than it should be allowed.       The common language runtime helps protect managed code from these attacks by running a stack walk on all calls. The stack walk requires that all code in the call stack has permission to access a protected resource. Because the code attempting the attack will always be somewhere in the call stack, it will be unable to exceed its own security permissions."
+  summary: "管理堆疊查核行程，判斷呼叫堆疊中的所有呼叫端是否具有存取受保護的資源的必要權限。"
+  remarks: "部分信任程式碼一律會顯示安全性風險。 有時候可以代表沒有存取資源的權限的惡意程式碼執行動作操作。 如此一來，惡意程式碼可以達到比應該允許較高的安全性存取權。       通用語言執行平台可協助保護免於這些攻擊的 managed 程式碼所執行的所有呼叫堆疊查核行程。 堆疊查核行程要求所有呼叫堆疊中的程式碼必須都具有存取受保護的資源的權限。 因為嘗試攻擊的程式碼一定會某處呼叫堆疊中，將無法超過自己的安全性權限。"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -35,8 +35,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Asserts that the calling code can access the resource identified by the current permission object, even if callers higher in the stack have not been granted permission to access the resource."
-  remarks: "Calling Assert stops the permission check on callers higher in the call stack. Therefore, even if these callers do not have the requisite permissions, they can still access resources. An assertion is effective only if the code that calls Assert passes the security check for the permission that it is asserting.       A call to Assert is effective until the calling code returns to its caller or until a subsequent call to Assert renders the previous assertion ineffective. Also, <xref:System.Security.CodeAccessPermission.RevertAssert%2A> or <xref:System.Security.CodeAccessPermission.RevertAll%2A> removes a pending Assert.       Assert is ignored for a permission not granted because a demand for that permission will not succeed. However, if code lower on the call stack calls <xref:System.Security.IStackWalk.Demand%2A> for that permission, a <xref:System.Security.SecurityException> is thrown when the stack walk reaches the code that tried to call Assert. This happens because the code that called Assert has not been granted the permission, even though it tried to Assert it.      > [!CAUTION] >  Because calling Assert removes the requirement that all code in the call chain must be granted permission to access the specified resource, it can open up security vulnerabilities if used incorrectly or inappropriately. Therefore, it should be used with great caution."
+  summary: "即使堆疊中較高層的呼叫端未獲得存取資源的權限呼叫程式碼可以存取目前權限物件所識別之資源的判斷提示。"
+  remarks: "呼叫判斷提示，就會停止在呼叫堆疊中較高的呼叫端的權限檢查。 因此，即使這些呼叫端沒有必要的權限，他們仍然可以存取資源。 判斷提示就會生效，只有當呼叫判斷提示的程式碼通過安全性檢查，它會判斷提示之權限。       判斷提示的呼叫是有效的直到呼叫程式碼會傳回其呼叫端或判斷提示的後續呼叫會呈現先前的判斷提示的效果不佳。 此外，<xref:System.Security.CodeAccessPermission.RevertAssert%2A>或<xref:System.Security.CodeAccessPermission.RevertAll%2A>移除暫止的判斷提示。</xref:System.Security.CodeAccessPermission.RevertAll%2A> </xref:System.Security.CodeAccessPermission.RevertAssert%2A>       判斷提示該權限的要求將會失敗，因為未授與權限會被忽略。 不過，如果在呼叫堆疊中較低的程式碼呼叫<xref:System.Security.IStackWalk.Demand%2A>該權限，<xref:System.Security.SecurityException>堆疊查核行程到達程式碼嘗試呼叫判斷提示時，會擲回。</xref:System.Security.SecurityException> </xref:System.Security.IStackWalk.Demand%2A> 這不會因為呼叫判斷提示的程式碼無法獲得的權限，即使它嘗試將它判斷提示。      > [!CAUTION] > 呼叫 Assert 移除所有的程式碼呼叫鏈結中，必須授存取指定的資源的權限的需求，因為它可以開啟安全性漏洞如果使用不正確或不正確。 因此，應該使用小心謹慎。"
   syntax:
     content: public void Assert ();
     parameters: []
@@ -44,7 +44,7 @@ items:
   exceptions:
   - type: System.Security.SecurityException
     commentId: T:System.Security.SecurityException
-    description: "The calling code does not have <xref href=&quot;System.Security.Permissions.SecurityPermissionFlag&quot;></xref>."
+    description: "呼叫程式碼並沒有<xref href=&quot;System.Security.Permissions.SecurityPermissionFlag&quot;> </xref>。"
   platform:
   - net462
 - uid: System.Security.IStackWalk.Demand
@@ -59,8 +59,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Determines at run time whether all callers in the call stack have been granted the permission specified by the current permission object."
-  remarks: "This method is typically used by secure libraries to ensure that callers have permission to access a resource. For example, a file class in a secure class library calls Demand for the necessary <xref:System.Security.Permissions.FileIOPermission> before performing a file operation requested by the caller.       The permissions of the code that calls this method are not examined; the check begins from the immediate caller of that code and proceeds up the stack. Demand succeeds only if no <xref:System.Security.SecurityException> is raised."
+  summary: "決定在執行階段呼叫堆疊中的所有呼叫端獲得目前權限物件所指定的權限。"
+  remarks: "這個方法通常可由安全程式庫來確定呼叫端擁有存取資源的權限。 例如，檔案中的類別安全類別庫呼叫的必要需求<xref:System.Security.Permissions.FileIOPermission>之前執行檔案作業的呼叫端要求。</xref:System.Security.Permissions.FileIOPermission>       不會檢查呼叫這個方法的程式碼的權限;檢查該程式碼的立即呼叫端從開始，然後進行堆疊。 要求執行成功，只有當沒有<xref:System.Security.SecurityException>，就會引發。</xref:System.Security.SecurityException>"
   syntax:
     content: public void Demand ();
     parameters: []
@@ -68,7 +68,7 @@ items:
   exceptions:
   - type: System.Security.SecurityException
     commentId: T:System.Security.SecurityException
-    description: "A caller higher in the call stack does not have the permission specified by the current permission object.       -or-       A caller in the call stack has called <xref:System.Security.IStackWalk.Deny*> on the current permission object."
+    description: "呼叫堆疊中較高層的呼叫端沒有目前的權限物件所指定的權限。       -或-呼叫堆疊中的呼叫端已呼叫<xref:System.Security.IStackWalk.Deny*>上目前的權限物件。</xref:System.Security.IStackWalk.Deny*>"
   platform:
   - net462
 - uid: System.Security.IStackWalk.Deny
@@ -83,8 +83,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Causes every <xref:System.Security.IStackWalk.Demand*> for the current object that passes through the calling code to fail."
-  remarks: "This method prevents callers higher in the call stack from accessing the protected resource through the code that calls this method, even if those callers have been granted permission to access it. The call stack is typically represented as growing down, so that methods higher in the call stack call methods lower in the call stack.       Deny can limit the liability of the programmer or help prevent accidental security vulnerabilities because it helps prevent the method that calls Deny from being used to access the resource protected by the denied permission. If a method calls Deny on a permission, and if a <xref:System.Security.IStackWalk.Demand%2A> for that permission is invoked by a caller lower in the call stack, that security check will fail when it reaches the Deny.       Deny is ignored for a permission not granted because a demand for that permission will not succeed."
+  summary: "會導致每個<xref:System.Security.IStackWalk.Demand*>目前物件通過呼叫程式碼失敗。</xref:System.Security.IStackWalk.Demand*>"
+  remarks: "這個方法會防止呼叫堆疊中較高層的呼叫端程式碼呼叫此方法，透過存取受保護的資源，即使這些呼叫端必須被授與存取權限。 呼叫堆疊通常會表示向下成長，使方法呼叫堆疊中較高層呼叫的方法較低的呼叫堆疊中。       拒絕可以限制程式設計人員的責任，或協助防止意外安全性漏洞，因為它可協助防止拒絕會從用來存取拒絕的權限所保護的資源呼叫的方法。 如果方法呼叫 Deny 權限，而且如果<xref:System.Security.IStackWalk.Demand%2A>到達 Deny 時，安全性檢查的呼叫堆疊中較低的呼叫端所叫用該權限時，將會失敗。</xref:System.Security.IStackWalk.Demand%2A>       拒絕權限未授與該權限的要求將會失敗，因為已忽略。"
   syntax:
     content: public void Deny ();
     parameters: []
@@ -104,8 +104,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Causes every <xref:System.Security.IStackWalk.Demand*> for all objects except the current one that passes through the calling code to fail, even if code higher in the call stack has been granted permission to access other resources."
-  remarks: "PermitOnly is similar to <xref:System.Security.IStackWalk.Deny%2A>, in that both cause stack walks to fail when they would otherwise succeed. The difference is that <xref:System.Security.IStackWalk.Deny%2A> specifies permissions that will cause the stack walk to fail, but PermitOnly specifies the only permissions that do not cause the stack walk to fail. Call this method to ensure that your code can be used to access only the specified resources.       PermitOnly is ignored for a permission not granted because a demand for that permission will not succeed. However, if code lower on the call stack later calls <xref:System.Security.IStackWalk.Demand%2A> for that permission, a <xref:System.Security.SecurityException> is thrown when the stack walk reaches the code that tried to call PermitOnly. This is because the code that called PermitOnly has not been granted the permission, even though it called PermitOnly for that permission. The call stack is typically represented as growing down, so that methods higher in the call stack call methods lower in the call stack."
+  summary: "會導致每個<xref:System.Security.IStackWalk.Demand*>通過呼叫程式碼失敗，即使在呼叫堆疊中較高的程式碼授與權限來存取其他資源目前以外的所有物件。</xref:System.Security.IStackWalk.Demand*>"
+  remarks: "PermitOnly 是類似於<xref:System.Security.IStackWalk.Deny%2A>，在於兩者會導致堆疊查核行程符合則成功時失敗。</xref:System.Security.IStackWalk.Deny%2A> 其差異在於，<xref:System.Security.IStackWalk.Deny%2A>指定權限，會導致堆疊查核行程失敗，但 PermitOnly 指定不會導致堆疊查核行程失敗的唯一權限。</xref:System.Security.IStackWalk.Deny%2A> 呼叫此方法，以確保您的程式碼，可用來存取指定的資源。       PermitOnly 會忽略該權限的要求將會失敗，因為未授與的權限。 不過，如果程式碼呼叫較低堆疊稍後呼叫<xref:System.Security.IStackWalk.Demand%2A>該權限，<xref:System.Security.SecurityException>堆疊查核行程到達程式碼嘗試呼叫 PermitOnly 時，會擲回。</xref:System.Security.SecurityException> </xref:System.Security.IStackWalk.Demand%2A> 這是因為呼叫 PermitOnly 的程式碼無法獲得的權限，即使它針對該權限來呼叫 PermitOnly。 呼叫堆疊通常會表示向下成長，使方法呼叫堆疊中較高層呼叫的方法較低的呼叫堆疊中。"
   syntax:
     content: public void PermitOnly ();
     parameters: []
