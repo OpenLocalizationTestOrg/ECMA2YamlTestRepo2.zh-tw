@@ -21,8 +21,8 @@ items:
   nameWithType: SecureString
   fullName: System.Security.SecureString
   type: Class
-  summary: "Represents text that should be kept confidential, such as by deleting it from computer memory when no longer needed. This class cannot be inherited."
-  remarks: "SecureString is a string type that provides a measure of security. It tries to avoid storing potentially sensitive strings in process memory as plain text.  (For limitations, however, see the [How secure is SecureString?](#HowSecure) section.) The value of an instance of SecureString is automatically protected using a mechanism supported by the underlying platform when the instance is initialized or when the value is modified. Your application can render the instance immutable and prevent further modification by invoking the <xref:System.Security.SecureString.MakeReadOnly%2A> method.       The maximum length of a SecureString instance is 65,536 characters.      > [!IMPORTANT] >  This type implements the <xref:System.IDisposable> interface. When you have finished using an instance of the type, you should dispose of it either directly or indirectly. To dispose of the type directly, call its <xref:System.IDisposable.Dispose%2A> method in a `try`/`catch` block. To dispose of it indirectly, use a language construct such as `using` (in C#) or `Using` (in Visual Basic). For more information, see the “Using an Object that Implements IDisposable” section in the <xref:System.IDisposable> interface topic.       The SecureString class and its members are not visible to COM. For more information, see <xref:System.Runtime.InteropServices.ComVisibleAttribute>.       In this section:       [String vs. SecureString](#vsString)     [SecureString operations](#Ops)     [SecureString and interop](#interop)     [How secure is  SecureString?](#HowSecure)      <a name=&quot;vsString&quot;></a>    ## String versus SecureString    An instance of the <xref:System.String?displayProperty=fullName> class is both immutable and, when no longer needed, cannot be programmatically scheduled for garbage collection; that is, the instance is read-only after it is created, and it is not possible to predict when the instance will be deleted from computer memory. Because <xref:System.String?displayProperty=fullName> instances are immutable, operations that appear to modify an existing instance  actually create a copy of it to manipulate. Consequently, if a <xref:System.String> object contains sensitive information such as a password, credit card number, or personal data, there is a risk the information could be revealed after it is used because your application cannot delete the data from computer memory.       A SecureString object is similar to a <xref:System.String> object in that it has a text value. However, the value of a SecureString object is pinned in memory, may use a protection mechanism, such as encryption, provided by the underlying operating system, can be modified until your application marks it as read-only, and can be deleted from computer memory either by your application calling the <xref:System.Security.SecureString.Dispose%2A> method  or by the .NET Framework garbage collector.       For a discussion of the limitations of the SecureString class, see the [How secure is  SecureString?](#HowSecure) section.       [Back to top](#top)      <a name=&quot;Ops&quot;></a>    ## SecureString operations    The SecureString class includes members that allow you to do the following:       Instantiate a SecureString object    You instantiate a SecureString object by calling its parameterless constructor.       Add characters to a SecureString object    You can add a single character at a time to a SecureString object  by calling its <xref:System.Security.SecureString.AppendChar%2A> or <xref:System.Security.SecureString.InsertAt%2A> method.      > [!IMPORTANT] >  A SecureString object should never be constructed from a <xref:System.String>, because the sensitive data is already subject to the memory persistence consequences of the immutable <xref:System.String> class. The best way to construct a SecureString object is from a character-at-a-time unmanaged source, such as the <xref:System.Console.ReadKey%2A?displayProperty=fullName> method.       Remove characters from a SecureString object    You can replace an individual character by calling the <xref:System.Security.SecureString.SetAt%2A> method, remove an individual character by calling the <xref:System.Security.SecureString.RemoveAt%2A> method, or remove all characters from the SecureString instance by calling the  <xref:System.Security.SecureString.Clear%2A> method.       Make the SecureString object read-only    Once you have defined the string that the SecureString object represents, you call its  <xref:System.Security.SecureString.MakeReadOnly%2A> method to make the string read-only.       Get information about the SecureString object    The SecureString class has only two members that provide information about the string: its <xref:System.Security.SecureString.Length%2A> property, which indicates the number of UTF16-encoded code units in the string; and the <xref:System.Security.SecureString.IsReadOnly%2A>, method, which indicates whether the instance is read-only.       Release the memory allocated to the SecureString instance    Because SecureString implements the <xref:System.IDisposable> interface, you release its memory by calling the <xref:System.Security.SecureString.Dispose%2A> method.       The SecureString class has no members that inspect, compare, or convert the value of a SecureString. The absence of such members helps protect the value of the instance from accidental or malicious exposure. Use appropriate members of the <xref:System.Runtime.InteropServices.Marshal?displayProperty=fullName> class, such as the <xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A> method, to manipulate the value of a SecureString object.       The .NET Framework Class Library commonly uses SecureString instances in the following ways:      -   To provide password information to a process by using the <xref:System.Diagnostics.ProcessStartInfo> structure or by calling an overload of the <xref:System.Diagnostics.Process.Start%2A?displayProperty=fullName> method that has a parameter of type SecureString.      -   To provide network password information by calling a <xref:System.Net.NetworkCredential> class constructor that has a parameter of type SecureString or by using the <xref:System.Net.NetworkCredential.SecurePassword%2A?displayProperty=fullName> property.      -   To provide password information for SQL Server Authentication by calling the <xref:System.Data.SqlClient.SqlCredential.%23ctor%2A?displayProperty=fullName> constructor or retrieving the value of the <xref:System.Data.SqlClient.SqlCredential.Password%2A?displayProperty=fullName> property.      -   To pass a string to unmanaged code. For more information, see the [SecureString and interop](#interop) section.       [Back to top](#top)      <a name=&quot;interop&quot;></a>    ## SecureString and interop    Because the operating system does not  directly support SecureString, you must convert the value of the SecureString object to the required string type before passing the string to a native method.  The <xref:System.Runtime.InteropServices.Marshal> class has five methods that do this:      -   <xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName>, which converts the SecureString string value to a binary string (BSTR) recognized by COM.      -   <xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName> and <xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName>, which copy the SecureString string value to an ANSI string in unmanaged memory.      -   <xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName> and <xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>, which copy the SecureString string value to a Unicode string in unmanaged memory.       Each of these methods creates a clear-text string in unmanaged memory. It is the responsibility of the developer to zero out and free that memory as soon as it is no longer needed. Each of the string conversion and memory allocation methods has a corresponding method to zero out and free the allocated memory:      |Allocation and conversion method|Zero and free method|   |--------------------------------------|--------------------------|   |<xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeBSTR%2A?displayProperty=fullName>|   |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemAnsi%2A?displayProperty=fullName>|   |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemUnicode%2A?displayProperty=fullName>|   |<xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocAnsi%2A?displayProperty=fullName>|   |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode%2A?displayProperty=fullName>|       [Back to top](#top)      <a name=&quot;HowSecure&quot;></a>    ## How secure is SecureString?    When created properly, a SecureString instance provides more data protection than a <xref:System.String>. When creating a string from a character-at-a-time source, <xref:System.String> creates multiple intermediate in memory, whereas  SecureString creates just a single instance.  Garbage collection of <xref:System.String> objects  is non-deterministic. In addition, because its memory is not pinned, the garbage collector will make additional copies of <xref:System.String> values when moving and compacting memory. In contrast, the memory allocated to a SecureString object is pinned,  and that memory can be freed by calling the <xref:System.Security.SecureString.Dispose%2A> method.       Although data stored in a SecureString instance is more secure than data stored in a <xref:System.String> instance, there are significant limitations on how secure a SecureString instance is. These include:       Platform    On the Windows operating system, the contents of a SecureString instance&quot;s internal character array is encrypted. However, whether because of missing APIs or key management issues,  encryption is not available on all platforms. Because of this, SecureString is available on Desktop (Windows only), and not on .NET Core.       Duration    Even if the SecureString implementation is able to take advantage of encryption, the plain text assigned to the SecureString instance may be exposed at various times:      -   Because Windows doesn&quot;t offer a secure string implementation at the operating system level, the .NET Framework still has to convert the secure string value to its plain text representation in order to use it.      -   Whenever the value of the secure string is modified by methods such as <xref:System.Security.SecureString.AppendChar%2A> or <xref:System.Security.SecureString.RemoveAt%2A>, it must be decrypted (i.e., converted back to plain text), modified, and then encrypted again.      -   If the secure string is used in an interop call, it must be converted to an ANSI string, a Unicode string, or a binary string (BSTR). For more information, see the [SecureString and interop](#interop) section.       The time interval for which the SecureString instance&quot;s value is exposed  is merely shortened in comparison to the <xref:System.String> class.       Storage versus usage    More generally, the SecureString class defines a storage mechanism for string values that should be protected or kept confidential. However, outside of the .NET Framework itself, no usage mechanism supports SecureString. This means that the secure string must be converted to a usable form (typically a clear text form) that can be recognized by its target, and     that decryption and conversion must occur in user space.       Overall, SecureString is more secure than <xref:System.String> because it limits the exposure of sensitive string data. However, those strings may still be exposed to any process or operation that has access to raw memory, such as a malicious process running on the host computer, a process dump, or a user-viewable swap file. Instead of using SecureString to protect passwords, the recommended alternative is to use an opaque handle to credentials that are stored outside of the process.       [Back to top](#top)"
+  summary: "表示文字應該保持機密，例如藉由從不再需要時的電腦記憶體刪除。 這個類別無法被繼承。"
+  remarks: "SecureString 是安全性的字串類型，提供考量。 它會嘗試避免以純文字格式的程序記憶體中儲存敏感性字串。  (如限制，不過，請參閱[安全是 SecureString？](#HowSecure) > 一節。)SecureString 執行個體的值會自動施以保護使用初始化執行個體時，基礎的平台所支援的機制，或修改值時。 您的應用程式可以呈現執行個體的不可變，並避免其他修改叫用<xref:System.Security.SecureString.MakeReadOnly%2A>方法。</xref:System.Security.SecureString.MakeReadOnly%2A>       SecureString 執行個體的長度上限為 65,536 個字元。      > [!IMPORTANT] > 這個型別實作<xref:System.IDisposable>介面。</xref:System.IDisposable> 當您完成使用類型的執行個體時，您應該會處置它直接或間接。 若要直接處置的類型，呼叫其<xref:System.IDisposable.Dispose%2A>方法中的`try` / `catch`區塊。</xref:System.IDisposable.Dispose%2A> 若要為其配置間接，使用語言建構例如`using`（C# 中） 或`Using`（在 Visual Basic)。 如需詳細資訊，請參閱中的 「 使用物件的實作 IDisposable 」 一節<xref:System.IDisposable>介面 > 主題。</xref:System.IDisposable>       SecureString 類別和其成員不是為 COM 可見。 如需詳細資訊，請參閱<xref:System.Runtime.InteropServices.ComVisibleAttribute>.</xref:System.Runtime.InteropServices.ComVisibleAttribute>       本章節內容︰ [vs 的字串。SecureString](#vsString)[SecureString 作業](#Ops)[SecureString 和 interop](#interop)[安全是 SecureString 嗎？               ](#HowSecure)      <a name=&quot;vsString&quot;></a># # 字串與 SecureString 的執行個體<xref:System.String?displayProperty=fullName>類別會是不變，而且不再需要時，無法以程式設計方式排定進行記憶體回收; 亦即，執行個體是唯讀後建立，而且不可能預測時的執行個體將會從電腦記憶體刪除。</xref:System.String?displayProperty=fullName> 因為<xref:System.String?displayProperty=fullName>執行個體是不變，看似修改現有的執行個體的作業實際建立一份來操作。</xref:System.String?displayProperty=fullName> 因此，如果<xref:System.String>物件包含密碼、 信用卡號碼或個人資料等機密資訊，因為您的應用程式無法從電腦記憶體刪除資料使用之後，可能會洩漏資訊的風險。</xref:System.String>       SecureString 物件是類似於<xref:System.String>物件，因為它具有文字值。</xref:System.String> 不過，SecureString 物件已釘選在記憶體中，值可能會使用保護機制，例如，可以修改基礎作業系統所提供的加密，直到您的應用程式將它標記為唯讀狀態，以及可以從電腦記憶體刪除是藉由應用程式呼叫<xref:System.Security.SecureString.Dispose%2A>方法或.NET Framework 記憶體回收行程。</xref:System.Security.SecureString.Dispose%2A>       如需 SecureString 類別的限制的討論，請參閱[安全是 SecureString？](#HowSecure) > 一節。       [回到頁首](#top)<a name=&quot;Ops&quot;> </a> # # SecureString operations SecureString 類別包含成員，可讓您執行下列動作︰ SecureString 物件具現化 SecureString 物件呼叫其無參數建構函式來具現化。             加入字元 SecureString 物件您可以一次加入單一字元，SecureString 物件，藉由呼叫其<xref:System.Security.SecureString.AppendChar%2A>或<xref:System.Security.SecureString.InsertAt%2A>方法。</xref:System.Security.SecureString.InsertAt%2A> </xref:System.Security.SecureString.AppendChar%2A>      > [!IMPORTANT] > SecureString 物件永遠不應該建構<xref:System.String>，因為機密資料已經受限於記憶體持續性的後果不可變的<xref:System.String>類別。</xref:System.String> </xref:System.String> 建構 SecureString 物件的最佳方式是從字元-一次 unmanaged 的來源，例如<xref:System.Console.ReadKey%2A?displayProperty=fullName>方法。</xref:System.Console.ReadKey%2A?displayProperty=fullName>       您可以藉由呼叫來取代個別字元的移除字元 SecureString 物件<xref:System.Security.SecureString.SetAt%2A>方法，藉由呼叫移除個別字元<xref:System.Security.SecureString.RemoveAt%2A>方法或移除所有的字元從 SecureString 執行個體呼叫<xref:System.Security.SecureString.Clear%2A>方法。</xref:System.Security.SecureString.Clear%2A> </xref:System.Security.SecureString.RemoveAt%2A> </xref:System.Security.SecureString.SetAt%2A>       將 SecureString 物件為唯讀之後您已經定義 SecureString 物件所代表的字串，您會呼叫其<xref:System.Security.SecureString.MakeReadOnly%2A>方法，以讓唯讀的字串。</xref:System.Security.SecureString.MakeReadOnly%2A>       SecureString 物件 SecureString 類別取得的資訊已經提供字串的相關資訊的只有兩個成員︰ 其<xref:System.Security.SecureString.Length%2A>屬性，指出 UTF16 編碼字碼單位的字串; 字串數目而<xref:System.Security.SecureString.IsReadOnly%2A>，方法，指出執行個體是否為唯讀。</xref:System.Security.SecureString.IsReadOnly%2A> </xref:System.Security.SecureString.Length%2A>       釋放的記憶體配置到 SecureString 執行個體因為 SecureString 實作<xref:System.IDisposable>介面，您藉由呼叫釋放其記憶體<xref:System.Security.SecureString.Dispose%2A>方法。</xref:System.Security.SecureString.Dispose%2A> </xref:System.IDisposable>       SecureString 類別具有檢查、 比較或轉換 SecureString 值的任何成員。 如果沒有這類成員可協助防止意外或惡意公開的執行個體的值。 使用的適當成員<xref:System.Runtime.InteropServices.Marshal?displayProperty=fullName>類別，例如<xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A>方法，來處理 SecureString 物件的值。</xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A> </xref:System.Runtime.InteropServices.Marshal?displayProperty=fullName>       .NET Framework 類別庫通常使用 SecureString 執行個體，以下列方式:-若要透過使用提供的密碼資訊至處理序<xref:System.Diagnostics.ProcessStartInfo>結構，或藉由呼叫的多載<xref:System.Diagnostics.Process.Start%2A?displayProperty=fullName>SecureString 類型參數的方法。</xref:System.Diagnostics.Process.Start%2A?displayProperty=fullName> </xref:System.Diagnostics.ProcessStartInfo>      藉由呼叫提供網路密碼資訊<xref:System.Net.NetworkCredential>類別建構函式具有參數的型別 SecureString，或是使用<xref:System.Net.NetworkCredential.SecurePassword%2A?displayProperty=fullName>屬性。</xref:System.Net.NetworkCredential.SecurePassword%2A?displayProperty=fullName> </xref:System.Net.NetworkCredential>      藉由呼叫提供的 SQL Server 驗證密碼資訊<xref:System.Data.SqlClient.SqlCredential.%23ctor%2A?displayProperty=fullName>建構函式或擷取的值<xref:System.Data.SqlClient.SqlCredential.Password%2A?displayProperty=fullName>屬性。</xref:System.Data.SqlClient.SqlCredential.Password%2A?displayProperty=fullName> </xref:System.Data.SqlClient.SqlCredential.%23ctor%2A?displayProperty=fullName>      -若要將字串傳遞至 unmanaged 程式碼。 如需詳細資訊，請參閱[SecureString 和 interop](#interop) > 一節。       [回到頁首](#top)<a name=&quot;interop&quot;> </a> # # SecureString 和 interop 因為作業系統並不直接支援 SecureString，您必須轉換 SecureString 物件的值為必要的字串類型之前將字串傳遞至原生方法。        <xref:System.Runtime.InteropServices.Marshal>類別有五個方法，執行這項操作:-<xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName>將 SecureString 字串到 COM 所辨識的二進位字串 (BSTR)、</xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName> </xref:System.Runtime.InteropServices.Marshal>      -<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName>和<xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName>，這將 SecureString 字串值複製到 unmanaged 記憶體中的 ANSI 字串。</xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName> </xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName>      -<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>和<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>，這將 SecureString 字串值複製到 unmanaged 記憶體中的 Unicode 字串。</xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName> </xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>       每一種方法在 unmanaged 記憶體中建立純文字字串。 它是開發人員會清空，並釋放該記憶體，只要不再需要的責任。 字串轉換和記憶體配置方法的每個已對應的方法將會清空，並釋放配置的記憶體: |配置和轉換方法 |零，並釋放方法 |  |--------------------------------------|--------------------------|  |<xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeBSTR%2A?displayProperty=fullName>|  |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemAnsi%2A?displayProperty=fullName>|  |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemUnicode%2A?displayProperty=fullName>|  |<xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocAnsi%2A?displayProperty=fullName>|  |<xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName>|<xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode%2A?displayProperty=fullName>|      [Back to top](#top)      <a name=&quot;HowSecure&quot;></a>    ## How secure is SecureString?</xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocAnsi%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocAnsi%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemUnicode%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemUnicode%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.ZeroFreeCoTaskMemAnsi%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.SecureStringToCoTaskMemAnsi%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.ZeroFreeBSTR%2A?displayProperty=fullName></xref:System.Runtime.InteropServices.Marshal.SecureStringToBSTR%2A?displayProperty=fullName>    SecureString 執行個體正確建立時提供更多的資料保護，比<xref:System.String>.</xref:System.String> 當建立字串字元-一次來源<xref:System.String>而 SecureString 建立只要單一執行個體，在記憶體中，建立多個中繼。</xref:System.String>  記憶體回收<xref:System.String>物件不具決定性。</xref:System.String> 此外，因為其記憶體無法釘選，記憶體回收行程將會產生多份<xref:System.String>值時移動和壓縮記憶體。</xref:System.String> 相較之下，已釘選為 SecureString 物件配置的記憶體，並可以釋放該記憶體，藉由呼叫<xref:System.Security.SecureString.Dispose%2A>方法。</xref:System.Security.SecureString.Dispose%2A>       雖然 SecureString 執行個體中儲存的資料是詳細資料儲存在<xref:System.String>執行個體，有一些重要限制如何安全 SecureString 執行個體依原樣</xref:System.String>比的安全 這些活動包括︰ 平台上的 Windows 作業系統，SecureString 執行個體的內部字元陣列的內容已加密。 不過，是否因為遺漏應用程式開發介面或金鑰管理問題，加密並不適用於所有平台。 因為這個緣故，SecureString 可在桌面上 (僅限 Windows)，而不是在.NET Core。       如果 SecureString 實作是能夠充分利用的加密，指派給執行個體可能會暴露在不同時間 SecureString 的純文字的持續時間偶數:-因為 Windows 不提供的安全字串實作在作業系統層級，這是.NET Framework 仍具有將安全字串值轉換為它的純文字格式表示，才能使用。      -只要安全字串的值修改方法例如<xref:System.Security.SecureString.AppendChar%2A>或<xref:System.Security.SecureString.RemoveAt%2A>，必須解密 （亦即，已轉換的回純文字）、 加以修改，因此再加密一次。</xref:System.Security.SecureString.RemoveAt%2A> </xref:System.Security.SecureString.AppendChar%2A>      -如果 interop 呼叫中使用的安全字串，它必須轉換為 ANSI 字串、 Unicode 字串，或二進位字串 (BSTR)。 如需詳細資訊，請參閱[SecureString 和 interop](#interop) > 一節。       SecureString 執行個體的值會公開其時間間隔只會縮短相較於<xref:System.String>類別。</xref:System.String>       與使用方式的儲存體較常見地，SecureString 類別會定義儲存機制應該受保護或保持機密的字串值。 不過，.NET Framework 本身以外沒有使用量機制支援 SecureString。 這表示安全字串，必須轉換成可用的格式 （通常是純文字形式），其目標，可以辨識和解密和轉換必須出現在使用者空間中。       整體來說，SecureString 比<xref:System.String>因為它會限制公開敏感的字串資料。</xref:System.String> 不過，這些字串可能仍然會公開給任何處理程序或具有未經處理的記憶體，例如主機電腦、 處理序傾印或使用者可檢視交換檔上執行的惡意程序的存取權的作業。 除了使用 SecureString 保護的密碼，建議的替代做法是使用儲存認證時，在程序之外的不透明控制代碼。       [回到頁首](#top)"
   example:
   - "The following example demonstrates how to use a SecureString to secure a user’s password for use as a credential to start a new process.  \n  \n [!code-vb[System.Security.SecureString.Ctor#4](~/add/codesnippet/visualbasic/t-system.security.secure_1.vb)]\n [!code-cs[System.Security.SecureString.Ctor#4](~/add/codesnippet/csharp/t-system.security.secure_1.cs)]"
   syntax:
@@ -46,7 +46,7 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Initializes a new instance of the <xref href=&quot;System.Security.SecureString&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Security.SecureString&quot;></xref>類別。"
   remarks: ''
   example:
   - "The following example uses the default (or parameterless) constructor to instantiate a new <xref:System.Security.SecureString> object. It then calls the <xref:System.Security.SecureString.AppendChar%2A> method to add an array of characters to it.  \n  \n [!code-cs[System.Security.SecureString.Ctor#2](~/add/codesnippet/csharp/m-system.security.secure_7_1.cs)]\n [!code-cpp[System.Security.SecureString.Ctor#2](~/add/codesnippet/cpp/m-system.security.secure_7_1.cpp)]\n [!code-vb[System.Security.SecureString.Ctor#2](~/add/codesnippet/visualbasic/m-system.security.secure_7_1.vb)]  \n  \n The following example creates a <xref:System.Security.SecureString> object from the value of a <xref:System.String> object.  \n  \n [!code-vb[System.Security.SecureString.Ctor#3](~/add/codesnippet/visualbasic/m-system.security.secure_7_2.vb)]\n [!code-cpp[System.Security.SecureString.Ctor#3](~/add/codesnippet/cpp/m-system.security.secure_7_2.cpp)]\n [!code-cs[System.Security.SecureString.Ctor#3](~/add/codesnippet/csharp/m-system.security.secure_7_2.cs)]"
@@ -57,10 +57,10 @@ items:
   exceptions:
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this instance."
+    description: "保護或解除保護這個執行個體的值時發生錯誤。"
   - type: System.NotSupportedException
     commentId: T:System.NotSupportedException
-    description: "This operation is not supported on this platform."
+    description: "這個平台上不支援此作業。"
   platform:
   - net462
 - uid: System.Security.SecureString.#ctor(System.Char*,System.Int32)
@@ -75,8 +75,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Initializes a new instance of the <xref href=&quot;System.Security.SecureString&quot;></xref> class from a subarray of &lt;xref:System.Char?displayProperty=fullName&gt; objects.       This constructor is not CLS-compliant. The CLS-compliant alternative is &lt;xref:System.Security.SecureString.%23ctor?displayProperty=fullName&gt;."
-  remarks: "This constructor initializes the new <xref:System.Security.SecureString> object to the number of characters in `value` specified by `length`; the value of the instance is then encrypted.       In C#, this constructor is defined only in the context of unsafe code."
+  summary: "初始化的新執行個體<xref href=&quot;System.Security.SecureString&quot;></xref>類別的子陣列&lt;xref:System.Char?displayProperty=fullName&gt;物件。       這個建構函式不符合 CLS 標準。 符合 CLS 標準的替代方式是&lt;xref:System.Security.SecureString.%23ctor?displayProperty=fullName&gt;。"
+  remarks: "這個建構函式會初始化新<xref:System.Security.SecureString>物件中的字元數`value`所指定`length`; 執行個體的值會加密。</xref:System.Security.SecureString>       在 C# 中，只在不安全的程式碼內容中定義這個建構函式。"
   example:
   - "The following example instantiates a new <xref:System.Security.SecureString> object by passing its constructor a pointer to a character array.  \n  \n [!code-cpp[System.Security.SecureString.Ctor2#1](~/add/codesnippet/cpp/m-system.security.secure_3_1.cpp)]\n [!code-cs[System.Security.SecureString.Ctor2#1](~/add/codesnippet/csharp/securestringctor/ctor1.cs#1)]"
   syntax:
@@ -84,24 +84,24 @@ items:
     parameters:
     - id: value
       type: System.Char*
-      description: "A pointer to an array of &lt;xref:System.Char?displayProperty=fullName&gt; objects."
+      description: "陣列的指標&lt;xref:System.Char?displayProperty=fullName&gt;物件。"
     - id: length
       type: System.Int32
-      description: "The number of elements of `value` to include in the new instance."
+      description: "元素數`value`来包含在新的執行個體中。"
   overload: System.Security.SecureString.#ctor*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>value</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>value</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "<code>length</code> is less than zero or greater than 65,536."
+    description: "<code>length</code>小於零或大於 65,536。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   - type: System.NotSupportedException
     commentId: T:System.NotSupportedException
-    description: "This operation is not supported on this platform."
+    description: "這個平台上不支援此作業。"
   platform:
   - net462
 - uid: System.Security.SecureString.AppendChar(System.Char)
@@ -116,8 +116,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Appends a character to the end of the current secure string."
-  remarks: "If the implementation uses a protection mechanism, such as encryption, the value of this secure string, if any, is unprotected; `c` is appended; then the new value of the secure string is re-protected."
+  summary: "將字元附加至目前安全字串的結尾。"
+  remarks: "如果實作會使用保護機制，例如加密，如果有的話，這個安全字串的值是未受保護;`c`附加; 然後安全字串的新值並在重新保護。"
   example:
   - "The following example demonstrates how the AppendChar, <xref:System.Security.SecureString.InsertAt%2A>, <xref:System.Security.SecureString.RemoveAt%2A>, <xref:System.Security.SecureString.SetAt%2A>, and <xref:System.Security.SecureString.Clear%2A> methods affect the value of a <xref:System.Security.SecureString> object.  \n  \n [!code-cpp[SecureString.xAt#1](~/add/codesnippet/cpp/m-system.security.secure_6_1.cpp)]\n [!code-cs[SecureString.xAt#1](~/add/codesnippet/csharp/m-system.security.secure_6_1.cs)]\n [!code-vb[SecureString.xAt#1](~/add/codesnippet/visualbasic/m-system.security.secure_6_1.vb)]  \n  \n The following example demonstrates how the AppendChar and <xref:System.Security.SecureString.RemoveAt%2A> methods can be used to collect the characters in a password.  \n  \n [!code-cpp[SecureString.xChar#1](~/add/codesnippet/cpp/m-system.security.secure_6_2.cpp)]\n [!code-vb[SecureString.xChar#1](~/add/codesnippet/visualbasic/m-system.security.secure_6_2.vb)]\n [!code-cs[SecureString.xChar#1](~/add/codesnippet/csharp/m-system.security.secure_6_2.cs)]"
   syntax:
@@ -125,21 +125,21 @@ items:
     parameters:
     - id: c
       type: System.Char
-      description: "A character to append to this secure string."
+      description: "要附加至這個安全字串的字元。"
   overload: System.Security.SecureString.AppendChar*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This secure string is read-only."
+    description: "這個安全字串為唯讀。"
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "Performing this operation would make the length of this secure string greater than 65,536 characters."
+    description: "執行此作業會使這個安全字串的長度大於 65,536 個字元。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   platform:
   - net462
 - uid: System.Security.SecureString.Clear
@@ -154,8 +154,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Deletes the value of the current secure string."
-  remarks: "The computer memory that contains the value of this secure string is zeroed, then the length of the value of this secure string is set to zero."
+  summary: "刪除目前安全字串的值。"
+  remarks: "電腦記憶體，其中包含這個安全字串的值為&0;，則這個安全字串的值的長度設定為零。"
   example:
   - "The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A>, <xref:System.Security.SecureString.InsertAt%2A>, <xref:System.Security.SecureString.RemoveAt%2A>, <xref:System.Security.SecureString.SetAt%2A>, and Clear methods affect the value of a <xref:System.Security.SecureString> object.  \n  \n [!code-cpp[SecureString.xAt#1](~/add/codesnippet/cpp/m-system.security.secure_5_1.cpp)]\n [!code-cs[SecureString.xAt#1](~/add/codesnippet/csharp/m-system.security.secure_5_1.cs)]\n [!code-vb[SecureString.xAt#1](~/add/codesnippet/visualbasic/m-system.security.secure_5_1.vb)]"
   syntax:
@@ -165,10 +165,10 @@ items:
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This secure string is read-only."
+    description: "這個安全字串為唯讀。"
   platform:
   - net462
 - uid: System.Security.SecureString.Copy
@@ -183,22 +183,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Creates a copy of the current secure string."
-  remarks: "If an instance of a <xref:System.Security.SecureString> is marked read-only, the copy of that instance will not be read-only."
+  summary: "建立目前安全字串的複本。"
+  remarks: "如果執行個體<xref:System.Security.SecureString>是標示為唯讀，該執行個體的複本將不處於唯讀模式。</xref:System.Security.SecureString>"
   syntax:
     content: public System.Security.SecureString Copy ();
     parameters: []
     return:
       type: System.Security.SecureString
-      description: "A duplicate of this secure string."
+      description: "這個安全字串的複本。"
   overload: System.Security.SecureString.Copy*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   platform:
   - net462
 - uid: System.Security.SecureString.Dispose
@@ -213,8 +213,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Releases all resources used by the current <xref href=&quot;System.Security.SecureString&quot;></xref> object."
-  remarks: "The Dispose method writes binary zeroes to the allocated memory that contains the value of this <xref:System.Security.SecureString> object, then frees the allocated memory.       For more information, see [Garbage Collection](~/add/includes/ajax-current-ext-md.md)."
+  summary: "目前所使用的資源全部釋出<xref href=&quot;System.Security.SecureString&quot;></xref>物件。"
+  remarks: "Dispose 方法寫入配置的記憶體，其中包含這個值的二進位零<xref:System.Security.SecureString>物件，然後釋放配置的記憶體。</xref:System.Security.SecureString>       如需詳細資訊，請參閱[回收](~/add/includes/ajax-current-ext-md.md)。"
   syntax:
     content: public void Dispose ();
     parameters: []
@@ -234,8 +234,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Inserts a character in this secure string at the specified index position."
-  remarks: "The index is zero-based; the first character in this secure string is at index position zero.       If the implementation uses a protection mechanism, such as encryption, the value of the secure string, if any, is unprotected; `c` is inserted at the specified index position; then the new value is re-protected. The InsertAt method yields the same results as the <xref:System.Security.SecureString.AppendChar%2A> method, which inserts a character at the end of a secure string, if the `index` parameter of InsertAt is set to the length of this instance."
+  summary: "在這個安全字串中位於指定的索引位置插入的字元。"
+  remarks: "索引以零為起始。這個安全字串中的第一個字元是在索引位置為零。       如果實作會使用保護機制，例如加密，如果有的話，安全字串的值是未受保護;`c`插入指定的索引位置，則新值並在重新保護。 InsertAt 方法就會產生相同的結果<xref:System.Security.SecureString.AppendChar%2A>方法，這個方法會將安全字串的結尾插入字元，如果`index`InsertAt 的參數設定為這個執行個體的長度。</xref:System.Security.SecureString.AppendChar%2A>"
   example:
   - "The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A>, InsertAt, <xref:System.Security.SecureString.RemoveAt%2A>, <xref:System.Security.SecureString.SetAt%2A>, and <xref:System.Security.SecureString.Clear%2A> methods affect the value of a <xref:System.Security.SecureString> object.  \n  \n [!code-cpp[SecureString.xAt#1](~/add/codesnippet/cpp/m-system.security.secure_0_1.cpp)]\n [!code-cs[SecureString.xAt#1](~/add/codesnippet/csharp/m-system.security.secure_0_1.cs)]\n [!code-vb[SecureString.xAt#1](~/add/codesnippet/visualbasic/m-system.security.secure_0_1.vb)]"
   syntax:
@@ -243,24 +243,24 @@ items:
     parameters:
     - id: index
       type: System.Int32
-      description: "The index position where parameter `c` is inserted."
+      description: "索引位置參數`c`插入。"
     - id: c
       type: System.Char
-      description: "The character to insert."
+      description: "要插入的字元。"
   overload: System.Security.SecureString.InsertAt*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This secure string is read-only."
+    description: "這個安全字串為唯讀。"
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "<code>index</code> is less than zero, or greater than the length of this secure string.       -or-       Performing this operation would make the length of this secure string greater than 65,536 characters."
+    description: "<code>index</code>小於零或大於這個安全字串的長度。       -或者-執行此作業會使這個安全字串的長度大於 65,536 個字元。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   platform:
   - net462
 - uid: System.Security.SecureString.IsReadOnly
@@ -275,19 +275,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Indicates whether this secure string is marked read-only."
-  remarks: "After an instance of <xref:System.Security.SecureString> is marked read-only by the <xref:System.Security.SecureString.MakeReadOnly%2A> method, any attempt to modify the value of the instance throws an <xref:System.InvalidOperationException>. Use the IsReadOnly method to test whether a <xref:System.Security.SecureString> is read-only before attempting to modify it."
+  summary: "指出是否這個安全字串標示為唯讀。"
+  remarks: "執行個體<xref:System.Security.SecureString>已標示為唯讀，<xref:System.Security.SecureString.MakeReadOnly%2A>方法中，任何嘗試修改值的執行個體則會擲回<xref:System.InvalidOperationException>.</xref:System.InvalidOperationException></xref:System.Security.SecureString.MakeReadOnly%2A></xref:System.Security.SecureString>之後 使用 IsReadOnly 方法來測試是否<xref:System.Security.SecureString>為唯讀，然後再嘗試將修改它。</xref:System.Security.SecureString>"
   syntax:
     content: public bool IsReadOnly ();
     parameters: []
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if this secure string is marked read-only; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果這個安全字串標示為唯讀。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Security.SecureString.IsReadOnly*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   platform:
   - net462
 - uid: System.Security.SecureString.Length
@@ -302,18 +302,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Gets the number of characters in the current secure string."
-  remarks: "The Length property returns the number of <xref:System.Char> objects in this instance, not the number of Unicode characters. A Unicode character might be represented by more than one <xref:System.Char> object.       The maximum length of a <xref:System.Security.SecureString> instance is 65,536 characters."
+  summary: "取得目前安全字串中的字元數。"
+  remarks: "Length 屬性傳回的數目<xref:System.Char>這個執行個體中的物件、 不是 Unicode 字元的數目。</xref:System.Char> Unicode 字元可能會表示由多個<xref:System.Char>物件。</xref:System.Char>       最大長度<xref:System.Security.SecureString>執行個體為 65,536 個字元。</xref:System.Security.SecureString>"
   syntax:
     content: public int Length { get; }
     return:
       type: System.Int32
-      description: "The number of &lt;xref:System.Char?displayProperty=fullName&gt; objects in this secure string."
+      description: "數目&lt;xref:System.Char?displayProperty=fullName&gt;物件在這個安全字串。"
   overload: System.Security.SecureString.Length*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   platform:
   - net462
 - uid: System.Security.SecureString.MakeReadOnly
@@ -328,8 +328,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Makes the text value of this secure string read-only."
-  remarks: "Initialize the text value of an instance of the <xref:System.Security.SecureString> class with the <xref:System.Security.SecureString.%23ctor%2A> constructors, and modify the value with the <xref:System.Security.SecureString.Clear%2A>, <xref:System.Security.SecureString.RemoveAt%2A>, <xref:System.Security.SecureString.SetAt%2A>, <xref:System.Security.SecureString.InsertAt%2A>, and <xref:System.Security.SecureString.AppendChar%2A> methods.       After you have made your final modifications, use the MakeReadOnly method to make the value of the instance immutable (read-only). After the value is marked as read-only, any further attempt to modify it throws an <xref:System.InvalidOperationException>.       The effect of invoking MakeReadOnly is permanent because the <xref:System.Security.SecureString> class provides no means to make the secure string modifiable again. Use the <xref:System.Security.SecureString.IsReadOnly%2A> method to test whether an instance of <xref:System.Security.SecureString> is read-only."
+  summary: "使這個安全字串的文字值成為唯讀。"
+  remarks: "初始化的執行個體的文字值<xref:System.Security.SecureString>類別<xref:System.Security.SecureString.%23ctor%2A>建構函式，並修改此值與<xref:System.Security.SecureString.Clear%2A>， <xref:System.Security.SecureString.RemoveAt%2A>， <xref:System.Security.SecureString.SetAt%2A>， <xref:System.Security.SecureString.InsertAt%2A>，和<xref:System.Security.SecureString.AppendChar%2A>方法。</xref:System.Security.SecureString.AppendChar%2A> </xref:System.Security.SecureString.InsertAt%2A> </xref:System.Security.SecureString.SetAt%2A> </xref:System.Security.SecureString.RemoveAt%2A> </xref:System.Security.SecureString.Clear%2A> </xref:System.Security.SecureString.%23ctor%2A> </xref:System.Security.SecureString>       在進行最後的修改之後，使用 MakeReadOnly 方法讓執行個體的值不可變 （唯讀）。 值會標示為唯讀之後，修改任何進一步嘗試就會擲回<xref:System.InvalidOperationException>.</xref:System.InvalidOperationException>       叫用 MakeReadOnly 的效果是永久性因為<xref:System.Security.SecureString>類別會提供任何方法來執行安全字串可修改，然後再次。</xref:System.Security.SecureString> 使用<xref:System.Security.SecureString.IsReadOnly%2A>方法來測試執行個體是否<xref:System.Security.SecureString>處於唯讀狀態。</xref:System.Security.SecureString> </xref:System.Security.SecureString.IsReadOnly%2A>"
   example:
   - "The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A> and <xref:System.Security.SecureString.RemoveAt%2A> methods can be used to collect the characters in a password. After the password is collected, it is made read-only.  \n  \n [!code-cpp[SecureString.xChar#1](~/add/codesnippet/cpp/m-system.security.secure_1_1.cpp)]\n [!code-vb[SecureString.xChar#1](~/add/codesnippet/visualbasic/m-system.security.secure_1_1.vb)]\n [!code-cs[SecureString.xChar#1](~/add/codesnippet/csharp/m-system.security.secure_1_1.cs)]"
   syntax:
@@ -339,7 +339,7 @@ items:
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   platform:
   - net462
 - uid: System.Security.SecureString.RemoveAt(System.Int32)
@@ -354,8 +354,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Removes the character at the specified index position from this secure string."
-  remarks: "The index is zero-based; the first character in this instance is at index position zero.       If the implementation uses a protection mechanism, such as encryption, the value of this secure string, if any, is unprotected; the character at the specified index position is removed; then the new value is re-protected."
+  summary: "從這個安全字串中移除指定的索引位置處的字元。"
+  remarks: "索引以零為起始。這個執行個體中的第一個字元是在索引位置為零。       如果實作會使用保護機制，例如加密，如果有的話，這個安全字串的值是未受保護;已移除指定的索引位置處的字元;然後，新值並在重新保護。"
   example:
   - "The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A>, <xref:System.Security.SecureString.InsertAt%2A>, RemoveAt, <xref:System.Security.SecureString.SetAt%2A>, and <xref:System.Security.SecureString.Clear%2A> methods affect the value of a <xref:System.Security.SecureString> object.  \n  \n [!code-cpp[SecureString.xAt#1](~/add/codesnippet/cpp/m-system.security.secure_2_1.cpp)]\n [!code-cs[SecureString.xAt#1](~/add/codesnippet/csharp/m-system.security.secure_2_1.cs)]\n [!code-vb[SecureString.xAt#1](~/add/codesnippet/visualbasic/m-system.security.secure_2_1.vb)]  \n  \n The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A> and RemoveAt methods can be used to collect the characters in a password.  \n  \n [!code-cpp[SecureString.xChar#1](~/add/codesnippet/cpp/m-system.security.secure_2_2.cpp)]\n [!code-vb[SecureString.xChar#1](~/add/codesnippet/visualbasic/m-system.security.secure_2_2.vb)]\n [!code-cs[SecureString.xChar#1](~/add/codesnippet/csharp/m-system.security.secure_2_2.cs)]"
   syntax:
@@ -363,21 +363,21 @@ items:
     parameters:
     - id: index
       type: System.Int32
-      description: "The index position of a character in this secure string."
+      description: "這個安全字串中字元的索引位置。"
   overload: System.Security.SecureString.RemoveAt*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This secure string is read-only."
+    description: "這個安全字串為唯讀。"
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "<code>index</code> is less than zero, or greater than or equal to the length of this secure string."
+    description: "<code>index</code>小於零，或大於或等於這個安全字串的長度。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   platform:
   - net462
 - uid: System.Security.SecureString.SetAt(System.Int32,System.Char)
@@ -392,8 +392,8 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: "Replaces the existing character at the specified index position with another character."
-  remarks: "The index is zero-based; the first character in this instance is at index position zero.       If the implementation uses a protection mechanism, such as encryption, the value of the secure string, if any, is unprotected; `c` is assigned to the specified index position; then the new value is re-protected."
+  summary: "以另一個字元，取代指定的索引位置的現有字元。"
+  remarks: "索引以零為起始。這個執行個體中的第一個字元是在索引位置為零。       如果實作會使用保護機制，例如加密，如果有的話，安全字串的值是未受保護;`c`指派給指定的索引位置，則新值並在重新保護。"
   example:
   - "The following example demonstrates how the <xref:System.Security.SecureString.AppendChar%2A>, <xref:System.Security.SecureString.InsertAt%2A>, <xref:System.Security.SecureString.RemoveAt%2A>, SetAt, and <xref:System.Security.SecureString.Clear%2A> methods affect the value of a <xref:System.Security.SecureString> object.  \n  \n [!code-cpp[SecureString.xAt#1](~/add/codesnippet/cpp/m-system.security.secure_4_1.cpp)]\n [!code-cs[SecureString.xAt#1](~/add/codesnippet/csharp/m-system.security.secure_4_1.cs)]\n [!code-vb[SecureString.xAt#1](~/add/codesnippet/visualbasic/m-system.security.secure_4_1.vb)]"
   syntax:
@@ -401,24 +401,24 @@ items:
     parameters:
     - id: index
       type: System.Int32
-      description: "The index position of an existing character in this secure string"
+      description: "這個安全字串中的 現有字元的索引位置"
     - id: c
       type: System.Char
-      description: "A character that replaces the existing character."
+      description: "字元會取代現有的字元。"
   overload: System.Security.SecureString.SetAt*
   exceptions:
   - type: System.ObjectDisposedException
     commentId: T:System.ObjectDisposedException
-    description: "This secure string has already been disposed."
+    description: "已經處置這個安全字串。"
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This secure string is read-only."
+    description: "這個安全字串為唯讀。"
   - type: System.ArgumentOutOfRangeException
     commentId: T:System.ArgumentOutOfRangeException
-    description: "<code>index</code> is less than zero, or greater than or equal to the length of this secure string."
+    description: "<code>index</code>小於零，或大於或等於這個安全字串的長度。"
   - type: System.Security.Cryptography.CryptographicException
     commentId: T:System.Security.Cryptography.CryptographicException
-    description: "An error occurred while protecting or unprotecting the value of this secure string."
+    description: "保護或解除保護這個安全字串的值時發生錯誤。"
   platform:
   - net462
 references:
