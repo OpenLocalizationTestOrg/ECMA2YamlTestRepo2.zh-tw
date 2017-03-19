@@ -12,8 +12,8 @@ items:
   nameWithType: ManagedToNativeComInteropStubAttribute
   fullName: System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute
   type: Class
-  summary: "Provides support for user customization of interop stubs in managed-to-COM interop scenarios."
-  remarks: "This attribute enables interop developers who have knowledge about marshaling and the inner workings of interop calls to do the following:      -   Take advantage of customized interop stubs at build time instead of run time.      -   Debug customized interop stubs.      -   Provide marshaling capabilities within a stub that the runtime does not provide.      -   Provide user-specific method dispatch capabilities.       You apply the attribute on a method in an interface to specify a corresponding stub method for managed-to-native COM interop.       If this attribute is encountered during run time, the common language runtime does not dynamically generate an interop stub. Instead, it invokes the custom stub that was created at build time.       The ManagedToNativeComInteropStubAttribute attribute has the following characteristics:      -   The attribute can be used only on methods from interfaces that are marked `[ComImport]`. If the attribute is applied to non-interface types, it is ignored by the runtime.      -   The attribute can be used only once on the same method in an interface. If it is used more than once, the compiler generates a duplicated attribute error.      -   The attribute is not inheritable from a base interface. Derived interfaces must explicitly assign the attribute.      -   The assembly that contains the attributed method must also contain the customized stub.       Overloaded stub methods are valid. Although you specify only the type and the name of the stub method, the runtime will discover the corresponding stub. It does this by examining all the arguments on the interface method, and then performing full signature matching by using an explicit `this` pointer.       It is also possible for multiple methods in an interface to share the same stub method; however, you should be careful when you use shared stubs.      > [!NOTE] >  Stub methods must be static.       You could inform the runtime to use a customized interop stub at build time instead of run time with the following C# code:      ```   [ComImport]   interface IMyInterface   {       [ManagedToNativeComInteropStubAttribute(typeof(TestStubClass),                 &quot;ForwardTestStub&quot;)]       void GetString (string arg);   }   ```       You could then use the following code to declare the corresponding stub method:      ```   class TestStubClass   {       internal static void ForwardTestStub(IMyInterface thisObject,                string arg) {…}   }   ```"
+  summary: "提供管理-到-COM interop 案例中的 interop 虛設常式的使用者自訂的支援。"
+  remarks: "這個屬性可讓具有認知封送處理和 interop 呼叫，執行下列動作的內部運作的 interop 開發人員:-利用自訂 interop 虛設常式在建置階段，而不是執行階段。      偵錯自訂 interop 虛設常式。      -提供在執行階段不會提供 stub 封送處理功能。      -提供使用者特定方法分派功能。       您可以套用的屬性上指定的受管理的原生 COM interop 對應虛設常式方法的介面中的方法。       如果在執行階段期間遇到這個屬性時，common language runtime 不會以動態方式產生 interop 的虛設常式。 相反地，它會叫用自訂在建置期間建立的虛設常式。       ManagedToNativeComInteropStubAttribute 屬性具有下列特性:-屬性只能用於從標記的介面方法`[ComImport]`。 如果此屬性會套用至非介面類型，則會忽略由執行階段。      -屬性能一次在介面中的相同方法。 如果使用超過一次，編譯器會產生重複的屬性時發生錯誤。      -屬性不是繼承自基底介面的。 衍生的介面必須明確地指派屬性。      -包含的屬性化的方法的組件也必須包含自訂的虛設常式。       多載的虛設常式方法都是有效的。 雖然您指定的型別和虛設常式方法的名稱，執行階段會探索對應的虛設常式。 它會檢查在介面方法中，所有引數，然後執行 比對的方式使用明確的完整簽章`this`指標。       也可能會共用相同的虛設常式方法; 介面中的多個方法不過，您應該注意當您使用共用的虛設常式。      > [!NOTE] > 虛設常式方法必須是靜態。       您可以通知執行階段使用自訂 interop 虛設常式在建置階段，而不是以下列 C# 程式碼的執行時間︰```   [ComImport]   interface IMyInterface   {       [ManagedToNativeComInteropStubAttribute(typeof(TestStubClass),                 &quot;ForwardTestStub&quot;)]       void GetString (string arg);   }   ```您接著可以使用下列程式碼來宣告對應的虛設常式方法︰```   class TestStubClass   {       internal static void ForwardTestStub(IMyInterface thisObject,                string arg) {…}   }   ```"
   syntax:
     content: >-
       [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple=false, Inherited=false)]
@@ -39,24 +39,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: "Initializes a new instance of the <xref href=&quot;System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute&quot;></xref> class with the specified class type and method name."
+  summary: "初始化的新執行個體<xref href=&quot;System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute&quot;></xref>類別指定的類別類型和方法名稱。"
   syntax:
     content: public ManagedToNativeComInteropStubAttribute (Type classType, string methodName);
     parameters:
     - id: classType
       type: System.Type
-      description: "The class that contains the required stub method."
+      description: "包含必要的虛設常式方法的類別。"
     - id: methodName
       type: System.String
-      description: "The name of the stub method."
+      description: "虛設常式方法的名稱。"
   overload: System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute.#ctor*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "<code>methodName</code> cannot be found.       -or-       The method is not static or non-generic.       -or-       The method&quot;s parameter list does not match the expected parameter list for the stub."
+    description: "<code>methodName</code>找不到。       -或者-方法不是靜態或非泛型。       -或者-方法的參數清單不符合預期的參數清單，為虛設常式。"
   - type: System.MethodAccessException
     commentId: T:System.MethodAccessException
-    description: "The interface that contains the managed interop method has no access to the stub method, because the stub method has private or protected accessibility, or because of a security issue."
+    description: "包含 managed interop 方法的介面有沒有存取權的虛設常式方法，因為虛設常式方法具有私用或受保護的存取範圍，或因為安全性問題。"
   platform:
   - net462
 - uid: System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute.ClassType
@@ -71,12 +71,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: "Gets the class that contains the required stub method."
+  summary: "取得包含所需的虛設常式方法的類別。"
   syntax:
     content: public Type ClassType { get; }
     return:
       type: System.Type
-      description: "The class that contains the customized interop stub."
+      description: "包含自訂 interop 虛設常式的類別。"
   overload: System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute.ClassType*
   exceptions: []
   platform:
@@ -93,12 +93,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: "Gets the name of the stub method."
+  summary: "取得虛設常式方法的名稱。"
   syntax:
     content: public string MethodName { get; }
     return:
       type: System.String
-      description: "The name of a customized interop stub."
+      description: "自訂 interop 虛設常式的名稱。"
   overload: System.Runtime.InteropServices.ManagedToNativeComInteropStubAttribute.MethodName*
   exceptions: []
   platform:
