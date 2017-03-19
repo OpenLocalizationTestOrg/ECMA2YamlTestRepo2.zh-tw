@@ -12,8 +12,8 @@ items:
   nameWithType: WebAuthenticationSuccessAuditEvent
   fullName: System.Web.Management.WebAuthenticationSuccessAuditEvent
   type: Class
-  summary: "Provides information about successful authentication events."
-  remarks: "ASP.NET health monitoring allows production and operations staff to manage deployed Web applications. The <xref:System.Web.Management> namespace contains the health-event types responsible for packaging application health-status data and the provider types responsible for processing this data. It also contains supporting types that help during the management of health events.       The following list describes the features for which ASP.NET raises events of type WebAuthenticationSuccessAuditEvent.      > [!NOTE] >  By default ASP.NET is configured to log audit failure conditions only, as logging success conditions can severely strain system resources.  You can always configure the system to log the success conditions.      -   Forms Authentication. Successful conditions are audited. Success audits include the user name that was authenticated. Instead, failure audits do not include the user name, since they typically result from a ticket that failed decryption or validation. Both contain the client IP address. The related event audit code is <xref:System.Web.Management.WebEventCodes.AuditFormsAuthenticationSuccess>.      -   Membership. Successful conditions are audited. Both success and failure audits contain the username that was attempted. Neither form of audit will contain the password that was attempted, because that would risk persisting a valid password in the log. The related event audit code is <xref:System.Web.Management.WebEventCodes.AuditMembershipAuthenticationSuccess>.       When a WebAuthenticationSuccessAuditEvent is raised, by default it updates the Authentication Success Events Raised performance counter. To view this performance counter in System Monitor (PerfMon), in the **Add Counters** window select **ASP.NET** in the **Performance object** drop-down list, select the Authentication Success Events Raised performance counter, and click the **Add** button. For more information, see [Using the System Monitor (PerfMon) with ASP.NET Applications](http://go.microsoft.com/fwlink/?linkid=36882&clcid=0x409) on MSDN.      > [!NOTE] >  In most cases you will be able to use the ASP.NET health-monitoring types as implemented, and you will control the health-monitoring system by specifying values in the `healthMonitoring` configuration section. You can also derive from the health-monitoring types to create your own custom events and providers. For an example of deriving from the <xref:System.Web.Management.WebBaseEvent> class, see the example provided in this topic."
+  summary: "提供驗證成功事件的相關資訊。"
+  remarks: "ASP.NET 健康監視，可讓管理已部署的 Web 應用程式的生產環境和作業人員。 <xref:System.Web.Management>命名空間包含負責封裝應用程式健全狀況狀態資料和負責處理此資料提供者類型的健全狀況事件型別。</xref:System.Web.Management> 它也會包含有助於管理健全狀況事件的支援型別。       下列清單說明 ASP.NET，會引發事件的型別 WebAuthenticationSuccessAuditEvent 的功能。      > [!NOTE] > 預設 ASP.NET 設定為記錄成功記錄稽核失敗狀況，條件會嚴重地耗用系統資源。  您永遠可以設定系統以記錄成功狀況。      為表單驗證。 稽核成功的狀況。 成功稽核會包含已驗證的使用者名稱。 相反地，稽核失敗不會包含使用者名稱，因為它們通常會從無法解密或驗證票證。 同時包含用戶端 IP 位址。 相關的事件稽核的程式碼為<xref:System.Web.Management.WebEventCodes.AuditFormsAuthenticationSuccess>。</xref:System.Web.Management.WebEventCodes.AuditFormsAuthenticationSuccess>      成員資格。 稽核成功的狀況。 成功和失敗稽核會包含所嘗試的使用者名稱。 兩種稽核形式會包含已嘗試的密碼，因為，會保存記錄檔中的有效密碼的風險。 相關的事件稽核的程式碼為<xref:System.Web.Management.WebEventCodes.AuditMembershipAuthenticationSuccess>。</xref:System.Web.Management.WebEventCodes.AuditMembershipAuthenticationSuccess>       當引發 WebAuthenticationSuccessAuditEvent 時，依預設它會更新驗證成功的事件引發的效能計數器。 若要檢視在 系統監視器 (PerfMon)，此效能計數器中**新增計數器**視窗選取**ASP.NET**中**效能物件**下拉式清單中，選取 驗證成功事件引發的效能計數器，然後按一下**新增** 按鈕。 如需詳細資訊，請參閱[ASP.NET 應用程式使用 「 系統監視器 (PerfMon)](http://go.microsoft.com/fwlink/?linkid=36882&clcid=0x409) MSDN 上。      > [!NOTE] > 在大部分情況下您將能夠實作時，使用 ASP.NET 健康監視類型，而您會藉由指定的值控制健全狀況監視系統`healthMonitoring`組態區段。 您也可以衍生自健全狀況監視類型的類型來建立您自己的自訂事件和提供者。 如需範例衍生自<xref:System.Web.Management.WebBaseEvent>類別，請參閱本主題中所提供的範例。</xref:System.Web.Management.WebBaseEvent>"
   example:
   - "This code example has two parts: a configuration-file excerpt, followed by code that shows how to customize the WebAuthenticationSuccessAuditEvent event.  \n  \n This following is an excerpt of the configuration file's `provider` and `eventMappings` sections. They are already set by default. The only thing you need to do is to provide the setup for the `rules` element in the `healthMonitoring` section.  \n  \n```  \n<healthMonitoring  \n  enabled=\"true\"  \n  heartBeatInterval=\"0\">  \n  \n    <providers>  \n      // Configure the provider to process   \n      // the health events.  \n      <add name=\"EventLogProvider\"  \n         type=\"System.Web.Management.EventLogWebEventProvider,  \n         System.Web,Version=2.0.3600.0,Culture=neutral,  \n         PublicKeyToken=b03f5f7f11d50a3a\"/>  \n    </providers>  \n  \n    <eventMappings>  \n       <clear />  \n       // Configure the custom event   \n       // to handle the audit events.   \n        <add name=\"SampleWebAuthenticationSuccessAuditEvent\"   \n          type=\"SamplesAspNet.SampleWebAuthenticationSuccessAuditEvent,  \n          webauthsuccessaudit, Version=1.0.1735.23144, Culture=neutral,   \n          PublicKeyToken=dd969eda3f3f6ae1, processorArchitecture=MSIL\" />  \n  \n     </eventMappings>  \n     <rules>  \n       <clear/>  \n       // Establish the connection between custom event   \n       // and the provider that must process it.  \n      <add name=\"Log Authentication Success Audits\"   \n        eventName=\"SampleWebAuthenticationFailureAuditEvent\"  \n        provider=\"EventLogProvider\"   \n        profile=\"Custom\" />\\  \n     </rules>  \n  \n</healthMonitoring>  \n```  \n  \n The following code shows how to customize the WebAuthenticationSuccessAuditEvent event.  \n  \n [!code-vb[System.Web.Management.WebAuthenticationSuccessAuditEvent#1](~/add/codesnippet/visualbasic/t-system.web.management._10_1.vb)]\n [!code-cs[System.Web.Management.WebAuthenticationSuccessAuditEvent#1](~/add/codesnippet/csharp/t-system.web.management._10_1.cs)]"
   syntax:
@@ -58,8 +58,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Management
-  summary: "Initializes the <xref href=&quot;System.Web.Management.WebAuthenticationSuccessAuditEvent&quot;></xref> class using the supplied parameters."
-  remarks: "This constructor is used internally by the ASP.NET health-monitoring system. You will never use it to instantiate a <xref:System.Web.Management.WebAuthenticationSuccessAuditEvent> object, but you can call this constructor when implementing your own event type that inherits from this class.      > [!NOTE] >  The WebAuthenticationSuccessAuditEvent constructor is not intended to be used directly from your code. It is called by ASP.NET. You can call the WebAuthenticationSuccessAuditEvent constructor when deriving from the <xref:System.Web.Management.WebAuthenticationSuccessAuditEvent> class."
+  summary: "初始化<xref href=&quot;System.Web.Management.WebAuthenticationSuccessAuditEvent&quot;></xref>類別使用提供的參數。"
+  remarks: "ASP.NET 健康監視系統會在內部使用這個建構函式。 您永遠不會使用它來具現化<xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>物件，但是您可以呼叫這個建構函式時實作自訂事件的型別繼承自這個類別。</xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>      > [!NOTE] > WebAuthenticationSuccessAuditEvent 建構函式不是直接從您的程式碼使用。 它是由 ASP.NET 呼叫。 衍生<xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>類別</xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>時，您可以呼叫 WebAuthenticationSuccessAuditEvent 建構函式"
   example:
   - "The following code example shows how to customize this constructor.  \n  \n [!code-vb[System.Web.Management.WebAuthenticationSuccessAuditEvent#2](~/add/codesnippet/visualbasic/f06e0196-5c99-4ca7-a77b-_1.vb)]\n [!code-cs[System.Web.Management.WebAuthenticationSuccessAuditEvent#2](~/add/codesnippet/csharp/f06e0196-5c99-4ca7-a77b-_1.cs)]"
   syntax:
@@ -67,16 +67,16 @@ items:
     parameters:
     - id: message
       type: System.String
-      description: "The event description."
+      description: "事件描述。"
     - id: eventSource
       type: System.Object
-      description: "The object that is the source of the event."
+      description: "事件的來源物件。"
     - id: eventCode
       type: System.Int32
-      description: "The code associated with the event. When you implement a custom event, the event code must be greater than <xref href=&quot;System.Web.Management.WebEventCodes.WebExtendedBase&quot;></xref>."
+      description: "與事件相關聯的程式碼。 當您實作自訂事件時，事件的程式碼必須是大於<xref href=&quot;System.Web.Management.WebEventCodes.WebExtendedBase&quot;> </xref>。"
     - id: nameToAuthenticate
       type: System.String
-      description: "The name of the authenticated user."
+      description: "已驗證的使用者名稱。"
   overload: System.Web.Management.WebAuthenticationSuccessAuditEvent.#ctor*
   exceptions: []
   platform:
@@ -93,8 +93,8 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Management
-  summary: "Initializes the <xref href=&quot;System.Web.Management.WebSuccessAuditEvent&quot;></xref> class using the supplied parameters."
-  remarks: "This constructor is used internally by the ASP.NET health-monitoring system. You will never use it to instantiate a <xref:System.Web.Management.WebAuthenticationSuccessAuditEvent> object, but you can call this constructor when implementing your own event type that inherits from this class.      > [!NOTE] >  The WebAuthenticationSuccessAuditEvent constructor is not intended to be used directly from your code. It is called by ASP.NET. You can call the WebAuthenticationSuccessAuditEvent constructor when deriving from the <xref:System.Web.Management.WebAuthenticationSuccessAuditEvent> class."
+  summary: "初始化<xref href=&quot;System.Web.Management.WebSuccessAuditEvent&quot;></xref>類別使用提供的參數。"
+  remarks: "ASP.NET 健康監視系統會在內部使用這個建構函式。 您永遠不會使用它來具現化<xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>物件，但是您可以呼叫這個建構函式時實作自訂事件的型別繼承自這個類別。</xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>      > [!NOTE] > WebAuthenticationSuccessAuditEvent 建構函式不是直接從您的程式碼使用。 它是由 ASP.NET 呼叫。 衍生<xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>類別</xref:System.Web.Management.WebAuthenticationSuccessAuditEvent>時，您可以呼叫 WebAuthenticationSuccessAuditEvent 建構函式"
   example:
   - "The following code example shows how to customize this constructor.  \n  \n [!code-vb[System.Web.Management.WebAuthenticationSuccessAuditEvent#3](~/add/codesnippet/visualbasic/afac7708-6243-4126-b8c9-_1.vb)]\n [!code-cs[System.Web.Management.WebAuthenticationSuccessAuditEvent#3](~/add/codesnippet/csharp/afac7708-6243-4126-b8c9-_1.cs)]"
   syntax:
@@ -102,19 +102,19 @@ items:
     parameters:
     - id: message
       type: System.String
-      description: "The event description."
+      description: "事件描述。"
     - id: eventSource
       type: System.Object
-      description: "The object that is the source of the event."
+      description: "事件的來源物件。"
     - id: eventCode
       type: System.Int32
-      description: "The code associated with the event. When you implement a custom event, the event code must be greater than <xref href=&quot;System.Web.Management.WebEventCodes.WebExtendedBase&quot;></xref>."
+      description: "與事件相關聯的程式碼。 當您實作自訂事件時，事件的程式碼必須是大於<xref href=&quot;System.Web.Management.WebEventCodes.WebExtendedBase&quot;> </xref>。"
     - id: eventDetailCode
       type: System.Int32
-      description: "The <xref href=&quot;System.Web.Management.WebEventCodes&quot;></xref> value that specifies the detailed identifier for the event."
+      description: "<xref href=&quot;System.Web.Management.WebEventCodes&quot;> </xref>值，指定事件的詳細識別項。"
     - id: nameToAuthenticate
       type: System.String
-      description: "The name of the authenticated user."
+      description: "已驗證的使用者名稱。"
   overload: System.Web.Management.WebAuthenticationSuccessAuditEvent.#ctor*
   exceptions: []
   platform:
@@ -131,15 +131,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Management
-  summary: "Gets the name of the authenticated user."
-  remarks: "Only the success audits include the name of the authenticated user. The failure audits do not include the user name, since they typically result from failed decryption or validation."
+  summary: "取得已驗證的使用者名稱。"
+  remarks: "成功稽核會包含已驗證的使用者名稱。 失敗的稽核不包含使用者名稱，因為它們通常是由解密或驗證失敗所造成。"
   example:
   - "The following code example shows how to use the NameToAuthenticate property.  \n  \n [!code-vb[System.Web.Management.WebAuthenticationSuccessAuditEvent#3](~/add/codesnippet/visualbasic/p-system.web.management._21_1.vb)]\n [!code-cs[System.Web.Management.WebAuthenticationSuccessAuditEvent#3](~/add/codesnippet/csharp/p-system.web.management._21_1.cs)]"
   syntax:
     content: public string NameToAuthenticate { get; }
     return:
       type: System.String
-      description: "The name of the authenticated user."
+      description: "已驗證的使用者名稱。"
   overload: System.Web.Management.WebAuthenticationSuccessAuditEvent.NameToAuthenticate*
   exceptions: []
   platform:
