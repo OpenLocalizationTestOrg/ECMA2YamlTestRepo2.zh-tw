@@ -39,8 +39,8 @@ items:
   nameWithType: InstancePersistenceContext
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext
   type: Class
-  summary: "Represents execution state information while a persistence command is being executed."
-  remarks: "An instance of this class is passed to the TryCommand method of persistence provider implementations. Persistence providers use this class to inspect the in-memory view of the instance as well as indicate the results of operations on the external store which may affect the view or other in-memory context."
+  summary: "持續性命令執行時，表示執行狀態資訊。"
+  remarks: "這個類別的執行個體傳遞至持續性提供者實作的 TryCommand 方法。 持續性提供者會使用這個類別來檢查執行個體的記憶體中檢視，以及指出外部存放區可能會影響檢視或其他記憶體中的內容上的作業結果。"
   syntax:
     content: public sealed class InstancePersistenceContext
   inheritance:
@@ -61,14 +61,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully associated a key to the current instance in the instance store. The identifier of the key is specified as a parameter."
-  remarks: "The instance key must be unassociated. The current instance handle must be bound to an instance as well as a lock on that instance."
+  summary: "表示持續性提供者已成功關聯到目前的執行個體的執行個體存放區中的索引鍵。 做為參數指定之金鑰識別碼。"
+  remarks: "執行個體索引鍵必須是無關聯。 目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。"
   syntax:
     content: public void AssociatedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: "The instance key identifier  for the key that has been associated. Must not be Guid.Empty."
+      description: "已產生關聯的索引鍵的執行個體索引鍵的識別碼。 不得為 Guid.Empty。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.AssociatedInstanceKey*
   exceptions: []
   platform:
@@ -85,26 +85,26 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Begin an asynchronous operation to bind an existing lock on an instance to the current instance handle. The version of the existing lock is passed as a parameter."
-  remarks: "When attempting to acquire a lock, the persistence provider may decide that the current instance is already locked in the current store. If the lock token matches the current handle’s lock token, then the persistence provider can attempt to reclaim the lock by inspecting its version and passing it to BeginBindReclaimedLock. The persistence provider must not make changes to the instance until the lock is successfully reclaimed. If no other handle is bound to the lock, then the BeginBindReclaimedLock operation succeeds and the current handle becomes bound to the lock. Otherwise, BeginBindReclaimedLock or EndBindReclaimedLock throws InstanceHandleConflictException. If commands are in progress on other handles, the operation may not complete while waiting for the outcome of those commands to decide whether the lock can be reclaimed.       The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock.       Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
+  summary: "開始非同步作業以將現有的鎖定繫結至目前的執行個體控制代碼的執行個體上。 現有的鎖定版本會做為參數傳遞。"
+  remarks: "當嘗試取得鎖定，持續性提供者可能會決定目前的執行個體已被鎖定在目前的存放區。 如果其鎖定權杖符合目前控制代碼的鎖定權杖，持續性提供者可以嘗試回收鎖定，方式是檢查其版本，以及將它傳遞給 BeginBindReclaimedLock。 持續性提供者不得對進行變更的執行個體成功回收鎖定之前。 如果沒有其他控制代碼已繫結至鎖定，則 BeginBindReclaimedLock 作業就會成功，而且目前的控制代碼會變成繫結至鎖定。 否則，BeginBindReclaimedLock 或 EndBindReclaimedLock 會擲回 InstanceHandleConflictException。 如果命令正在進行其他控制代碼，此作業可能不會完成等候這些命令，來決定是否能夠回收鎖定的結果。       目前的執行個體控制代碼必須繫結執行個體和鎖定擁有者。 執行個體不得為完成。 鎖定擁有者相關聯的鎖定權杖用來識別鎖定的擁有者。       一旦鎖定繫結至控制代碼，它就會控制代碼的存留期間繫結。 可以變更鎖定權杖都執行個體版本。"
   syntax:
     content: public IAsyncResult BeginBindReclaimedLock (long instanceVersion, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: "The version of the lock held on the instance, or zero if the persistence provider does not implement lock versions."
+      description: "鎖定版本保留在執行個體，則為零，但如果持續性提供者沒有實作鎖定版本。"
     - id: timeout
       type: System.TimeSpan
-      description: "The timeout period for the asynchronous operation."
+      description: "非同步作業的逾時期限。"
     - id: callback
       type: System.AsyncCallback
-      description: "The method to be called when the operation is completed."
+      description: "要在作業完成時呼叫的方法。"
     - id: state
       type: System.Object
-      description: "The state information associated with the asynchronous operation."
+      description: "與非同步作業相關聯的狀態資訊。"
     return:
       type: System.IAsyncResult
-      description: "The status of an asynchronous operation."
+      description: "非同步作業的狀態。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock*
   exceptions: []
   platform:
@@ -121,26 +121,26 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Begins executing a persistence command asynchronously."
-  remarks: "A persistence provider can use this method to execute sub-commands as part of a command. The sub-command will be executed using BeginTryCommand, similar to commands passed to InstanceStore.BeginExecute. Commands can be nested, but a command must not execute more than one sub-command at a time."
+  summary: "開始以非同步方式執行持續性命令。"
+  remarks: "持續性提供者可以使用這個方法，將子命令當做命令的一部分執行。 此子命令將使用 BeginTryCommand 來執行，類似於命令傳遞給 InstanceStore.BeginExecute 的。 命令可以巢狀化，但命令只能執行一個以上的子命令一次。"
   syntax:
     content: public IAsyncResult BeginExecute (System.Runtime.DurableInstancing.InstancePersistenceCommand command, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: command
       type: System.Runtime.DurableInstancing.InstancePersistenceCommand
-      description: "The persistence command to be executed."
+      description: "要執行的持續性命令。"
     - id: timeout
       type: System.TimeSpan
-      description: "The time-out value for the operation."
+      description: "作業的逾時值。"
     - id: callback
       type: System.AsyncCallback
-      description: "The delegate that receives the notification of the asynchronous receive that a request operation completes."
+      description: "委派會接收非同步通知接收要求作業完成。"
     - id: state
       type: System.Object
-      description: "The state information."
+      description: "狀態資訊。"
     return:
       type: System.IAsyncResult
-      description: "The status of an asynchronous operation."
+      description: "非同步作業的狀態。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginExecute*
   exceptions: []
   platform:
@@ -157,14 +157,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Binds a newly acquired lock on an instance to the current instance handle. The version of the acquired lock is passed as a parameter."
-  remarks: "If a persistence provider implements lock versioning, then each time a lock is acquired on the instance, the version must be incremented by one in the external store. The first time the instance is locked, the version should be 1. Each lock acquisition invalidates the previous lock. The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock       Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
+  summary: "將新取得的鎖定繫結至目前的執行個體控制代碼的執行個體上。 取得的鎖定版本會做為參數傳遞。"
+  remarks: "如果持續性提供者實作鎖定版本，然後每次在執行個體，取得鎖定版本都必須遞增一外部存放區中。 第一次鎖定執行個體時，版本應為 1。 取得每個鎖定會使先前的鎖定失效。 目前的執行個體控制代碼必須繫結執行個體和鎖定擁有者。 執行個體不得為完成。 鎖定擁有者相關聯的鎖定權杖用來識別鎖定的擁有者一旦鎖定繫結至控制代碼，則仍會保持此控制代碼的存留期間繫結。 可以變更鎖定權杖都執行個體版本。"
   syntax:
     content: public void BindAcquiredLock (long instanceVersion);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: "Version of the lock acquired on the instance, or zero if the persistence provider does not implement lock versions."
+      description: "取得執行個體，或為零，如果持續性提供者沒有實作鎖定版本的鎖定版本。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindAcquiredLock*
   exceptions: []
   platform:
@@ -181,13 +181,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Binds an <xref href=&quot;System.Runtime.DurableInstancing.InstancePersistenceEvent&quot;></xref> to an instance handle."
+  summary: "將繫結<xref href=&quot;System.Runtime.DurableInstancing.InstancePersistenceEvent&quot;></xref>至執行個體控制代碼。"
   syntax:
     content: public void BindEvent (System.Runtime.DurableInstancing.InstancePersistenceEvent persistenceEvent);
     parameters:
     - id: persistenceEvent
       type: System.Runtime.DurableInstancing.InstancePersistenceEvent
-      description: "An <xref href=&quot;System.Runtime.DurableInstancing.InstancePersistenceEvent&quot;></xref> object containing information about the event."
+      description: "<xref href=&quot;System.Runtime.DurableInstancing.InstancePersistenceEvent&quot;> </xref>物件，其中包含事件的相關資訊。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindEvent*
   exceptions: []
   platform:
@@ -204,14 +204,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Binds an instance whose identifier is specified as a parameter to the current instance handle."
-  remarks: "Once an instance is bound to a handle, it remains bound for the lifetime of the handle. No other instance can ever be bound to the handle."
+  summary: "將繫結執行個體的識別碼會指定為目前的執行個體控制代碼的參數。"
+  remarks: "一旦執行個體已繫結至控制代碼，它就會控制代碼的存留期間繫結。 其他執行個體曾經繫結至控制代碼。"
   syntax:
     content: public void BindInstance (Guid instanceId);
     parameters:
     - id: instanceId
       type: System.Guid
-      description: "An instance identifier. Must not be Guid.Empty."
+      description: "執行個體識別碼。 不得為 Guid.Empty。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstance*
   exceptions: []
   platform:
@@ -228,17 +228,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Binds an instance owner to the current instance handle."
-  remarks: "Once an instance owner is bound to a handle, it remains bound for the lifetime of the handle. No other instance owner can ever be bound to the handle."
+  summary: "將執行個體擁有者繫結至目前的執行個體控制代碼。"
+  remarks: "一旦執行個體擁有者已繫結至控制代碼，它就會控制代碼的存留期間繫結。 其他執行個體擁有者可以無法繫結至控制代碼。"
   syntax:
     content: public void BindInstanceOwner (Guid instanceOwnerId, Guid lockToken);
     parameters:
     - id: instanceOwnerId
       type: System.Guid
-      description: "The identifier for the instance owner."
+      description: "執行個體擁有者的識別項。"
     - id: lockToken
       type: System.Guid
-      description: "The lock token of the instance owner. A persistence provider may choose to use the same value for the instance owner identifier and the owner’s lock token."
+      description: "執行個體擁有者的鎖定權杖。 持續性提供者可以選擇的執行個體擁有者識別碼和擁有者的鎖定權杖使用相同的值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstanceOwner*
   exceptions: []
   platform:
@@ -255,17 +255,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Binds an existing lock on an instance to the current instance handle. The version of the existing lock is passed as a parameter."
-  remarks: "When attempting to acquire a lock, the persistence provider may decide that the current instance is already locked in the current store. If the lock token matches the current handle’s lock token, then the persistence provider can attempt to reclaim the lock by inspecting its version and passing it to BindReclaimedLock. The persistence provider must not make changes to the instance until the lock is successfully reclaimed. If no other handle is bound to the lock, then BindReclaimedLock succeeds and the current handle becomes bound to the lock. Otherwise, BindReclaimedLock throws InstanceHandleConflictException. If commands are in progress on other handles, BindReclaimedLock may block waiting for the outcome of those commands before deciding whether the lock can be reclaimed.       The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock.       Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
+  summary: "將現有的鎖定繫結至目前的執行個體控制代碼的執行個體上。 現有的鎖定版本會做為參數傳遞。"
+  remarks: "當嘗試取得鎖定，持續性提供者可能會決定目前的執行個體已被鎖定在目前的存放區。 如果其鎖定權杖符合目前控制代碼的鎖定權杖，然後持續性提供者可以嘗試檢查它的版本，並將其傳遞給 BindReclaimedLock 來回收鎖定。 持續性提供者不得對進行變更的執行個體成功回收鎖定之前。 如果沒有其他控制代碼已繫結至鎖定，然後 BindReclaimedLock 就會成功，和目前的控制代碼會變成繫結至鎖定。 否則，BindReclaimedLock 會擲回 InstanceHandleConflictException。 如果命令正在進行其他控制代碼，BindReclaimedLock 可能會封鎖等候這些命令的結果，然後再決定是否能夠回收鎖定。       目前的執行個體控制代碼必須繫結執行個體和鎖定擁有者。 執行個體不得為完成。 鎖定擁有者相關聯的鎖定權杖用來識別鎖定的擁有者。       一旦鎖定繫結至控制代碼，它就會控制代碼的存留期間繫結。 可以變更鎖定權杖都執行個體版本。"
   syntax:
     content: public void BindReclaimedLock (long instanceVersion, TimeSpan timeout);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: "Version of the lock held on the instance, or zero if the persistence provider does not implement lock versions."
+      description: "鎖定版本保留在執行個體，則為零，但如果持續性提供者沒有實作鎖定版本。"
     - id: timeout
       type: System.TimeSpan
-      description: "The time-out value for the operation."
+      description: "作業的逾時值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindReclaimedLock*
   exceptions: []
   platform:
@@ -282,8 +282,8 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully marked the current instance as complete in the instance store."
-  remarks: "The current instance handle must be bound to an instance as well as a lock on that instance. The instance must be initialized and not be already completed. (An instance is initialized if a set of instance data has ever been persisted to it.) All of the keys associated to the instance must be completed."
+  summary: "表示持續性提供者已經成功地標示為已完成執行個體存放區中的目前執行個體。"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。 執行個體必須進行初始化，而且尚未完成。 （如果執行個體資料集曾經保存到它已初始化執行個體）。必須完成所有的執行個體相關聯的金鑰。"
   syntax:
     content: public void CompletedInstance ();
     parameters: []
@@ -303,14 +303,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully marked a key as complete in the external store. The identifier of the key is specified as a parameter."
-  remarks: "The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated to the current instance and not be already completed."
+  summary: "表示持續性提供者已經成功地標示為已完成在外部存放區中的索引鍵。 做為參數指定之金鑰識別碼。"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。 執行個體索引鍵必須是目前的執行個體相關聯，而且尚未完成。"
   syntax:
     content: public void CompletedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: "The instance key identifier for the key that has been completed. Must not be Guid.Empty."
+      description: "已完成之索引鍵的執行個體索引鍵識別碼。 不得為 Guid.Empty。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.CompletedInstanceKey*
   exceptions: []
   platform:
@@ -327,17 +327,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Creates an instance of an exception which can be thrown from TryCommand to trigger BindReclaimedLock behavior."
-  remarks: "Sample code:      ```      protected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)   {       throw context.CreateBindReclaimedLockException(5);   }   is equivalent to   protected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)   {       context.BindReclaimedLock(5, timeout);       throw new OperationCanceledException();   }      ```"
+  summary: "建立從 TryCommand 以觸發 BindReclaimedLock 行為可能會擲回的例外狀況的執行個體。"
+  remarks: "範例程式碼︰```      protected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)   {       throw context.CreateBindReclaimedLockException(5);   }   is equivalent to   protected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)   {       context.BindReclaimedLock(5, timeout);       throw new OperationCanceledException();   }      ```"
   syntax:
     content: public Exception CreateBindReclaimedLockException (long instanceVersion);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: "The version of the lock held on the instance, or zero if the persistence provider does not implement lock versions."
+      description: "鎖定版本保留在執行個體，則為零，但如果持續性提供者沒有實作鎖定版本。"
     return:
       type: System.Exception
-      description: "An exception."
+      description: "例外狀況。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.CreateBindReclaimedLockException*
   exceptions: []
   platform:
@@ -354,13 +354,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Ends the asynchronous operation started by the <xref:System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock*> method."
+  summary: "結束非同步作業來啟動<xref:System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock*>方法。</xref:System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock*>"
   syntax:
     content: public void EndBindReclaimedLock (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: "The result of the asynchronous operation."
+      description: "非同步作業的結果。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.EndBindReclaimedLock*
   exceptions: []
   platform:
@@ -377,13 +377,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Ends the asynchronous operation."
+  summary: "結束非同步作業。"
   syntax:
     content: public void EndExecute (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: "The status of an asynchronous operation."
+      description: "非同步作業的狀態。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.EndExecute*
   exceptions: []
   platform:
@@ -400,17 +400,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Executes a persistence command."
-  remarks: "A persistence provider can use this method to execute sub-commands as part of a command. The sub-command will be executed using TryCommand, similar to commands passed to InstanceStore.Execute. Commands can be nested, but a command must not execute more than one sub-command at a time."
+  summary: "執行持續性命令。"
+  remarks: "持續性提供者可以使用這個方法，將子命令當做命令的一部分執行。 此子命令將使用 TryCommand 來執行，與命令傳遞給 InstanceStore.Execute。 命令可以巢狀化，但命令只能執行一個以上的子命令一次。"
   syntax:
     content: public void Execute (System.Runtime.DurableInstancing.InstancePersistenceCommand command, TimeSpan timeout);
     parameters:
     - id: command
       type: System.Runtime.DurableInstancing.InstancePersistenceCommand
-      description: "The persistence command to be executed."
+      description: "要執行的持續性命令。"
     - id: timeout
       type: System.TimeSpan
-      description: "The time-out value for the operation."
+      description: "作業的逾時值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.Execute*
   exceptions: []
   platform:
@@ -427,12 +427,12 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Gets the current instance handle."
+  summary: "取得目前的執行個體控制代碼。"
   syntax:
     content: public System.Runtime.DurableInstancing.InstanceHandle InstanceHandle { get; }
     return:
       type: System.Runtime.DurableInstancing.InstanceHandle
-      description: "The current instance handle."
+      description: "目前的執行個體控制代碼。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceHandle*
   exceptions: []
   platform:
@@ -449,13 +449,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Gets the version of the lock held on the current instance by the current instance handle."
-  remarks: "The persistence provider should check this value against the lock version of the lock held on an instance in the instance store when performing an operation that requires a lock (such as persisting instance data) using a handle bound to the lock. If the lock version doesn’t match, the command should fail with InstanceLockLostException."
+  summary: "取得目前的執行個體上保留目前的執行個體控制代碼的鎖定版本。"
+  remarks: "持續性提供者應該檢查此值，針對保留執行個體存放區中執行個體上執行的作業需要使用控制代碼的鎖定 （例如保存執行個體資料） 會繫結至鎖定時的鎖定與鎖定版本。 如果鎖定版本不符，此命令應該會由於 instancelocklostexception。"
   syntax:
     content: public long InstanceVersion { get; }
     return:
       type: System.Int64
-      description: "The version of the instance lock bound to the current instance handle, or -1 if the handle isn’t bound to a lock."
+      description: "如果控制代碼沒有繫結至鎖定，執行個體鎖定版本繫結至目前的執行個體控制代碼，則為-1。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceVersion*
   exceptions: []
   platform:
@@ -472,12 +472,12 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Gets the instance view object that represents the in-memory state of the current instance. This view reflects updates as they are made by the command in progress."
+  summary: "取得表示目前的執行個體的記憶體中狀態的執行個體檢視物件。 此檢視反映在進行中的命令來進行更新。"
   syntax:
     content: public System.Runtime.DurableInstancing.InstanceView InstanceView { get; }
     return:
       type: System.Runtime.DurableInstancing.InstanceView
-      description: "The instance view object."
+      description: "執行個體檢視物件。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceView*
   exceptions: []
   platform:
@@ -494,26 +494,26 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully retrieved the current instance from the instance store."
-  remarks: "The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the loaded instance is marked as complete, the loaded data is considered to be consistent; otherwise, it is considered to be in doubt."
+  summary: "表示持續性提供者已成功擷取目前的執行個體從執行個體存放區。"
+  remarks: "目前的執行個體控制代碼必須繫結執行個體。 如果執行個體控制代碼繫結至鎖定或標示為完成載入的執行個體，所載入的資料會被視為一致的。否則，它會被視為不確定。"
   syntax:
     content: public void LoadedInstance (System.Runtime.DurableInstancing.InstanceState state, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> instanceData, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> instanceMetadata, System.Collections.Generic.IDictionary<Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>> associatedInstanceKeyMetadata, System.Collections.Generic.IDictionary<Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>> completedInstanceKeyMetadata);
     parameters:
     - id: state
       type: System.Runtime.DurableInstancing.InstanceState
-      description: "The instance state information."
+      description: "執行個體狀態資訊。"
     - id: instanceData
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "The instance data as a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "做為字典的執行個體資料<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: instanceMetadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "Instance metadata as a collection of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "執行個體中繼資料，做為集合<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: associatedInstanceKeyMetadata
       type: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
-      description: "Associated instance key metadata as a dictionary of instance identifier and instance key metadata, which is a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "相關聯執行個體索引鍵的中繼資料，做為字典的執行個體識別碼和執行個體索引鍵的中繼資料，這是一個字典的<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: completedInstanceKeyMetadata
       type: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
-      description: "Completed instance metadata as a dictionary of instance identifier and instance key metadata, which is a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "完成執行個體中繼資料做為字典的執行個體識別碼和執行個體索引鍵的中繼資料，這是一個字典的<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.LoadedInstance*
   exceptions: []
   platform:
@@ -530,13 +530,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Gets the lock token of the instance owner bound to the current instance handle."
-  remarks: "The persistence provider should check this value against the lock token of the lock held on an instance in the instance store when performing an operation that requires a lock (such as persisting instance data) using a handle bound to the lock. If the lock token doesn’t match, the command should fail with InstanceLockLostException.       The persistence provider should use this value as the lock token when acquiring a new lock on an instance (such as persisting instance data using a handle not already bound to a lock). If the instance is already locked in the instance store and the lock token matches this lock token, the persistence provider can attempt to reclaim the instance using BindReclaimedLock."
+  summary: "取得語彙基元繫結至目前的執行個體控制代碼的執行個體擁有者的鎖定。"
+  remarks: "持續性提供者應該檢查此值，針對保留執行個體存放區中執行個體上執行的作業需要使用控制代碼的鎖定 （例如保存執行個體資料） 會繫結至鎖定時的鎖定的鎖定權杖。 如果鎖定權杖不符，此命令應該會由於 instancelocklostexception。       持續性提供者應該使用這個值當做鎖定權杖，取得執行個體 （例如使用尚未繫結至鎖定的控制代碼的保存執行個體資料） 的新鎖定時。 如果執行個體已經鎖定執行個體存放區中，而且其鎖定權杖符合這個鎖定權杖，持續性提供者可以嘗試回收使用 BindReclaimedLock 的執行個體。"
   syntax:
     content: public Guid LockToken { get; }
     return:
       type: System.Guid
-      description: "The lock token bound to the current instance handle, or Guid.Empty if the handle isn’t bound to an instance owner."
+      description: "如果控制代碼沒有繫結至執行個體擁有者，其鎖定權杖繫結至目前的執行個體控制代碼，則為 Guid.Empty。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.LockToken*
   exceptions: []
   platform:
@@ -553,14 +553,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully persisted a set of instance data to the instance store. This has the effect of initializing the instance if it wasn’t already."
-  remarks: "The current instance handle must be bound to an instance as well as a lock on that instance. Each set of instance data completely replaces the previous set. The set of instance data may be null – this is the same as empty. Persisting a null set of instance data deletes the existing set of instance data. (Persisting a set of instance data has no effect on instance metadata.)"
+  summary: "表示持續性提供者已經成功保存執行個體存放區的執行個體資料集。 如果尚未初始化執行個體的這個效果。"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。 每個執行個體資料集完全取代先前的設定。 執行個體資料集可能為 null，這相當於空白。 保存集合執行個體資料為 null，就會刪除現有的執行個體資料集。 （保存執行個體資料集沒有任何作用，執行個體中繼資料）。"
   syntax:
     content: public void PersistedInstance (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> data);
     parameters:
     - id: data
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "Instance data as a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "做為字典的執行個體資料<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.PersistedInstance*
   exceptions: []
   platform:
@@ -577,13 +577,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Adds the <xref href=&quot;System.Runtime.DurableInstancing.InstanceStoreQueryResult&quot;></xref> passed as a parameter to a list of <xref href=&quot;System.Runtime.DurableInstancing.InstanceStoreQueryResult&quot;></xref> objects in an <xref href=&quot;System.Runtime.DurableInstancing.InstanceView&quot;></xref>."
+  summary: "新增<xref href=&quot;System.Runtime.DurableInstancing.InstanceStoreQueryResult&quot;></xref>做為參數傳遞給清單中的<xref href=&quot;System.Runtime.DurableInstancing.InstanceStoreQueryResult&quot;></xref>中的物件<xref href=&quot;System.Runtime.DurableInstancing.InstanceView&quot;> </xref>。"
   syntax:
     content: public void QueriedInstanceStore (System.Runtime.DurableInstancing.InstanceStoreQueryResult queryResult);
     parameters:
     - id: queryResult
       type: System.Runtime.DurableInstancing.InstanceStoreQueryResult
-      description: "The results of a query against an instance store."
+      description: "針對執行個體存放區查詢的結果。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.QueriedInstanceStore*
   exceptions: []
   platform:
@@ -600,20 +600,20 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully read some instance key metadata for a key associated to the current instance from the instance store."
-  remarks: "The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the current instance is marked as complete, the metadata is considered to be consistent; otherwise, it is considered to be in doubt."
+  summary: "表示持續性提供者已經成功地讀取某些執行個體索引鍵中繼資料從執行個體存放區目前的執行個體相關聯的索引鍵。"
+  remarks: "目前的執行個體控制代碼必須繫結執行個體。 如果執行個體控制代碼繫結至鎖定或目前的執行個體標示為完成，中繼資料會被視為一致的。否則，它會被視為不確定。"
   syntax:
     content: public void ReadInstanceKeyMetadata (Guid key, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: key
       type: System.Guid
-      description: "The instance key identifier for the key whose metadata was read. Must not be Guid.Empty."
+      description: "已讀取其中繼資料的索引鍵的執行個體索引鍵的識別碼。 不得為 Guid.Empty。"
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "The metadata as a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "將中繼資料的字典當做<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: complete
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_True&quot; name=&quot;True&quot; href=&quot;&quot;></xref> if the metadata represents all of the metadata associated to the instance key, otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_True&quot; name=&quot;True&quot; href=&quot;&quot;></xref>如果中繼資料代表全部的中繼資料與相關聯的執行個體索引鍵，否則<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceKeyMetadata*
   exceptions: []
   platform:
@@ -630,16 +630,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully read some instance metadata for the current instance from the instance store."
+  summary: "表示持續性提供者已經成功讀取某些執行個體的中繼資料目前的執行個體從執行個體存放區。"
   syntax:
     content: public void ReadInstanceMetadata (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "The metadata as a dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "將中繼資料的字典當做<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: complete
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_True&quot; name=&quot;True&quot; href=&quot;&quot;></xref> if the metadata represents all of the metadata associated to the instance, otherwise <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_True&quot; name=&quot;True&quot; href=&quot;&quot;></xref>如果中繼資料代表執行個體，否則相關聯的中繼資料的所有<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceMetadata*
   exceptions: []
   platform:
@@ -656,17 +656,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Sets the instance owner metadata using the data passed in the parameter."
-  remarks: "The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the current instance is marked as complete, the metadata is considered to be consistent; otherwise, it is considered to be in doubt."
+  summary: "設定使用參數中傳遞的資料執行個體擁有者中繼資料。"
+  remarks: "目前的執行個體控制代碼必須繫結執行個體。 如果執行個體控制代碼繫結至鎖定或目前的執行個體標示為完成，中繼資料會被視為一致的。否則，它會被視為不確定。"
   syntax:
     content: public void ReadInstanceOwnerMetadata (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: "The dictionary of <xref:System.Xml.Linq.XName> and <xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref> objects."
+      description: "字典<xref:System.Xml.Linq.XName>和<xref href=&quot;System.Runtime.DurableInstancing.InstanceValue&quot;></xref>物件。</xref:System.Xml.Linq.XName>"
     - id: complete
       type: System.Boolean
-      description: "The value to specify whether the consistency to be set to <xref href=&quot;System.Runtime.DurableInstancing.InstanceValueConsistency&quot;></xref> or <xref href=&quot;System.Runtime.DurableInstancing.InstanceValueConsistency&quot;></xref>."
+      description: "指定的值是否設為 「 一致性<xref href=&quot;System.Runtime.DurableInstancing.InstanceValueConsistency&quot;></xref>或<xref href=&quot;System.Runtime.DurableInstancing.InstanceValueConsistency&quot;> </xref>。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceOwnerMetadata*
   exceptions: []
   platform:
@@ -683,14 +683,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Sets the cancellation handler to be called when the cancel of an operation is requested."
-  remarks: "If the cancellation handler is called, the persistence provider should cancel all pending operations and throw OperationCanceledException from TryCommand to indicate that the persistence command was interrupted before it could be completed."
+  summary: "設定要求取消作業時呼叫了取消處理常式。"
+  remarks: "如果呼叫了取消處理常式，持續性提供者應該取消所有暫止的作業，並擲回 OperationCanceledException，從 TryCommand 來指示它在完成之前，已中斷的持續性命令。"
   syntax:
     content: public void SetCancellationHandler (Action<System.Runtime.DurableInstancing.InstancePersistenceContext> cancellationHandler);
     parameters:
     - id: cancellationHandler
       type: System.Action{System.Runtime.DurableInstancing.InstancePersistenceContext}
-      description: "The reference to a function to be called."
+      description: "要呼叫的函式的參考。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.SetCancellationHandler*
   exceptions: []
   platform:
@@ -707,14 +707,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully disassociated a key from the current instance in the instance store. The identifier of the key is specified as a parameter."
-  remarks: "The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated to the current instance and must be marked complete. The current instance must not be marked complete."
+  summary: "表示持續性提供者已成功中斷目前的執行個體的執行個體存放區中的索引鍵。 做為參數指定之金鑰識別碼。"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。 執行個體索引鍵必須是目前的執行個體相關聯，而且必須標示為完成。 目前的執行個體必須不是標示為完成。"
   syntax:
     content: public void UnassociatedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: "The instance key identifier for the key that has been unassociated. Must not be Guid.Empty."
+      description: "已經解除關聯索引鍵的執行個體索引鍵識別碼。 不得為 Guid.Empty。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.UnassociatedInstanceKey*
   exceptions: []
   platform:
@@ -731,13 +731,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Gets the user context information attached to the current instance handle."
-  remarks: "The object is the one that is returned from InstanceStore.OnNewInstanceHandle for the current instance handle."
+  summary: "取得附加至目前的執行個體控制代碼的使用者內容資訊。"
+  remarks: "物件是從 InstanceStore.OnNewInstanceHandle 傳回目前執行個體控制代碼。"
   syntax:
     content: public object UserContext { get; }
     return:
       type: System.Object
-      description: "The user context information."
+      description: "使用者內容資訊。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.UserContext*
   exceptions: []
   platform:
@@ -754,20 +754,20 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully written a metadata value for an instance key that is associated with the current instance to the instance store"
-  remarks: "The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated with the current instance and must not be completed."
+  summary: "表示持續性提供者已經成功地寫入執行個體存放區目前的執行個體相關聯執行個體索引鍵的中繼資料值"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及鎖定該執行個體上。 執行個體索引鍵必須是目前的執行個體相關聯，而且不得為完成。"
   syntax:
     content: public void WroteInstanceKeyMetadataValue (Guid key, System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: key
       type: System.Guid
-      description: "The instance key identifier for the key. Must not be Guid.Empty."
+      description: "索引鍵的執行個體索引鍵識別碼。 不得為 Guid.Empty。"
     - id: name
       type: System.Xml.Linq.XName
-      description: "The name of the metadata property."
+      description: "中繼資料屬性的名稱。"
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: "The value of the metadata property."
+      description: "中繼資料屬性的值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceKeyMetadataValue*
   exceptions: []
   platform:
@@ -784,17 +784,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully written a metadata value for the current instance to the external instance store."
-  remarks: "The current instance handle must be bound to an instance as well as has a lock on that instance. The instance must not be completed."
+  summary: "表示持續性提供者已經成功地寫入目前的執行個體的中繼資料值到外部的執行個體存放區。"
+  remarks: "目前的執行個體控制代碼必須繫結至執行個體，以及該執行個體上具有鎖定。 執行個體不得為完成。"
   syntax:
     content: public void WroteInstanceMetadataValue (System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: name
       type: System.Xml.Linq.XName
-      description: "The name of the metadata property."
+      description: "中繼資料屬性的名稱。"
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: "The value of the metadata property."
+      description: "中繼資料屬性的值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceMetadataValue*
   exceptions: []
   platform:
@@ -811,17 +811,17 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: "Indicates that the persistence provider has successfully written a metadata value for the current instance owner to the instance store."
-  remarks: "The current instance handle must be bound to an instance owner."
+  summary: "表示持續性提供者已經成功寫入的中繼資料值為目前的執行個體擁有者執行個體存放區。"
+  remarks: "目前的執行個體控制代碼必須繫結執行個體擁有者。"
   syntax:
     content: public void WroteInstanceOwnerMetadataValue (System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: name
       type: System.Xml.Linq.XName
-      description: "The name of the metadata property."
+      description: "中繼資料屬性的名稱。"
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: "The value of the metadata property."
+      description: "中繼資料屬性的值。"
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceOwnerMetadataValue*
   exceptions: []
   platform:
