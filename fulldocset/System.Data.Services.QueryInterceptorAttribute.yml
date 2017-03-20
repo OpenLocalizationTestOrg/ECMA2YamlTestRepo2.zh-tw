@@ -11,8 +11,8 @@ items:
   nameWithType: QueryInterceptorAttribute
   fullName: System.Data.Services.QueryInterceptorAttribute
   type: Class
-  summary: "The QueryInterceptorAttribute on a method annotates it as a query interceptor on the specified entity set."
-  remarks: "Entity set-level authorization and validation is implemented by methods annotated with the QueryInterceptorAttribute. [!INCLUDE[ssAstoria](~/add/includes/ssastoria-md.md)]s do not implement security policies but instead provide the infrastructure required for service developers to write their own security rules and business validation.       Entity set access control and validation is enabled through query operations by using query composition. To control entity-based access, implement a method-per-entity set according to the following rules:       The method must have public scope and be annotated with the QueryInterceptorAttribute, taking the name of a entity set as a parameter.       The method must accept no parameters.       The method must return an expression of type `Expression<Func<T, bool>>` that is the filter to be composed for the entity set."
+  summary: "在方法上的 QueryInterceptorAttribute 標註它為指定的實體集上的查詢攔截器。"
+  remarks: "實體集層級的授權和驗證是由以 QueryInterceptorAttribute 註解的方法實作。 [!INCLUDE[ssAstoria](~/add/includes/ssastoria-md.md)]s 不要實作安全性原則，而是提供服務開發人員撰寫自己的安全性規則和商務驗證所需的基礎結構。       實體集的存取控制，透過查詢作業使用查詢組合啟用驗證。 若要控制實體為基礎的存取，實作方法-每秒的實體集根據下列規則︰ 方法必須有公用的範圍，並標註具有 QueryInterceptorAttribute，花費的實體集做為參數的名稱。       此方法必須接受任何參數。       此方法必須傳回型別的運算式`Expression<Func<T, bool>>`也就是將篩選條件組成之實體集。"
   example:
   - "The following example controls access to the `Customers` entity set. Each `Customer` can only see `Orders` associated with that `Customer`.  \n  \n```  \n[QueryInterceptor(\"Orders\")]  \npublic Expression<Func<Order, bool>> FilterOrders()   \n{  \n    return o => o.Customer.Name == /* Current principal name. */;  \n}   \n  \n// Insures that the user accessing the customer(s) has the appropriate  \n// rights as defined in the QueryRules object to access the customer  \n// resource(s).  \n  \n[QueryInterceptor (\"Customers\")]  \npublic Expression<Func<Customer, bool>> FilterCustomers()   \n{  \n  return c => c.Name == /* Current principal name. */ &&  \n              this.CurrentDataSource.QueryRules.Contains(  \n                rule => rule.Name == c.Name &&  \n                        rule.CustomerAllowedToQuery == true  \n              );  \n}  \n  \n```"
   syntax:
@@ -38,13 +38,13 @@ items:
   assemblies:
   - System.Data.Services
   namespace: System.Data.Services
-  summary: "Initializes a new instance of the <xref href=&quot;System.Data.Services.QueryInterceptorAttribute&quot;></xref> class for the entity set specified by the <code>entitySetName</code> parameter."
+  summary: "初始化的新執行個體<xref href=&quot;System.Data.Services.QueryInterceptorAttribute&quot;></xref>的實體集所指定的類別<code> entitySetName </code>參數。"
   syntax:
     content: public QueryInterceptorAttribute (string entitySetName);
     parameters:
     - id: entitySetName
       type: System.String
-      description: "The name of the entity set that contains the entity to which the interceptor applies."
+      description: "包含攔截器適用於這個實體的實體集名稱。"
   overload: System.Data.Services.QueryInterceptorAttribute.#ctor*
   exceptions: []
   platform:
@@ -61,12 +61,12 @@ items:
   assemblies:
   - System.Data.Services
   namespace: System.Data.Services
-  summary: "Gets the name of the entity set that contains the entity to which the interceptor applies."
+  summary: "取得包含攔截器適用於這個實體的實體集名稱。"
   syntax:
     content: public string EntitySetName { get; }
     return:
       type: System.String
-      description: "A string that indicates the name of the entity set that contains the entity to which the interceptor applies."
+      description: "表示包含攔截器適用於這個實體的實體集名稱的字串。"
   overload: System.Data.Services.QueryInterceptorAttribute.EntitySetName*
   exceptions: []
   platform:
