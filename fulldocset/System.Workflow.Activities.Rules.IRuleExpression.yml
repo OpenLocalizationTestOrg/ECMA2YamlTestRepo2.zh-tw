@@ -15,7 +15,7 @@ items:
   nameWithType: IRuleExpression
   fullName: System.Workflow.Activities.Rules.IRuleExpression
   type: Interface
-  summary: "Represents the base class from which custom expression writers must derive to write custom expressions."
+  summary: "表示要寫入自訂運算式自訂運算式寫入器必須衍生自的基底類別。"
   remarks: ''
   example:
   - "The following code creates an expression that can be used in declarative conditions and rule sets. The expression is named `TwoOfThree`, and takes 3 parameters, all of which must evaluate to Booleans. This expression returns `true` if 2 of the 3 expressions return `true`.  \n  \n To use this code, add it to a Class Library project and reference the library from your workflow project.  \n  \n```c#  \nusing System.CodeDom;  \nusing System.Text;  \nusing System.Workflow.Activities.Rules;  \nusing System.Workflow.ComponentModel.Compiler;  \n  \nnamespace TwoOfThreeRuleExpression  \n{  \n    public class TwoOfThree : CodeExpression, IRuleExpression  \n    {  \n        CodeExpression expression1, expression2, expression3;  \n  \n        public CodeExpression First  \n        {  \n            get { return expression1; }  \n            set { expression1 = value; }  \n        }  \n  \n        public CodeExpression Second  \n        {  \n            get { return expression2; }  \n            set { expression2 = value; }  \n        }  \n  \n        public CodeExpression Third  \n        {  \n            get { return expression3; }  \n            set { expression3 = value; }  \n        }  \n  \n        public TwoOfThree()  \n        {  \n            // constructor required for deserialization  \n        }  \n  \n        public TwoOfThree(CodeExpression first, CodeExpression second, CodeExpression third)  \n        {  \n            // constructor required by parser  \n            expression1 = first;  \n            expression2 = second;  \n            expression3 = third;  \n        }  \n  \n        public void AnalyzeUsage(RuleAnalysis analysis, bool isRead, bool isWritten, RulePathQualifier qualifier)  \n        {  \n            // check what the 3 expressions use  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression1, true, false, null);  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression2, true, false, null);  \n            RuleExpressionWalker.AnalyzeUsage(analysis, expression3, true, false, null);  \n        }  \n  \n        public CodeExpression Clone()  \n        {  \n            TwoOfThree result = new TwoOfThree();  \n            result.expression1 = RuleExpressionWalker.Clone(expression1);  \n            result.expression2 = RuleExpressionWalker.Clone(expression2);  \n            result.expression3 = RuleExpressionWalker.Clone(expression3);  \n            return result;  \n        }  \n  \n        public void Decompile(StringBuilder stringBuilder, CodeExpression parentExpression)  \n        {  \n            // what should be displayed by the parser  \n            stringBuilder.Append(\"TwoOfThree(\");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression1, this);  \n            stringBuilder.Append(\", \");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression2, this);  \n            stringBuilder.Append(\", \");  \n            RuleExpressionWalker.Decompile(stringBuilder, expression3, this);  \n            stringBuilder.Append(\")\");  \n        }  \n  \n        static RuleLiteralResult resultTrue = new RuleLiteralResult(true);  \n        static RuleLiteralResult resultFalse = new RuleLiteralResult(false);  \n  \n        public RuleExpressionResult Evaluate(RuleExecution execution)  \n        {  \n            // start by doing the first 2 expressions  \n            RuleExpressionResult r1 = RuleExpressionWalker.Evaluate(execution, expression1);  \n            RuleExpressionResult r2 = RuleExpressionWalker.Evaluate(execution, expression2);  \n            bool b1 = (bool)r1.Value;  \n            bool b2 = (bool)r2.Value;  \n            if (b1 && b2)  \n            {  \n                // both are true, so result is true  \n                return resultTrue;  \n            }  \n            else if (b1 || b2)  \n            {  \n                // only one of the first 2 is true, evaluate the third to determine result  \n                return RuleExpressionWalker.Evaluate(execution, expression3);  \n            }  \n            else  \n                // both e1 and e2 are false, so skip e3 and return false;  \n                return resultFalse;  \n        }  \n  \n        public bool Match(CodeExpression expression)  \n        {  \n            TwoOfThree other = expression as TwoOfThree;  \n            return (other != null) &&  \n                RuleExpressionWalker.Match(expression1, other.expression1) &&  \n                RuleExpressionWalker.Match(expression2, other.expression2) &&  \n                RuleExpressionWalker.Match(expression3, other.expression3);  \n        }  \n  \n        public RuleExpressionInfo Validate(RuleValidation validation, bool isWritten)  \n        {  \n            ValidateExpression(validation, expression1, \"First\");  \n            ValidateExpression(validation, expression2, \"Second\");  \n            ValidateExpression(validation, expression3, \"Third\");  \n            return new RuleExpressionInfo(typeof(bool));  \n        }  \n  \n        private void ValidateExpression(RuleValidation validation, CodeExpression expression, string propertyName)  \n        {  \n            ValidationError error;  \n            if (expression == null)  \n            {  \n                error = new ValidationError(propertyName + \" cannot be null\", 123);  \n                validation.Errors.Add(error);  \n            }  \n            else  \n            {  \n                RuleExpressionInfo result = RuleExpressionWalker.Validate(validation, expression, false);  \n                if ((result == null) || (result.ExpressionType != typeof(bool)))  \n                {  \n                    error = new ValidationError(propertyName + \" must return boolean result\", 123);  \n                    validation.Errors.Add(error);  \n                }  \n            }  \n        }  \n    }  \n}  \n```"
@@ -36,22 +36,22 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "When overridden in a derived class, reports on how the object uses fields and properties in the context type."
+  summary: "當在衍生類別中覆寫時，會報告物件如何使用欄位和屬性中的內容型別。"
   syntax:
     content: public void AnalyzeUsage (System.Workflow.Activities.Rules.RuleAnalysis analysis, bool isRead, bool isWritten, System.Workflow.Activities.Rules.RulePathQualifier qualifier);
     parameters:
     - id: analysis
       type: System.Workflow.Activities.Rules.RuleAnalysis
-      description: "The <xref href=&quot;System.Workflow.Activities.Rules.RuleAnalysis&quot;></xref> method to store fields and properties read by a condition or read by an action."
+      description: "<xref href=&quot;System.Workflow.Activities.Rules.RuleAnalysis&quot;> </xref>方法來將欄位和屬性儲存由條件讀取或由動作寫入。"
     - id: isRead
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the expression is being read from; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> if the expression is not being read from."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果運算式正被讀取。<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>如果運算式未被讀取。"
     - id: isWritten
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the expression is being written to; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> if the expression is not being written to."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果正在寫入運算式。<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>如果運算式未寫入。"
     - id: qualifier
       type: System.Workflow.Activities.Rules.RulePathQualifier
-      description: "The path of a field or property."
+      description: "欄位或屬性的路徑。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.AnalyzeUsage*
   exceptions: []
   platform:
@@ -68,13 +68,13 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "When overridden in a derived class, creates a deep copy of the current <xref href=&quot;System.CodeDom.CodeExpression&quot;></xref>."
+  summary: "當在衍生類別中覆寫時，會建立目前的深層複本<xref href=&quot;System.CodeDom.CodeExpression&quot;> </xref>。"
   syntax:
     content: public System.CodeDom.CodeExpression Clone ();
     parameters: []
     return:
       type: System.CodeDom.CodeExpression
-      description: "A deep copy of the current <xref href=&quot;System.CodeDom.CodeExpression&quot;></xref>."
+      description: "目前的深層複本<xref href=&quot;System.CodeDom.CodeExpression&quot;> </xref>。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.Clone*
   exceptions: []
   platform:
@@ -91,16 +91,16 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "When overridden in a derived class, decompiles the custom expression into string form."
+  summary: "當在衍生類別中覆寫時，反編譯成字串格式的自訂運算式。"
   syntax:
     content: public void Decompile (System.Text.StringBuilder stringBuilder, System.CodeDom.CodeExpression parentExpression);
     parameters:
     - id: stringBuilder
       type: System.Text.StringBuilder
-      description: "A mutable string for the decompiled expression. This method should append the decompiled syntax for this subexpression."
+      description: "反編譯運算式可變動字串。 這個方法應附加這個子運算式的反編譯的語法。"
     - id: parentExpression
       type: System.CodeDom.CodeExpression
-      description: "The parent code expression. This can be used to determine operator precedence, and whether this subexpression needs to be parenthesized."
+      description: "父程式碼運算式。 這可用來判斷運算子優先順序，而這個子運算式是否需要加上括號。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.Decompile*
   exceptions: []
   platform:
@@ -117,16 +117,16 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "When overridden in a derived class, evaluates the custom expression."
+  summary: "當在衍生類別中覆寫時，會評估自訂運算式。"
   syntax:
     content: public System.Workflow.Activities.Rules.RuleExpressionResult Evaluate (System.Workflow.Activities.Rules.RuleExecution execution);
     parameters:
     - id: execution
       type: System.Workflow.Activities.Rules.RuleExecution
-      description: "The <xref href=&quot;System.Workflow.Activities.Rules.RuleExecution&quot;></xref> to execute the expression."
+      description: "<xref href=&quot;System.Workflow.Activities.Rules.RuleExecution&quot;> </xref>執行運算式。"
     return:
       type: System.Workflow.Activities.Rules.RuleExpressionResult
-      description: "The <xref href=&quot;System.Workflow.Activities.Rules.RuleExpressionResult&quot;></xref> that indicates the result of the rule execution."
+      description: "<xref href=&quot;System.Workflow.Activities.Rules.RuleExpressionResult&quot;> </xref> ，指出規則執行的結果。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.Evaluate*
   exceptions: []
   platform:
@@ -143,16 +143,16 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "Compares the current expression to another expression to determine whether they are equal."
+  summary: "比較目前運算式與另一個運算式來判斷它們是否相等。"
   syntax:
     content: public bool Match (System.CodeDom.CodeExpression expression);
     parameters:
     - id: expression
       type: System.CodeDom.CodeExpression
-      description: "The expression to compare the current expression to."
+      description: "要比較目前運算式和運算式。"
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> to show that the expressions are equal; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>若要顯示的運算式相等。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.Match*
   exceptions: []
   platform:
@@ -169,19 +169,19 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: "When overridden in a derived class, verifies that the expression is configured correctly and has no errors."
+  summary: "當在衍生類別中覆寫時，會驗證運算式已正確設定，而且沒有任何錯誤。"
   syntax:
     content: public System.Workflow.Activities.Rules.RuleExpressionInfo Validate (System.Workflow.Activities.Rules.RuleValidation validation, bool isWritten);
     parameters:
     - id: validation
       type: System.Workflow.Activities.Rules.RuleValidation
-      description: "The <xref href=&quot;System.Workflow.Activities.Rules.RuleValidation&quot;></xref> to manage the validation process."
+      description: "<xref href=&quot;System.Workflow.Activities.Rules.RuleValidation&quot;> </xref>管理驗證程序。"
     - id: isWritten
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if the expression is being written to; <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref> if the expression is not being written to."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果正在寫入運算式。<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>如果運算式未寫入。"
     return:
       type: System.Workflow.Activities.Rules.RuleExpressionInfo
-      description: "The <xref href=&quot;System.Workflow.Activities.Rules.RuleExpressionInfo&quot;></xref> for the expression."
+      description: "<xref href=&quot;System.Workflow.Activities.Rules.RuleExpressionInfo&quot;> </xref>運算式。"
   overload: System.Workflow.Activities.Rules.IRuleExpression.Validate*
   exceptions: []
   platform:

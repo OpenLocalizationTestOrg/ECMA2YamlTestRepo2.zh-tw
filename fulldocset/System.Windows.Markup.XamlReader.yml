@@ -22,8 +22,8 @@ items:
   nameWithType: XamlReader
   fullName: System.Windows.Markup.XamlReader
   type: Class
-  summary: "Reads XAML input and creates an object graph, using the WPF default XAML reader and an associated XAML object writer."
-  remarks: "The synchronous <xref:System.Windows.Markup.XamlReader.Load%2A> methods are static, but the asynchronous <xref:System.Windows.Markup.XamlReader.LoadAsync%2A> methods are not static and require an instance of the XamlReader class to use.       The output of the `Load` methods is a single object, which represents the root object of a created object tree or object graph. Object graphs that are created by XamlReader are typically added to the existing object tree of a WPF application at run time. Otherwise the new object graph is considered disconnected for purposes of the WPF application model. This means that it does not render, and cannot be accessed using any of the object tree techniques as applied to the WPF application&quot;s main object tree (for example, the APIs <xref:System.Windows.FrameworkElement.FindName%2A>, <xref:System.Windows.LogicalTreeHelper>, <xref:System.Windows.Media.VisualTreeHelper>). For more information on object tree concepts, see [Trees in WPF](~/add/includes/ajax-current-ext-md.md).       XamlReader supports the following primary scenarios:      -   **Cloning/object factory**: Without additional mechanisms, a reference type generally cannot be included in more than one position in a WPF object tree. (Examples of additional mechanisms that offer support for sharing or re-use in WPF include objects that are based on <xref:System.Windows.Freezable>, or support for commonly shareable objects such as <xref:System.Windows.Media.Brush> that are referenced as an item from a <xref:System.Windows.ResourceDictionary>.) One way to clone an object that is already in the object tree is to serialize the object using <xref:System.Windows.Markup.XamlWriter.Save%2A?displayProperty=fullName>. You then use the serialized string as input for a call to <xref:System.Windows.Markup.XamlReader.Load%2A>, with a stream or <xref:System.Xml.XmlReader> as an intermediary.      -   **Constructing objects based on just-in-time information**: There are often other ways to have late-binding or user-supplied input change the state of existing objects. For example you could use the same value to set more than one property, or use data binding. But if you have a scenario where even the type of object to create is only determinable at run time or with user interaction, then creating such an object by building up a string for <xref:System.Windows.Markup.XamlReader.Load%2A> input is often a useful technique.      -   **Using existing resource techniques**: The <xref:System.IO.Stream> type is used frequently in other frameworks or technologies for transferring data or objects across application boundaries or for similar situations. You can then use the <xref:System.IO.Stream> techniques to store or obtain XAML-formatted data that you eventually use to create an object as part of your application.      -   **Fixed documents:** Your application might load local or downloaded XPS documents for inclusion in a WPF application object tree and UI.      > [!NOTE] >  This documentation sometimes describes an object graph, as opposed to an object tree. A strict parent-child relationship does not always exist in the run time object relationships of a run time WPF application, so an object graph is a more widely applicable terminology. However, because WPF also includes two different tree conceptualization APIs (<xref:System.Windows.LogicalTreeHelper>, <xref:System.Windows.Media.VisualTreeHelper>) the tree metaphor still applies adequately to most real-world cases in WPF. From the XAML language perspective however, the object graph is often the best way to think about how objects are created out of XAML, because the XAML language itself does not necessarily specify helper class methodologies that bring the relationships more into a tree structure again.      ## Code Access Security, Loose XAML, and XamlReader    XAML is a markup language that directly represents object instantiation and execution. Therefore, elements created in XAML have the same ability to interact with system resources (network access, file system IO, for example) as the equivalent generated code does.       [!INCLUDE[TLA2#tla_winclient](~/add/includes/tla2sharptla-winclient-md.md)] supports the [!INCLUDE[TLA2#tla_net](~/add/includes/tla2sharptla-net-md.md)] security framework [!INCLUDE[TLA#tla_cas](~/add/includes/tlasharptla-cas-md.md)]. This means that [!INCLUDE[TLA2#tla_winclient](~/add/includes/tla2sharptla-winclient-md.md)] content running in the internet zone has reduced execution permissions. &quot;Loose XAML&quot; (pages of noncompiled XAML interpreted at load time by a XAML viewer) and [!INCLUDE[TLA#tla_xbap](~/add/includes/tlasharptla-xbap-md.md)] are usually run in this internet zone and use the same permission set.  However, XAML loaded in to a fully trusted application has the same access to the system resources as the hosting application does. For more information, see [WPF Partial Trust Security](~/add/includes/ajax-current-ext-md.md).       The implications of these statements for XamlReader is that your application design must make trust decisions about the XAML you decide to load. If you are loading XAML that is not trusted, consider implementing your own sandboxing technique for how you load the resulting object graph.       XamlReader can also be called by partial trust code. In this case, Internet security zone is applied for code access security. If anything in the loaded XAML is invalid under Internet security zone, a XAML parse exception is thrown. Under XBAP and other cases that are partial trust at the platform level, where XamlReader is part of the execution, you get the same exception behavior as with explicit partial trust calls.      ## WPF XAML, XAML Readers/Writers, and XAML Language Versioning    [!INCLUDE[xaml2009](~/add/includes/xaml2009-md.md)] includes language features such as  and . You can use signatures of `Load` or `Parse` to load XAML that uses these features. However, those language features are not supported for XAML that needs to be markup compiled (such as XAML for the **Page** build action in a WPF application, or any XAML that involves the markup compile task in the build actions).       WPF types and the WPF technology in general support concepts that rely on access to WPF internals. For instance, how WPF implements dependency properties relies on internal techniques for efficient type-member lookup. Access to these internals is enabled by the XAML reading and writing APIs provided in <xref:System.Windows.Markup.XamlWriter> and XamlReader from the <xref:System.Windows.Markup> namespace and PresentationFramework assembly. However, the lower-level XAML readers and XAML writers from the System.Xaml assembly (classes based on <xref:System.Xaml.XamlReader?displayProperty=fullName>, <xref:System.Xaml.XamlWriter?displayProperty=fullName>) do not have access to the WPF internals. There is no dependency from System.Xaml to any WPF-specific assembly. Without access to the WPF internals, System.Xaml readers and writers cannot correctly load or save all WPF types, or types based on WPF types. In particular, the System.Xaml readers and writers do not understand concepts such as the WPF dependency property backing property store, or all the specifics of how WPF uses styles, resource dictionaries and templates. Therefore you have a choice to make:      -   If you are loading WPF types, and/or you are using XAML in BAML form in any way, use the PresentationFramework XAML readers and XAML writers.      -   If you are not relying on any WPF types or the BAML form of XAML, and are not using another specific technology&quot;s XAML reader or XAML writer implementation for reasons that are specific to that framework, use the System.Xaml XAML readers and XAML writers.      ## System.Xaml Backing Implementation in .NET 4    XamlReader is the callable API surface for the WPF framework-level XAML parser. The same underlying XAML parser also performs the run-time XAML loading and parsing for WPF applications that target [!INCLUDE[net_v30_short](~/add/includes/net-v30-short-md.md)] and [!INCLUDE[net_v35_short](~/add/includes/net-v35-short-md.md)].       If you are targeting [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)], the external API is the same, but parts of the implementation are built on the [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)] general XAML implementation in the System.Xaml assembly, which improves many of the technical and reporting aspects of parsing XAML. Targeting [!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)] necessarily entails including System.Xaml as a reference, and details of implementation such as the exceptions reported may come from System.Xaml defined types.      <a name=&quot;xamlTextUsage_XamlReader&quot;></a>    ## XAML Text Usage"
+  summary: "讀取 XAML 輸入並建立使用 WPF 預設 XAML 讀取器和相關聯的 XAML 物件寫入器的物件圖形。"
+  remarks: "同步<xref:System.Windows.Markup.XamlReader.Load%2A>方法是靜態的但非同步<xref:System.Windows.Markup.XamlReader.LoadAsync%2A>方法不是靜態的而且需要使用 XamlReader 類別的執行個體。</xref:System.Windows.Markup.XamlReader.LoadAsync%2A> </xref:System.Windows.Markup.XamlReader.Load%2A>       輸出`Load`方法為單一物件，表示樹狀目錄中建立的物件或物件圖形的根物件。 物件圖形建立的 XamlReader 通常會加入到現有的物件樹狀結構的 WPF 應用程式在執行階段。 否則新的物件圖形視為中斷連線的 WPF 應用程式模型的用途。 這表示不會呈現，而且無法存取使用任何的物件樹狀結構方法，以套用至 WPF 應用程式的主要物件樹狀結構 (例如，應用程式開發介面<xref:System.Windows.FrameworkElement.FindName%2A>， <xref:System.Windows.LogicalTreeHelper>， <xref:System.Windows.Media.VisualTreeHelper>)。</xref:System.Windows.Media.VisualTreeHelper> </xref:System.Windows.LogicalTreeHelper> </xref:System.Windows.FrameworkElement.FindName%2A> 如需有關物件樹狀結構的概念的詳細資訊，請參閱[中 WPF 樹狀架構](~/add/includes/ajax-current-ext-md.md)。       XamlReader 支援下列主要案例:-**複製/物件 factory**︰ 沒有其他的機制，參考類型通常不能包含在 WPF 物件樹狀結構中的多個位置。 (其他的機制，提供共用的支援，或在 WPF 中重複使用的範例包括物件為基礎的<xref:System.Windows.Freezable>，或支援通常可共用的物件，例如<xref:System.Windows.Media.Brush>為從一個項目所參考之<xref:System.Windows.ResourceDictionary>。)</xref:System.Windows.ResourceDictionary> </xref:System.Windows.Media.Brush> </xref:System.Windows.Freezable>若要複製的物件已經在物件樹狀結構中的一種方式為序列化使用<xref:System.Windows.Markup.XamlWriter.Save%2A?displayProperty=fullName>.</xref:System.Windows.Markup.XamlWriter.Save%2A?displayProperty=fullName>物件 用於序列化的字串做為輸入呼叫<xref:System.Windows.Markup.XamlReader.Load%2A>，與資料流或<xref:System.Xml.XmlReader>做為媒介。</xref:System.Xml.XmlReader> </xref:System.Windows.Markup.XamlReader.Load%2A>      -**建構物件會根據在 just-in-time 資訊**︰ 通常是其他的方式有晚期繫結或使用者提供輸入變更現有物件的狀態。 例如您無法使用相同的值來設定多個屬性，或使用資料繫結。 如果您有的案例，其中甚至建立物件的類型是僅判斷在執行階段或使用者互動，然後建立這類物件建置的字串，但是<xref:System.Windows.Markup.XamlReader.Load%2A>輸入通常是一個實用的方法。</xref:System.Windows.Markup.XamlReader.Load%2A>      -**使用現有的資源技術**:<xref:System.IO.Stream>型別用於經常在於其他 framework 或技術傳送跨應用程式界限的資料或物件或類似的情況。</xref:System.IO.Stream> 然後您可以使用<xref:System.IO.Stream>技術來儲存，或取得 XAML 格式的資料，最後使用建立的物件做為您的應用程式的一部分。</xref:System.IO.Stream>      -**固定文件︰**您的應用程式可能會載入包含在 WPF 應用程式物件樹狀結構和 UI 中的本機或下載 XPS 文件。      > [!NOTE] > 這份文件有時會描述物件圖形，而不是物件樹狀結構。 嚴格的父子式關聯性不一律存在於執行的階段物件關聯性的執行的階段 WPF 應用程式，因此物件圖形是更廣泛套用的術語。 不過，因為 WPF 還包含兩個不同的樹狀目錄概念化應用程式開發介面 (<xref:System.Windows.LogicalTreeHelper>， <xref:System.Windows.Media.VisualTreeHelper>) 樹狀目錄象徵仍適用於適當地在 WPF 中大部分的真實情況。</xref:System.Windows.Media.VisualTreeHelper> </xref:System.Windows.LogicalTreeHelper> 從 XAML 語言的觀點來看，物件圖形其實通常思考如何從 XAML，會建立物件本身為 XAML 語言不一定會指定關聯性樹狀結構至多個再次顯示的 helper 類別方法的最佳方式。      ## 程式碼存取安全性、 鬆散的 XAML 和 XamlReader XAML 是直接代表物件具現化和執行的標記語言。 因此，在 XAML 中建立的項目就可以進行互動的系統資源 （例如，網路存取、 檔案系統的 IO，） 做為對等項目產生程式碼的功能。       [!INCLUDE[TLA2#tla_winclient](~/add/includes/tla2sharptla-winclient-md.md)]支援[!INCLUDE[TLA2#tla_net](~/add/includes/tla2sharptla-net-md.md)]安全性架構[!INCLUDE[TLA#tla_cas](~/add/includes/tlasharptla-cas-md.md)]。 這表示[!INCLUDE[TLA2#tla_winclient](~/add/includes/tla2sharptla-winclient-md.md)]網際網路區域中執行的內容已降低執行權限。 「 鬆散的 XAML 」 （file XAML 頁面解譯 XAML 檢視器在載入時間） 和[!INCLUDE[TLA#tla_xbap](~/add/includes/tlasharptla-xbap-md.md)]通常會執行這個網際網路區域中，並使用相同的權限集合。  不過，完全受信任的應用程式中載入的 XAML 一樣都裝載的應用程式具有相同存取權的系統資源。 如需詳細資訊，請參閱[WPF 部分信任安全性](~/add/includes/ajax-current-ext-md.md)。       這些陳述式造成的影響 XamlReader 是應用程式的設計必須讓您決定要載入的 XAML 相關的信任決策。 如果您載入未受信任的 XAML，請考慮實作您自己的沙箱技術的載入結果的物件圖形的方式。       XamlReader 也可以呼叫由部分信任程式碼。 在此情況下，網際網路安全性區域就會套用程式碼存取安全性。 如果在載入的 XAML 中的任何項目無效網際網路安全性區域底下，XAML 剖析例外狀況會擲回。 XBAP 和其他平台層級，其中 XamlReader 是在執行期間，在部分信任的案例下，您會取得例外狀況與相同的行為與明確的部分信任的呼叫。      ## WPF XAML、 XAML 讀取器/寫入器和 XAML 的語言版本控制[!INCLUDE[xaml2009](~/add/includes/xaml2009-md.md)]包含語言功能，例如與。 您可以使用的簽章`Load`或`Parse`載入會使用這些功能的 XAML。 不過，這些語言功能不支援，需要進行標記編譯 xaml (例如 XAML**頁面**建置 WPF 應用程式或建置動作以標記編譯工作牽涉到任何 XAML 中的動作)。       WPF 型別和 WPF 技術通常支援依賴存取可 WPF 內部的概念。 比方說，WPF 會相依性屬性的實作依賴內部技術有效率的型別成員查閱。 存取這些內部項目會啟用讀取和寫入應用程式開發介面中提供的 XAML<xref:System.Windows.Markup.XamlWriter>和從 XamlReader<xref:System.Windows.Markup>命名空間和 PresentationFramework 組件。</xref:System.Windows.Markup> </xref:System.Windows.Markup.XamlWriter> 不過，較低層級的 XAML 讀取器和 XAML 寫入器透過 System.Xaml 組件 (類別根據<xref:System.Xaml.XamlReader?displayProperty=fullName>， <xref:System.Xaml.XamlWriter?displayProperty=fullName>) 沒有 WPF 內部資訊的存取。</xref:System.Xaml.XamlWriter?displayProperty=fullName> </xref:System.Xaml.XamlReader?displayProperty=fullName> 沒有任何特定的 WPF 組件從 System.Xaml 相依性。 如果沒有 WPF 內部存取，System.Xaml 讀取器和寫入器無法正確載入或儲存所有 WPF 類型根據 WPF 類型。 特別是，System.Xaml 讀取器和寫入器不了解概念，例如支援屬性存放區或所有的細節 WPF 會使用樣式、 資源字典和範本的 WPF 相依性屬性。 因此，您必須選擇来讓:-如果您正在載入 WPF 類型，及/或您使用 XAML 中的任何方式 BAML 形式使用 PresentationFramework XAML 讀取器和 XAML 寫入器。      -如果您不依賴任何 WPF 類型或 BAML 形式的 XAML，並不使用另一種特定技術的 XAML 讀取器或 XAML 寫入器實作專屬於該架構的原因，請使用 System.Xaml XAML 讀取器和 XAML 寫入器。      ## 在.NET 4 XamlReader System.Xaml 備份實作是 WPF 架構層級 XAML 剖析器可呼叫的 API 介面。 相同的基礎 XAML 剖析器也會執行載入及剖析 WPF 應用程式為目標的執行階段 XAML[!INCLUDE[net_v30_short](~/add/includes/net-v30-short-md.md)]和[!INCLUDE[net_v35_short](~/add/includes/net-v35-short-md.md)]。       如果您的目標[!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)]，外部應用程式開發介面都相同，但實作的部分之上[!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)]System.Xaml 組件，可改善剖析 XAML 的技術和報告方面的許多一般 XAML 實作。 目標[!INCLUDE[net_v40_short](~/add/includes/net-v40-short-md.md)]一定需要包括 System.Xaml 的參考，以及實作的詳細資料，例如例外狀況的報告可能來自於 System.Xaml 中定義型別。      <a name=&quot;xamlTextUsage_XamlReader&quot;></a># # XAML 文字用法"
   example:
   - "The following example converts a <xref:System.Windows.Controls.Button> into a string using the <xref:System.Windows.Markup.XamlWriter> class.  The string is then loaded back into a <xref:System.Windows.Controls.Button> using the static <xref:System.Windows.Markup.XamlReader.Load%2A> method on the XamlReader class.  \n  \n [!code-cs[xamlreaderwritersnippets#XamlReaderLoadXmlReader](~/add/codesnippet/csharp/XamlReaderWriterSnippets/Window1.xaml.cs#xamlreaderloadxmlreader)]\n [!code-vb[xamlreaderwritersnippets#XamlReaderLoadXmlReader](~/add/codesnippet/visualbasic/xamlreaderwritersnippets/window1.xaml.vb#xamlreaderloadxmlreader)]"
   syntax:
@@ -46,7 +46,7 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Initializes a new instance of the <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>類別。"
   syntax:
     content: public XamlReader ();
     parameters: []
@@ -66,8 +66,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Aborts the current asynchronous load operation, if there is an asynchronous load operation pending."
-  remarks: "CancelAsync is an asynchronous operation; therefore, some loading may occur before the operation is aborted."
+  summary: "中止目前非同步載入作業，如果有暫止的非同步載入作業。"
+  remarks: "CancelAsync 是非同步作業;因此，在作業中止之前，可能會發生部分載入。"
   syntax:
     content: public void CancelAsync ();
     parameters: []
@@ -87,13 +87,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Returns a <xref href=&quot;System.Xaml.XamlSchemaContext&quot;></xref> object that represents the WPF schema context settings for a <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>."
+  summary: "傳回<xref href=&quot;System.Xaml.XamlSchemaContext&quot;></xref>物件，代表 WPF 結構描述內容設定為<xref href=&quot;System.Windows.Markup.XamlReader&quot;> </xref>。"
   syntax:
     content: public static System.Xaml.XamlSchemaContext GetWpfSchemaContext ();
     parameters: []
     return:
       type: System.Xaml.XamlSchemaContext
-      description: "A <xref href=&quot;System.Xaml.XamlSchemaContext&quot;></xref> object that represents the WPF schema context settings for a <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>."
+      description: "A <xref href=&quot;System.Xaml.XamlSchemaContext&quot;> </xref>物件，代表 WPF 結構描述內容設定為<xref href=&quot;System.Windows.Markup.XamlReader&quot;> </xref>。"
   overload: System.Windows.Markup.XamlReader.GetWpfSchemaContext*
   exceptions: []
   platform:
@@ -110,7 +110,7 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.IO.Stream> and returns an <xref:System.Object> that is the root of the corresponding object tree."
+  summary: "讀取指定的 XAML 輸入<xref:System.IO.Stream>並傳回<xref:System.Object>也就是對應的物件樹狀結構的根目錄。</xref:System.Object> </xref:System.IO.Stream>"
   remarks: ''
   example:
   - "The following example saves a <xref:System.Windows.Controls.Button> into a <xref:System.IO.MemoryStream> using the <xref:System.Windows.Markup.XamlWriter> class. The stream is then loaded back into a <xref:System.Windows.Controls.Button> using the static <xref:System.Windows.Markup.XamlReader.Load%2A> method on the <xref:System.Windows.Markup.XamlReader> class.  \n  \n [!code-cs[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/add/codesnippet/csharp/XamlReaderWriterSnippets/Window1.xaml.cs#xamlreaderloadxmlreader)]\n [!code-vb[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/add/codesnippet/visualbasic/xamlreaderwritersnippets/window1.xaml.vb#xamlreaderloadxmlreader)]"
@@ -119,15 +119,15 @@ items:
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: "The XAML to load, in stream form."
+      description: "若要載入，資料流的形式的 XAML。"
     return:
       type: System.Object
-      description: "The object at the root of the created object tree."
+      description: "在建立的物件樹狀結構的根物件。"
   overload: System.Windows.Markup.XamlReader.Load*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>stream</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>stream</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.Load(System.Xaml.XamlReader)
@@ -142,22 +142,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input through a provided <xref href=&quot;System.Xaml.XamlReader&quot;></xref> and returns an object that is the root of the corresponding object tree."
-  remarks: "The input <xref:System.Xaml.XamlReader> can be <xref:System.Windows.Baml2006.Baml2006Reader>. This is how you can load BAML at run time, or for localization tool purposes."
+  summary: "讀取透過提供 XAML 輸入<xref href=&quot;System.Xaml.XamlReader&quot;></xref>並傳回對應的物件樹狀結構根目錄的物件。"
+  remarks: "<xref:System.Xaml.XamlReader>可以是<xref:System.Windows.Baml2006.Baml2006Reader>.</xref:System.Windows.Baml2006.Baml2006Reader></xref:System.Xaml.XamlReader>輸入 這是在執行階段，或當地語系化工具的目的而言，如何載入 BAML。"
   syntax:
     content: public static object Load (System.Xaml.XamlReader reader);
     parameters:
     - id: reader
       type: System.Xaml.XamlReader
-      description: "A <xref href=&quot;System.Xaml.XamlReader&quot;></xref> object. This is expected to be initialized with input XAML."
+      description: "A <xref href=&quot;System.Xaml.XamlReader&quot;></xref> object. 初始化具有輸入 XAML，這是預期行為。"
     return:
       type: System.Object
-      description: "The object that is the root of the created object tree."
+      description: "所建立的物件樹狀目錄的根目錄的物件。"
   overload: System.Windows.Markup.XamlReader.Load*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>reader</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>reader</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.Load(System.Xml.XmlReader)
@@ -172,7 +172,7 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.Xml.XmlReader> and returns an object that is the root of the corresponding object tree."
+  summary: "讀取指定的 XAML 輸入<xref:System.Xml.XmlReader>並傳回物件，對應的物件樹狀結構的根目錄。</xref:System.Xml.XmlReader>"
   remarks: ''
   example:
   - "The following example converts a <xref:System.Windows.Controls.Button> into a string using the <xref:System.Windows.Markup.XamlWriter> class.  The string is then loaded back into a <xref:System.Windows.Controls.Button> using the static <xref:System.Windows.Markup.XamlReader.Load%2A> method on the <xref:System.Windows.Markup.XamlReader> class.  \n  \n [!code-cs[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/add/codesnippet/csharp/XamlReaderWriterSnippets/Window1.xaml.cs#xamlreaderloadxmlreader)]\n [!code-vb[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/add/codesnippet/visualbasic/xamlreaderwritersnippets/window1.xaml.vb#xamlreaderloadxmlreader)]"
@@ -181,15 +181,15 @@ items:
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "The <xref:System.Xml.XmlReader> that has already loaded the XAML input to load in XML form."
+      description: "<xref:System.Xml.XmlReader>，已經載入輸入 XML 表單中載入的 XAML。</xref:System.Xml.XmlReader>"
     return:
       type: System.Object
-      description: "The object that is the root of the created object tree."
+      description: "所建立的物件樹狀目錄的根目錄的物件。"
   overload: System.Windows.Markup.XamlReader.Load*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>reader</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>reader</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.Load(System.IO.Stream,System.Windows.Markup.ParserContext)
@@ -204,24 +204,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.IO.Stream> and returns an object that is the root of the corresponding object tree."
+  summary: "讀取指定的 XAML 輸入<xref:System.IO.Stream>並傳回物件，對應的物件樹狀結構的根目錄。</xref:System.IO.Stream>"
   syntax:
     content: public static object Load (System.IO.Stream stream, System.Windows.Markup.ParserContext parserContext);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: "The stream that contains the XAML input to load."
+      description: "包含 XAML 輸入載入的資料流。"
     - id: parserContext
       type: System.Windows.Markup.ParserContext
-      description: "Context information used by the parser."
+      description: "剖析器使用的內容資訊。"
     return:
       type: System.Object
-      description: "The object that is the root of the created object tree."
+      description: "所建立的物件樹狀目錄的根目錄的物件。"
   overload: System.Windows.Markup.XamlReader.Load*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>stream</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       <code>parserContext</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>stream</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>.       -or-       <code>parserContext</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.LoadAsync(System.IO.Stream)
@@ -236,25 +236,25 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.IO.Stream> and returns the root of the corresponding object tree."
-  remarks: "An asynchronous XAML load operation will initially return an object that is purely the root object. Asynchronously, XAML parsing then continues, and any child objects are filled in under the root. This is in contrast to the typical WPF XAML processing behavior and its interaction with WPF concepts of object lifetime. In the typical (non-async) interaction, all properties of an object including all child collections are filled before returning an element and reporting it as loaded. That behavior equates to a bottom-up methodology for creating the tree where the root object is the last object to become available.       You typically would assign the returned object to some location in your WPF application&quot;s object tree, with the knowledge that content might still be filling in and might cause incremental layout updates if the entire content is exposed as part of the UI. For this reason it is typical to isolate or virtualize any asynchronously loaded objects from XAML, and to use application-specific logic or application state to notify when <xref:System.Windows.Markup.XamlReader.LoadCompleted> is handled.       In order for LoadAsync to load XAML input asynchronously, the root element in the XAML input must contain the attribute and value `x:SynchronousMode=&quot;Async&quot;`. The value is treated as case sensitive. If the XAML input root does not contain `x:SynchronousMode=&quot;Async&quot;`, no exception is thrown, and the call is processed as a synchronous load (see <xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%29>).       Only one asynchronous load operation per instance of the <xref:System.Windows.Markup.XamlReader> class can be performed at a time.  If more than one asynchronous operation is attempted on the same instance of the <xref:System.Windows.Markup.XamlReader> class an <xref:System.InvalidOperationException> is thrown."
+  summary: "讀取指定的 XAML 輸入<xref:System.IO.Stream>並傳回對應的物件樹狀結構的根目錄。</xref:System.IO.Stream>"
+  remarks: "非同步的 XAML 載入作業一開始會傳回單純的根物件的物件。 以非同步的方式，XAML 剖析然後仍繼續，和任何子物件會填入根目錄下。 這是相較於一般的 WPF XAML 處理行為以及其與互動的物件存留期的 WPF 概念。 一般 （非同步） 互動，包括所有子物件的所有屬性會傳回項目，並報告其在載入之前都填入。 該行為等同於建立樹狀結構的根物件所在的最後一個物件變成可用的由下而上的方法。       通常會將傳回的物件指派給 WPF 應用程式的物件樹狀結構中有些位置、 內容的知識可能仍然會填入，如果 UI 的一部分公開的整個內容可能會造成累加配置更新。 基於這個原因是隔離，或將虛擬化 xaml，任何以非同步方式載入的物件，並使用特定應用程式邏輯或應用程式狀態通知時，一般<xref:System.Windows.Markup.XamlReader.LoadCompleted>處理。</xref:System.Windows.Markup.XamlReader.LoadCompleted>       為了讓 LoadAsync 以非同步方式載入的 XAML 輸入 XAML 中的根項目輸入必須包含的屬性和值`x:SynchronousMode=&quot;Async&quot;`。 此值視為區分大小寫。 如果不包含 XAML 輸入的根`x:SynchronousMode=&quot;Async&quot;`、 擲回任何例外狀況，以及同步負載處理呼叫 (請參閱<xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%29>)。</xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%29>       每個執行個體只有一個非同步載入作業<xref:System.Windows.Markup.XamlReader>類別可以執行一次。</xref:System.Windows.Markup.XamlReader>  如果多個非同步作業會嘗試在相同的執行個體上<xref:System.Windows.Markup.XamlReader>類別<xref:System.InvalidOperationException>就會擲回。</xref:System.InvalidOperationException> </xref:System.Windows.Markup.XamlReader>"
   syntax:
     content: public object LoadAsync (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: "The stream containing the XAML input to load."
+      description: "包含 XAML 輸入載入的資料流。"
     return:
       type: System.Object
-      description: "The object that is the root of the created object tree."
+      description: "所建立的物件樹狀目錄的根目錄的物件。"
   overload: System.Windows.Markup.XamlReader.LoadAsync*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>stream</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>stream</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "Multiple load operations are pending concurrently with the same <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>."
+    description: "正在暫止多個負載作業與相同同時<xref href=&quot;System.Windows.Markup.XamlReader&quot;> </xref>。"
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.LoadAsync(System.Xml.XmlReader)
@@ -269,25 +269,25 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.Xml.XmlReader> and returns the root of the corresponding object tree."
-  remarks: "An asynchronous XAML load operation will initially return an object that is purely the root object. Asynchronously, XAML parsing then continues, and any child objects are filled in under the root. This is in contrast to the typical WPF XAML processing behavior and its interaction with WPF concepts of object lifetime. In the typical (non-async) interaction, all properties of an object including all child collections are filled before returning an element and reporting it as loaded. That behavior equates to a bottom-up methodology for creating the tree where the root object is the last object to become available.       You typically would assign the returned object from LoadAsync to some location in your application&quot;s object tree, with the knowledge that content might still be filling in and might cause incremental layout updates if the entire content is exposed as part of the UI. For this reason it is typical to isolate or virtualize any asynchronously loaded objects from XAML, and to use application-specific logic or application state to notify when <xref:System.Windows.Markup.XamlReader.LoadCompleted> is handled.       In order for LoadAsync to load XAML input asynchronously, the root element in the XAML markup must contain the attribute and value `x:SynchronousMode=&quot;Async&quot;`. The value is treated as case sensitive. If the XAML markup root does not contain `x:SynchronousMode=&quot;Async&quot;`, no exception is thrown, and the call is instead processed as a synchronous load (see <xref:System.Windows.Markup.XamlReader.Load%28System.Xml.XmlReader%29>).       Only one asynchronous load operation per instance of the <xref:System.Windows.Markup.XamlReader> class can be performed at a time.  If more than one asynchronous operation is attempted on the same instance of the <xref:System.Windows.Markup.XamlReader> class an <xref:System.InvalidOperationException> is thrown."
+  summary: "讀取指定的 XAML 輸入<xref:System.Xml.XmlReader>並傳回對應的物件樹狀結構的根目錄。</xref:System.Xml.XmlReader>"
+  remarks: "非同步的 XAML 載入作業一開始會傳回單純的根物件的物件。 以非同步的方式，XAML 剖析然後仍繼續，和任何子物件會填入根目錄下。 這是相較於一般的 WPF XAML 處理行為以及其與互動的物件存留期的 WPF 概念。 一般 （非同步） 互動，包括所有子物件的所有屬性會傳回項目，並報告其在載入之前都填入。 該行為等同於建立樹狀結構的根物件所在的最後一個物件變成可用的由下而上的方法。       通常會就會將從 LoadAsync 傳回的物件指派給您的應用程式物件樹狀結構中的某些位置、 內容的知識可能仍然會填入，如果 UI 的一部分公開的整個內容可能會造成累加配置更新。 基於這個原因是隔離，或將虛擬化 xaml，任何以非同步方式載入的物件，並使用特定應用程式邏輯或應用程式狀態通知時，一般<xref:System.Windows.Markup.XamlReader.LoadCompleted>處理。</xref:System.Windows.Markup.XamlReader.LoadCompleted>       為了讓 LoadAsync 載入 XAML 輸入以非同步的方式，在 XAML 標記中的根項目必須包含的屬性和值`x:SynchronousMode=&quot;Async&quot;`。 此值視為區分大小寫。 如果不包含 XAML 標記根`x:SynchronousMode=&quot;Async&quot;`、 擲回任何例外狀況，以及同步負載改為處理的呼叫 (請參閱<xref:System.Windows.Markup.XamlReader.Load%28System.Xml.XmlReader%29>)。</xref:System.Windows.Markup.XamlReader.Load%28System.Xml.XmlReader%29>       每個執行個體只有一個非同步載入作業<xref:System.Windows.Markup.XamlReader>類別可以執行一次。</xref:System.Windows.Markup.XamlReader>  如果多個非同步作業會嘗試在相同的執行個體上<xref:System.Windows.Markup.XamlReader>類別<xref:System.InvalidOperationException>就會擲回。</xref:System.InvalidOperationException> </xref:System.Windows.Markup.XamlReader>"
   syntax:
     content: public object LoadAsync (System.Xml.XmlReader reader);
     parameters:
     - id: reader
       type: System.Xml.XmlReader
-      description: "An existing  <xref:System.Xml.XmlReader> that has already loaded/read the XAML input."
+      description: "現有<xref:System.Xml.XmlReader>，具有已載入/讀取 XAML 輸入。</xref:System.Xml.XmlReader>"
     return:
       type: System.Object
-      description: "The root of the created object tree."
+      description: "建立的物件樹狀目錄的根目錄。"
   overload: System.Windows.Markup.XamlReader.LoadAsync*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>reader</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>reader</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "Multiple load operations are performed concurrently with the same <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>."
+    description: "多個載入作業將會與相同同時<xref href=&quot;System.Windows.Markup.XamlReader&quot;> </xref>。"
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.LoadAsync(System.IO.Stream,System.Windows.Markup.ParserContext)
@@ -302,28 +302,28 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified <xref:System.IO.Stream> and returns the root of the corresponding object tree."
-  remarks: "An asynchronous XAML load operation will initially return an object that is purely the root object. Asynchronously, XAML parsing then continues, and any child objects are filled in under the root. This is in contrast to the typical WPF XAML processing behavior and its interaction with WPF concepts of object lifetime. In the typical (non-async) interaction, all properties of an object including all child collections are filled before returning an element and reporting it as loaded. That behavior equates to a bottom-up methodology for creating the tree where the root object is the last object to become available.       You typically would assign the returned object to some location in your application&quot;s object tree, with the knowledge that content might still be filling in and might cause incremental layout updates if the entire content is exposed as part of the UI. For this reason it is typical to isolate or virtualize any asynchronously loaded objects from XAML, and to use application-specific logic or application state to notify when <xref:System.Windows.Markup.XamlReader.LoadCompleted> is handled.       In order for LoadAsync to load markup asynchronously, the root element in the XAML markup must contain the attribute and value `x:SynchronousMode=&quot;Async&quot;`. The value is treated as case sensitive. If the XAML markup root does not contain `x:SynchronousMode=&quot;Async&quot;`, no exception is thrown, and the call is processed as a synchronous load (see <xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%2CSystem.Windows.Markup.ParserContext%29>).       Only one asynchronous load operation per instance of the <xref:System.Windows.Markup.XamlReader> class can be performed at a time.  If more than one asynchronous operation is attempted on the same instance of the <xref:System.Windows.Markup.XamlReader> class an <xref:System.InvalidOperationException> is thrown."
+  summary: "讀取指定的 XAML 輸入<xref:System.IO.Stream>並傳回對應的物件樹狀結構的根目錄。</xref:System.IO.Stream>"
+  remarks: "非同步的 XAML 載入作業一開始會傳回單純的根物件的物件。 以非同步的方式，XAML 剖析然後仍繼續，和任何子物件會填入根目錄下。 這是相較於一般的 WPF XAML 處理行為以及其與互動的物件存留期的 WPF 概念。 一般 （非同步） 互動，包括所有子物件的所有屬性會傳回項目，並報告其在載入之前都填入。 該行為等同於建立樹狀結構的根物件所在的最後一個物件變成可用的由下而上的方法。       通常會將傳回的物件指派給您的應用程式物件樹狀結構中有些位置、 內容的知識可能仍然會填入，如果 UI 的一部分公開的整個內容可能會造成累加配置更新。 基於這個原因是隔離，或將虛擬化 xaml，任何以非同步方式載入的物件，並使用特定應用程式邏輯或應用程式狀態通知時，一般<xref:System.Windows.Markup.XamlReader.LoadCompleted>處理。</xref:System.Windows.Markup.XamlReader.LoadCompleted>       為了讓 LoadAsync 以非同步方式載入標記，在 XAML 標記中的根項目必須包含的屬性和值`x:SynchronousMode=&quot;Async&quot;`。 此值視為區分大小寫。 如果不包含 XAML 標記根`x:SynchronousMode=&quot;Async&quot;`、 擲回任何例外狀況，以及同步負載處理呼叫 (請參閱<xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%2CSystem.Windows.Markup.ParserContext%29>)。</xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%2CSystem.Windows.Markup.ParserContext%29>       每個執行個體只有一個非同步載入作業<xref:System.Windows.Markup.XamlReader>類別可以執行一次。</xref:System.Windows.Markup.XamlReader>  如果多個非同步作業會嘗試在相同的執行個體上<xref:System.Windows.Markup.XamlReader>類別<xref:System.InvalidOperationException>就會擲回。</xref:System.InvalidOperationException> </xref:System.Windows.Markup.XamlReader>"
   syntax:
     content: public object LoadAsync (System.IO.Stream stream, System.Windows.Markup.ParserContext parserContext);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: "A stream containing the XAML input to load."
+      description: "包含 XAML 輸入載入的資料流。"
     - id: parserContext
       type: System.Windows.Markup.ParserContext
-      description: "Context information used by the parser."
+      description: "剖析器使用的內容資訊。"
     return:
       type: System.Object
-      description: "The root of the created object tree."
+      description: "建立的物件樹狀目錄的根目錄。"
   overload: System.Windows.Markup.XamlReader.LoadAsync*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "<code>stream</code> is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "<code>stream</code>is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "Multiple load operations are performed concurrently with the same <xref href=&quot;System.Windows.Markup.XamlReader&quot;></xref>."
+    description: "多個載入作業將會與相同同時<xref href=&quot;System.Windows.Markup.XamlReader&quot;> </xref>。"
   platform:
   - net462
 - uid: System.Windows.Markup.XamlReader.LoadCompleted
@@ -338,13 +338,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Occurs when an asynchronous load operation completes."
-  remarks: "LoadCompleted is also raised when an asynchronous load operation aborts."
+  summary: "非同步載入作業完成時發生。"
+  remarks: "非同步載入作業中止時，也會引發 LoadCompleted。"
   syntax:
     content: public event System.ComponentModel.AsyncCompletedEventHandler LoadCompleted;
     return:
       type: System.ComponentModel.AsyncCompletedEventHandler
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -360,17 +360,17 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML input in the specified text string and returns an object that corresponds to the root of the specified markup."
-  remarks: "The implementation calls <xref:System.Windows.Markup.XamlReader.Load%2A> internally after creating a stream from the string. See <xref:System.Windows.Markup.XamlReader.Load%2A> for additional information such as possible exceptions."
+  summary: "讀取 XAML 輸入中指定的文字字串並傳回對應的物件，指定標記的根目錄。"
+  remarks: "實作會呼叫<xref:System.Windows.Markup.XamlReader.Load%2A>從字串建立的資料流之後，在內部。</xref:System.Windows.Markup.XamlReader.Load%2A> 請參閱<xref:System.Windows.Markup.XamlReader.Load%2A>如需詳細資訊，例如可能的例外狀況。</xref:System.Windows.Markup.XamlReader.Load%2A>"
   syntax:
     content: public static object Parse (string xamlText);
     parameters:
     - id: xamlText
       type: System.String
-      description: "The input XAML, as a single text string."
+      description: "輸入 XAML 中，為單一文字字串。"
     return:
       type: System.Object
-      description: "The root of the created object tree."
+      description: "建立的物件樹狀目錄的根目錄。"
   overload: System.Windows.Markup.XamlReader.Parse*
   exceptions: []
   platform:
@@ -387,20 +387,20 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: "Reads the XAML markup in the specified text string (using a specified <xref href=&quot;System.Windows.Markup.ParserContext&quot;></xref>) and returns an object that corresponds to the root of the specified markup."
-  remarks: "The implementation calls <xref:System.Windows.Markup.XamlReader.Load%2A> internally after creating a stream from the string. See <xref:System.Windows.Markup.XamlReader.Load%2A> for additional information such as possible exceptions."
+  summary: "讀取 XAML 標記中指定的文字字串 (使用指定<xref href=&quot;System.Windows.Markup.ParserContext&quot;> </xref>)，並傳回對應的物件，指定標記的根目錄。"
+  remarks: "實作會呼叫<xref:System.Windows.Markup.XamlReader.Load%2A>從字串建立的資料流之後，在內部。</xref:System.Windows.Markup.XamlReader.Load%2A> 請參閱<xref:System.Windows.Markup.XamlReader.Load%2A>如需詳細資訊，例如可能的例外狀況。</xref:System.Windows.Markup.XamlReader.Load%2A>"
   syntax:
     content: public static object Parse (string xamlText, System.Windows.Markup.ParserContext parserContext);
     parameters:
     - id: xamlText
       type: System.String
-      description: "The input XAML, as a single text string."
+      description: "輸入 XAML 中，為單一文字字串。"
     - id: parserContext
       type: System.Windows.Markup.ParserContext
-      description: "Context information used by the parser."
+      description: "剖析器使用的內容資訊。"
     return:
       type: System.Object
-      description: "The root of the created object tree."
+      description: "建立的物件樹狀目錄的根目錄。"
   overload: System.Windows.Markup.XamlReader.Parse*
   exceptions: []
   platform:
