@@ -24,8 +24,8 @@ items:
   nameWithType: JumpList
   fullName: System.Windows.Shell.JumpList
   type: Class
-  summary: "Represents a list of items and tasks displayed as a menu on a [!INCLUDE[win7](~/add/includes/win7-md.md)] taskbar button."
-  remarks: "The [!INCLUDE[win7](~/add/includes/win7-md.md)] taskbar provides enhanced functionality for starting programs directly from the taskbar button by using Jump Lists. Jump Lists are also used in the [!INCLUDE[win7](~/add/includes/win7-md.md)] Start menu. You access a Jump List by right-clicking a taskbar button or by clicking the arrow next to a program in the Start menu. For more information about Jump Lists, see the [Taskbar](http://go.microsoft.com/fwlink/?LinkId=178478) section of the Windows User Experience Interaction Guidelines.       The JumpList class provides a managed wrapper for the Jump List functionality in the [!INCLUDE[win7](~/add/includes/win7-md.md)] taskbar and manages the data passed to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell. The functionality exposed by the JumpList class is not available in versions of [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] earlier than [!INCLUDE[win7](~/add/includes/win7-md.md)]. Applications that use the JumpList class will run in other versions of [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)], but the Jump List will not be available. For more information about the Windows shell and native Jump List APIs, see [Taskbar Extensions](http://go.microsoft.com/fwlink/?LinkId=178479).       The following illustration shows the Jump List for Windows Media Player, with items in the **Tasks** and **Frequent** categories.       ![Windows Media Player Jump List](~/add/media/wpfshell-jumplist.png &quot;Windows Media Player Jump List&quot;)   Windows Media Player Jump List      ## Configuring a Jump List    Jump Lists can contain two types of items, a <xref:System.Windows.Shell.JumpTask> and a <xref:System.Windows.Shell.JumpPath>. A <xref:System.Windows.Shell.JumpTask> is a link to a program and a <xref:System.Windows.Shell.JumpPath> is a link to a file. You can visually separate items in a Jump List by creating a <xref:System.Windows.Shell.JumpTask> that does not have a <xref:System.Windows.Shell.JumpTask.Title%2A> and <xref:System.Windows.Shell.JumpItem.CustomCategory%2A> specified. This empty <xref:System.Windows.Shell.JumpTask> will be displayed as a horizontal line in the Jump List.      > [!NOTE] >  If the type of the file specified in a <xref:System.Windows.Shell.JumpPath> is not registered with your application, the file will not appear in the Jump List. For example, if you add a <xref:System.Windows.Shell.JumpPath> that points to a .txt file, your application must be registered to handle .txt files. For more information, see [Introduction to File Associations](http://go.microsoft.com/fwlink/?LinkId=178480).       Jump items are placed into categories in the JumpList. By default, a <xref:System.Windows.Shell.JumpItem> is displayed in the **Tasks** category. Alternatively, you can specify a <xref:System.Windows.Shell.JumpItem.CustomCategory%2A> for the <xref:System.Windows.Shell.JumpItem>.       You can specify whether the standard **Recent** and **Frequent** categories are displayed in the JumpList by setting the <xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A> and <xref:System.Windows.Shell.JumpList.ShowFrequentCategory%2A> properties. The contents of these categories are managed by the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell. Because these categories might contain much of the same data, you typically display one or the other in your JumpList, but not both. [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] automatically manages recent items if they are opened through a common file dialog box or used to open an application through file type association. When an item is accessed through the Jump List, you can notify the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell to add the item to the **Recent** category by calling the <xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A> method.      ## Applying a Jump List to the Windows Shell    You cannot access the shell’s Jump List directly or read its contents into the JumpList class. Instead, the JumpList class provides a representation of a Jump List that you can work with, and then apply to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell. You typically create a JumpList and set it one time when the application is first run. However, you can modify or replace the JumpList at run time.       When you have set the JumpList properties, you must apply the JumpList to the Windows shell before its contents appear in the taskbar Jump List. This is done automatically when the JumpList is first attached to an application, either in XAML or in a call to the <xref:System.Windows.Shell.JumpList.SetJumpList%2A> method. If you modify the contents of the JumpList at run time, you must call the <xref:System.Windows.Shell.JumpList.Apply%2A> method to apply its current contents to the Windows shell.      ## Setting a Jump List in XAML    A JumpList is not automatically attached to an <xref:System.Windows.Application> object. You attach a JumpList to an <xref:System.Windows.Application> object in XAML by using the attached property syntax. The JumpList class implements the <xref:System.ComponentModel.ISupportInitialize> interface to support XAML declaration of a JumpList. If the JumpList is declared in XAML and attached to the current <xref:System.Windows.Application>, it is automatically applied to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell when the JumpList is initialized.      ## Setting and Modifying a Jump List in Code    You attach a JumpList to an <xref:System.Windows.Application> object in code by calling the static <xref:System.Windows.Shell.JumpList.SetJumpList%2A> method. This also applies the JumpList to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell.       To modify a JumpList at run time, you call the <xref:System.Windows.Shell.JumpList.GetJumpList%2A> method to get the JumpList that is currently attached to an <xref:System.Windows.Application>. After you have modified the properties of the JumpList, you must call the <xref:System.Windows.Shell.JumpList.Apply%2A> method to apply the changes to the Windows shell.      > [!NOTE] >  You typically create one JumpList that is attached to the <xref:System.Windows.Application> and applied to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell. However, you can create multiple JumpList objects. Only one JumpList at a time can be applied to the [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)] shell, and only one JumpList at a time can be associated with an <xref:System.Windows.Application>. The .NET Framework does not require that these be the same JumpList.      > [!NOTE] >  This class contains a link demand at the class level that applies to all members. A <xref:System.Security.SecurityException> is thrown when the immediate caller does not have full-trust permission. For more information about security demands, see [Link Demands](~/add/includes/ajax-current-ext-md.md) and [Inheritance Demands](http://msdn.microsoft.com/en-us/28b9adbb-8f08-4f10-b856-dbf59eb932d9)."
+  summary: "代表清單項目和工作上顯示為功能表[!INCLUDE[win7](~/add/includes/win7-md.md)]工作列按鈕。"
+  remarks: "[!INCLUDE[win7](~/add/includes/win7-md.md)]工作列可提供直接從工作列按鈕啟動程式，使用跳躍清單的增強的功能。 中也會使用跳躍清單[!INCLUDE[win7](~/add/includes/win7-md.md)]開始 功能表。 以滑鼠右鍵按一下工作列按鈕，或按一下 [開始] 功能表中的程式旁的箭號，您可以存取跳躍清單。 如需跳躍清單的詳細資訊，請參閱[工作列](http://go.microsoft.com/fwlink/?LinkId=178478)的 Windows 使用者經驗互動指導方針 > 一節。       JumpList 類別提供 managed 包裝函式中的跳躍清單功能[!INCLUDE[win7](~/add/includes/win7-md.md)]工作列及管理資料傳遞至[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層。 JumpList 類別所公開的功能不適用於新版[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]早於[!INCLUDE[win7](~/add/includes/win7-md.md)]。 使用過 JumpList 類別的應用程式會執行在其他版本的[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]，但是無法使用跳躍清單。 如需有關 Windows shell 和原生跳清單 Api 的詳細資訊，請參閱[工作列延伸](http://go.microsoft.com/fwlink/?LinkId=178479)。       下圖顯示跳躍清單適用於 Windows Media Player 中的項目**工作**和**經常**類別。       ![Windows Media Player 跳躍清單](~/add/media/wpfshell-jumplist.png &quot;Windows Media Player 跳躍清單&quot;)Windows Media Player 跳躍清單 # # 設定跳躍清單跳躍清單可以包含兩種類型的項目，<xref:System.Windows.Shell.JumpTask>和<xref:System.Windows.Shell.JumpPath>。</xref:System.Windows.Shell.JumpPath> </xref:System.Windows.Shell.JumpTask> A<xref:System.Windows.Shell.JumpTask>是程式的連結和<xref:System.Windows.Shell.JumpPath>是檔案的連結。</xref:System.Windows.Shell.JumpPath> </xref:System.Windows.Shell.JumpTask> 您可以建立，以視覺化方式分隔跳躍清單中的項目<xref:System.Windows.Shell.JumpTask>沒有<xref:System.Windows.Shell.JumpTask.Title%2A>和<xref:System.Windows.Shell.JumpItem.CustomCategory%2A>指定。</xref:System.Windows.Shell.JumpItem.CustomCategory%2A> </xref:System.Windows.Shell.JumpTask.Title%2A> </xref:System.Windows.Shell.JumpTask> 這個空白<xref:System.Windows.Shell.JumpTask>將會顯示為水平線跳躍清單中。</xref:System.Windows.Shell.JumpTask>      > [!NOTE] > 中指定之檔案的類型如果<xref:System.Windows.Shell.JumpPath>未向您的應用程式中，檔案不會出現在跳躍清單。</xref:System.Windows.Shell.JumpPath> 例如，如果您加入<xref:System.Windows.Shell.JumpPath>，它會指向.txt 檔案，必須註冊您的應用程式，以處理.txt 檔案。</xref:System.Windows.Shell.JumpPath> 如需詳細資訊，請參閱[簡介檔案關聯](http://go.microsoft.com/fwlink/?LinkId=178480)。       跳躍項目會放入 JumpList 中的類別。 根據預設，<xref:System.Windows.Shell.JumpItem>會顯示在**工作**類別目錄。</xref:System.Windows.Shell.JumpItem> 或者，您可以指定<xref:System.Windows.Shell.JumpItem.CustomCategory%2A><xref:System.Windows.Shell.JumpItem>。</xref:System.Windows.Shell.JumpItem> </xref:System.Windows.Shell.JumpItem.CustomCategory%2A>       您可以指定是否標準**最近**和**經常**類別藉由設定時，會在過 JumpList<xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>和<xref:System.Windows.Shell.JumpList.ShowFrequentCategory%2A>屬性。</xref:System.Windows.Shell.JumpList.ShowFrequentCategory%2A> </xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A> 這些類別的內容由[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層。 因為這些類別可能包含許多相同的資料，您通常顯示其中一個您 JumpList 但非兩者。 [!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]如果是透過通用檔案對話方塊中開啟或用來開啟應用程式，透過檔案類型關聯，會自動管理最近的項目。 透過跳躍清單存取項目時，您可以通知[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]介面，以便將項目加入**最近**藉由呼叫類別<xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A>方法。</xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A>      ## 將跳躍清單套用至 Windows Shell 您無法直接存取的殼層跳躍清單或其內容讀入 JumpList 類別。 相反地，JumpList 類別提供跳躍清單，您可以使用，並接著將套用至的表示法[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層。 通常您會建立過 JumpList，並將它設定為應用程式第一次執行一次。 不過，您可以修改，或在執行階段取代 JumpList。       當您已經設定過 JumpList 屬性時，您必須套用 JumpList Windows shell 之前其內容會出現在工作列跳躍清單。 這作業時自動完成 JumpList 第一次連接至應用程式，在 XAML 中或在呼叫<xref:System.Windows.Shell.JumpList.SetJumpList%2A>方法。</xref:System.Windows.Shell.JumpList.SetJumpList%2A> 如果您在執行階段修改過 JumpList 的內容，您必須呼叫<xref:System.Windows.Shell.JumpList.Apply%2A>方法，以其目前的內容套用至 Windows shell。</xref:System.Windows.Shell.JumpList.Apply%2A>      ## 在 XAML A JumpList 中設定跳躍清單不會自動附加至<xref:System.Windows.Application>物件。</xref:System.Windows.Application> 附加至 JumpList<xref:System.Windows.Application>物件在 XAML 中使用的附加的屬性的語法。</xref:System.Windows.Application> JumpList 類別會實作<xref:System.ComponentModel.ISupportInitialize>介面來支援 XAML 宣告過 JumpList。</xref:System.ComponentModel.ISupportInitialize> 如果是在 XAML 中宣告過 JumpList，並附加至目前<xref:System.Windows.Application>，自動套用到[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層 JumpList 初始化時。</xref:System.Windows.Application>      ## 設定及修改跳躍清單與您的程式碼中附加至 JumpList<xref:System.Windows.Application>藉由呼叫靜態程式碼中的物件<xref:System.Windows.Shell.JumpList.SetJumpList%2A>方法。</xref:System.Windows.Shell.JumpList.SetJumpList%2A> </xref:System.Windows.Application> 這也適用於以 JumpList[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層。       若要在執行階段修改過 JumpList，您可以呼叫<xref:System.Windows.Shell.JumpList.GetJumpList%2A>方法來取得目前附加至<xref:System.Windows.Application>。</xref:System.Windows.Application> JumpList</xref:System.Windows.Shell.JumpList.GetJumpList%2A> 您已修改過 JumpList 屬性之後，您必須呼叫<xref:System.Windows.Shell.JumpList.Apply%2A>方法，以將變更套用至 Windows shell。</xref:System.Windows.Shell.JumpList.Apply%2A>      > [!NOTE] >，通常會建立一個附加至的 JumpList<xref:System.Windows.Application>並套用至[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層。</xref:System.Windows.Application> 不過，您可以建立多個 JumpList 物件。 一次只能有一個 JumpList 可以套用至[!INCLUDE[TLA#tla_mswin](~/add/includes/tlasharptla-mswin-md.md)]殼層，而且只有一個 JumpList 一次可以與<xref:System.Windows.Application>.</xref:System.Windows.Application>產生關聯 .NET Framework 不需要這些是相同的 JumpList。      > [!NOTE] > 這個類別包含在類別層級套用至所有成員的連結要求。 A<xref:System.Security.SecurityException>立即呼叫端沒有完全信任權限時，會擲回。</xref:System.Security.SecurityException> 如需安全性需求的詳細資訊，請參閱[連結要求](~/add/includes/ajax-current-ext-md.md)和[繼承要求](http://msdn.microsoft.com/en-us/28b9adbb-8f08-4f10-b856-dbf59eb932d9)。"
   example:
   - "The following example shows an application with a Jump List. The application has three buttons that enable you to add a task to the current Jump List, clear the contents of the Jump List, and apply a new Jump List to the application.  \n  \n The following example shows how to declare a JumpList in markup. The JumpList contains two <xref:System.Windows.Shell.JumpTask> links and one <xref:System.Windows.Shell.JumpPath>. Applying the <xref:System.Windows.Shell.JumpPath> to the shell will fail if the application is not registered to handle the .txt file name extension.  \n  \n [!code-xml[Shell_JumpListSample#000](~/add/codesnippet/xaml/jumplistsample/app.xaml#000)]  \n  \n The following example shows the code-behind page for `App.xaml`. This code handles the <xref:System.Windows.Shell.JumpList.JumpItemsRejected> and <xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> events.  \n  \n [!code-cs[Shell_JumpListSample#100](~/add/codesnippet/csharp/jumplistsample/app.xaml.cs#100)]  \n  \n The following example shows the markup used to create the application user interface.  \n  \n [!code-xml[Shell_JumpListSample#300](~/add/codesnippet/xaml/jumplistsample/mainwindow.xaml#300)]  \n  \n The following example shows the code-behind page for `MainWindow.xaml`. This code demonstrates how to modify, clear, and create a JumpList in procedural code. For the new Jump List, the static <xref:System.Windows.Shell.JumpList.SetJumpList%2A> method is called to associate the JumpList with the current application and apply the JumpList to the Windows shell.  \n  \n [!code-cs[Shell_JumpListSample#200](~/add/codesnippet/csharp/jumplistsample/mainwindow.xaml.cs#200)]"
   syntax:
@@ -54,7 +54,7 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Initializes a new instance of the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>類別。"
   syntax:
     content: public JumpList ();
     parameters: []
@@ -74,20 +74,20 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Initializes a new instance of the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> class with the specified parameters."
-  remarks: "The **Recent** and **Frequent** categories often contain many of the same jump items. As a result, applications typically display either the **Recent** or the **Frequent** category in the Jump List, but not both."
+  summary: "初始化的新執行個體<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>類別，以指定的參數。"
+  remarks: "**最近**和**經常**類別通常有許多相同的跳躍項目。 如此一來，應用程式通常會顯示這兩**最近**或**經常**跳躍清單，但非兩者的類別。"
   syntax:
     content: public JumpList (System.Collections.Generic.IEnumerable<System.Windows.Shell.JumpItem> items, bool showFrequent, bool showRecent);
     parameters:
     - id: items
       type: System.Collections.Generic.IEnumerable{System.Windows.Shell.JumpItem}
-      description: "The collection of <xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref> objects that are displayed in the Jump List."
+      description: "集合<xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref>跳躍清單中顯示的物件。"
     - id: showFrequent
       type: System.Boolean
-      description: "A value that indicates whether frequently used items are displayed in the Jump List."
+      description: "值，指出是否經常使用的項目會顯示在跳躍清單。"
     - id: showRecent
       type: System.Boolean
-      description: "A value that indicates whether recently used items are displayed in the Jump List."
+      description: "值，指出是否在跳躍清單顯示最近使用的項目。"
   overload: System.Windows.Shell.JumpList.#ctor*
   exceptions: []
   platform:
@@ -104,14 +104,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Adds the specified item path to the **Recent** category of the Jump List."
-  remarks: "The contents of the **Recent** category are managed by the Windows shell. To display recently used items in the Jump List, set the <xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A> property to `true`.       You can call the AddToRecentCategory method to request that the Windows shell add an item path to the **Recent** items list. If your application is not registered to handle the file type of the item, it will not appear in the **Recent** list and calls to AddToRecentCategory will fail silently."
+  summary: "將指定的項目路徑**最近**跳躍清單的類別。"
+  remarks: "內容**最近**類別由 Windows shell。 若要顯示最近使用過的項目跳躍清單中，設定<xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>屬性`true`。</xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>       您可以呼叫來要求 Windows shell 中新增的項目路徑 AddToRecentCategory 方法**最近**項目清單。 如果您的應用程式尚未註冊來處理檔案類型的項目，它不會出現在**最近**清單和 AddToRecentCategory 的呼叫將會以無訊息模式失敗。"
   syntax:
     content: public static void AddToRecentCategory (string itemPath);
     parameters:
     - id: itemPath
       type: System.String
-      description: "The path to add to the Jump List."
+      description: "要加入的跳躍清單的路徑。"
   overload: System.Windows.Shell.JumpList.AddToRecentCategory*
   exceptions: []
   platform:
@@ -128,14 +128,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Adds the specified jump path to the **Recent** category of the Jump List."
-  remarks: "The contents of the **Recent** category are managed by the Windows shell. To display recently used items in the Jump List, set the <xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A> property to `true`.       You can call the AddToRecentCategory method to request that the Windows shell add the specified jump path to the **Recent** items list. If your application is not registered to handle the file type of the item, it will not appear in the **Recent** list and calls to AddToRecentCategory will fail silently."
+  summary: "將指定的跳躍路徑**最近**跳躍清單的類別。"
+  remarks: "內容**最近**類別由 Windows shell。 若要顯示最近使用過的項目跳躍清單中，設定<xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>屬性`true`。</xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>       您可以呼叫來要求 Windows shell 加入指定的跳躍路徑 AddToRecentCategory 方法**最近**項目清單。 如果您的應用程式尚未註冊來處理檔案類型的項目，它不會出現在**最近**清單和 AddToRecentCategory 的呼叫將會以無訊息模式失敗。"
   syntax:
     content: public static void AddToRecentCategory (System.Windows.Shell.JumpPath jumpPath);
     parameters:
     - id: jumpPath
       type: System.Windows.Shell.JumpPath
-      description: "The <xref href=&quot;System.Windows.Shell.JumpPath&quot;></xref> to add to the Jump List."
+      description: "<xref href=&quot;System.Windows.Shell.JumpPath&quot;> </xref>加入跳躍清單。"
   overload: System.Windows.Shell.JumpList.AddToRecentCategory*
   exceptions: []
   platform:
@@ -152,14 +152,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Adds the specified jump task to the **Recent** category of the Jump List."
-  remarks: "The contents of the **Recent** category are managed by the Windows shell. To display recently used items in the Jump List, set the <xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A> property to `true`.       You can call the AddToRecentCategory method to request that the Windows shell add the specified jump task to the **Recent** items list."
+  summary: "將指定的跳躍工作**最近**跳躍清單的類別。"
+  remarks: "內容**最近**類別由 Windows shell。 若要顯示最近使用過的項目跳躍清單中，設定<xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>屬性`true`。</xref:System.Windows.Shell.JumpList.ShowRecentCategory%2A>       您可以呼叫來要求 Windows shell 新增指定的跳躍任務 AddToRecentCategory 方法**最近**項目清單。"
   syntax:
     content: public static void AddToRecentCategory (System.Windows.Shell.JumpTask jumpTask);
     parameters:
     - id: jumpTask
       type: System.Windows.Shell.JumpTask
-      description: "The <xref href=&quot;System.Windows.Shell.JumpTask&quot;></xref> to add to the Jump List."
+      description: "<xref href=&quot;System.Windows.Shell.JumpTask&quot;> </xref>加入跳躍清單。"
   overload: System.Windows.Shell.JumpList.AddToRecentCategory*
   exceptions: []
   platform:
@@ -176,8 +176,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Sends the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> to the Windows shell in its current state."
-  remarks: "The Apply method sends the content of the <xref:System.Windows.Shell.JumpList> to the Windows shell in its current state. After this call is complete, the <xref:System.Windows.Shell.JumpList.JumpItems%2A> property is modified to contain only those items that the Windows shell successfully added to its taskbar Jump List. You can access the lists of removed items through event handlers for the <xref:System.Windows.Shell.JumpList.JumpItemsRejected> and <xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> events."
+  summary: "傳送<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref> Windows 殼層處於目前狀態。"
+  remarks: "Apply 方法傳送的內容<xref:System.Windows.Shell.JumpList>Windows 殼層處於目前狀態。</xref:System.Windows.Shell.JumpList> 此呼叫完成之後，<xref:System.Windows.Shell.JumpList.JumpItems%2A>屬性修改為包含 Windows shell 已成功新增至其工作列跳躍清單的項目。</xref:System.Windows.Shell.JumpList.JumpItems%2A> 您可以透過事件處理常式存取移除的項目清單<xref:System.Windows.Shell.JumpList.JumpItemsRejected>和<xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser>事件。</xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> </xref:System.Windows.Shell.JumpList.JumpItemsRejected>"
   example:
   - "The following example shows how to get the current <xref:System.Windows.Shell.JumpList> and clear the contents of the <xref:System.Windows.Shell.JumpList.JumpItems%2A> collection. The Apply method is then called to apply the <xref:System.Windows.Shell.JumpList> changes to the Windows shell. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#230](~/add/codesnippet/csharp/jumplistsample/mainwindow.xaml.cs#230)]"
   syntax:
@@ -187,7 +187,7 @@ items:
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "The <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> is not completely initialized."
+    description: "<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref>未完全初始化。"
   platform:
   - net462
 - uid: System.Windows.Shell.JumpList.BeginInit
@@ -202,8 +202,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Signals the start of the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> initialization."
-  remarks: "The <xref:System.Windows.Shell.JumpList> class implements the <xref:System.ComponentModel.ISupportInitialize> interface to support XAML declaration of a <xref:System.Windows.Shell.JumpList>. The BeginInit method is only called when the <xref:System.Windows.Shell.JumpList> is declared in XAML and attached to an <xref:System.Windows.Application> by using the attached property syntax. You do not call this method from your code."
+  summary: "表示的開始<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>初始化。"
+  remarks: "<xref:System.Windows.Shell.JumpList>類別會實作<xref:System.ComponentModel.ISupportInitialize>介面，以支援<xref:System.Windows.Shell.JumpList>.</xref:System.Windows.Shell.JumpList> XAML 宣告</xref:System.ComponentModel.ISupportInitialize></xref:System.Windows.Shell.JumpList> BeginInit 方法只會呼叫時<xref:System.Windows.Shell.JumpList>是在 XAML 中宣告，並附加至<xref:System.Windows.Application>使用附加的屬性語法。</xref:System.Windows.Application> </xref:System.Windows.Shell.JumpList> 沒有從您的程式碼呼叫此方法。"
   syntax:
     content: public void BeginInit ();
     parameters: []
@@ -211,7 +211,7 @@ items:
   exceptions:
   - type: System.InvalidOperationException
     commentId: T:System.InvalidOperationException
-    description: "This call to BeginInit is nested in a previous call to BeginInit."
+    description: "在先前呼叫 BeginInit 巢狀 BeginInit 呼叫。"
   platform:
   - net462
 - uid: System.Windows.Shell.JumpList.EndInit
@@ -226,8 +226,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Signals the end of the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> initialization."
-  remarks: "The <xref:System.Windows.Shell.JumpList> class implements the <xref:System.ComponentModel.ISupportInitialize> interface to support XAML declaration of a <xref:System.Windows.Shell.JumpList>. The EndInit method is only called when the <xref:System.Windows.Shell.JumpList> is declared in XAML and attached to an <xref:System.Windows.Application> by using the attached property syntax. You do not call this method from your code.       The EndInit method has the same effect as the <xref:System.Windows.Shell.JumpList.Apply%2A> method. EndInit sends the content of the <xref:System.Windows.Shell.JumpList> to the Windows shell in its current state. After this call is complete, the <xref:System.Windows.Shell.JumpList.JumpItems%2A> property is modified to contain only those items that the Windows shell successfully added to its Jump List. You can access the lists of removed items through event handlers for the <xref:System.Windows.Shell.JumpList.JumpItemsRejected> and <xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> events."
+  summary: "表示的結束<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>初始化。"
+  remarks: "<xref:System.Windows.Shell.JumpList>類別會實作<xref:System.ComponentModel.ISupportInitialize>介面，以支援<xref:System.Windows.Shell.JumpList>.</xref:System.Windows.Shell.JumpList> XAML 宣告</xref:System.ComponentModel.ISupportInitialize></xref:System.Windows.Shell.JumpList> EndInit 方法只會呼叫時<xref:System.Windows.Shell.JumpList>是在 XAML 中宣告，並附加至<xref:System.Windows.Application>使用附加的屬性語法。</xref:System.Windows.Application> </xref:System.Windows.Shell.JumpList> 沒有從您的程式碼呼叫此方法。       EndInit 方法具有相同的效果<xref:System.Windows.Shell.JumpList.Apply%2A>方法。</xref:System.Windows.Shell.JumpList.Apply%2A> EndInit 傳送的內容<xref:System.Windows.Shell.JumpList>Windows 殼層處於目前狀態。</xref:System.Windows.Shell.JumpList> 此呼叫完成之後，<xref:System.Windows.Shell.JumpList.JumpItems%2A>屬性修改為包含 Windows shell 成功新增至其跳躍清單的項目。</xref:System.Windows.Shell.JumpList.JumpItems%2A> 您可以透過事件處理常式存取移除的項目清單<xref:System.Windows.Shell.JumpList.JumpItemsRejected>和<xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser>事件。</xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> </xref:System.Windows.Shell.JumpList.JumpItemsRejected>"
   syntax:
     content: public void EndInit ();
     parameters: []
@@ -235,7 +235,7 @@ items:
   exceptions:
   - type: System.NotSupportedException
     commentId: T:System.NotSupportedException
-    description: "This call to EndInit is not paired with a call to <xref:System.Windows.Shell.JumpList.BeginInit*>."
+    description: "此呼叫 EndInit 不搭配<xref:System.Windows.Shell.JumpList.BeginInit*>.</xref:System.Windows.Shell.JumpList.BeginInit*>呼叫"
   platform:
   - net462
 - uid: System.Windows.Shell.JumpList.GetJumpList(System.Windows.Application)
@@ -250,8 +250,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Returns the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> object associated with an application."
-  remarks: "You can call the GetJumpList method to get the <xref:System.Windows.Shell.JumpList> currently associated with an <xref:System.Windows.Application>. The .NET Framework does not require that this be the <xref:System.Windows.Shell.JumpList> that is currently applied to the Windows shell."
+  summary: "傳回<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>應用程式相關聯的物件。"
+  remarks: "您可以呼叫以取得<xref:System.Windows.Shell.JumpList>目前<xref:System.Windows.Application>.</xref:System.Windows.Application>與相關聯</xref:System.Windows.Shell.JumpList>的 GetJumpList 方法 .NET Framework 不需要，這是<xref:System.Windows.Shell.JumpList>目前套用至 Windows shell。</xref:System.Windows.Shell.JumpList>"
   example:
   - "The following example shows how to get the <xref:System.Windows.Shell.JumpList> associated with the current application. A <xref:System.Windows.Shell.JumpTask> is added to the <xref:System.Windows.Shell.JumpList.JumpItems%2A> collection and added to the **Recent** category. The <xref:System.Windows.Shell.JumpList.Apply%2A> method is called to apply the updated <xref:System.Windows.Shell.JumpList> to the Windows shell. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#240](~/add/codesnippet/csharp/jumplistsample/mainwindow.xaml.cs#240)]"
   syntax:
@@ -259,10 +259,10 @@ items:
     parameters:
     - id: application
       type: System.Windows.Application
-      description: "The application associated with the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>."
+      description: "應用程式相關聯<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref>。"
     return:
       type: System.Windows.Shell.JumpList
-      description: "The <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> object associated with the specified application."
+      description: "<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref>與指定的應用程式相關聯的物件。"
   overload: System.Windows.Shell.JumpList.GetJumpList*
   exceptions: []
   platform:
@@ -279,15 +279,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Gets the collection of <xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref> objects that are displayed in the Jump List."
-  remarks: "Jump Lists can contain two types of items, a <xref:System.Windows.Shell.JumpTask> and a <xref:System.Windows.Shell.JumpPath>. A <xref:System.Windows.Shell.JumpTask> is a link to a program and a <xref:System.Windows.Shell.JumpPath> is a link to a file.       When a <xref:System.Windows.Shell.JumpList> is created, the JumpItems collection is empty. You can add any <xref:System.Windows.Shell.JumpTask> or <xref:System.Windows.Shell.JumpPath> objects to the collection. The collection will only contain items that have been added by your program. After the <xref:System.Windows.Shell.JumpList> has been passed to the Windows shell by a successful call to either the <xref:System.Windows.Shell.JumpList.EndInit%2A> or <xref:System.Windows.Shell.JumpList.Apply%2A> methods, the JumpItems collection will contain only the items that were successfully added to the taskbar Jump List. Items that were not successfully added are removed from the JumpItems collection. You can access the lists of removed items through event handlers for the <xref:System.Windows.Shell.JumpList.JumpItemsRejected> and <xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> events."
+  summary: "取得集合<xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref>跳躍清單中顯示的物件。"
+  remarks: "跳躍清單可以包含兩種類型的項目，<xref:System.Windows.Shell.JumpTask>和<xref:System.Windows.Shell.JumpPath>。</xref:System.Windows.Shell.JumpPath> </xref:System.Windows.Shell.JumpTask> A<xref:System.Windows.Shell.JumpTask>是程式的連結和<xref:System.Windows.Shell.JumpPath>是檔案的連結。</xref:System.Windows.Shell.JumpPath> </xref:System.Windows.Shell.JumpTask>       當<xref:System.Windows.Shell.JumpList>會建立 JumpItems 集合是空的。</xref:System.Windows.Shell.JumpList> 您可以新增任何<xref:System.Windows.Shell.JumpTask>或<xref:System.Windows.Shell.JumpPath>物件加入集合。</xref:System.Windows.Shell.JumpPath> </xref:System.Windows.Shell.JumpTask> 集合只會包含已加入您的程式項目。 之後<xref:System.Windows.Shell.JumpList>具有已成功呼叫傳遞至 Windows shell<xref:System.Windows.Shell.JumpList.EndInit%2A>或<xref:System.Windows.Shell.JumpList.Apply%2A>方法的 JumpItems 集合會包含已成功新增至工作列跳躍清單的項目。</xref:System.Windows.Shell.JumpList.Apply%2A> </xref:System.Windows.Shell.JumpList.EndInit%2A> </xref:System.Windows.Shell.JumpList> 未成功加入的項目會從 JumpItems 集合中移除。 您可以透過事件處理常式存取移除的項目清單<xref:System.Windows.Shell.JumpList.JumpItemsRejected>和<xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser>事件。</xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> </xref:System.Windows.Shell.JumpList.JumpItemsRejected>"
   example:
   - "The following example shows how to get the current <xref:System.Windows.Shell.JumpList> and clear the contents of the JumpItems collection. The <xref:System.Windows.Shell.JumpList.Apply%2A> method is then called to apply the <xref:System.Windows.Shell.JumpList> changes to the Windows shell. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#230](~/add/codesnippet/csharp/jumplistsample/mainwindow.xaml.cs#230)]"
   syntax:
     content: public System.Collections.Generic.List<System.Windows.Shell.JumpItem> JumpItems { get; }
     return:
       type: System.Collections.Generic.List{System.Windows.Shell.JumpItem}
-      description: "The collection of <xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref> objects displayed in the Jump List. The default is an empty collection."
+      description: "集合<xref href=&quot;System.Windows.Shell.JumpItem&quot;></xref>跳躍清單中顯示的物件。 預設為空集合。"
   overload: System.Windows.Shell.JumpList.JumpItems*
   exceptions: []
   platform:
@@ -304,15 +304,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Occurs when jump items are not successfully added to the Jump List by the Windows shell."
-  remarks: "After the contents of the <xref:System.Windows.Shell.JumpList> are applied to the Windows shell, the <xref:System.Windows.Shell.JumpList.JumpItems%2A> property is modified to contain only those items that the Windows shell successfully added to its Jump List. You can access the lists of removed items through event handlers for the JumpItemsRejected and <xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser> events."
+  summary: "發生於跳躍項目不會成功地新增到跳躍清單 Windows shell。"
+  remarks: "內容之後<xref:System.Windows.Shell.JumpList>會套用至 Windows shell，<xref:System.Windows.Shell.JumpList.JumpItems%2A>屬性修改為包含 Windows shell 成功新增至其跳躍清單的項目。</xref:System.Windows.Shell.JumpList.JumpItems%2A> </xref:System.Windows.Shell.JumpList> 您可以透過事件處理常式存取移除的項目清單中，針對 JumpItemsRejected 和<xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser>事件。</xref:System.Windows.Shell.JumpList.JumpItemsRemovedByUser>"
   example:
   - "The following example shows how to handle the JumpItemsRejected event to display the rejected items in a message box. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#110](~/add/codesnippet/csharp/jumplistsample/app.xaml.cs#110)]"
   syntax:
     content: public event EventHandler<System.Windows.Shell.JumpItemsRejectedEventArgs> JumpItemsRejected;
     return:
       type: System.EventHandler{System.Windows.Shell.JumpItemsRejectedEventArgs}
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -328,15 +328,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Occurs when jump items previously in the Jump List are removed from the list by the user."
-  remarks: "After the contents of the <xref:System.Windows.Shell.JumpList> are applied to the Windows shell, the <xref:System.Windows.Shell.JumpList.JumpItems%2A> property is modified to contain only those items that the Windows shell successfully added to its Jump List. You can access the lists of removed items through event handlers for the <xref:System.Windows.Shell.JumpList.JumpItemsRejected> and JumpItemsRemovedByUser events."
+  summary: "發生於使用者從清單移除先前跳躍跳躍清單項目。"
+  remarks: "內容之後<xref:System.Windows.Shell.JumpList>會套用至 Windows shell，<xref:System.Windows.Shell.JumpList.JumpItems%2A>屬性修改為包含 Windows shell 成功新增至其跳躍清單的項目。</xref:System.Windows.Shell.JumpList.JumpItems%2A> </xref:System.Windows.Shell.JumpList> 您可以透過事件處理常式存取移除的項目清單<xref:System.Windows.Shell.JumpList.JumpItemsRejected>和 JumpItemsRemovedByUser 事件。</xref:System.Windows.Shell.JumpList.JumpItemsRejected>"
   example:
   - "The following example shows how to handle the JumpItemsRemovedByUser event to display the rejected items in a message box. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#120](~/add/codesnippet/csharp/jumplistsample/app.xaml.cs#120)]"
   syntax:
     content: public event EventHandler<System.Windows.Shell.JumpItemsRemovedEventArgs> JumpItemsRemovedByUser;
     return:
       type: System.EventHandler{System.Windows.Shell.JumpItemsRemovedEventArgs}
-      description: "To be added."
+      description: "即將加入。"
   exceptions: []
   platform:
   - net462
@@ -352,8 +352,8 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Sets the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> object associated with an application."
-  remarks: "You can create multiple <xref:System.Windows.Shell.JumpList> objects. However, only one <xref:System.Windows.Shell.JumpList> at a time can be associated with an <xref:System.Windows.Application>. Call the SetJumpList method to set the <xref:System.Windows.Shell.JumpList> currently associated with an <xref:System.Windows.Application>."
+  summary: "設定<xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>應用程式相關聯的物件。"
+  remarks: "您可以建立多個<xref:System.Windows.Shell.JumpList>物件。</xref:System.Windows.Shell.JumpList> 不過，只有一個<xref:System.Windows.Shell.JumpList>可以關聯<xref:System.Windows.Application>.</xref:System.Windows.Application>一次</xref:System.Windows.Shell.JumpList> 呼叫 SetJumpList 方法來設定<xref:System.Windows.Shell.JumpList>目前<xref:System.Windows.Application>.</xref:System.Windows.Application>與相關聯</xref:System.Windows.Shell.JumpList>的"
   example:
   - "The following example shows how to create a <xref:System.Windows.Shell.JumpList> in code. The static SetJumpList method is called to associate the <xref:System.Windows.Shell.JumpList> with the current application. The <xref:System.Windows.Shell.JumpList> is automatically applied to the Windows shell when it is set. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-cs[Shell_JumpListSample#210](~/add/codesnippet/csharp/jumplistsample/mainwindow.xaml.cs#210)]"
   syntax:
@@ -361,10 +361,10 @@ items:
     parameters:
     - id: application
       type: System.Windows.Application
-      description: "The application associated with the <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref>."
+      description: "應用程式相關聯<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref>。"
     - id: value
       type: System.Windows.Shell.JumpList
-      description: "The <xref href=&quot;System.Windows.Shell.JumpList&quot;></xref> to associate with the application."
+      description: "<xref href=&quot;System.Windows.Shell.JumpList&quot;> </xref>要與應用程式產生關聯。"
   overload: System.Windows.Shell.JumpList.SetJumpList*
   exceptions: []
   platform:
@@ -381,15 +381,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Gets or sets a value that indicates whether frequently used items are displayed in the Jump List."
-  remarks: "The contents of the **Frequent** category are managed by the Windows shell. To display frequently used items in the Jump List, set the ShowFrequentCategory property to `true`.       The **Recent** and **Frequent** categories often contain many of the same jump items. As a result, applications typically display either the **Recent** or the **Frequent** category in the Jump List, but not both."
+  summary: "取得或設定值，指出是否經常使用的項目會顯示在跳躍清單。"
+  remarks: "內容**經常**類別由 Windows shell。 若要在跳躍清單顯示常用的項目，將 ShowFrequentCategory 屬性設定為`true`。       **最近**和**經常**類別通常有許多相同的跳躍項目。 如此一來，應用程式通常會顯示這兩**最近**或**經常**跳躍清單，但非兩者的類別。"
   example:
   - "The following example shows a <xref:System.Windows.Shell.JumpList> configured to show the **Frequent** category. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-xml[Shell_JumpListSample#001](~/add/codesnippet/xaml/jumplistsample/app.xaml#001)]"
   syntax:
     content: public bool ShowFrequentCategory { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if frequently used items are displayed in the Jump List; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果經常使用的項目會顯示在跳躍清單中。否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Windows.Shell.JumpList.ShowFrequentCategory*
   exceptions: []
   platform:
@@ -406,15 +406,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Shell
-  summary: "Gets or sets a value that indicates whether recently used items are displayed in the Jump List."
-  remarks: "The contents of the **Recent** category are managed by the Windows shell. To display frequently used items in the Jump List, set the ShowRecentCategory property to `true`.       The **Recent** and **Frequent** categories often contain many of the same jump items. As a result, applications typically display either the **Recent** or the **Frequent** category in the Jump List, but not both.       You can call the <xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A> method to request that the Windows shell add items to the **Recent** items list. If your application is not registered to handle the file name type of the item, it will not appear in the **Recent** list and calls to <xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A> will fail silently."
+  summary: "取得或設定值，指出是否在跳躍清單顯示最近使用的項目。"
+  remarks: "內容**最近**類別由 Windows shell。 若要在跳躍清單顯示常用的項目，將 ShowRecentCategory 屬性設定為`true`。       **最近**和**經常**類別通常有許多相同的跳躍項目。 如此一來，應用程式通常會顯示這兩**最近**或**經常**跳躍清單，但非兩者的類別。       您可以呼叫<xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A>方法來要求 Windows shell 將項目加入**最近**項目清單。</xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A> 如果您的應用程式尚未註冊來處理檔案名稱的項目類型，它不會出現在**最近**清單和呼叫<xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A>將會以無訊息模式失敗。</xref:System.Windows.Shell.JumpList.AddToRecentCategory%2A>"
   example:
   - "The following example shows a <xref:System.Windows.Shell.JumpList> configured to show the **Recent** category. This example is part of a larger example available in the <xref:System.Windows.Shell.JumpList> class overview.  \n  \n [!code-xml[Shell_JumpListSample#001](~/add/codesnippet/xaml/jumplistsample/app.xaml#001)]"
   syntax:
     content: public bool ShowRecentCategory { get; set; }
     return:
       type: System.Boolean
-      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref> if recently used items are displayed in the Jump List; otherwise, <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>. The default is <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;></xref>."
+      description: "<xref uid=&quot;langword_csharp_true&quot; name=&quot;true&quot; href=&quot;&quot;></xref>如果最近使用過的項目會顯示在跳躍清單;否則， <xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。 預設值是<xref uid=&quot;langword_csharp_false&quot; name=&quot;false&quot; href=&quot;&quot;> </xref>。"
   overload: System.Windows.Shell.JumpList.ShowRecentCategory*
   exceptions: []
   platform:
