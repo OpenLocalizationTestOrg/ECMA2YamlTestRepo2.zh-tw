@@ -18,8 +18,8 @@ items:
   nameWithType: StoryFragment
   fullName: System.Windows.Documents.DocumentStructures.StoryFragment
   type: Class
-  summary: "Represents all or part of a story within an [!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)] document."
-  remarks: "An XPS story in an [!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)] document is roughly analogous to a story in a newspaper or magazine. It is a passage of text and graphic content, usually on a single topic, within a single [!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)] document. Typically, it spans multiple pages, but it can be shorter than a page like a sidebar — boxed story — in a magazine. A story can also be discontinuous like a front page newspaper story that is continued on page 4. Consequently, a given page can have more than one story and parts of more than one story. A header or footer is also a special kind of story that is entirely contained on a single page.       A StoryFragment represents all or a portion of a story. It can never span more than one page, but it can occupy the whole of a page or share a page with other fragments. If a story is on more than one page, each part of it on each page is a separate fragment. Although stories can have discontinuous sets of fragments, no fragment can itself be discontinuous.       Only a <xref:System.Windows.Documents.DocumentStructures.StoryFragments> element can be a parent of a StoryFragment.  The location of the <xref:System.Windows.Documents.DocumentStructures.StoryBreak> elements within a StoryFragment indicates if the story is contained in multiple fragments, and if the additional fragments either precede or follow the current fragment.       When a StoryFragment ends in the middle of some structural element; say a `<TableRowGroupStructure>`, then [!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)] document-producing applications must insert an appropriate end tag for the element (in this case `</TableRowGroupStructure>`) before the `</StoryFragment>` tag, even though the structure is being continued in a later fragment. (This is necessary to ensure that the element tree within the StoryFragment is valid XML.) The fragment that continues the story must begin with an opening tag for the interrupted structure. The entire tree of interrupted structures must be treated the same way (with one exception, discussed below): End tags must be added for every unmatched start tag above the point of interruption.       The exception applies when the story interruption comes immediately after a `</TableCellStructure>` tag, then the producing application must insert an empty table cell structure (`<TableCellStructure></TableCellStructure>`) at the corresponding point in the fragment that continues the story. This is necessary so that consuming applications that need to merge all fragments of a given story can use a simple algorithm to do this.       Assume, for example, that an application wanted to add the following material to an [!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)] document:      ```   <SectionStructure>      <TableStructure>         <TableRowGroupStructure>            <TableRowStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;SomeContent&quot; />                  </ParagraphStructure>               </TableCellStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;MoreContent&quot; />                  </ParagraphStructure>               </TableCellStructure>            </TableRowStructure>            <TableRowStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;EvenMoreContent&quot; />                  </ParagraphStructure>               </TableCellStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;LastContent&quot; />                  </ParagraphStructure>               </TableCellStructure>            </TableRowStructure>         </TableRowGroupStructure>      </TableStructure>   </SectionStructure>   ```       If a page break forces an end to the fragment just after the `</TableCellStructure>` for &quot;SomeContent&quot;, the application must create the split as shown in the following example:      ```   <StoryFragment StoryName=&quot;MyStory&quot; FragmentType=&quot;Content&quot;>    <SectionStructure>       <TableStructure>          <TableRowGroupStructure>             <TableRowStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;SomeContent&quot; />                   </ParagraphStructure>                 </TableCellStructure>   <!-- lines from here to end of fragment added by producer-->             </TableRowStructure>          </TableRowGroupStructure>       </TableStructure>    </SectionStructure>   </StoryFragment>      <StoryFragment StoryName=&quot;MyStory&quot; FragmentType=&quot;Content&quot;>    <SectionStructure>       <TableStructure>          <TableRowGroupStructure>             <TableRowStructure>                <TableCellStructure>                  <!-- extra cell added by producer-->                </TableCellStructure>   <!-- lines from here to start of fragment added by producer-->                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;MoreContent&quot; />                   </ParagraphStructure>                </TableCellStructure>             </TableRowStructure>             <TableRowStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;EvenMoreContent&quot; />                   </ParagraphStructure>                </TableCellStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;LastContent&quot; />                   </ParagraphStructure>                </TableCellStructure>             </TableRowStructure>          </TableRowGroupStructure>       </TableStructure>    </SectionStructure>   </StoryFragment>   ```       An application that reads the document might need to merge this content. Consider, for example, an XPS viewer with a **Copy Whole Story to Clipboard** button; or an **XPS for the Blind** application that passed stories to a voice synthesizer.  Some applications that read the document may need to merge a subset of the fragments of a story. For example, a feature that copies a whole paragraph to the clipboard by triple-clicking it would need to do a merge whenever the paragraph spanned a page break, because such a paragraph would be split between two StoryFragments.       **To merge use this algorithm:**      1.  Delete the `</StoryFragment>` from the end of the first fragment to be merged and delete the `<StoryFragment>` from the beginning of the second.      2.  If the last closing tag of the first fragment is of the same type as the first opening tag of the second fragment (and they are not `<NamedElement>` tags), delete them both.      3.  Repeat step 2 until the two fragments are in *either* of these states:          -   There is no longer a type match between the last end tag of the leading fragment the first start tag of the trailing fragment.          -   The last end tag of the leading fragment the first start tag of the trailing fragment are both `<NamedElement>` tags.       In the example above, if the empty cell had not been added by the producing application, then a merger of the fragments would produce a table whose first row had only one cell containing both the &quot;SomeContent&quot; and &quot;MoreContent&quot; references instead of the original first row with two cells, each containing a single reference       When the entire story is being merged, the algorithm should be repeated for each subsequent fragment that is part of the same story. The fragments that belong to a story are indexed in the `<Story>` element. See section 9.1.15 of the [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] specification which you can obtain at [XPS: Specification and License Downloads](http://www.microsoft.com/whdc/xps/downloads.mspx). The last fragment for a given story will have a <xref:System.Windows.Documents.DocumentStructures.StoryBreak> element as its last child."
+  summary: "代表所有或部分內劇本[!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)]文件。"
+  remarks: "在 XPS 劇本[!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)]文件是約略相當於在雜誌或報紙劇本。 它是一段文字和圖形的內容，通常是在單一主題中，在單一上[!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)]文件。 一般而言，跨越多個頁面，但它可以是少於一頁，如同 [資訊看板] — boxed 的劇本 — 雜誌中的。 本文也可以是像是第 4 頁繼續的封面報紙劇本不連續。 因此，指定的頁面中可以有一個以上的劇本和組件的多個劇本。 也是劇本的一種特殊，完全包含在單一頁面上的頁首或頁尾。       StoryFragment 代表所有或部分的本文。 它可以絕不會跨越多個頁面上，但可以佔用整個頁面或分享其他片段中的頁面。 本文是否位於多個頁面上，它在每個頁面上的每個部分是個別的片段。 雖然劇本可以有不連續的片段的集合，但是沒有片段本身可以是不連續。       只有<xref:System.Windows.Documents.DocumentStructures.StoryFragments>項目可以 StoryFragment 的父系。</xref:System.Windows.Documents.DocumentStructures.StoryFragments>  位置<xref:System.Windows.Documents.DocumentStructures.StoryBreak>StoryFragment 內的項目會指出本文包含在多個片段，以及如果其他片段之前，或依照目前的片段。</xref:System.Windows.Documents.DocumentStructures.StoryBreak>       當 StoryFragment 結束中間部分的結構化項目;說出`<TableRowGroupStructure>`，然後[!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)]文件產生的應用程式必須插入適當的結束標記的項目 (在此情況下`</TableRowGroupStructure>`) 之前`</StoryFragment>`標記，即使在更新版本的片段中繼續結構的。 （這是為了確保 StoryFragment 內的項目樹狀是有效的 XML。）繼續劇本片段的開頭必須中斷結構開頭的標記。 中斷結構的整個樹狀結構必須是相同的方式處理 （有一個例外狀況，如下所示）︰ 結束標記必須先新增中斷點上述每個不相符的開始標記。       例外狀況適用於當劇本中斷之後，隨即出現`</TableCellStructure>`標記，則產生的應用程式必須插入空的資料表資料格結構 (`<TableCellStructure></TableCellStructure>`) 在對應的時間點繼續該劇本的片段中。 這是本文的必要的以便使用需要合併指定的所有片段的應用程式可以使用簡單的演算法，若要這樣做。       例如，假設，應用程式想要新增下列內容，以[!INCLUDE[TLA2#tla_xps](~/add/includes/ajax-current-ext-md.md)]文件︰```   <SectionStructure>      <TableStructure>         <TableRowGroupStructure>            <TableRowStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;SomeContent&quot; />                  </ParagraphStructure>               </TableCellStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;MoreContent&quot; />                  </ParagraphStructure>               </TableCellStructure>            </TableRowStructure>            <TableRowStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;EvenMoreContent&quot; />                  </ParagraphStructure>               </TableCellStructure>               <TableCellStructure>                  <ParagraphStructure>                     <NamedElement NameReference=&quot;LastContent&quot; />                  </ParagraphStructure>               </TableCellStructure>            </TableRowStructure>         </TableRowGroupStructure>      </TableStructure>   </SectionStructure>   ```如果分頁符號會強制在片段結束之後`</TableCellStructure>`&quot;SomeContent&quot;，如應用程式必須建立分割如下列範例所示︰```   <StoryFragment StoryName=&quot;MyStory&quot; FragmentType=&quot;Content&quot;>    <SectionStructure>       <TableStructure>          <TableRowGroupStructure>             <TableRowStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;SomeContent&quot; />                   </ParagraphStructure>                 </TableCellStructure>   <!-- lines from here to end of fragment added by producer-->             </TableRowStructure>          </TableRowGroupStructure>       </TableStructure>    </SectionStructure>   </StoryFragment>      <StoryFragment StoryName=&quot;MyStory&quot; FragmentType=&quot;Content&quot;>    <SectionStructure>       <TableStructure>          <TableRowGroupStructure>             <TableRowStructure>                <TableCellStructure>                  <!-- extra cell added by producer-->                </TableCellStructure>   <!-- lines from here to start of fragment added by producer-->                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;MoreContent&quot; />                   </ParagraphStructure>                </TableCellStructure>             </TableRowStructure>             <TableRowStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;EvenMoreContent&quot; />                   </ParagraphStructure>                </TableCellStructure>                <TableCellStructure>                   <ParagraphStructure>                      <NamedElement NameReference=&quot;LastContent&quot; />                   </ParagraphStructure>                </TableCellStructure>             </TableRowStructure>          </TableRowGroupStructure>       </TableStructure>    </SectionStructure>   </StoryFragment>   ```讀取文件的應用程式可能需要合併此內容。 例如，考慮使用 XPS 檢視器**複製到剪貼簿的整個本文**按鈕; 或**Blind 的 XPS**劇本給語音合成器的應用程式。  讀取文件的某些應用程式可能需要合併的劇本片段的子集。 例如，將整個段落複製到剪貼簿中，按一下 triple 會想要進行合併，每當段落跨越分頁，因為這類段落會分割成兩個 StoryFragments 功能。       **若要合併使用此演算法︰** 1。  刪除`</StoryFragment>`從合併和刪除的第一個片段的結尾`<StoryFragment>`從第二個開頭。      2.  如果最後的結尾標記的第一個片段的第一次的開頭標記為相同類型的第二個片段 (且不是`<NamedElement>`標記)，這兩者同時刪除。      3.  重複步驟 2 中，在兩個片段之前*任一*種狀態:-再也沒有型別相符項目之間的最後一個的結束標記開頭片段結尾的片段的第一個開始標記。          -最後一個目的結束標記開頭有片段結尾的片段的第一個開始標記都`<NamedElement>`標記。       在上述範例中，如果產生的應用程式中，未加入的空白儲存格然後合併片段會產生其第一個資料列必須只有一個資料格包含而不是原始的第一個資料列與兩個資料格，&quot;SomeContent&quot;和&quot;MoreContent&quot;參考每一個都會包含單一的參考，當整個本文正在合併的資料表此演算法應該屬於相同的劇本的每個後續片段重複。 屬於劇本片段會編製索引`<Story>`項目。 請參閱章節 9.1.15[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]規格其中您可以在取得[XPS︰ 規格和授權下載](http://www.microsoft.com/whdc/xps/downloads.mspx)。 必須為給定的劇本的最後一個片段<xref:System.Windows.Documents.DocumentStructures.StoryBreak>項目做為其最後一個子系。</xref:System.Windows.Documents.DocumentStructures.StoryBreak>"
   example:
   - "The following example shows the `<StoryFragment>` part of an [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] document.  \n  \n [!code-xml[DocumentStructure#DocStructStoryFragContent1](~/add/codesnippet/xaml/DocumentStructure/Content/FixedPage1_structure.xaml#docstructstoryfragcontent1)]"
   syntax:
@@ -47,7 +47,7 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Initializes a new instance of the <xref href=&quot;System.Windows.Documents.DocumentStructures.StoryFragment&quot;></xref> class."
+  summary: "初始化的新執行個體<xref href=&quot;System.Windows.Documents.DocumentStructures.StoryFragment&quot;></xref>類別。"
   syntax:
     content: public StoryFragment ();
     parameters: []
@@ -67,18 +67,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Add a block to the story fragment."
+  summary: "加入劇本片段的區塊。"
   syntax:
     content: public void Add (System.Windows.Documents.DocumentStructures.BlockElement element);
     parameters:
     - id: element
       type: System.Windows.Documents.DocumentStructures.BlockElement
-      description: "The block to add."
+      description: "要加入的區塊。"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.Add*
   exceptions:
   - type: System.ArgumentNullException
     commentId: T:System.ArgumentNullException
-    description: "The block passed is <xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;></xref>."
+    description: "傳遞此區塊已<xref uid=&quot;langword_csharp_null&quot; name=&quot;null&quot; href=&quot;&quot;> </xref>。"
   platform:
   - net462
 - uid: System.Windows.Documents.DocumentStructures.StoryFragment.FragmentName
@@ -93,13 +93,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Gets or sets the name of the story fragment."
-  remarks: 'For more information about the `FragmentName` attribute of the `</StoryFragment>` part of an [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] document, see chapter 9 of the [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] specification which you can obtain at [XPS: Specification and License Downloads](http://www.microsoft.com/whdc/xps/downloads.mspx).'
+  summary: "取得或設定劇本片段的名稱。"
+  remarks: '如需詳細資訊`FragmentName`屬性`</StoryFragment>`屬於[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]文件，請參閱第 9 的[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]規格其中您可以在取得[XPS︰ 規格和授權下載](http://www.microsoft.com/whdc/xps/downloads.mspx)。'
   syntax:
     content: public string FragmentName { get; set; }
     return:
       type: System.String
-      description: "A <xref:System.String> representing the name of this fragment."
+      description: "A<xref:System.String>代表這個片段的名稱。</xref:System.String>"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.FragmentName*
   exceptions: []
   platform:
@@ -116,15 +116,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Gets or sets the type of fragment."
-  remarks: "Possible values include &quot;Header,&quot; &quot;Footer,&quot; and &quot;Content.&quot;       For more information about the `FragmentType` attribute of the `</StoryFragment>` part of an [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] document, see chapter 9 of the [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] specification which you can obtain at [XPS: Specification and License Downloads](http://www.microsoft.com/whdc/xps/downloads.mspx)."
+  summary: "取得或設定片段的型別。"
+  remarks: "可能的值包括&quot;Header，&quot;&quot;頁尾 」 和 「 內容 」。       如需詳細資訊`FragmentType`屬性`</StoryFragment>`屬於[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]文件，請參閱第 9 的[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]規格其中您可以在取得[XPS︰ 規格和授權下載](http://www.microsoft.com/whdc/xps/downloads.mspx)。"
   example:
   - "The following example shows the `FragmentType` attribute of the `<StoryFragment>` part of an [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] document.  \n  \n [!code-xml[DocumentStructure#DocStructStoryFragContent1](~/add/codesnippet/xaml/DocumentStructure/Content/FixedPage1_structure.xaml#docstructstoryfragcontent1)]"
   syntax:
     content: public string FragmentType { get; set; }
     return:
       type: System.String
-      description: "A <xref:System.String> representing the type of fragment."
+      description: "A<xref:System.String>代表片段的型別。</xref:System.String>"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.FragmentType*
   exceptions: []
   platform:
@@ -141,15 +141,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Gets or sets the name of the story."
-  remarks: "All fragments of a given story must have the same value for this property. It must match the `StoryName` attribute of the `<Story>` element. See section 9.1.15 of the [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] specification which you can obtain at [XPS: Specification and License Downloads](http://www.microsoft.com/whdc/xps/downloads.mspx).       This property can be unspecified if <xref:System.Windows.Documents.DocumentStructures.StoryFragment.FragmentType%2A> is Header or Footer."
+  summary: "取得或設定此劇本的名稱。"
+  remarks: "指定本文的所有片段必須都有相同的值，這個屬性。 它必須符合`StoryName`屬性`<Story>`項目。 請參閱章節 9.1.15[!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)]規格其中您可以在取得[XPS︰ 規格和授權下載](http://www.microsoft.com/whdc/xps/downloads.mspx)。       如果這個屬性可以是未指定<xref:System.Windows.Documents.DocumentStructures.StoryFragment.FragmentType%2A>是頁首或頁尾。</xref:System.Windows.Documents.DocumentStructures.StoryFragment.FragmentType%2A>"
   example:
   - "The following example shows the `StoryName` attribute of the `<StoryFragment>` part of an [!INCLUDE[TLA#tla_xps](~/add/includes/tlasharptla-xps-md.md)] document.  \n  \n [!code-xml[DocumentStructure#DocStructStoryFragContent1](~/add/codesnippet/xaml/DocumentStructure/Content/FixedPage1_structure.xaml#docstructstoryfragcontent1)]"
   syntax:
     content: public string StoryName { get; set; }
     return:
       type: System.String
-      description: "A <xref:System.String> representing the name of the story."
+      description: "A<xref:System.String>代表劇本的名稱。</xref:System.String>"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.StoryName*
   exceptions: []
   platform:
@@ -172,7 +172,7 @@ items:
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerator{System.Windows.Documents.DocumentStructures.BlockElement}
-      description: "To be added."
+      description: "即將加入。"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.System#Collections#Generic#IEnumerable<System#Windows#Documents#DocumentStructures#BlockElement>#GetEnumerator*
   exceptions: []
   platform:
@@ -190,13 +190,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "This method has not been implemented."
+  summary: "尚未實作這個方法。"
   syntax:
     content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: "Always raises <xref:System.NotSupportedException>."
+      description: "一律引發<xref:System.NotSupportedException>.</xref:System.NotSupportedException>"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.System#Collections#IEnumerable#GetEnumerator*
   exceptions: []
   platform:
@@ -214,19 +214,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "This member supports the [!INCLUDE[TLA#tla_winfx](~/add/includes/ajax-current-ext-md.md)] infrastructure and is not intended to be used directly from your code."
-  remarks: "Adds a child object to the <xref:System.Windows.Documents.DocumentStructures.StoryFragment>.       There must be at least one child of the <xref:System.Windows.Documents.DocumentStructures.StoryFragment> and the children can only be of these types: <xref:System.Windows.Documents.DocumentStructures.ParagraphStructure>, <xref:System.Windows.Documents.DocumentStructures.FigureStructure>, <xref:System.Windows.Documents.DocumentStructures.ListStructure>, <xref:System.Windows.Documents.DocumentStructures.TableStructure>, <xref:System.Windows.Documents.DocumentStructures.SectionStructure>, and <xref:System.Windows.Documents.DocumentStructures.StoryBreak>.       A <xref:System.Windows.Documents.DocumentStructures.StoryBreak> can only be the first or last child of a <xref:System.Windows.Documents.DocumentStructures.StoryFragment>."
+  summary: "此成員支援[!INCLUDE[TLA#tla_winfx](~/add/includes/ajax-current-ext-md.md)]基礎結構，不適合直接從您的程式碼使用。"
+  remarks: "將子物件加入至<xref:System.Windows.Documents.DocumentStructures.StoryFragment>。</xref:System.Windows.Documents.DocumentStructures.StoryFragment>       必須至少一個子系<xref:System.Windows.Documents.DocumentStructures.StoryFragment>這些型別只能是子系︰ <xref:System.Windows.Documents.DocumentStructures.ParagraphStructure>， <xref:System.Windows.Documents.DocumentStructures.FigureStructure>， <xref:System.Windows.Documents.DocumentStructures.ListStructure>， <xref:System.Windows.Documents.DocumentStructures.TableStructure>， <xref:System.Windows.Documents.DocumentStructures.SectionStructure>，和<xref:System.Windows.Documents.DocumentStructures.StoryBreak>。</xref:System.Windows.Documents.DocumentStructures.StoryBreak> </xref:System.Windows.Documents.DocumentStructures.SectionStructure> </xref:System.Windows.Documents.DocumentStructures.TableStructure> </xref:System.Windows.Documents.DocumentStructures.ListStructure> </xref:System.Windows.Documents.DocumentStructures.FigureStructure> </xref:System.Windows.Documents.DocumentStructures.ParagraphStructure> </xref:System.Windows.Documents.DocumentStructures.StoryFragment>       <xref:System.Windows.Documents.DocumentStructures.StoryBreak>僅能<xref:System.Windows.Documents.DocumentStructures.StoryFragment>.</xref:System.Windows.Documents.DocumentStructures.StoryFragment>的第一個或最後一個子系</xref:System.Windows.Documents.DocumentStructures.StoryBreak>"
   syntax:
     content: void IAddChild.AddChild (object value);
     parameters:
     - id: value
       type: System.Object
-      description: "The child <xref:System.Object> that is added."
+      description: "子系<xref:System.Object>加入。</xref:System.Object>"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.System#Windows#Markup#IAddChild#AddChild*
   exceptions:
   - type: System.ArgumentException
     commentId: T:System.ArgumentException
-    description: "<code>value</code> is not one of the types that can be a child of this class. See **Remarks**."
+    description: "<code>value</code>不是其中一個型別可能是這個類別的子系。 請參閱**備註**。"
   platform:
   - net462
 - uid: System.Windows.Documents.DocumentStructures.StoryFragment.System#Windows#Markup#IAddChild#AddText(System.String)
@@ -242,13 +242,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.DocumentStructures
-  summary: "Adds the text content of a node to the object."
+  summary: "將節點的文字內容加入物件中。"
   syntax:
     content: void IAddChild.AddText (string text);
     parameters:
     - id: text
       type: System.String
-      description: "The text to add to the object."
+      description: "要新增至物件的文字。"
   overload: System.Windows.Documents.DocumentStructures.StoryFragment.System#Windows#Markup#IAddChild#AddText*
   exceptions: []
   platform:
